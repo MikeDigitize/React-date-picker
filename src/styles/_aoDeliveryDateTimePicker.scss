@@ -1,0 +1,370 @@
+.aoCalendarGenericMessage {
+  background: #fb8401;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 2px 4px 2px rgba(0, 0, 0, 0.1);
+  font-family: $fontFamily;
+  line-height: 20px;
+  margin: 20px 0;
+}
+.aoCalendarGenericMessage p {
+    color: $aoWhite;
+}
+#aoCalendarTitle, #aoDeliveryOptionTitle, #aoCollectionPointTitle {
+    @include font-size(18);
+    font-family: $fontFamily;
+    font-weight: normal;
+    padding: 12px 12px 12px 15px;
+    text-transform: uppercase;
+    clear: left;
+}
+
+    #aoCalendarHolder {
+    border: 1px solid #d0d1d3;
+  width: 966px;
+  margin: auto;
+  font-weight: bold;
+  font-family:$fontFamily;
+  position: relative; }
+  #aoCalendarHolder * {
+   
+    outline: none; }
+    #aoCalendarHolder .aoCalendarDisabledCover {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #fff url("/Themes/Common/Images/singleCheckout/deliveryBlocker.png") no-repeat 0 0;
+    }
+    #aoCalendarHolder .aoCalendarDisabledCoverMessage {
+    position: absolute;
+    z-index: 2;
+    top: 10px;
+    width: 240px;
+    border-radius: 10px;
+    margin-top: -9px;
+    left: 0;
+    color: #fff;
+    padding: 20px;
+    font-weight: normal;
+    text-align: left;
+     @include font-size(16);
+    }
+  #aoCalendarHolder #aoCalendarDateRangeSelect {
+    width: 280px;
+    margin: auto;
+      padding: 5px 0 8px;
+      position: relative;
+      left: 185px;
+  }
+    #aoCalendarHolder #aoCalendarDateRangeSelect p {
+      text-align: center;
+      display: inline-block;
+      min-width: 125px;
+	  position: relative;
+	  bottom: 5px;
+      vertical-align: bottom;
+	  user-select: none;
+       @include font-size(16);
+    }
+    #aoCalendarHolder #aoCalendarDateRangeSelect span {
+	  display: inline-block;
+      color: #00b5e2;
+      @include font-size(25);
+      cursor: pointer;
+      vertical-align: middle;
+	  width: 30px;
+	  height: 20px; 
+	  padding: 15px;
+	  text-align: right; }
+	  #aoCalendarHolder #aoCalendarDateRangeSelect span:first-child {
+		text-align: left;
+	  }
+      #aoCalendarHolder #aoCalendarDateRangeSelect span:hover {
+        opacity: 0.8;
+        filter: alpha(opacity=80);
+      }
+  #aoCalendarHolder .aoCalendarNotHighlightable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; }
+  #aoCalendarHolder .aoCalendarTable {
+    width: 100%;
+    font-family: Arial, sans-serif; }
+    #aoCalendarHolder .aoCalendarTable thead th:first-child {
+        border-left: none;
+    }
+    #aoCalendarHolder .aoCalendarTable thead th {
+        border-left:1px solid #e0e0e0;
+    }
+    #aoCalendarHolder .aoCalendarTable thead th p {
+      margin: 0 0 0 10px;
+       @include font-size(15);
+      }
+    #aoCalendarHolder .aoCalendarTable tbody td {
+      color: #00b5e2;      
+      padding-bottom: 15px;
+      padding-right: 10px;
+      border: 1px solid #e0e0e0;
+    }
+        #aoCalendarHolder .aoCalendarTable tbody td:first-child {
+            border-left: none;
+        }
+   
+  #aoCalendarHolder .aoCalendarHeadExtraInfo {   
+    @include font-size(11);
+    color: #969696;
+    min-height: 20px;
+  }
+  #aoCalendarHolder .aoCalendarTableDay {
+    color: #969696;
+    text-transform: uppercase;
+     @include font-size(18);
+    font-weight: bold;
+  }
+  #aoCalendarHolder .aoCalendarTableDate {
+    color: #6f6f6f; }
+  #aoCalendarHolder .aoCalendarEco {
+    color: #7db921 !important; }
+  #aoCalendarHolder .aoCalendarTableSelectable {
+    cursor: pointer;
+    text-transform: uppercase; }
+  #aoCalendarHolder .aoCalendarTableSelectable p {
+    text-align: center;
+    padding: 25px 0;
+    width: 95%;
+    height: 35%; 
+     @include font-size(15);
+    color: #00b5e2;
+    margin: 9px 0 -5px 8px;
+    border-radius: 5px;
+    border: 1px solid #c6c6c6;
+    box-shadow: 2px 4px 2px rgba(0, 0, 0, 0.1);
+    background: #fbfbfb;
+    background: -moz-linear-gradient(top,  #fbfbfb 20%, #e2e2e2 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(20%,#fbfbfb), color-stop(100%,#e2e2e2));
+    background: -webkit-linear-gradient(top,  #fbfbfb 20%,#e2e2e2 100%);
+    background: -o-linear-gradient(top,  #fbfbfb 20%,#e2e2e2 100%);
+    background: -ms-linear-gradient(top,  #fbfbfb 20%,#e2e2e2 100%);
+    background: linear-gradient(to bottom,  #fbfbfb 20%,#e2e2e2 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbfbfb', endColorstr='#e2e2e2',GradientType=0 );
+  }
+    #aoCalendarHolder .aoCalendarTableSelectable p:hover {
+      border: 1px solid #8a8a8a; }
+    #aoCalendarHolder .aoCalendarTableSelectable p:active {
+      box-shadow: none; }
+  #aoCalendarHolder .aoCalendarTableSelected {
+    color: #fff !important;
+    background: #00b5e2 !important;
+    border: 1px solid #00b5e2 !important;
+    box-shadow: inset 5px 6px 10px -6px rgba(0, 0, 0, 0.5) !important; 
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false) !important;}
+    #aoCalendarHolder .aoCalendarTableSelected:hover {
+      border: 1px solid #008caf !important; }
+  #aoCalendarHolder .aoCalendarTimeDesc {
+      @include font-size(16);
+      font-weight: bold;
+      margin-bottom: 3px !important;
+
+  }
+  #aoCalendarHolder .aoCalendarTableTimeslot p {
+    color: #737272;
+    margin: 0; }
+  #aoCalendarHolder .aoCalendarExtraDeliveryInfo {
+    font-weight: normal;
+     @include font-size(12);
+      /*width: 170px;*/
+      line-height: 16px;
+
+  }
+  #aoCalendarHolder p.aoCalendarTime {
+    text-transform: lowercase;
+    margin-bottom: 5px;
+      @include font-size(18);
+
+  }
+  #aoCalendarHolder .aoCalendarShowTimeslotsBtn {
+    background: #fff;
+    border: none;
+    text-align: center;
+    color: #00b5e2;
+    font-family: $fontFamily;
+     @include font-size(16);
+    font-weight: bold;
+    border-radius: 5px;
+    margin-top: 30px;
+    cursor: pointer;
+
+      margin: 14px 10px 10px 10px;
+      display: block;
+      text-align: left; 
+    
+      background: url("/Themes/Common/Images/singleCheckout/timeslots-small.png") no-repeat;
+      padding: 2px 2px 6px 30px;
+
+  }
+    .ie8 #aoCalendarOrderSummary {
+        right: 10px;
+    }
+  #aoCalendarHolder #aoCalendarOrderSummary {
+    float: right;
+      position: relative;
+      top: -32px;
+  }
+  #aoCalendarHolder .aoCalendarOrderSummaryColumn {
+    float: left; }
+    #aoCalendarHolder .aoCalendarOrderSummaryColumn:first-child {
+     }
+    #aoCalendarHolder .aoCalendarOrderSummaryColumn:last-child {
+     
+      text-align: right;
+      padding-right: 10px;
+    }
+  #aoCalendarHolder .aoCalendarOrderTitle {
+    font-weight: normal;
+    color: #737272;
+    text-align: right;
+      @include font-size(16);
+      margin-bottom: 8px;
+
+  }
+  #aoCalendarHolder #aoDeliveryCharge, #aoCalendarHolder #aoDeliveryTotal {
+    font-weight: bold;
+    margin-left: 20px;
+       @include font-size(16);
+      text-align: right;
+       margin-bottom: 8px;
+  }
+  #aoCalendarHolder .aoCalendarTableHide {
+    display: none; }
+    .jasmine_html-reporter { margin-top: 30px}
+    .aoCalendarTable tbody td {
+        width: 10%;
+    }
+   .aoCalendarTableTimeslot {
+       width: 30% !important;
+       padding-top: 15px;
+       padding-left: 15px;
+   }
+    .aoCalendarTable thead {
+        height: 65px;
+    }
+   .aoCalendarTable thead th {
+       height: 20px;
+   }
+   .aoCalendarTable tr th {
+       width: 10px;
+       text-align: center;
+       padding-bottom: 10px;
+       vertical-align: bottom;
+       padding-right: 10px;
+   }
+   .aoCalendarTable tr th p {
+       line-height: 18px;
+   }
+   .aoCalendarTableDay, .aoCalendarTableDate {
+       font-weight: bold;
+       font-size: 14px;
+   }
+   .aoCalendarTable tbody {
+       border-top: 1px solid #eaebec;
+       border-bottom: 1px solid #eaebec;
+   }
+   .aoCalendarDateRangeCtrlDisabled {
+       opacity: 0.3 !important; 
+       cursor: default !important;
+   }
+   .aoCalendarDateRangeCtrlDisabled:hover {
+       opacity: 0.3 !important;
+   }
+    .aoCalendarBold {
+        font-weight: bold;
+    }
+    .aoCalendarError {
+       margin-left: 0 !important; 
+    }
+   .ie8 .aoCalendarDateRangeCtrlDisabled {
+       color: #9dc8d3 !important; 
+   }
+   .ie8 .aoCalendarDateRangeCtrlDisabled:hover {
+       color: #9dc8d3 !important;
+   }
+   /* rotation */
+    @-webkit-keyframes rotation {
+	    from {-webkit-transform: rotate(0deg);}
+	    to {-webkit-transform: rotate(359deg);}
+    } 
+
+    @-moz-keyframes rotation {
+	    from {-moz-transform: rotate(0deg);}
+	    to {-moz-transform: rotate(359deg);}
+    }
+ 
+    @-o-keyframes rotation {
+	    from {-o-transform: rotate(0deg);}
+	    to {-o-transform: rotate(359deg);}
+    }
+
+    @keyframes rotation {
+	    from {transform: rotate(0deg);}
+	    to {transform: rotate(359deg);}
+    }
+
+   .spinner {
+       height:100px;
+       width:100px;
+       margin:0 auto;
+       position:relative;
+       -webkit-animation: rotation .6s infinite linear;
+       -moz-animation: rotation .6s infinite linear;
+       -o-animation: rotation .6s infinite linear; 
+       animation: rotation .6s infinite linear;
+       border-left:12px solid rgba(127,186,35,.15);
+       border-right:12px solid rgba(127,186,35,.15);
+       border-bottom:12px solid rgba(127,186,35,.15);
+       border-top:12px solid rgba(127,186,35,.8);
+       border-radius:100%;
+       text-indent:-9999px;
+       margin-top:7%;}
+    .inner {
+        position: absolute;
+        top: 108px;
+        /* bottom: 0px; */
+        left: 31px;
+        right: 0;
+        margin: auto;
+        width: 80px;
+        height: 80px;
+         @include font-size(50);
+        color: rgba(127, 186, 35, 0.8);
+    }
+
+.aoTesting {
+    text-transform:none !important;    
+     @include font-size(12);
+    font-weight: normal;
+}
+
+.aoTesting .icon-tick2 {
+    color: $aoGreen;
+}
+
+.aoCalendarAnytime .aoCalendarTime {
+    margin-bottom: auto !important;
+}
+ .aoCalendarTimeSlotRow .aoCalendarExtraDeliveryInfo {
+    display: none;
+}
+
+.aoCalendarTimeSlotRow .aoCalendarExtraDeliveryInfo {
+    display: none;
+}
+
+.aoCalendarTimeSlotRow .aoCalendarTableTimeslot {
+    padding-left: 15px;
+    background: none;
+}
