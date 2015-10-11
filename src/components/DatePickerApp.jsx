@@ -1,4 +1,5 @@
 import React from "react";
-import DatePickerContainer from "./DatePicker/DatePickerContainer";
+import PickerContainer from "./Picker/PickerContainer";
+import { config } from "../data/available-dates";
 
-React.render(<DatePickerContainer />, document.querySelector(".app-holder"));
+React.render(<PickerContainer config={config} />, document.querySelector(".app-holder"));

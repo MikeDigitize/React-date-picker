@@ -7,37 +7,20 @@
 
 /* Breakpoints */
 /*	General classes */
-._2XkZg4cAoMAeulU91e7trh {
+._2V3L5lAwAFNrVx91VMOZNL {
   padding: 20px 0 0;
   border-top: 1px dashed #AB905B;
   border-bottom: 1px dashed #AB905B; }
 
-._3JxcHrNfgU8auCb_YqYuNZ {
-  text-align: center; }
+._2jnqxNVZRf1nCWihSNkv3Z, ._1Qq05B5n_ZuASi021mf9Zv * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
 
-.pSehWZW_mCUqGbT4qngG8 {
-  color: #7FBA23; }
-
-.gl3mS8vlNCjjo0CTVZu-V {
-  background: #ffffff;
-  padding: 2px; }
-
-.iIdDM4ax_wp8JNmF-xDsQ, ._25P1WyT7itH6kcnj4OLWQ1 {
-  font-family: league_gothicregular;
-  font-size: 45px;
-  letter-spacing: 2px;
-  -webkit-font-smoothing: antialiased; }
-
-/*
- *  Consolidating CSS classes
- */
-._6dFiFB8WaF4i8KVGi7hF4 { }
-
-/*
- *  Consolidating SASS classes
- */
-._3w-X1Kj-X4JVnN--zcQCkQ, ._25P1WyT7itH6kcnj4OLWQ1 {
-  font-weight: normal; }
-
-._19ZmlDd64bbhUfX6XLo7rQ, ._25P1WyT7itH6kcnj4OLWQ1 {
-  font-size: 40px; }
+._1Qq05B5n_ZuASi021mf9Zv {
+  width: 990px;
+  margin: auto;
+  font-family: Arial; }
+  ._1Qq05B5n_ZuASi021mf9Zv * {
+    boxsizing: border-box; }

@@ -1,4 +1,4 @@
-{  
+export const dateCharges = {
    "20151009":[  
       {  
          "TimeSlotId":213,

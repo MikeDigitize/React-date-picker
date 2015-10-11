@@ -1,0 +1,21 @@
+@import "../../styles/global.scss";
+
+.unselectable {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.date-picker {
+
+  * {
+    boxsizing: border-box;
+    @extend .unselectable;
+  }
+
+  width: 990px;
+  margin: auto;
+  font-family: Arial;
+
+}

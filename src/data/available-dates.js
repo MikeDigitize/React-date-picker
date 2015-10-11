@@ -1,4 +1,4 @@
-export const availableDays = {
+export const config = {
    "calendarConfiguration":{  
       "chargeConfigurationCollection":{  
          "NextDay":{  
