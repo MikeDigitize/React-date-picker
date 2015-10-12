@@ -2,6 +2,7 @@ const CALENDARCONFIG = "CALENDARCONFIG";
 const AVAILABLEDATES = "AVAILABLEDATES";
 const BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 const DATECHARGECONFIG = "DATECHARGECONFIG";
+const DATEUPDATE = "DATEUPDATE";
 
 export function calendarConfig(data) {
     return { state : data, type: CALENDARCONFIG };
@@ -17,4 +18,8 @@ export function dateChargeConfig(data) {
 
 export function basketTotalUpdate(data) {
     return { state : data, type: BASKETTOTALUPDATE };
+}
+
+export function dateUpdate(data) {
+    return { state : data, type : DATEUPDATE };
 }

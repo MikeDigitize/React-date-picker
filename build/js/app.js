@@ -20498,23 +20498,33 @@
 	    }, {
 	        key: "onNewData",
 	        value: function onNewData() {
+	            var _this = this;
 
 	            var newavailableDates = _storesPickerStore2["default"].getState().availableDates;
 	            this.setState(function (previousState) {
-	                var same = previousState.availableDates.length === newavailableDates.length && previousState.availableDates.length;
-	                if (same) {
-	                    same = previousState.availableDates.map(function (date, i) {
-	                        return Object.is(date, newavailableDates[i]);
-	                    }).reduce(function (a, b) {
-	                        return a && b;
-	                    });
-	                }
-	                if (!same) {
+	                if (!_this.hasAvailableDatesChanged(previousState, newavailableDates)) {
 	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.dateChargeConfig)(_dataDateCharges.dateCharges));
+	                    _this.prepareData();
 	                }
 	                return { availableDates: newavailableDates, dateChargesConfig: _storesPickerStore2["default"].getState().dateChargesConfig };
 	            });
 	        }
+	    }, {
+	        key: "hasAvailableDatesChanged",
+	        value: function hasAvailableDatesChanged(prev, next) {
+	            var same = prev.availableDates.length === next.length && prev.availableDates.length;
+	            if (same) {
+	                same = prev.availableDates.map(function (date, i) {
+	                    return Object.is(date, next[i]);
+	                }).reduce(function (a, b) {
+	                    return a && b;
+	                });
+	            }
+	            return same;
+	        }
+	    }, {
+	        key: "prepareData",
+	        value: function prepareData() {}
 	    }, {
 	        key: "render",
 	        value: function render() {
@@ -23962,10 +23972,12 @@
 	exports.availableDates = availableDates;
 	exports.dateChargeConfig = dateChargeConfig;
 	exports.basketTotalUpdate = basketTotalUpdate;
+	exports.dateUpdate = dateUpdate;
 	var CALENDARCONFIG = "CALENDARCONFIG";
 	var AVAILABLEDATES = "AVAILABLEDATES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var DATECHARGECONFIG = "DATECHARGECONFIG";
+	var DATEUPDATE = "DATEUPDATE";
 
 	function calendarConfig(data) {
 	    return { state: data, type: CALENDARCONFIG };
@@ -23981,6 +23993,10 @@
 
 	function basketTotalUpdate(data) {
 	    return { state: data, type: BASKETTOTALUPDATE };
+	}
+
+	function dateUpdate(data) {
+	    return { state: data, type: DATEUPDATE };
 	}
 
 /***/ },

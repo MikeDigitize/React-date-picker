@@ -26,17 +26,28 @@ export default class PickerContainer extends React.Component {
 
         let newavailableDates = DatePickerStore.getState().availableDates;
         this.setState((previousState) => {
-            let same = (previousState.availableDates.length === newavailableDates.length) && previousState.availableDates.length;
-            if(same) {
-                same = previousState.availableDates.map((date, i) => {
-                    return Object.is(date, newavailableDates[i])
-                }).reduce((a,b) => a && b);
-            }
-            if(!same) {
+            if(!this.hasAvailableDatesChanged(previousState, newavailableDates)) {
                 DatePickerStore.dispatch(dateChargeConfig(dateCharges));
+                this.prepareData();
             }
             return { availableDates: newavailableDates, dateChargesConfig : DatePickerStore.getState().dateChargesConfig };
         });
+
+    }
+
+    hasAvailableDatesChanged(prev, next) {
+        let same = (prev.availableDates.length === next.length) && prev.availableDates.length;
+        if(same) {
+            same = prev.availableDates.map((date, i) => {
+                return Object.is(date, next[i])
+            }).reduce((a,b) => a && b);
+        }
+        return same;
+
+    }
+
+    prepareData() {
+
     }
 
     render() {
