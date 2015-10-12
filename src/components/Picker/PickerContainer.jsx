@@ -7,51 +7,131 @@ import "../../utils/Object-is-polyfill";
 
 export default class PickerContainer extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
+            config : this.props.config,
             availableDates : [],
-            dateChargesConfig : {}
-        };
-        DatePickerStore.subscribe(this.onNewData.bind(this));
-    }
-
-    componentWillMount() {
-        DatePickerStore.dispatch(calendarConfig(this.props.config));
-        DatePickerStore.dispatch(availableDates(this.props.config.calendarConfiguration.availableDays));
-        DatePickerStore.dispatch(basketTotalUpdate(this.props.config.orderTotals.OverallTotalNumber));
-    }
-
-    onNewData() {
-
-        let newavailableDates = DatePickerStore.getState().availableDates;
-        this.setState((previousState) => {
-            if(!this.hasAvailableDatesChanged(previousState, newavailableDates)) {
-                DatePickerStore.dispatch(dateChargeConfig(dateCharges));
-                this.prepareData();
+            dateChargesConfig : {},
+            unsubscribeFromStore : null,
+            pickerState : {
+                "closed" : true,
+                "third-party" : false,
+                "no-dates-available" : false,
+                "loading" : false,
+                "ready" : false
             }
-            return { availableDates: newavailableDates, dateChargesConfig : DatePickerStore.getState().dateChargesConfig };
-        });
-
+        };
     }
 
-    hasAvailableDatesChanged(prev, next) {
-        let same = (prev.availableDates.length === next.length) && prev.availableDates.length;
-        if(same) {
-            same = prev.availableDates.map((date, i) => {
-                return Object.is(date, next[i])
-            }).reduce((a,b) => a && b);
+    componentWillReceiveProps(nextProps) {
+        if(Object.keys(nextProps).length) {
+
+            if(nextProps.config.calendarConfiguration.dataState === "ThirdParty") {
+                this.setState({
+                    pickerState : {
+                        closed : false,
+                        thirdparty : true,
+                        noDatesAvailable : false,
+                        loading : false,
+                        ready : false
+                    }
+                });
+            }
+
+            else if(!Object.keys(nextProps.config.calendarConfiguration.availableDays).length){
+                this.setState({
+                    pickerState : {
+                        closed : false,
+                        thirdparty : false,
+                        noDatesAvailable : true,
+                        loading : false,
+                        ready : false
+                    }
+                });
+            }
+
+            else {
+
+                console.log("loading!");
+
+                if(this.state.unsubscribeFromStore){
+                    this.state.unsubscribeFromStore();
+                }
+
+                this.setState({
+                    unsubscribeFromStore : DatePickerStore.subscribe(this.onNewData.bind(this)),
+                    pickerState : {
+                        closed : false,
+                        thirdparty : false,
+                        noDatesAvailable : false,
+                        loading : true,
+                        ready : false
+                    }
+                });
+
+                // simulate ajax call
+                setTimeout(()=> {
+
+                    this.setState({
+                        dateChargesConfig : dateCharges,
+                        pickerState : {
+                            closed : false,
+                            thirdparty : false,
+                            noDatesAvailable : false,
+                            loading : false,
+                            ready : true
+                        }
+                    });
+
+                }, 1500);
+
+                DatePickerStore.dispatch(basketTotalUpdate(nextProps.config.orderTotals.OverallTotalNumber));
+
+            }
         }
-        return same;
-
     }
 
-    prepareData() {
-
+    onNewData(){
+        console.log("on new data!!");
     }
 
     render() {
-        return (<Picker dateChargesConfig={this.state.dateChargesConfig}/>);
+        console.log("render picker", this.state);
+        if(this.state.pickerState.closed) {
+            return (
+                <div>
+                    <p>Closed</p>
+                </div>
+            );
+        }
+        else if(this.state.pickerState.thirdparty) {
+            return (
+                <div>
+                    <p>thirdparty</p>
+                </div>
+            );
+        }
+        else if(this.state.pickerState.noDatesAvailable) {
+            return (
+                <div>
+                    <p>noDatesAvailable</p>
+                </div>
+            );
+        }
+        else if(this.state.pickerState.loading){
+            return (
+                <div>
+                    <p>loading</p>
+                </div>
+            );
+        }
+        else if(this.state.pickerState.ready){
+            return (<Picker dateChargesConfig={this.state.dateChargesConfig}/>);
+        }
+        else {
+            return false;
+        }
     }
 
 }
