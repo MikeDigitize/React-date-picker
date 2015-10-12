@@ -1,25 +1,15 @@
-const CALENDARCONFIG = "CALENDARCONFIG";
-const AVAILABLEDATES = "AVAILABLEDATES";
+const NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 const BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
-const DATECHARGECONFIG = "DATECHARGECONFIG";
-const DATEUPDATE = "DATEUPDATE";
-
-export function calendarConfig(data) {
-    return { state : data, type: CALENDARCONFIG };
-}
+const NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
 
 export function availableDates(data) {
-    return { state : data, type: AVAILABLEDATES };
+    return { state : data, type: NEWAVAILABLEDATESANDCHARGES };
 }
 
-export function dateChargeConfig(data) {
-    return { state : data, type: DATECHARGECONFIG };
+export function chargesConfig(data) {
+    return { state : data, type: NEWCHARGESCONFIG };
 }
 
-export function basketTotalUpdate(data) {
+export function basketTotal(data) {
     return { state : data, type: BASKETTOTALUPDATE };
-}
-
-export function dateUpdate(data) {
-    return { state : data, type : DATEUPDATE };
 }

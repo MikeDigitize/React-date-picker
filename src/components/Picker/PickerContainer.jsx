@@ -1,7 +1,7 @@
 import React from "react";
 import Picker from "./Picker";
 import DatePickerStore from "../../stores/PickerStore";
-import { calendarConfig, basketTotalUpdate, availableDates, dateChargeConfig } from "../../actions/picker-data-actions";
+import { basketTotal, availableDates, chargesConfig } from "../../actions/picker-data-actions";
 import { dateCharges } from "../../data/date-charges";
 import "../../utils/Object-is-polyfill";
 
@@ -10,8 +10,6 @@ export default class PickerContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            config : this.props.config,
-            availableDates : [],
             dateChargesConfig : {},
             unsubscribeFromStore : null,
             pickerState : {
@@ -25,6 +23,17 @@ export default class PickerContainer extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+
+        /*
+            When props contain an object with a key we know we have some data to work with.
+            The first config arrives with some data we need to send to the store -
+                - the available dates and date types
+                - the charge configuration
+                - the order totals
+            We then need to create a comma separated list of shortdates to send off to a second handler
+            which returns the detailed date info.
+         */
+
         if(Object.keys(nextProps).length) {
 
             if(nextProps.config.calendarConfiguration.dataState === "ThirdParty") {
@@ -49,11 +58,10 @@ export default class PickerContainer extends React.Component {
                         ready : false
                     }
                 });
+
             }
 
             else {
-
-                console.log("loading!");
 
                 if(this.state.unsubscribeFromStore){
                     this.state.unsubscribeFromStore();
@@ -86,18 +94,22 @@ export default class PickerContainer extends React.Component {
 
                 }, 1500);
 
-                DatePickerStore.dispatch(basketTotalUpdate(nextProps.config.orderTotals.OverallTotalNumber));
+                DatePickerStore.dispatch(basketTotal(nextProps.config.orderTotals.OverallTotalNumber));
+                DatePickerStore.dispatch(availableDates(nextProps.config.calendarConfiguration.availableDays));
+                DatePickerStore.dispatch(chargesConfig(nextProps.config.calendarConfiguration.chargeConfigurationCollection));
 
             }
+
         }
+        
     }
 
     onNewData(){
-        console.log("on new data!!");
+        console.log("on new data!!", DatePickerStore.getState());
     }
 
     render() {
-        console.log("render picker", this.state);
+        console.log("render picker container");
         if(this.state.pickerState.closed) {
             return (
                 <div>

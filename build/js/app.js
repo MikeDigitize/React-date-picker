@@ -20531,8 +20531,6 @@
 
 	        _get(Object.getPrototypeOf(PickerContainer.prototype), "constructor", this).call(this, props);
 	        this.state = {
-	            config: this.props.config,
-	            availableDates: [],
 	            dateChargesConfig: {},
 	            unsubscribeFromStore: null,
 	            pickerState: {
@@ -20549,6 +20547,16 @@
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
 	            var _this = this;
+
+	            /*
+	                When props contain an object with a key we know we have some data to work with.
+	                The first config arrives with some data we need to send to the store -
+	                    - the available dates and date types
+	                    - the charge configuration
+	                    - the order totals
+	                We then need to create a comma separated list of shortdates to send off to a second handler
+	                which returns the detailed date info.
+	             */
 
 	            if (Object.keys(nextProps).length) {
 
@@ -20573,8 +20581,6 @@
 	                        }
 	                    });
 	                } else {
-
-	                    console.log("loading!");
 
 	                    if (this.state.unsubscribeFromStore) {
 	                        this.state.unsubscribeFromStore();
@@ -20606,19 +20612,21 @@
 	                        });
 	                    }, 1500);
 
-	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.basketTotalUpdate)(nextProps.config.orderTotals.OverallTotalNumber));
+	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.basketTotal)(nextProps.config.orderTotals.OverallTotalNumber));
+	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(nextProps.config.calendarConfiguration.availableDays));
+	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.chargesConfig)(nextProps.config.calendarConfiguration.chargeConfigurationCollection));
 	                }
 	            }
 	        }
 	    }, {
 	        key: "onNewData",
 	        value: function onNewData() {
-	            console.log("on new data!!");
+	            console.log("on new data!!", _storesPickerStore2["default"].getState());
 	        }
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            console.log("render picker", this.state);
+	            console.log("render picker container");
 	            if (this.state.pickerState.closed) {
 	                return _react2["default"].createElement(
 	                    "div",
@@ -20729,6 +20737,7 @@
 	    _createClass(Picker, [{
 	        key: "render",
 	        value: function render() {
+	            console.log("render datapicker");
 	            return _react2["default"].createElement(
 	                "section",
 	                { styleName: "date-picker" },
@@ -23458,34 +23467,19 @@
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    return {
-	        calendarConfig: newCalendarConfig(state.calendarConfig, action),
 	        availableDates: availableDates(state.availableDates, action),
 	        basketTotal: basketTotal(state.basketTotal, action),
-	        dateChargesConfig: dateChargeConfig(state.dateChargesConfig, action)
+	        chargesConfig: chargesConfig(state.dateChargesConfig, action)
 	    };
 	}
 
-	function newCalendarConfig() {
+	function availableDates() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    switch (action.type) {
-	        case "CALENDARCONFIG":
+	        case "NEWAVAILABLEDATESANDCHARGES":
 	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function availableDates() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "AVAILABLEDATES":
-	            return Object.keys(action.state).map(function (key) {
-	                return key;
-	            });
 	        default:
 	            return state;
 	    }
@@ -23503,12 +23497,12 @@
 	    }
 	}
 
-	function dateChargeConfig() {
+	function chargesConfig() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    switch (action.type) {
-	        case "DATECHARGECONFIG":
+	        case "NEWCHARGESCONFIG":
 	            return action.state;
 	        default:
 	            return state;
@@ -24103,35 +24097,23 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.calendarConfig = calendarConfig;
 	exports.availableDates = availableDates;
-	exports.dateChargeConfig = dateChargeConfig;
-	exports.basketTotalUpdate = basketTotalUpdate;
-	exports.dateUpdate = dateUpdate;
-	var CALENDARCONFIG = "CALENDARCONFIG";
-	var AVAILABLEDATES = "AVAILABLEDATES";
+	exports.chargesConfig = chargesConfig;
+	exports.basketTotal = basketTotal;
+	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
-	var DATECHARGECONFIG = "DATECHARGECONFIG";
-	var DATEUPDATE = "DATEUPDATE";
-
-	function calendarConfig(data) {
-	    return { state: data, type: CALENDARCONFIG };
-	}
+	var NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
 
 	function availableDates(data) {
-	    return { state: data, type: AVAILABLEDATES };
+	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
 	}
 
-	function dateChargeConfig(data) {
-	    return { state: data, type: DATECHARGECONFIG };
+	function chargesConfig(data) {
+	    return { state: data, type: NEWCHARGESCONFIG };
 	}
 
-	function basketTotalUpdate(data) {
+	function basketTotal(data) {
 	    return { state: data, type: BASKETTOTALUPDATE };
-	}
-
-	function dateUpdate(data) {
-	    return { state: data, type: DATEUPDATE };
 	}
 
 /***/ },

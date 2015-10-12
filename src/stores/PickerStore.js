@@ -2,26 +2,16 @@ import { createStore } from "redux";
 
 function DatePicker(state = {}, action = {}) {
     return {
-        calendarConfig : newCalendarConfig(state.calendarConfig, action),
         availableDates : availableDates(state.availableDates, action),
         basketTotal : basketTotal(state.basketTotal, action),
-        dateChargesConfig : dateChargeConfig(state.dateChargesConfig, action)
+        chargesConfig : chargesConfig(state.dateChargesConfig, action)
     }
 }
 
-function newCalendarConfig(state = {}, action = {}) {
+function availableDates(state = {}, action = {}) {
     switch(action.type) {
-        case "CALENDARCONFIG" :
+        case "NEWAVAILABLEDATESANDCHARGES" :
             return action.state;
-        default :
-            return state;
-    }
-}
-
-function availableDates(state = [], action = {}) {
-    switch(action.type) {
-        case "AVAILABLEDATES" :
-            return Object.keys(action.state).map(key => key);
         default :
             return state;
     }
@@ -36,9 +26,9 @@ function basketTotal(state = 0, action = {}) {
     }
 }
 
-function dateChargeConfig(state = {}, action = {}) {
+function chargesConfig(state = {}, action = {}) {
     switch(action.type) {
-        case "DATECHARGECONFIG" :
+        case "NEWCHARGESCONFIG" :
             return action.state;
         default :
             return state;

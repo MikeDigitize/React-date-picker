@@ -10,6 +10,7 @@ class Picker extends React.Component {
     }
 
     render() {
+        console.log("render datapicker");
         return (
             <section styleName="date-picker">
                 <h1>AO.com</h1>
