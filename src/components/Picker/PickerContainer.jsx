@@ -1,7 +1,7 @@
 import React from "react";
 import Picker from "./Picker";
 import DatePickerStore from "../../stores/PickerStore";
-import { basketTotal, availableDates, chargesConfig, daysConfig, totalWeeks } from "../../actions/picker-data-actions";
+import { basketTotal, availableDates, chargesConfig, daysConfig, totalWeeks, daysAndChargesConfig } from "../../actions/picker-data-actions";
 import { dateCharges } from "../../data/date-charges";
 import { fillInGaps, formatDates, includeDayTypeCharges,createDateRanges } from "../../utils/date-utils";
 import "../../utils/Object-is-polyfill";
@@ -83,6 +83,7 @@ export default class PickerContainer extends React.Component {
                 DatePickerStore.dispatch(availableDates(nextProps.config.calendarConfiguration.availableDays));
                 DatePickerStore.dispatch(chargesConfig(nextProps.config.calendarConfiguration.chargeConfigurationCollection));
 
+                // simulate ajax call
                 setTimeout(()=> {
                     this.preparePickerData();
                 }, 1000);
@@ -98,9 +99,12 @@ export default class PickerContainer extends React.Component {
         let formattedDates = formatDates(dates);
         let weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
         formattedDates = includeDayTypeCharges(formattedDates, DatePickerStore.getState().chargesConfig);
+
         DatePickerStore.dispatch(availableDates(dates));
         DatePickerStore.dispatch(daysConfig(formattedDates));
         DatePickerStore.dispatch(totalWeeks(weeks));
+
+        DatePickerStore.dispatch(daysAndChargesConfig(dateCharges));
 
         this.setState({
             dateRanges : createDateRanges(formattedDates, weeks),
@@ -112,6 +116,37 @@ export default class PickerContainer extends React.Component {
                 ready : true
             }
         });
+
+        var counter = 0, timeslotDescriptions = [];
+
+        console.log(dates);
+
+        for (var i in dateCharges) {
+
+            if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
+                timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+            } else {
+                timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+            }
+
+            console.log(timeslotDescriptions);
+
+            for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
+
+                if (!dateCharges[i][j]) {
+                    dateCharges[i].splice(j, 0, { WebDescription: null });
+                }
+                else if (dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
+                    dateCharges[i].splice(j, 0, { WebDescription: null });
+                }
+
+            }
+
+            counter++;
+
+        }
+
+        console.log(dateCharges);
 
     }
 

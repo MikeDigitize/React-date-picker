@@ -20602,6 +20602,7 @@
 	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(nextProps.config.calendarConfiguration.availableDays));
 	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.chargesConfig)(nextProps.config.calendarConfiguration.chargeConfigurationCollection));
 
+	                    // simulate ajax call
 	                    setTimeout(function () {
 	                        _this.preparePickerData();
 	                    }, 1000);
@@ -20615,9 +20616,12 @@
 	            var formattedDates = (0, _utilsDateUtils.formatDates)(dates);
 	            var weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
 	            formattedDates = (0, _utilsDateUtils.includeDayTypeCharges)(formattedDates, _storesPickerStore2["default"].getState().chargesConfig);
+
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(dates));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.daysConfig)(formattedDates));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.totalWeeks)(weeks));
+
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.daysAndChargesConfig)(_dataDateCharges.dateCharges));
 
 	            this.setState({
 	                dateRanges: (0, _utilsDateUtils.createDateRanges)(formattedDates, weeks),
@@ -20629,6 +20633,35 @@
 	                    ready: true
 	                }
 	            });
+
+	            var counter = 0,
+	                timeslotDescriptions = [];
+
+	            console.log(dates);
+
+	            for (var i in _dataDateCharges.dateCharges) {
+
+	                if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
+	                    timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+	                } else {
+	                    timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+	                }
+
+	                console.log(timeslotDescriptions);
+
+	                for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
+
+	                    if (!_dataDateCharges.dateCharges[i][j]) {
+	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
+	                    } else if (_dataDateCharges.dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
+	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
+	                    }
+	                }
+
+	                counter++;
+	            }
+
+	            console.log(_dataDateCharges.dateCharges);
 	        }
 	    }, {
 	        key: "onNewData",
@@ -23471,7 +23504,8 @@
 	        chargesConfig: chargesConfig(state.dateChargesConfig, action),
 	        daysConfig: daysConfig(state.daysConfig, action),
 	        totalWeeks: totalWeeks(state.totalWeeks, action),
-	        tableDisplayIndex: tableDisplayIndex(state.tableDisplayIndex, action)
+	        tableDisplayIndex: tableDisplayIndex(state.tableDisplayIndex, action),
+	        daysAndChargesConfig: daysAndChargesConfig(state.daysAndChargesConfig, action)
 	    };
 	}
 
@@ -23536,11 +23570,23 @@
 	}
 
 	function tableDisplayIndex() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? 5 : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    switch (action.type) {
 	        case "TABLEDISPLAYINDEX":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function daysAndChargesConfig() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWDAYSANDCHARGESCONFIG":
 	            return action.state;
 	        default:
 	            return state;
@@ -24173,12 +24219,17 @@
 	        _get(Object.getPrototypeOf(DateRange.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            dates: this.props.dateRanges,
-	            index: _storesPickerStore2["default"].getState().tableDisplayIndex
+	            index: _storesPickerStore2["default"].getState().tableDisplayIndex,
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this))
 	        };
-	        _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this));
 	    }
 
 	    _createClass(DateRange, [{
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            this.state.unsubscribe();
+	        }
+	    }, {
 	        key: "onTableDisplayIndexUpdate",
 	        value: function onTableDisplayIndexUpdate() {
 	            this.setState({
@@ -24252,12 +24303,14 @@
 	exports.daysConfig = daysConfig;
 	exports.totalWeeks = totalWeeks;
 	exports.updateTableIndex = updateTableIndex;
+	exports.daysAndChargesConfig = daysAndChargesConfig;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
 	var NEWDAYSCONFIG = "NEWDAYSCONFIG";
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
+	var NEWDAYSANDCHARGESCONFIG = "NEWDAYSANDCHARGESCONFIG";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -24281,6 +24334,10 @@
 
 	function updateTableIndex(data) {
 	    return { state: data, type: TABLEDISPLAYINDEX };
+	}
+
+	function daysAndChargesConfig(data) {
+	    return { state: data, type: NEWDAYSANDCHARGESCONFIG };
 	}
 
 /***/ },

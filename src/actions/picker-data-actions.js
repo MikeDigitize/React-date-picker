@@ -4,6 +4,7 @@ const NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
 const NEWDAYSCONFIG = "NEWDAYSCONFIG";
 const TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 const TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
+const NEWDAYSANDCHARGESCONFIG = "NEWDAYSANDCHARGESCONFIG";
 
 export function availableDates(data) {
     return { state : data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -27,4 +28,8 @@ export function totalWeeks(data) {
 
 export function updateTableIndex(data) {
     return { state : data, type: TABLEDISPLAYINDEX };
+}
+
+export function daysAndChargesConfig(data) {
+    return { state : data, type : NEWDAYSANDCHARGESCONFIG }
 }

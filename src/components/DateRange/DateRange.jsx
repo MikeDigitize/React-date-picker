@@ -10,9 +10,13 @@ class DateRange extends React.Component {
         super(props);
         this.state = {
             dates : this.props.dateRanges,
-            index : DatePickerStore.getState().tableDisplayIndex
+            index : DatePickerStore.getState().tableDisplayIndex,
+            unsubscribe : DatePickerStore.subscribe(this.onTableDisplayIndexUpdate.bind(this))
         };
-        DatePickerStore.subscribe(this.onTableDisplayIndexUpdate.bind(this));
+    }
+
+    componentWillUnmount() {
+        this.state.unsubscribe();
     }
 
     onTableDisplayIndexUpdate() {
