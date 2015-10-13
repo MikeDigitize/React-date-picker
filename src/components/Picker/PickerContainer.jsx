@@ -3,7 +3,7 @@ import Picker from "./Picker";
 import DatePickerStore from "../../stores/PickerStore";
 import { basketTotal, availableDates, chargesConfig, daysConfig, totalWeeks } from "../../actions/picker-data-actions";
 import { dateCharges } from "../../data/date-charges";
-import { fillInGaps, formatDates, includeDayTypeCharges } from "../../utils/date-utils";
+import { fillInGaps, formatDates, includeDayTypeCharges,createDateRanges } from "../../utils/date-utils";
 import "../../utils/Object-is-polyfill";
 
 export default class PickerContainer extends React.Component {
@@ -79,27 +79,13 @@ export default class PickerContainer extends React.Component {
                     }
                 });
 
-                // simulate ajax call
-                setTimeout(()=> {
-
-                    this.setState({
-                        dateChargesConfig : dateCharges,
-                        pickerState : {
-                            closed : false,
-                            thirdparty : false,
-                            noDatesAvailable : false,
-                            loading : false,
-                            ready : true
-                        }
-                    });
-
-                }, 1500);
-
                 DatePickerStore.dispatch(basketTotal(nextProps.config.orderTotals.OverallTotalNumber));
                 DatePickerStore.dispatch(availableDates(nextProps.config.calendarConfiguration.availableDays));
                 DatePickerStore.dispatch(chargesConfig(nextProps.config.calendarConfiguration.chargeConfigurationCollection));
 
-                this.preparePickerData();
+                setTimeout(()=> {
+                    this.preparePickerData();
+                }, 1000);
 
             }
 
@@ -112,10 +98,21 @@ export default class PickerContainer extends React.Component {
         let formattedDates = formatDates(dates);
         let weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
         formattedDates = includeDayTypeCharges(formattedDates, DatePickerStore.getState().chargesConfig);
-
         DatePickerStore.dispatch(availableDates(dates));
         DatePickerStore.dispatch(daysConfig(formattedDates));
         DatePickerStore.dispatch(totalWeeks(weeks));
+
+        this.setState({
+            dateRanges : createDateRanges(formattedDates, weeks),
+            pickerState : {
+                closed : false,
+                thirdparty : false,
+                noDatesAvailable : false,
+                loading : false,
+                ready : true
+            }
+        });
+
     }
 
     onNewData(){
@@ -152,7 +149,7 @@ export default class PickerContainer extends React.Component {
             );
         }
         else if(this.state.pickerState.ready){
-            return (<Picker dateChargesConfig={this.state.dateChargesConfig}/>);
+            return (<Picker dateRanges={this.state.dateRanges}/>);
         }
         else {
             return false;

@@ -3,6 +3,7 @@ const BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 const NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
 const NEWDAYSCONFIG = "NEWDAYSCONFIG";
 const TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
+const TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 
 export function availableDates(data) {
     return { state : data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -22,4 +23,8 @@ export function daysConfig(data) {
 
 export function totalWeeks(data) {
     return { state : data, type: TOTALWEEKSUPDATE };
+}
+
+export function updateTableIndex(data) {
+    return { state : data, type: TABLEDISPLAYINDEX };
 }

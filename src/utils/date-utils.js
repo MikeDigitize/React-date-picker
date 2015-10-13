@@ -180,3 +180,41 @@ export function includeDayTypeCharges(dates, charges) {
         return Object.assign({}, date, { dayTypeCharge : date.desc === "N/A" ? 0 : charges[date.desc].charge });
     });
 }
+
+export function createDateRanges(dates, totalAmountOfWeeks) {
+
+    let amountOfDays = dates.length;
+    let datesArray = [];
+    let endOfWeek;
+
+    for (let i = 0; i < totalAmountOfWeeks; i++) {
+
+        // if not the last week
+        if (i < totalAmountOfWeeks - 1) {
+            endOfWeek = 6;
+        }
+
+        // if the days in the last week is not exactly 7, use the remainder after dividing days by 7 (minus 1 as index based)
+        else {
+            endOfWeek = amountOfDays % 7 === 0 ? 6 : amountOfDays % 7 - 1;
+        }
+
+        // construct date range
+        // if only day in the date range i.e. aug 5 - aug 5, only show one date
+        if (dates[i * 7].month + " " + dates[i * 7].date === dates[(i * 7) + endOfWeek].month + " " + dates[(i * 7) + endOfWeek].date) {
+            var month = dates[i * 7].month;
+            var date = dates[i * 7].date;
+            datesArray.push(month + date);
+        }
+        else {
+            var fromMonth = dates[i * 7].month;
+            var fromDate = dates[i * 7].date;
+            var toMonth = dates[(i * 7) + endOfWeek].month;
+            var toDate = dates[(i * 7) + endOfWeek].date;
+            datesArray.push(fromMonth + fromDate + " - " + toMonth + toDate);
+        }
+    }
+
+    return datesArray;
+
+}

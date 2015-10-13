@@ -14,8 +14,7 @@ class Picker extends React.Component {
     render() {
         return (
             <section styleName="date-picker">
-                <DateRange />
-
+                <DateRange dateRanges={this.props.dateRanges}/>
             </section>
         );
     }

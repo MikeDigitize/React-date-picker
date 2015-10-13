@@ -20598,26 +20598,13 @@
 	                        }
 	                    });
 
-	                    // simulate ajax call
-	                    setTimeout(function () {
-
-	                        _this.setState({
-	                            dateChargesConfig: _dataDateCharges.dateCharges,
-	                            pickerState: {
-	                                closed: false,
-	                                thirdparty: false,
-	                                noDatesAvailable: false,
-	                                loading: false,
-	                                ready: true
-	                            }
-	                        });
-	                    }, 1500);
-
 	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.basketTotal)(nextProps.config.orderTotals.OverallTotalNumber));
 	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(nextProps.config.calendarConfiguration.availableDays));
 	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.chargesConfig)(nextProps.config.calendarConfiguration.chargeConfigurationCollection));
 
-	                    this.preparePickerData();
+	                    setTimeout(function () {
+	                        _this.preparePickerData();
+	                    }, 1000);
 	                }
 	            }
 	        }
@@ -20628,10 +20615,20 @@
 	            var formattedDates = (0, _utilsDateUtils.formatDates)(dates);
 	            var weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
 	            formattedDates = (0, _utilsDateUtils.includeDayTypeCharges)(formattedDates, _storesPickerStore2["default"].getState().chargesConfig);
-
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(dates));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.daysConfig)(formattedDates));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.totalWeeks)(weeks));
+
+	            this.setState({
+	                dateRanges: (0, _utilsDateUtils.createDateRanges)(formattedDates, weeks),
+	                pickerState: {
+	                    closed: false,
+	                    thirdparty: false,
+	                    noDatesAvailable: false,
+	                    loading: false,
+	                    ready: true
+	                }
+	            });
 	        }
 	    }, {
 	        key: "onNewData",
@@ -20682,7 +20679,7 @@
 	                    )
 	                );
 	            } else if (this.state.pickerState.ready) {
-	                return _react2["default"].createElement(_Picker2["default"], { dateChargesConfig: this.state.dateChargesConfig });
+	                return _react2["default"].createElement(_Picker2["default"], { dateRanges: this.state.dateRanges });
 	            } else {
 	                return false;
 	            }
@@ -20758,7 +20755,7 @@
 	            return _react2["default"].createElement(
 	                "section",
 	                { styleName: "date-picker" },
-	                _react2["default"].createElement(_DateRangeDateRange2["default"], null)
+	                _react2["default"].createElement(_DateRangeDateRange2["default"], { dateRanges: this.props.dateRanges })
 	            );
 	        }
 	    }]);
@@ -23473,7 +23470,8 @@
 	        basketTotal: basketTotal(state.basketTotal, action),
 	        chargesConfig: chargesConfig(state.dateChargesConfig, action),
 	        daysConfig: daysConfig(state.daysConfig, action),
-	        totalWeeks: totalWeeks(state.totalWeeks, action)
+	        totalWeeks: totalWeeks(state.totalWeeks, action),
+	        tableDisplayIndex: tableDisplayIndex(state.tableDisplayIndex, action)
 	    };
 	}
 
@@ -23531,6 +23529,18 @@
 
 	    switch (action.type) {
 	        case "TOTALWEEKSUPDATE":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function tableDisplayIndex() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? 5 : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "TABLEDISPLAYINDEX":
 	            return action.state;
 	        default:
 	            return state;
@@ -24152,6 +24162,8 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
+	var _actionsPickerDataActions = __webpack_require__(235);
+
 	var DateRange = (function (_React$Component) {
 	    _inherits(DateRange, _React$Component);
 
@@ -24159,21 +24171,55 @@
 	        _classCallCheck(this, DateRange);
 
 	        _get(Object.getPrototypeOf(DateRange.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            dates: this.props.dateRanges,
+	            index: _storesPickerStore2["default"].getState().tableDisplayIndex
+	        };
+	        _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this));
 	    }
 
 	    _createClass(DateRange, [{
+	        key: "onTableDisplayIndexUpdate",
+	        value: function onTableDisplayIndexUpdate() {
+	            this.setState({
+	                index: _storesPickerStore2["default"].getState().tableDisplayIndex
+	            });
+	        }
+	    }, {
+	        key: "prevweek",
+	        value: function prevweek() {
+	            var _this = this;
+
+	            this.setState({
+	                index: this.state.index === 0 ? this.state.dates.length - 1 : --this.state.index
+	            }, function () {
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.updateTableIndex)(_this.state.index));
+	            });
+	        }
+	    }, {
+	        key: "nextweek",
+	        value: function nextweek() {
+	            var _this2 = this;
+
+	            this.setState({
+	                index: this.state.index === this.state.dates.length - 1 ? 0 : ++this.state.index
+	            }, function () {
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.updateTableIndex)(_this2.state.index));
+	            });
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
 	                "div",
 	                { styleName: "date-range-select" },
-	                _react2["default"].createElement("span", { styleName: "date-range-left date-range-ctrl", className: "icon-left" }),
+	                _react2["default"].createElement("span", { styleName: "date-range-left date-range-ctrl", className: "icon-left", onClick: this.prevweek.bind(this) }),
 	                _react2["default"].createElement(
 	                    "p",
 	                    { styleName: "date-range" },
-	                    "Oct 11 - Oct 17"
+	                    this.state.dates[this.state.index]
 	                ),
-	                _react2["default"].createElement("span", { styleName: "date-range-right date-range-ctrl", className: "icon-right" })
+	                _react2["default"].createElement("span", { styleName: "date-range-right date-range-ctrl", className: "icon-right", onClick: this.nextweek.bind(this) })
 	            );
 	        }
 	    }]);
@@ -24205,11 +24251,13 @@
 	exports.basketTotal = basketTotal;
 	exports.daysConfig = daysConfig;
 	exports.totalWeeks = totalWeeks;
+	exports.updateTableIndex = updateTableIndex;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
 	var NEWDAYSCONFIG = "NEWDAYSCONFIG";
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
+	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -24229,6 +24277,10 @@
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
+	}
+
+	function updateTableIndex(data) {
+	    return { state: data, type: TABLEDISPLAYINDEX };
 	}
 
 /***/ },
@@ -26507,6 +26559,7 @@
 	exports.formatDates = formatDates;
 	exports.suffix = suffix;
 	exports.includeDayTypeCharges = includeDayTypeCharges;
+	exports.createDateRanges = createDateRanges;
 
 	function fillInGaps(config) {
 
@@ -26679,6 +26732,42 @@
 	    return dates.map(function (date) {
 	        return Object.assign({}, date, { dayTypeCharge: date.desc === "N/A" ? 0 : charges[date.desc].charge });
 	    });
+	}
+
+	function createDateRanges(dates, totalAmountOfWeeks) {
+
+	    var amountOfDays = dates.length;
+	    var datesArray = [];
+	    var endOfWeek = undefined;
+
+	    for (var i = 0; i < totalAmountOfWeeks; i++) {
+
+	        // if not the last week
+	        if (i < totalAmountOfWeeks - 1) {
+	            endOfWeek = 6;
+	        }
+
+	        // if the days in the last week is not exactly 7, use the remainder after dividing days by 7 (minus 1 as index based)
+	        else {
+	                endOfWeek = amountOfDays % 7 === 0 ? 6 : amountOfDays % 7 - 1;
+	            }
+
+	        // construct date range
+	        // if only day in the date range i.e. aug 5 - aug 5, only show one date
+	        if (dates[i * 7].month + " " + dates[i * 7].date === dates[i * 7 + endOfWeek].month + " " + dates[i * 7 + endOfWeek].date) {
+	            var month = dates[i * 7].month;
+	            var date = dates[i * 7].date;
+	            datesArray.push(month + date);
+	        } else {
+	            var fromMonth = dates[i * 7].month;
+	            var fromDate = dates[i * 7].date;
+	            var toMonth = dates[i * 7 + endOfWeek].month;
+	            var toDate = dates[i * 7 + endOfWeek].date;
+	            datesArray.push(fromMonth + fromDate + " - " + toMonth + toDate);
+	        }
+	    }
+
+	    return datesArray;
 	}
 
 /***/ },

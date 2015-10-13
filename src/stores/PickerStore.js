@@ -6,7 +6,8 @@ function DatePicker(state = {}, action = {}) {
         basketTotal : basketTotal(state.basketTotal, action),
         chargesConfig : chargesConfig(state.dateChargesConfig, action),
         daysConfig : daysConfig(state.daysConfig, action),
-        totalWeeks : totalWeeks(state.totalWeeks, action)
+        totalWeeks : totalWeeks(state.totalWeeks, action),
+        tableDisplayIndex : tableDisplayIndex(state.tableDisplayIndex, action)
     }
 }
 
@@ -49,6 +50,15 @@ function daysConfig(state = {}, action = {}) {
 function totalWeeks(state = 0, action = {}) {
     switch(action.type) {
         case "TOTALWEEKSUPDATE" :
+            return action.state;
+        default :
+            return state;
+    }
+}
+
+function tableDisplayIndex(state = 0, action = {}) {
+    switch(action.type) {
+        case "TABLEDISPLAYINDEX" :
             return action.state;
         default :
             return state;
