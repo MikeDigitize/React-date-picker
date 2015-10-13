@@ -3,6 +3,8 @@ import CSSModule from "react-css-modules";
 import styles from "./picker-styles";
 import DatePickerStore from "../../stores/PickerStore";
 
+import DateRange from "../DateRange/DateRange";
+
 class Picker extends React.Component {
 
     constructor(props) {
@@ -10,13 +12,10 @@ class Picker extends React.Component {
     }
 
     render() {
-        console.log("render datapicker");
         return (
             <section styleName="date-picker">
-                <h1>AO.com</h1>
-                <ul>
-                    { Object.keys(this.props.dateChargesConfig).map((date, i) => <li key={i}>{date}</li>)}
-                </ul>
+                <DateRange />
+
             </section>
         );
     }

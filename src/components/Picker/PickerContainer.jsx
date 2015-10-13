@@ -1,8 +1,9 @@
 import React from "react";
 import Picker from "./Picker";
 import DatePickerStore from "../../stores/PickerStore";
-import { basketTotal, availableDates, chargesConfig } from "../../actions/picker-data-actions";
+import { basketTotal, availableDates, chargesConfig, daysConfig, totalWeeks } from "../../actions/picker-data-actions";
 import { dateCharges } from "../../data/date-charges";
+import { fillInGaps, formatDates, includeDayTypeCharges } from "../../utils/date-utils";
 import "../../utils/Object-is-polyfill";
 
 export default class PickerContainer extends React.Component {
@@ -98,10 +99,23 @@ export default class PickerContainer extends React.Component {
                 DatePickerStore.dispatch(availableDates(nextProps.config.calendarConfiguration.availableDays));
                 DatePickerStore.dispatch(chargesConfig(nextProps.config.calendarConfiguration.chargeConfigurationCollection));
 
+                this.preparePickerData();
+
             }
 
         }
-        
+
+    }
+
+    preparePickerData() {
+        let dates = fillInGaps(DatePickerStore.getState().availableDates);
+        let formattedDates = formatDates(dates);
+        let weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
+        formattedDates = includeDayTypeCharges(formattedDates, DatePickerStore.getState().chargesConfig);
+
+        DatePickerStore.dispatch(availableDates(dates));
+        DatePickerStore.dispatch(daysConfig(formattedDates));
+        DatePickerStore.dispatch(totalWeeks(weeks));
     }
 
     onNewData(){
@@ -109,7 +123,6 @@ export default class PickerContainer extends React.Component {
     }
 
     render() {
-        console.log("render picker container");
         if(this.state.pickerState.closed) {
             return (
                 <div>

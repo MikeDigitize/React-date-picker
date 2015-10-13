@@ -4,7 +4,9 @@ function DatePicker(state = {}, action = {}) {
     return {
         availableDates : availableDates(state.availableDates, action),
         basketTotal : basketTotal(state.basketTotal, action),
-        chargesConfig : chargesConfig(state.dateChargesConfig, action)
+        chargesConfig : chargesConfig(state.dateChargesConfig, action),
+        daysConfig : daysConfig(state.daysConfig, action),
+        totalWeeks : totalWeeks(state.totalWeeks, action)
     }
 }
 
@@ -29,6 +31,24 @@ function basketTotal(state = 0, action = {}) {
 function chargesConfig(state = {}, action = {}) {
     switch(action.type) {
         case "NEWCHARGESCONFIG" :
+            return action.state;
+        default :
+            return state;
+    }
+}
+
+function daysConfig(state = {}, action = {}) {
+    switch(action.type) {
+        case "NEWDAYSCONFIG" :
+            return action.state;
+        default :
+            return state;
+    }
+}
+
+function totalWeeks(state = 0, action = {}) {
+    switch(action.type) {
+        case "TOTALWEEKSUPDATE" :
             return action.state;
         default :
             return state;

@@ -17,7 +17,6 @@ class App extends React.Component {
     }
 
     render() {
-        console.log("render container!!");
         return(
             <div>
                 <button

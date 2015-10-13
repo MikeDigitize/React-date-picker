@@ -64,7 +64,7 @@
 
 	var _PickerPickerContainer2 = _interopRequireDefault(_PickerPickerContainer);
 
-	var _dataAvailableDates = __webpack_require__(236);
+	var _dataAvailableDates = __webpack_require__(239);
 
 	var App = (function (_React$Component) {
 	    _inherits(App, _React$Component);
@@ -88,7 +88,6 @@
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            console.log("render container!!");
 	            return _react2["default"].createElement(
 	                "div",
 	                null,
@@ -20517,11 +20516,13 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerDataActions = __webpack_require__(233);
+	var _actionsPickerDataActions = __webpack_require__(235);
 
-	var _dataDateCharges = __webpack_require__(234);
+	var _dataDateCharges = __webpack_require__(236);
 
-	__webpack_require__(235);
+	var _utilsDateUtils = __webpack_require__(237);
+
+	__webpack_require__(238);
 
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
@@ -20615,8 +20616,22 @@
 	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.basketTotal)(nextProps.config.orderTotals.OverallTotalNumber));
 	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(nextProps.config.calendarConfiguration.availableDays));
 	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.chargesConfig)(nextProps.config.calendarConfiguration.chargeConfigurationCollection));
+
+	                    this.preparePickerData();
 	                }
 	            }
+	        }
+	    }, {
+	        key: "preparePickerData",
+	        value: function preparePickerData() {
+	            var dates = (0, _utilsDateUtils.fillInGaps)(_storesPickerStore2["default"].getState().availableDates);
+	            var formattedDates = (0, _utilsDateUtils.formatDates)(dates);
+	            var weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
+	            formattedDates = (0, _utilsDateUtils.includeDayTypeCharges)(formattedDates, _storesPickerStore2["default"].getState().chargesConfig);
+
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(dates));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.daysConfig)(formattedDates));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.totalWeeks)(weeks));
 	        }
 	    }, {
 	        key: "onNewData",
@@ -20626,7 +20641,6 @@
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            console.log("render picker container");
 	            if (this.state.pickerState.closed) {
 	                return _react2["default"].createElement(
 	                    "div",
@@ -20725,6 +20739,10 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
+	var _DateRangeDateRange = __webpack_require__(233);
+
+	var _DateRangeDateRange2 = _interopRequireDefault(_DateRangeDateRange);
+
 	var Picker = (function (_React$Component) {
 	    _inherits(Picker, _React$Component);
 
@@ -20737,26 +20755,10 @@
 	    _createClass(Picker, [{
 	        key: "render",
 	        value: function render() {
-	            console.log("render datapicker");
 	            return _react2["default"].createElement(
 	                "section",
 	                { styleName: "date-picker" },
-	                _react2["default"].createElement(
-	                    "h1",
-	                    null,
-	                    "AO.com"
-	                ),
-	                _react2["default"].createElement(
-	                    "ul",
-	                    null,
-	                    Object.keys(this.props.dateChargesConfig).map(function (date, i) {
-	                        return _react2["default"].createElement(
-	                            "li",
-	                            { key: i },
-	                            date
-	                        );
-	                    })
-	                )
+	                _react2["default"].createElement(_DateRangeDateRange2["default"], null)
 	            );
 	        }
 	    }]);
@@ -23469,7 +23471,9 @@
 	    return {
 	        availableDates: availableDates(state.availableDates, action),
 	        basketTotal: basketTotal(state.basketTotal, action),
-	        chargesConfig: chargesConfig(state.dateChargesConfig, action)
+	        chargesConfig: chargesConfig(state.dateChargesConfig, action),
+	        daysConfig: daysConfig(state.daysConfig, action),
+	        totalWeeks: totalWeeks(state.totalWeeks, action)
 	    };
 	}
 
@@ -23503,6 +23507,30 @@
 
 	    switch (action.type) {
 	        case "NEWCHARGESCONFIG":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function daysConfig() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWDAYSCONFIG":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function totalWeeks() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "TOTALWEEKSUPDATE":
 	            return action.state;
 	        default:
 	            return state;
@@ -24090,6 +24118,81 @@
 
 /***/ },
 /* 233 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _dateRangeStyles = __webpack_require__(234);
+
+	var _dateRangeStyles2 = _interopRequireDefault(_dateRangeStyles);
+
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
+	var DateRange = (function (_React$Component) {
+	    _inherits(DateRange, _React$Component);
+
+	    function DateRange(props) {
+	        _classCallCheck(this, DateRange);
+
+	        _get(Object.getPrototypeOf(DateRange.prototype), "constructor", this).call(this, props);
+	    }
+
+	    _createClass(DateRange, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "div",
+	                { styleName: "date-range-select" },
+	                _react2["default"].createElement("span", { styleName: "date-range-left date-range-ctrl", className: "icon-left" }),
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "date-range" },
+	                    "Oct 11 - Oct 17"
+	                ),
+	                _react2["default"].createElement("span", { styleName: "date-range-right date-range-ctrl", className: "icon-right" })
+	            );
+	        }
+	    }]);
+
+	    return DateRange;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(DateRange, _dateRangeStyles2["default"], { allowMultiple: true });
+	module.exports = exports["default"];
+
+/***/ },
+/* 234 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"date-range-select":"OX0IQ95QuEmxlWQhyiRs6","date-range":"_1yKpw1RLO3THHz9hnbX_Dt","date-range-ctrl":"znc2lrvqmWUjnbcbNbeIr","date-range-right":"_1AqK9xb6dHCKGPeJDRvBtw","date-range-left":"_8SLLaLIWkMBPftpcd_ldr"};
+
+/***/ },
+/* 235 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -24100,9 +24203,13 @@
 	exports.availableDates = availableDates;
 	exports.chargesConfig = chargesConfig;
 	exports.basketTotal = basketTotal;
+	exports.daysConfig = daysConfig;
+	exports.totalWeeks = totalWeeks;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
+	var NEWDAYSCONFIG = "NEWDAYSCONFIG";
+	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -24116,8 +24223,16 @@
 	    return { state: data, type: BASKETTOTALUPDATE };
 	}
 
+	function daysConfig(data) {
+	    return { state: data, type: NEWDAYSCONFIG };
+	}
+
+	function totalWeeks(data) {
+	    return { state: data, type: TOTALWEEKSUPDATE };
+	}
+
 /***/ },
-/* 234 */
+/* 236 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26372,7 +26487,202 @@
 	exports.dateCharges = dateCharges;
 
 /***/ },
-/* 235 */
+/* 237 */
+/***/ function(module, exports) {
+
+	/*
+	    Take the initial config object of shortdates and date description
+	    e.g. { 20151025 : "Sunday" }
+	    fill in any gaps (some dates maybe missing) and return the object
+	 */
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.fillInGaps = fillInGaps;
+	exports.getNextDate = getNextDate;
+	exports.getDaysInMonth = getDaysInMonth;
+	exports.formatDates = formatDates;
+	exports.suffix = suffix;
+	exports.includeDayTypeCharges = includeDayTypeCharges;
+
+	function fillInGaps(config) {
+
+	    var tempDaysArray = [];
+	    var tempDaysObject = {};
+	    var totalDiff, totalDaysInMonth, a, b, i, j;
+
+	    tempDaysArray = Object.keys(config).map(function (date) {
+	        return date;
+	    });
+
+	    for (i = 0; i < tempDaysArray.length; i++) {
+
+	        if (i < tempDaysArray.length - 1) {
+
+	            // create an object key for shortdate
+	            tempDaysObject[tempDaysArray[i]] = config[tempDaysArray[i]];
+
+	            // get the next date and the next date after that
+	            a = getNextDate(tempDaysArray[i]);
+	            b = getNextDate(tempDaysArray[i + 1]);
+
+	            // if the next shortdate is not the expected shortdate there is a gap that needs to be filled!
+	            if (a.nextDay !== b.today) {
+
+	                // work out the difference between the two dates
+	                if (a.nextDay > b.today) {
+
+	                    totalDaysInMonth = getDaysInMonth(a.month, a.year);
+	                    totalDiff = totalDaysInMonth - Number(a.nextDay) + Number(b.today);
+	                } else {
+	                    totalDiff = b.today - a.nextDay;
+	                }
+
+	                // loop through the gap in dates and create a N/A record for each unavailable date
+	                for (j = 0; j < totalDiff; j++) {
+
+	                    // use N/A as a flag to determine later whether to render as a valid selectable date
+	                    tempDaysObject[a.nextDayShortDate] = "N/A";
+	                    a = getNextDate(a.nextDayShortDate);
+	                }
+	            }
+	        } else {
+	            tempDaysObject[tempDaysArray[i]] = config[tempDaysArray[i]];
+	        }
+	    }
+
+	    return tempDaysObject;
+	}
+
+	/*
+	    Pass in a shortdate, return an object of stats based on that date
+	 */
+
+	function getNextDate(date) {
+
+	    var shortdate = date.split("");
+	    var year = shortdate[0] + shortdate[1] + shortdate[2] + shortdate[3];
+	    var month = shortdate[4] + shortdate[5];
+	    var day = shortdate[6] + shortdate[7];
+	    var daysInCurrentMonth = getDaysInMonth(month, year);
+	    var nextDay, nextMonth, nextYear;
+
+	    if (day == daysInCurrentMonth) {
+
+	        nextDay = "01";
+
+	        if (month === "12") {
+
+	            nextMonth = "01";
+	            nextYear = Number(year) + 1;
+	        } else {
+
+	            nextMonth = String(Number(month) + 1);
+	            nextYear = String(Number(year));
+
+	            if (nextMonth.length === 1) {
+	                nextMonth = "0" + nextMonth;
+	            }
+	        }
+	    } else {
+
+	        nextDay = String(Number(day) + 1);
+
+	        if (nextDay.length === 1) {
+	            nextDay = "0" + nextDay;
+	        }
+
+	        nextMonth = month;
+	        nextYear = year;
+	    }
+
+	    return {
+	        today: day,
+	        nextDay: nextDay,
+	        year: year,
+	        nextYear: nextYear,
+	        month: month,
+	        nextMonth: nextMonth,
+	        totalDays: daysInCurrentMonth,
+	        todayShortDate: date,
+	        nextDayShortDate: nextYear + nextMonth + nextDay
+	    };
+	}
+
+	function getDaysInMonth(m, y) {
+	    return (/8|3|5|10/.test(--m) ? 30 : m == 1 ? !(y % 4) && y % 100 || !(y % 400) ? 29 : 28 : 31
+	    );
+	}
+
+	/*
+	    Create an array of formatted date objects with details of each delivery date
+	 */
+
+	function formatDates(dates) {
+
+	    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+	    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+	    return Object.keys(dates).map(function (date) {
+	        var datearr = date.split("");
+	        var year = datearr.slice(0, 4).reduce(function (a, b) {
+	            return a + b;
+	        });
+	        var month = datearr.slice(4, 6).slice(0, 2).reduce(function (a, b) {
+	            return a + b;
+	        });
+	        var day = datearr[6] === "0" ? datearr[7] : datearr.slice(6, 8).reduce(function (a, b) {
+	            return a + b;
+	        });
+	        var datestring = new Date(year + "/" + month + "/" + day);
+	        return {
+	            year: year,
+	            month: months[datestring.getMonth()],
+	            day: days[datestring.getDay()],
+	            dayOfWeek: datestring.getDay(),
+	            date: day,
+	            dateSuffix: suffix(day),
+	            desc: dates[date],
+	            shortdate: date
+	        };
+	    });
+	}
+
+	/*
+	    Get the correct date suffix
+	 */
+
+	function suffix(i) {
+
+	    var j = i % 10,
+	        k = i % 100;
+	    if (j == 1 && k != 11) {
+	        return "st";
+	    }
+	    if (j == 2 && k != 12) {
+	        return "nd";
+	    }
+	    if (j == 3 && k != 13) {
+	        return "rd";
+	    }
+	    return "th";
+	}
+
+	/*
+	    Bolt on the day charge for each object in the dates array
+	 */
+
+	function includeDayTypeCharges(dates, charges) {
+	    return dates.map(function (date) {
+	        return Object.assign({}, date, { dayTypeCharge: date.desc === "N/A" ? 0 : charges[date.desc].charge });
+	    });
+	}
+
+/***/ },
+/* 238 */
 /***/ function(module, exports) {
 
 	/*
@@ -26393,7 +26703,7 @@
 	}
 
 /***/ },
-/* 236 */
+/* 239 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26463,7 +26773,6 @@
 	      "availableDays": {
 	         "20151009": "SameDay",
 	         "20151010": "Saturday",
-	         "20151011": "Sunday",
 	         "20151012": "Monday",
 	         "20151013": "Tuesday",
 	         "20151014": "Wednesday",
@@ -26473,10 +26782,6 @@
 	         "20151018": "Sunday",
 	         "20151019": "Monday",
 	         "20151020": "Tuesday",
-	         "20151021": "Wednesday",
-	         "20151022": "Thursday",
-	         "20151023": "Friday",
-	         "20151024": "Saturday",
 	         "20151025": "Sunday",
 	         "20151026": "Monday",
 	         "20151027": "Tuesday",
@@ -26489,10 +26794,6 @@
 	         "20151103": "Tuesday",
 	         "20151104": "Wednesday",
 	         "20151105": "Thursday",
-	         "20151106": "Friday",
-	         "20151107": "Saturday",
-	         "20151108": "Sunday",
-	         "20151109": "Monday",
 	         "20151110": "Tuesday",
 	         "20151111": "Wednesday",
 	         "20151112": "Thursday",
