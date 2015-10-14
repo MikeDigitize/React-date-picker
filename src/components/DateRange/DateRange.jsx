@@ -10,7 +10,7 @@ class DateRange extends React.Component {
         super(props);
         this.state = {
             dates : this.props.dateRanges,
-            index : DatePickerStore.getState().tableDisplayIndex,
+            index : this.props.tableIndex,
             unsubscribe : DatePickerStore.subscribe(this.onTableDisplayIndexUpdate.bind(this))
         };
     }
@@ -52,5 +52,15 @@ class DateRange extends React.Component {
     }
 
 }
+
+DateRange.defaultProps = {
+    dateRanges : [],
+    tableIndex : 0
+};
+
+DateRange.propTypes = {
+    dateRanges : React.PropTypes.array,
+    tableIndex : React.PropTypes.number
+};
 
 export default CSSModule(DateRange, styles, { allowMultiple : true });

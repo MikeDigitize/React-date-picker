@@ -7,7 +7,7 @@ class TableHead extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex,
+            tableDisplayIndex : this.props.tableIndex,
             tableHeadData : this.props.tableHeadData
         }
     }

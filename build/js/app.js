@@ -20617,7 +20617,7 @@
 	            var formattedDates = (0, _utilsDateUtils.formatDates)(dates);
 	            var weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
 	            formattedDates = (0, _utilsDateUtils.includeDayTypeCharges)(formattedDates, _storesPickerStore2["default"].getState().chargesConfig);
-	            var tableHeadData = (0, _utilsTableDataUtils.createTableHeadData)(formattedDates);
+	            var thData = (0, _utilsTableDataUtils.createTableHeadData)(formattedDates);
 	            var ranges = (0, _utilsDateUtils.createDateRanges)(formattedDates, weeks);
 
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(dates));
@@ -20625,10 +20625,9 @@
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.totalWeeks)(weeks));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.daysAndChargesConfig)(_dataDateCharges.dateCharges));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.dateRanges)(ranges));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.tableHeadData)(thData));
 
 	            this.setState({
-	                dateRanges: ranges,
-	                tableHeadData: (0, _utilsTableDataUtils.createTableHeadData)(formattedDates),
 	                pickerState: {
 	                    closed: false,
 	                    thirdparty: false,
@@ -20714,10 +20713,7 @@
 	                    )
 	                );
 	            } else if (this.state.pickerState.ready) {
-	                return _react2["default"].createElement(_Picker2["default"], {
-	                    dateRanges: this.state.dateRanges,
-	                    tableHeadData: this.state.tableHeadData
-	                });
+	                return _react2["default"].createElement(_Picker2["default"], null);
 	            } else {
 	                return false;
 	            }
@@ -20785,35 +20781,35 @@
 	var Picker = (function (_React$Component) {
 	    _inherits(Picker, _React$Component);
 
-	    function Picker(props) {
+	    function Picker() {
 	        _classCallCheck(this, Picker);
 
-	        _get(Object.getPrototypeOf(Picker.prototype), "constructor", this).call(this, props);
-	        console.log("this.props", this.props);
+	        _get(Object.getPrototypeOf(Picker.prototype), "constructor", this).call(this);
+	        this.state = {
+	            dateRanges: _storesPickerStore2["default"].getState().dateRanges,
+	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
+	            tableIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
+	        };
 	    }
 
 	    _createClass(Picker, [{
 	        key: "render",
 	        value: function render() {
+	            console.log("this.state.tableHeadData", this.state.tableHeadData);
 	            return _react2["default"].createElement(
 	                "section",
 	                { styleName: "date-picker" },
-	                _react2["default"].createElement(_DateRangeDateRange2["default"], { dateRanges: this.props.dateRanges }),
-	                _react2["default"].createElement(_TableTable2["default"], { dateRanges: this.props.tableHeadData })
+	                _react2["default"].createElement(_DateRangeDateRange2["default"], { dateRanges: this.state.dateRanges }),
+	                _react2["default"].createElement(_TableTable2["default"], {
+	                    tableIndex: this.state.tableIndex,
+	                    tableHeadData: this.state.tableHeadData
+	                })
 	            );
 	        }
 	    }]);
 
 	    return Picker;
 	})(_react2["default"].Component);
-
-	Picker.defaultProps = {
-	    dateRanges: []
-	};
-
-	Picker.propTypes = {
-	    dateRanges: _react2["default"].PropTypes.array
-	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(Picker, _pickerStyles2["default"]);
 	module.exports = exports["default"];
@@ -23502,6 +23498,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.tableHeadData = tableHeadData;
 
 	var _redux = __webpack_require__(224);
 
@@ -23517,7 +23514,8 @@
 	        totalWeeks: totalWeeks(state.totalWeeks, action),
 	        tableDisplayIndex: tableDisplayIndex(state.tableDisplayIndex, action),
 	        daysAndChargesConfig: daysAndChargesConfig(state.daysAndChargesConfig, action),
-	        dateRanges: dateRanges(state.dateRanges, action)
+	        dateRanges: dateRanges(state.dateRanges, action),
+	        tableHeadData: tableHeadData(state.tableHeadData, action)
 	    };
 	}
 
@@ -23617,9 +23615,20 @@
 	    }
 	}
 
+	function tableHeadData() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWDATERANGES":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
 	var DatePickerStore = (0, _redux.createStore)(DatePicker);
 	exports["default"] = DatePickerStore;
-	module.exports = exports["default"];
 
 /***/ },
 /* 224 */
@@ -24243,7 +24252,7 @@
 	        _get(Object.getPrototypeOf(DateRange.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            dates: this.props.dateRanges,
-	            index: _storesPickerStore2["default"].getState().tableDisplayIndex,
+	            index: this.props.tableIndex,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this))
 	        };
 	    }
@@ -24302,6 +24311,16 @@
 	    return DateRange;
 	})(_react2["default"].Component);
 
+	DateRange.defaultProps = {
+	    dateRanges: [],
+	    tableIndex: 0
+	};
+
+	DateRange.propTypes = {
+	    dateRanges: _react2["default"].PropTypes.array,
+	    tableIndex: _react2["default"].PropTypes.number
+	};
+
 	exports["default"] = (0, _reactCssModules2["default"])(DateRange, _dateRangeStyles2["default"], { allowMultiple: true });
 	module.exports = exports["default"];
 
@@ -24329,6 +24348,7 @@
 	exports.updateTableIndex = updateTableIndex;
 	exports.daysAndChargesConfig = daysAndChargesConfig;
 	exports.dateRanges = dateRanges;
+	exports.tableHeadData = tableHeadData;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
@@ -24337,6 +24357,7 @@
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDAYSANDCHARGESCONFIG = "NEWDAYSANDCHARGESCONFIG";
 	var NEWDATERANGES = "NEWDATERANGES";
+	var NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -24368,6 +24389,10 @@
 
 	function dateRanges(data) {
 	    return { state: data, type: NEWDATERANGES };
+	}
+
+	function tableHeadData(data) {
+	    return { state: data, type: NEWTABLEHEADDATA };
 	}
 
 /***/ },
@@ -24406,6 +24431,10 @@
 
 	var _tableStyles2 = _interopRequireDefault(_tableStyles);
 
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
 
@@ -24413,7 +24442,10 @@
 	        _classCallCheck(this, Table);
 
 	        _get(Object.getPrototypeOf(Table.prototype), "constructor", this).call(this, props);
-	        console.log("table props", this.props);
+	        this.state = {
+	            tableHeadData: this.props.tableHeadData,
+	            tableIndex: this.props.tableIndex
+	        };
 	    }
 
 	    _createClass(Table, [{
@@ -24422,7 +24454,10 @@
 	            return _react2["default"].createElement(
 	                "table",
 	                { styleName: "date-picker-table" },
-	                _react2["default"].createElement(_TableTableHead2["default"], { tableHeadData: this.props.tableHeadData }),
+	                _react2["default"].createElement(_TableTableHead2["default"], {
+	                    tableHeadData: this.state.tableHeadData,
+	                    tableIndex: this.state.tableIndex
+	                }),
 	                _react2["default"].createElement("tbody", null)
 	            );
 	        }
@@ -24478,7 +24513,7 @@
 
 	        _get(Object.getPrototypeOf(TableHead.prototype), "constructor", this).call(this, props);
 	        this.state = {
-	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
+	            tableDisplayIndex: this.props.tableIndex,
 	            tableHeadData: this.props.tableHeadData
 	        };
 	    }

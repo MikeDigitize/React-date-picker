@@ -1,7 +1,7 @@
 import React from "react";
 import Picker from "./Picker";
 import DatePickerStore from "../../stores/PickerStore";
-import { basketTotal, availableDates, chargesConfig, daysConfig, totalWeeks, daysAndChargesConfig, dateRanges } from "../../actions/picker-data-actions";
+import { basketTotal, availableDates, chargesConfig, daysConfig, totalWeeks, daysAndChargesConfig, dateRanges, tableHeadData } from "../../actions/picker-data-actions";
 import { dateCharges } from "../../data/date-charges";
 import { fillInGaps, formatDates, includeDayTypeCharges,createDateRanges } from "../../utils/date-utils";
 import { createTableHeadData } from "../../utils/table-data-utils";
@@ -99,7 +99,7 @@ export default class PickerContainer extends React.Component {
         let formattedDates = formatDates(dates);
         let weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
         formattedDates = includeDayTypeCharges(formattedDates, DatePickerStore.getState().chargesConfig);
-        let tableHeadData = createTableHeadData(formattedDates);
+        let thData = createTableHeadData(formattedDates);
         let ranges = createDateRanges(formattedDates, weeks);
 
         DatePickerStore.dispatch(availableDates(dates));
@@ -107,10 +107,9 @@ export default class PickerContainer extends React.Component {
         DatePickerStore.dispatch(totalWeeks(weeks));
         DatePickerStore.dispatch(daysAndChargesConfig(dateCharges));
         DatePickerStore.dispatch(dateRanges(ranges));
+        DatePickerStore.dispatch(tableHeadData(thData));
 
         this.setState({
-            dateRanges : ranges,
-            tableHeadData : createTableHeadData(formattedDates),
             pickerState : {
                 closed : false,
                 thirdparty : false,
@@ -185,12 +184,7 @@ export default class PickerContainer extends React.Component {
             );
         }
         else if(this.state.pickerState.ready){
-            return (
-                <Picker
-                    dateRanges={this.state.dateRanges}
-                    tableHeadData={this.state.tableHeadData}
-                />
-            );
+            return (<Picker />);
         }
         else {
             return false;
