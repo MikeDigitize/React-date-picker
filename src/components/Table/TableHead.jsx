@@ -13,7 +13,14 @@ class TableHead extends React.Component {
     }
 
     createTableHeadRow() {
-        console.log("state!", this.state.tableHeadData);
+        console.log("TableHead state!", this.state);
+        console.log(this.state.tableHeadData.map((th, i) => {
+            return (<th key={i}>{this.createTableHeadText(th)}</th>)
+        }));
+    }
+
+    createTableHeadText(th) {
+        return Object.keys(th).map((text, i) => <p key={i}>{ th[text] }</p>);
     }
 
     render() {

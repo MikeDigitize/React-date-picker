@@ -8,8 +8,8 @@ class Table extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tableHeadData : this.props.tableHeadData,
-            tableIndex : this.props.tableIndex
+            tableHeadData : DatePickerStore.getState().tableHeadData,
+            tableIndex : DatePickerStore.getState().tableDisplayIndex
         };
     }
 
@@ -19,7 +19,7 @@ class Table extends React.Component {
                 <TableHead
                     tableHeadData={ this.state.tableHeadData }
                     tableIndex={ this.state.tableIndex }
-                    />
+                />
                 <tbody>
                 </tbody>
              </table>

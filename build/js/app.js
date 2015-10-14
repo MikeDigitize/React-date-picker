@@ -20637,32 +20637,34 @@
 	                }
 	            });
 
-	            var counter = 0,
-	                timeslotDescriptions = [];
-
-	            for (var i in _dataDateCharges.dateCharges) {
-
-	                if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
-	                    timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-	                } else {
-	                    timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-	                }
-
-	                //console.log(timeslotDescriptions);
-
-	                for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
-
-	                    if (!_dataDateCharges.dateCharges[i][j]) {
-	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
-	                    } else if (_dataDateCharges.dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
-	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
-	                    }
-	                }
-
-	                counter++;
-	            }
-
-	            console.log(_dataDateCharges.dateCharges);
+	            //var counter = 0, timeslotDescriptions = [];
+	            //
+	            //for (var i in dateCharges) {
+	            //
+	            //    if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
+	            //        timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+	            //    } else {
+	            //        timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+	            //    }
+	            //
+	            //    //console.log(timeslotDescriptions);
+	            //
+	            //    for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
+	            //
+	            //        if (!dateCharges[i][j]) {
+	            //            dateCharges[i].splice(j, 0, { WebDescription: null });
+	            //        }
+	            //        else if (dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
+	            //            dateCharges[i].splice(j, 0, { WebDescription: null });
+	            //        }
+	            //
+	            //    }
+	            //
+	            //    counter++;
+	            //
+	            //}
+	            //
+	            //console.log(dateCharges);
 	        }
 	    }, {
 	        key: "onNewData",
@@ -20795,15 +20797,14 @@
 	    _createClass(Picker, [{
 	        key: "render",
 	        value: function render() {
-	            console.log("this.state.tableHeadData", this.state.tableHeadData);
 	            return _react2["default"].createElement(
 	                "section",
 	                { styleName: "date-picker" },
-	                _react2["default"].createElement(_DateRangeDateRange2["default"], { dateRanges: this.state.dateRanges }),
-	                _react2["default"].createElement(_TableTable2["default"], {
-	                    tableIndex: this.state.tableIndex,
-	                    tableHeadData: this.state.tableHeadData
-	                })
+	                _react2["default"].createElement(_DateRangeDateRange2["default"], {
+	                    dateRanges: this.state.dateRanges,
+	                    tableIndex: this.state.tableIndex
+	                }),
+	                _react2["default"].createElement(_TableTable2["default"], null)
 	            );
 	        }
 	    }]);
@@ -23525,6 +23526,7 @@
 
 	    switch (action.type) {
 	        case "NEWAVAILABLEDATESANDCHARGES":
+
 	            return action.state;
 	        default:
 	            return state;
@@ -23620,7 +23622,7 @@
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    switch (action.type) {
-	        case "NEWDATERANGES":
+	        case "NEWTABLEHEADDATA":
 	            return action.state;
 	        default:
 	            return state;
@@ -24443,8 +24445,8 @@
 
 	        _get(Object.getPrototypeOf(Table.prototype), "constructor", this).call(this, props);
 	        this.state = {
-	            tableHeadData: this.props.tableHeadData,
-	            tableIndex: this.props.tableIndex
+	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
+	            tableIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
 	        };
 	    }
 
@@ -24521,7 +24523,27 @@
 	    _createClass(TableHead, [{
 	        key: "createTableHeadRow",
 	        value: function createTableHeadRow() {
-	            console.log("state!", this.state.tableHeadData);
+	            var _this = this;
+
+	            console.log("TableHead state!", this.state);
+	            console.log(this.state.tableHeadData.map(function (th, i) {
+	                return _react2["default"].createElement(
+	                    "th",
+	                    { key: i },
+	                    _this.createTableHeadText(th)
+	                );
+	            }));
+	        }
+	    }, {
+	        key: "createTableHeadText",
+	        value: function createTableHeadText(th) {
+	            return Object.keys(th).map(function (text, i) {
+	                return _react2["default"].createElement(
+	                    "p",
+	                    { key: i },
+	                    th[text]
+	                );
+	            });
 	        }
 	    }, {
 	        key: "render",
@@ -27174,14 +27196,7 @@
 	        };
 	    });
 
-	    return createArrayOfTheadConfigs(daysConfig, 7).map(function (week) {
-	        week.unshift({
-	            desc: null,
-	            day: null,
-	            date: null
-	        });
-	        return week;
-	    });
+	    return createArrayOfTheadConfigs(daysConfig, 7);
 	}
 
 	function createArrayOfTheadConfigs(daysConfig, size) {

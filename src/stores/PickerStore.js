@@ -17,6 +17,7 @@ function DatePicker(state = {}, action = {}) {
 function availableDates(state = {}, action = {}) {
     switch(action.type) {
         case "NEWAVAILABLEDATESANDCHARGES" :
+
             return action.state;
         default :
             return state;
@@ -88,7 +89,7 @@ function dateRanges(state = [], action = {}) {
 
 export function tableHeadData(state = [], action = {}) {
     switch(action.type) {
-        case "NEWDATERANGES" :
+        case "NEWTABLEHEADDATA" :
             return action.state;
         default :
             return state;

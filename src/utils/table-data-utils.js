@@ -8,14 +8,7 @@ export function createTableHeadData(dates) {
         };
     });
 
-    return createArrayOfTheadConfigs(daysConfig, 7).map(week => {
-        week.unshift({
-            desc : null,
-            day : null,
-            date : null
-        });
-        return week;
-    });
+    return createArrayOfTheadConfigs(daysConfig, 7);
 
 }
 
