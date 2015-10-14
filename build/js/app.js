@@ -64,7 +64,7 @@
 
 	var _PickerPickerContainer2 = _interopRequireDefault(_PickerPickerContainer);
 
-	var _dataAvailableDates = __webpack_require__(239);
+	var _dataAvailableDates = __webpack_require__(243);
 
 	var App = (function (_React$Component) {
 	    _inherits(App, _React$Component);
@@ -20518,11 +20518,13 @@
 
 	var _actionsPickerDataActions = __webpack_require__(235);
 
-	var _dataDateCharges = __webpack_require__(236);
+	var _dataDateCharges = __webpack_require__(239);
 
-	var _utilsDateUtils = __webpack_require__(237);
+	var _utilsDateUtils = __webpack_require__(240);
 
-	__webpack_require__(238);
+	var _utilsTableDataUtils = __webpack_require__(241);
+
+	__webpack_require__(242);
 
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
@@ -20532,7 +20534,6 @@
 
 	        _get(Object.getPrototypeOf(PickerContainer.prototype), "constructor", this).call(this, props);
 	        this.state = {
-	            dateChargesConfig: {},
 	            unsubscribeFromStore: null,
 	            pickerState: {
 	                "closed": true,
@@ -20616,15 +20617,18 @@
 	            var formattedDates = (0, _utilsDateUtils.formatDates)(dates);
 	            var weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
 	            formattedDates = (0, _utilsDateUtils.includeDayTypeCharges)(formattedDates, _storesPickerStore2["default"].getState().chargesConfig);
+	            var tableHeadData = (0, _utilsTableDataUtils.createTableHeadData)(formattedDates);
+	            var ranges = (0, _utilsDateUtils.createDateRanges)(formattedDates, weeks);
 
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(dates));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.daysConfig)(formattedDates));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.totalWeeks)(weeks));
-
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.daysAndChargesConfig)(_dataDateCharges.dateCharges));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.dateRanges)(ranges));
 
 	            this.setState({
-	                dateRanges: (0, _utilsDateUtils.createDateRanges)(formattedDates, weeks),
+	                dateRanges: ranges,
+	                tableHeadData: (0, _utilsTableDataUtils.createTableHeadData)(formattedDates),
 	                pickerState: {
 	                    closed: false,
 	                    thirdparty: false,
@@ -20637,8 +20641,6 @@
 	            var counter = 0,
 	                timeslotDescriptions = [];
 
-	            console.log(dates);
-
 	            for (var i in _dataDateCharges.dateCharges) {
 
 	                if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
@@ -20647,7 +20649,7 @@
 	                    timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
 	                }
 
-	                console.log(timeslotDescriptions);
+	                //console.log(timeslotDescriptions);
 
 	                for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
 
@@ -20712,7 +20714,10 @@
 	                    )
 	                );
 	            } else if (this.state.pickerState.ready) {
-	                return _react2["default"].createElement(_Picker2["default"], { dateRanges: this.state.dateRanges });
+	                return _react2["default"].createElement(_Picker2["default"], {
+	                    dateRanges: this.state.dateRanges,
+	                    tableHeadData: this.state.tableHeadData
+	                });
 	            } else {
 	                return false;
 	            }
@@ -20773,6 +20778,10 @@
 
 	var _DateRangeDateRange2 = _interopRequireDefault(_DateRangeDateRange);
 
+	var _TableTable = __webpack_require__(236);
+
+	var _TableTable2 = _interopRequireDefault(_TableTable);
+
 	var Picker = (function (_React$Component) {
 	    _inherits(Picker, _React$Component);
 
@@ -20780,6 +20789,7 @@
 	        _classCallCheck(this, Picker);
 
 	        _get(Object.getPrototypeOf(Picker.prototype), "constructor", this).call(this, props);
+	        console.log("this.props", this.props);
 	    }
 
 	    _createClass(Picker, [{
@@ -20788,7 +20798,8 @@
 	            return _react2["default"].createElement(
 	                "section",
 	                { styleName: "date-picker" },
-	                _react2["default"].createElement(_DateRangeDateRange2["default"], { dateRanges: this.props.dateRanges })
+	                _react2["default"].createElement(_DateRangeDateRange2["default"], { dateRanges: this.props.dateRanges }),
+	                _react2["default"].createElement(_TableTable2["default"], { dateRanges: this.props.tableHeadData })
 	            );
 	        }
 	    }]);
@@ -20797,11 +20808,11 @@
 	})(_react2["default"].Component);
 
 	Picker.defaultProps = {
-	    availableDates: {}
+	    dateRanges: []
 	};
 
 	Picker.propTypes = {
-	    availableDates: _react2["default"].PropTypes.object
+	    dateRanges: _react2["default"].PropTypes.array
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(Picker, _pickerStyles2["default"]);
@@ -23505,7 +23516,8 @@
 	        daysConfig: daysConfig(state.daysConfig, action),
 	        totalWeeks: totalWeeks(state.totalWeeks, action),
 	        tableDisplayIndex: tableDisplayIndex(state.tableDisplayIndex, action),
-	        daysAndChargesConfig: daysAndChargesConfig(state.daysAndChargesConfig, action)
+	        daysAndChargesConfig: daysAndChargesConfig(state.daysAndChargesConfig, action),
+	        dateRanges: dateRanges(state.dateRanges, action)
 	    };
 	}
 
@@ -23587,6 +23599,18 @@
 
 	    switch (action.type) {
 	        case "NEWDAYSANDCHARGESCONFIG":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function dateRanges() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWDATERANGES":
 	            return action.state;
 	        default:
 	            return state;
@@ -24304,6 +24328,7 @@
 	exports.totalWeeks = totalWeeks;
 	exports.updateTableIndex = updateTableIndex;
 	exports.daysAndChargesConfig = daysAndChargesConfig;
+	exports.dateRanges = dateRanges;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
@@ -24311,6 +24336,7 @@
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDAYSANDCHARGESCONFIG = "NEWDAYSANDCHARGESCONFIG";
+	var NEWDATERANGES = "NEWDATERANGES";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -24340,8 +24366,272 @@
 	    return { state: data, type: NEWDAYSANDCHARGESCONFIG };
 	}
 
+	function dateRanges(data) {
+	    return { state: data, type: NEWDATERANGES };
+	}
+
 /***/ },
 /* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _TableTableHead = __webpack_require__(237);
+
+	var _TableTableHead2 = _interopRequireDefault(_TableTableHead);
+
+	var _tableStyles = __webpack_require__(238);
+
+	var _tableStyles2 = _interopRequireDefault(_tableStyles);
+
+	var Table = (function (_React$Component) {
+	    _inherits(Table, _React$Component);
+
+	    function Table(props) {
+	        _classCallCheck(this, Table);
+
+	        _get(Object.getPrototypeOf(Table.prototype), "constructor", this).call(this, props);
+	        console.log("table props", this.props);
+	    }
+
+	    _createClass(Table, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "table",
+	                { styleName: "date-picker-table" },
+	                _react2["default"].createElement(_TableTableHead2["default"], { tableHeadData: this.props.tableHeadData }),
+	                _react2["default"].createElement("tbody", null)
+	            );
+	        }
+	    }]);
+
+	    return Table;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(Table, _tableStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _tableStyles = __webpack_require__(238);
+
+	var _tableStyles2 = _interopRequireDefault(_tableStyles);
+
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
+	var TableHead = (function (_React$Component) {
+	    _inherits(TableHead, _React$Component);
+
+	    function TableHead(props) {
+	        _classCallCheck(this, TableHead);
+
+	        _get(Object.getPrototypeOf(TableHead.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
+	            tableHeadData: this.props.tableHeadData
+	        };
+	    }
+
+	    _createClass(TableHead, [{
+	        key: "createTableHeadRow",
+	        value: function createTableHeadRow() {
+	            console.log("state!", this.state.tableHeadData);
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            this.createTableHeadRow();
+	            return _react2["default"].createElement(
+	                "thead",
+	                null,
+	                _react2["default"].createElement(
+	                    "tr",
+	                    null,
+	                    _react2["default"].createElement("th", null),
+	                    _react2["default"].createElement(
+	                        "th",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-extra-info" },
+	                            "Same Day"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-day" },
+	                            "SUN"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-date" },
+	                            "11"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "th",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-extra-info" },
+	                            "Next Day"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-day" },
+	                            "MON"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-date" },
+	                            "12"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "th",
+	                        null,
+	                        _react2["default"].createElement("p", { styleName: "table-head-extra-info" }),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-day" },
+	                            "TUE"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-date" },
+	                            "13"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "th",
+	                        null,
+	                        _react2["default"].createElement("p", { styleName: "table-head-extra-info" }),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-day" },
+	                            "WED"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-date" },
+	                            "14"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "th",
+	                        null,
+	                        _react2["default"].createElement("p", { styleName: "table-head-extra-info" }),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-day" },
+	                            "THU"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-date" },
+	                            "15"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "th",
+	                        null,
+	                        _react2["default"].createElement("p", { styleName: "table-head-extra-info" }),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-day" },
+	                            "FRI"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-date" },
+	                            "16"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "th",
+	                        null,
+	                        _react2["default"].createElement("p", { styleName: "table-head-extra-info" }),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-day" },
+	                            "SAT"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "table-head-date" },
+	                            "17"
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return TableHead;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(TableHead, _tableStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
+/* 238 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"date-picker-table":"_2fFeFRwWZTf51bPpQfobX4","table-head-extra-info":"_2Ht-HdGhCcrmFwsNJshupA","table-head-day":"_3bMhcWyiP4_HF9MoPiOpcJ","table-head-date":"_3bdydUn81Z5uh-jrQnVgeF","timeslot-desc":"_1hDevQLx1cX9WGK-FjjTzA","delivery-selectable":"UxfKBkTslH3rIBNnXMpq5","delivery-selected":"_2ZLN9pk6FVHmxuwGqy430H","time":"_1wAzEU7Ejgu1QZRFEThzKp","extra-info":"_5TCarjPfCjbfr6P0nQ2dN","icon-tick2":"_6CweULWxOBGVTyOPqODEC"};
+
+/***/ },
+/* 239 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26596,7 +26886,7 @@
 	exports.dateCharges = dateCharges;
 
 /***/ },
-/* 237 */
+/* 240 */
 /***/ function(module, exports) {
 
 	/*
@@ -26828,7 +27118,45 @@
 	}
 
 /***/ },
-/* 238 */
+/* 241 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.createTableHeadData = createTableHeadData;
+	exports.createArrayOfTheadConfigs = createArrayOfTheadConfigs;
+
+	function createTableHeadData(dates) {
+
+	    var daysConfig = dates.map(function (date) {
+	        return {
+	            desc: date.desc,
+	            day: date.day,
+	            date: date.date
+	        };
+	    });
+
+	    return createArrayOfTheadConfigs(daysConfig, 7).map(function (week) {
+	        week.unshift({
+	            desc: null,
+	            day: null,
+	            date: null
+	        });
+	        return week;
+	    });
+	}
+
+	function createArrayOfTheadConfigs(daysConfig, size) {
+	    return [].concat.apply([], daysConfig.map(function (_, i) {
+	        return i % size ? [] : [daysConfig.slice(i, i + size)];
+	    }));
+	}
+
+/***/ },
+/* 242 */
 /***/ function(module, exports) {
 
 	/*
@@ -26849,7 +27177,7 @@
 	}
 
 /***/ },
-/* 239 */
+/* 243 */
 /***/ function(module, exports) {
 
 	"use strict";

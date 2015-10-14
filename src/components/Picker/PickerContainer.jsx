@@ -1,9 +1,10 @@
 import React from "react";
 import Picker from "./Picker";
 import DatePickerStore from "../../stores/PickerStore";
-import { basketTotal, availableDates, chargesConfig, daysConfig, totalWeeks, daysAndChargesConfig } from "../../actions/picker-data-actions";
+import { basketTotal, availableDates, chargesConfig, daysConfig, totalWeeks, daysAndChargesConfig, dateRanges } from "../../actions/picker-data-actions";
 import { dateCharges } from "../../data/date-charges";
 import { fillInGaps, formatDates, includeDayTypeCharges,createDateRanges } from "../../utils/date-utils";
+import { createTableHeadData } from "../../utils/table-data-utils";
 import "../../utils/Object-is-polyfill";
 
 export default class PickerContainer extends React.Component {
@@ -11,7 +12,6 @@ export default class PickerContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dateChargesConfig : {},
             unsubscribeFromStore : null,
             pickerState : {
                 "closed" : true,
@@ -99,15 +99,18 @@ export default class PickerContainer extends React.Component {
         let formattedDates = formatDates(dates);
         let weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
         formattedDates = includeDayTypeCharges(formattedDates, DatePickerStore.getState().chargesConfig);
+        let tableHeadData = createTableHeadData(formattedDates);
+        let ranges = createDateRanges(formattedDates, weeks);
 
         DatePickerStore.dispatch(availableDates(dates));
         DatePickerStore.dispatch(daysConfig(formattedDates));
         DatePickerStore.dispatch(totalWeeks(weeks));
-
         DatePickerStore.dispatch(daysAndChargesConfig(dateCharges));
+        DatePickerStore.dispatch(dateRanges(ranges));
 
         this.setState({
-            dateRanges : createDateRanges(formattedDates, weeks),
+            dateRanges : ranges,
+            tableHeadData : createTableHeadData(formattedDates),
             pickerState : {
                 closed : false,
                 thirdparty : false,
@@ -119,8 +122,6 @@ export default class PickerContainer extends React.Component {
 
         var counter = 0, timeslotDescriptions = [];
 
-        console.log(dates);
-
         for (var i in dateCharges) {
 
             if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
@@ -129,7 +130,7 @@ export default class PickerContainer extends React.Component {
                 timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
             }
 
-            console.log(timeslotDescriptions);
+            //console.log(timeslotDescriptions);
 
             for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
 
@@ -184,7 +185,12 @@ export default class PickerContainer extends React.Component {
             );
         }
         else if(this.state.pickerState.ready){
-            return (<Picker dateRanges={this.state.dateRanges}/>);
+            return (
+                <Picker
+                    dateRanges={this.state.dateRanges}
+                    tableHeadData={this.state.tableHeadData}
+                />
+            );
         }
         else {
             return false;

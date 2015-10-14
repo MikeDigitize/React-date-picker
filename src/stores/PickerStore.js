@@ -8,7 +8,8 @@ function DatePicker(state = {}, action = {}) {
         daysConfig : daysConfig(state.daysConfig, action),
         totalWeeks : totalWeeks(state.totalWeeks, action),
         tableDisplayIndex : tableDisplayIndex(state.tableDisplayIndex, action),
-        daysAndChargesConfig : daysAndChargesConfig(state.daysAndChargesConfig, action)
+        daysAndChargesConfig : daysAndChargesConfig(state.daysAndChargesConfig, action),
+        dateRanges : dateRanges(state.dateRanges, action)
     }
 }
 
@@ -69,6 +70,15 @@ function tableDisplayIndex(state = 0, action = {}) {
 function daysAndChargesConfig(state = {}, action = {}) {
     switch(action.type) {
         case "NEWDAYSANDCHARGESCONFIG" :
+            return action.state;
+        default :
+            return state;
+    }
+}
+
+function dateRanges(state = [], action = {}) {
+    switch(action.type) {
+        case "NEWDATERANGES" :
             return action.state;
         default :
             return state;
