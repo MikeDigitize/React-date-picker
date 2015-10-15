@@ -64,7 +64,7 @@
 
 	var _PickerPickerContainer2 = _interopRequireDefault(_PickerPickerContainer);
 
-	var _dataAvailableDates = __webpack_require__(243);
+	var _dataAvailableDates = __webpack_require__(244);
 
 	var App = (function (_React$Component) {
 	    _inherits(App, _React$Component);
@@ -20518,13 +20518,13 @@
 
 	var _actionsPickerDataActions = __webpack_require__(233);
 
-	var _dataDateCharges = __webpack_require__(239);
+	var _dataDateCharges = __webpack_require__(240);
 
-	var _utilsDateUtils = __webpack_require__(240);
+	var _utilsDateUtils = __webpack_require__(241);
 
-	var _utilsTableDataUtils = __webpack_require__(241);
+	var _utilsTableDataUtils = __webpack_require__(242);
 
-	__webpack_require__(242);
+	__webpack_require__(243);
 
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
@@ -20637,34 +20637,47 @@
 	                }
 	            });
 
-	            //var counter = 0, timeslotDescriptions = [];
-	            //
-	            //for (var i in dateCharges) {
-	            //
-	            //    if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
-	            //        timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-	            //    } else {
-	            //        timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-	            //    }
-	            //
-	            //    //console.log(timeslotDescriptions);
-	            //
-	            //    for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
-	            //
-	            //        if (!dateCharges[i][j]) {
-	            //            dateCharges[i].splice(j, 0, { WebDescription: null });
-	            //        }
-	            //        else if (dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
-	            //            dateCharges[i].splice(j, 0, { WebDescription: null });
-	            //        }
-	            //
-	            //    }
-	            //
-	            //    counter++;
-	            //
-	            //}
-	            //
-	            //console.log(dateCharges);
+	            var counter = 0,
+	                timeslotDescriptions = [];
+
+	            for (var i in _dataDateCharges.dateCharges) {
+
+	                if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
+	                    timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+	                } else {
+	                    timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+	                }
+
+	                //console.log(timeslotDescriptions);
+
+	                for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
+
+	                    if (!_dataDateCharges.dateCharges[i][j]) {
+	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
+	                    } else if (_dataDateCharges.dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
+	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
+	                    }
+	                }
+
+	                counter++;
+	            }
+
+	            console.log(_dataDateCharges.dateCharges);
+
+	            /*
+	                row -
+	                      row description : Same day timeslot, Anytime delivery, Morning etc.
+	                    hasSubDesc : true / false
+	                    time : 07:00 - 12:00 etc
+	                    subdesc : [We'll take a 4 hour time slot...]
+	                    isAvailable : true / false
+	                          timeslot -
+	                              element : htmlelement
+	                            isAvailable : true / false
+	                            timeslotcharge : number
+	                            daytypecharge : type + type cost,
+	                            totalcharge : total
+	               */
 	        }
 	    }, {
 	        key: "onNewData",
@@ -20782,6 +20795,10 @@
 
 	var _TableTable2 = _interopRequireDefault(_TableTable);
 
+	var _TableTableBody = __webpack_require__(239);
+
+	var _TableTableBody2 = _interopRequireDefault(_TableTableBody);
+
 	var Picker = (function (_React$Component) {
 	    _inherits(Picker, _React$Component);
 
@@ -20812,7 +20829,7 @@
 	                    dateRanges: this.state.dateRanges,
 	                    tableIndex: this.state.tableIndex
 	                }),
-	                _react2["default"].createElement(_TableTable2["default"], null)
+	                _react2["default"].createElement(_TableTable2["default"], { body: _TableTableBody2["default"] })
 	            );
 	        }
 	    }]);
@@ -24448,19 +24465,21 @@
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
 
-	    function Table() {
+	    function Table(props) {
 	        _classCallCheck(this, Table);
 
-	        _get(Object.getPrototypeOf(Table.prototype), "constructor", this).call(this);
+	        _get(Object.getPrototypeOf(Table.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
 	            tableIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
 	        };
+	        console.log(props);
 	    }
 
 	    _createClass(Table, [{
 	        key: "render",
 	        value: function render() {
+	            var body = _react2["default"].createElement(this.props.body);
 	            return _react2["default"].createElement(
 	                "table",
 	                { styleName: "date-picker-table" },
@@ -24468,7 +24487,7 @@
 	                    tableHeadData: this.state.tableHeadData,
 	                    tableIndex: this.state.tableIndex
 	                }),
-	                _react2["default"].createElement("tbody", null)
+	                body
 	            );
 	        }
 	    }]);
@@ -24608,6 +24627,475 @@
 
 /***/ },
 /* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _tableStyles = __webpack_require__(238);
+
+	var _tableStyles2 = _interopRequireDefault(_tableStyles);
+
+	var TableBody = (function (_React$Component) {
+	    _inherits(TableBody, _React$Component);
+
+	    function TableBody() {
+	        _classCallCheck(this, TableBody);
+
+	        _get(Object.getPrototypeOf(TableBody.prototype), "constructor", this).apply(this, arguments);
+	    }
+
+	    _createClass(TableBody, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "tbody",
+	                null,
+	                _react2["default"].createElement(
+	                    "tr",
+	                    null,
+	                    _react2["default"].createElement(
+	                        "td",
+	                        { className: "timeslot-desc" },
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "time-desc" },
+	                            "Same day time slot"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "time" },
+	                            "4:30PM - 10PM"
+	                        ),
+	                        _react2["default"].createElement("p", { className: "extra-info" })
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£29.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement("td", null)
+	                ),
+	                _react2["default"].createElement(
+	                    "tr",
+	                    null,
+	                    _react2["default"].createElement(
+	                        "td",
+	                        { className: "timeslot-desc" },
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "time-desc" },
+	                            "Standard Delivery"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "extra-info" },
+	                            _react2["default"].createElement("span", { styleName: "icon-tick2" }),
+	                            " We'll text a 4-hour time slot on the day"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "extra-info" },
+	                            _react2["default"].createElement("span", { styleName: "icon-tick2" }),
+	                            " Online order tracking - no need to wait in"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "extra-info" },
+	                            _react2["default"].createElement("span", { styleName: "icon-tick2" }),
+	                            " Delivery from 7AM - 7PM"
+	                        )
+	                    ),
+	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£9.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£4.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£ Free"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£ Free"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£ Free"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£4.99"
+	                        )
+	                    )
+	                ),
+	                _react2["default"].createElement(
+	                    "tr",
+	                    null,
+	                    _react2["default"].createElement(
+	                        "td",
+	                        { className: "timeslot-desc" },
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "time-desc" },
+	                            "Morning"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "time" },
+	                            "07:00 - 12:00"
+	                        )
+	                    ),
+	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£29.98"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£24.98"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£24.98"
+	                        )
+	                    )
+	                ),
+	                _react2["default"].createElement(
+	                    "tr",
+	                    null,
+	                    _react2["default"].createElement(
+	                        "td",
+	                        { className: "timeslot-desc" },
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "time-desc" },
+	                            "Lunch"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "time" },
+	                            "10:00 - 14:00"
+	                        )
+	                    ),
+	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£29.98"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£24.98"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£24.98"
+	                        )
+	                    )
+	                ),
+	                _react2["default"].createElement(
+	                    "tr",
+	                    null,
+	                    _react2["default"].createElement(
+	                        "td",
+	                        { className: "timeslot-desc" },
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "time-desc" },
+	                            "Afternoon"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "time" },
+	                            "12:00 - 17:00"
+	                        )
+	                    ),
+	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£29.98"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£24.98"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£24.98"
+	                        )
+	                    )
+	                ),
+	                _react2["default"].createElement(
+	                    "tr",
+	                    null,
+	                    _react2["default"].createElement(
+	                        "td",
+	                        { className: "timeslot-desc" },
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "time-desc" },
+	                            "Evening"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { className: "time" },
+	                            "18:00 - 22:00"
+	                        )
+	                    ),
+	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£29.98"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£24.98"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£19.99"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "td",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "p",
+	                            { styleName: "delivery-selectable" },
+	                            "£24.98"
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return TableBody;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(TableBody, _tableStyles2["default"], { allowMultiple: true });
+	module.exports = exports["default"];
+
+/***/ },
+/* 240 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26862,7 +27350,7 @@
 	exports.dateCharges = dateCharges;
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports) {
 
 	/*
@@ -27094,7 +27582,7 @@
 	}
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -27125,7 +27613,7 @@
 	}
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports) {
 
 	/*
@@ -27146,7 +27634,7 @@
 	}
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports) {
 
 	"use strict";

@@ -5,23 +5,24 @@ import styles from "./table-styles";
 import DatePickerStore from "../../stores/PickerStore";
 
 class Table extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             tableHeadData : DatePickerStore.getState().tableHeadData,
             tableIndex : DatePickerStore.getState().tableDisplayIndex
         };
+        console.log(props);
     }
 
     render() {
+        let body = React.createElement(this.props.body);
         return (
             <table styleName="date-picker-table">
                 <TableHead
                     tableHeadData={ this.state.tableHeadData }
                     tableIndex={ this.state.tableIndex }
                 />
-                <tbody>
-                </tbody>
+                { body }
              </table>
         );
     }

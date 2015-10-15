@@ -119,34 +119,54 @@ export default class PickerContainer extends React.Component {
             }
         });
 
-        //var counter = 0, timeslotDescriptions = [];
-        //
-        //for (var i in dateCharges) {
-        //
-        //    if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
-        //        timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-        //    } else {
-        //        timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-        //    }
-        //
-        //    //console.log(timeslotDescriptions);
-        //
-        //    for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
-        //
-        //        if (!dateCharges[i][j]) {
-        //            dateCharges[i].splice(j, 0, { WebDescription: null });
-        //        }
-        //        else if (dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
-        //            dateCharges[i].splice(j, 0, { WebDescription: null });
-        //        }
-        //
-        //    }
-        //
-        //    counter++;
-        //
-        //}
-        //
-        //console.log(dateCharges);
+        var counter = 0, timeslotDescriptions = [];
+
+        for (var i in dateCharges) {
+
+            if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
+                timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+            } else {
+                timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+            }
+
+            //console.log(timeslotDescriptions);
+
+            for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
+
+                if (!dateCharges[i][j]) {
+                    dateCharges[i].splice(j, 0, { WebDescription: null });
+                }
+                else if (dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
+                    dateCharges[i].splice(j, 0, { WebDescription: null });
+                }
+
+            }
+
+            counter++;
+
+        }
+
+        console.log(dateCharges);
+
+        /*
+            row -
+
+                row description : Same day timeslot, Anytime delivery, Morning etc.
+                hasSubDesc : true / false
+                time : 07:00 - 12:00 etc
+                subdesc : [We'll take a 4 hour time slot...]
+                isAvailable : true / false
+
+                    timeslot -
+
+                        element : htmlelement
+                        isAvailable : true / false
+                        timeslotcharge : number
+                        daytypecharge : type + type cost,
+                        totalcharge : total
+
+         */
+
 
     }
 

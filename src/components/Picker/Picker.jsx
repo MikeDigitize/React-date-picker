@@ -6,6 +6,7 @@ import { updateTableIndex } from "../../actions/picker-data-actions";
 
 import DateRange from "../DateRange/DateRange";
 import Table from "../Table/Table";
+import TableBody from "../Table/TableBody";
 
 class Picker extends React.Component {
 
@@ -31,7 +32,7 @@ class Picker extends React.Component {
                     dateRanges={ this.state.dateRanges }
                     tableIndex={ this.state.tableIndex }
                 />
-                <Table />
+                <Table body={ TableBody } />
             </section>
         );
     }
