@@ -5,8 +5,8 @@ import styles from "./table-styles";
 import DatePickerStore from "../../stores/PickerStore";
 
 class Table extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             tableHeadData : DatePickerStore.getState().tableHeadData,
             tableIndex : DatePickerStore.getState().tableDisplayIndex

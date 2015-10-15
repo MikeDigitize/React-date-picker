@@ -7,9 +7,16 @@ class TableHead extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            unsubscribe : DatePickerStore.subscribe(this.updateTableIndex.bind(this)),
             tableDisplayIndex : this.props.tableIndex,
             tableHeadData : this.props.tableHeadData
         };
+    }
+
+    componentWillUnmount() {
+        if(typeof this.state.unsubscribe === "function") {
+            this.state.unsubscribe();
+        }
     }
 
     createTableHeadRow() {
@@ -21,6 +28,12 @@ class TableHead extends React.Component {
     createTableHeadText(th) {
         return Object.keys(th).map((text, i) =>{
             return (<p key={i}>{ th[text] }</p>);
+        });
+    }
+
+    updateTableIndex() {
+        this.setState({
+            tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex
         });
     }
 
@@ -36,5 +49,15 @@ class TableHead extends React.Component {
     }
 
 }
+
+TableHead.defaultProps = {
+    tableDisplayIndex : 0,
+    tableHeadData : []
+};
+
+TableHead.propTypes = {
+    tableDisplayIndex : React.PropTypes.number,
+    tableHeadData : React.PropTypes.array
+};
 
 export default CSSModule(TableHead, styles);

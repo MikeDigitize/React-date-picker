@@ -20637,32 +20637,34 @@
 	                }
 	            });
 
-	            var counter = 0,
-	                timeslotDescriptions = [];
-
-	            for (var i in _dataDateCharges.dateCharges) {
-
-	                if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
-	                    timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-	                } else {
-	                    timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-	                }
-
-	                //console.log(timeslotDescriptions);
-
-	                for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
-
-	                    if (!_dataDateCharges.dateCharges[i][j]) {
-	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
-	                    } else if (_dataDateCharges.dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
-	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
-	                    }
-	                }
-
-	                counter++;
-	            }
-
-	            console.log(_dataDateCharges.dateCharges);
+	            //var counter = 0, timeslotDescriptions = [];
+	            //
+	            //for (var i in dateCharges) {
+	            //
+	            //    if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
+	            //        timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+	            //    } else {
+	            //        timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+	            //    }
+	            //
+	            //    //console.log(timeslotDescriptions);
+	            //
+	            //    for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
+	            //
+	            //        if (!dateCharges[i][j]) {
+	            //            dateCharges[i].splice(j, 0, { WebDescription: null });
+	            //        }
+	            //        else if (dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
+	            //            dateCharges[i].splice(j, 0, { WebDescription: null });
+	            //        }
+	            //
+	            //    }
+	            //
+	            //    counter++;
+	            //
+	            //}
+	            //
+	            //console.log(dateCharges);
 	        }
 	    }, {
 	        key: "onNewData",
@@ -24446,10 +24448,10 @@
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
 
-	    function Table(props) {
+	    function Table() {
 	        _classCallCheck(this, Table);
 
-	        _get(Object.getPrototypeOf(Table.prototype), "constructor", this).call(this, props);
+	        _get(Object.getPrototypeOf(Table.prototype), "constructor", this).call(this);
 	        this.state = {
 	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
 	            tableIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
@@ -24521,12 +24523,20 @@
 
 	        _get(Object.getPrototypeOf(TableHead.prototype), "constructor", this).call(this, props);
 	        this.state = {
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.updateTableIndex.bind(this)),
 	            tableDisplayIndex: this.props.tableIndex,
 	            tableHeadData: this.props.tableHeadData
 	        };
 	    }
 
 	    _createClass(TableHead, [{
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            if (typeof this.state.unsubscribe === "function") {
+	                this.state.unsubscribe();
+	            }
+	        }
+	    }, {
 	        key: "createTableHeadRow",
 	        value: function createTableHeadRow() {
 	            var _this = this;
@@ -24551,6 +24561,13 @@
 	            });
 	        }
 	    }, {
+	        key: "updateTableIndex",
+	        value: function updateTableIndex() {
+	            this.setState({
+	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
+	            });
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
@@ -24568,6 +24585,16 @@
 
 	    return TableHead;
 	})(_react2["default"].Component);
+
+	TableHead.defaultProps = {
+	    tableDisplayIndex: 0,
+	    tableHeadData: []
+	};
+
+	TableHead.propTypes = {
+	    tableDisplayIndex: _react2["default"].PropTypes.number,
+	    tableHeadData: _react2["default"].PropTypes.array
+	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(TableHead, _tableStyles2["default"]);
 	module.exports = exports["default"];
