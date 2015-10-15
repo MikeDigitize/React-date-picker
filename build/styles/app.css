@@ -66,16 +66,16 @@
       ._2fFeFRwWZTf51bPpQfobX4 thead th p {
         margin: 0 0 0 10px;
         font-size: 15px; }
-        ._2fFeFRwWZTf51bPpQfobX4 thead th p._2Ht-HdGhCcrmFwsNJshupA {
+        ._2fFeFRwWZTf51bPpQfobX4 thead th p:first-child {
           font-size: 11px;
           color: #969696;
           min-height: 20px; }
-        ._2fFeFRwWZTf51bPpQfobX4 thead th p._3bMhcWyiP4_HF9MoPiOpcJ {
+        ._2fFeFRwWZTf51bPpQfobX4 thead th p:nth-child(2) {
           color: #969696;
           text-transform: uppercase;
           font-size: 18px;
           font-weight: bold; }
-        ._2fFeFRwWZTf51bPpQfobX4 thead th p._3bdydUn81Z5uh-jrQnVgeF {
+        ._2fFeFRwWZTf51bPpQfobX4 thead th p:nth-child(3) {
           color: #6f6f6f; }
   ._2fFeFRwWZTf51bPpQfobX4 tbody td {
     color: #00b5e2;

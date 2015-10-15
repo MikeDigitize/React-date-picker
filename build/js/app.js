@@ -20516,7 +20516,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerDataActions = __webpack_require__(235);
+	var _actionsPickerDataActions = __webpack_require__(233);
 
 	var _dataDateCharges = __webpack_require__(239);
 
@@ -20637,34 +20637,32 @@
 	                }
 	            });
 
-	            //var counter = 0, timeslotDescriptions = [];
-	            //
-	            //for (var i in dateCharges) {
-	            //
-	            //    if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
-	            //        timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-	            //    } else {
-	            //        timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-	            //    }
-	            //
-	            //    //console.log(timeslotDescriptions);
-	            //
-	            //    for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
-	            //
-	            //        if (!dateCharges[i][j]) {
-	            //            dateCharges[i].splice(j, 0, { WebDescription: null });
-	            //        }
-	            //        else if (dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
-	            //            dateCharges[i].splice(j, 0, { WebDescription: null });
-	            //        }
-	            //
-	            //    }
-	            //
-	            //    counter++;
-	            //
-	            //}
-	            //
-	            //console.log(dateCharges);
+	            var counter = 0,
+	                timeslotDescriptions = [];
+
+	            for (var i in _dataDateCharges.dateCharges) {
+
+	                if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
+	                    timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+	                } else {
+	                    timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
+	                }
+
+	                //console.log(timeslotDescriptions);
+
+	                for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
+
+	                    if (!_dataDateCharges.dateCharges[i][j]) {
+	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
+	                    } else if (_dataDateCharges.dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
+	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
+	                    }
+	                }
+
+	                counter++;
+	            }
+
+	            console.log(_dataDateCharges.dateCharges);
 	        }
 	    }, {
 	        key: "onNewData",
@@ -20772,7 +20770,9 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _DateRangeDateRange = __webpack_require__(233);
+	var _actionsPickerDataActions = __webpack_require__(233);
+
+	var _DateRangeDateRange = __webpack_require__(234);
 
 	var _DateRangeDateRange2 = _interopRequireDefault(_DateRangeDateRange);
 
@@ -20787,10 +20787,16 @@
 	        _classCallCheck(this, Picker);
 
 	        _get(Object.getPrototypeOf(Picker.prototype), "constructor", this).call(this);
+	        var tableIndex = _storesPickerStore2["default"].getState().tableDisplayIndex;
+	        var ranges = _storesPickerStore2["default"].getState().dateRanges;
+	        if (tableIndex >= ranges.length) {
+	            tableIndex = ranges.length - 1;
+	        }
+	        _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.updateTableIndex)(tableIndex));
 	        this.state = {
-	            dateRanges: _storesPickerStore2["default"].getState().dateRanges,
+	            dateRanges: ranges,
 	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
-	            tableIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
+	            tableIndex: tableIndex
 	        };
 	    }
 
@@ -24209,6 +24215,70 @@
 
 /***/ },
 /* 233 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.availableDates = availableDates;
+	exports.chargesConfig = chargesConfig;
+	exports.basketTotal = basketTotal;
+	exports.daysConfig = daysConfig;
+	exports.totalWeeks = totalWeeks;
+	exports.updateTableIndex = updateTableIndex;
+	exports.daysAndChargesConfig = daysAndChargesConfig;
+	exports.dateRanges = dateRanges;
+	exports.tableHeadData = tableHeadData;
+	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
+	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
+	var NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
+	var NEWDAYSCONFIG = "NEWDAYSCONFIG";
+	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
+	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
+	var NEWDAYSANDCHARGESCONFIG = "NEWDAYSANDCHARGESCONFIG";
+	var NEWDATERANGES = "NEWDATERANGES";
+	var NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
+
+	function availableDates(data) {
+	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
+	}
+
+	function chargesConfig(data) {
+	    return { state: data, type: NEWCHARGESCONFIG };
+	}
+
+	function basketTotal(data) {
+	    return { state: data, type: BASKETTOTALUPDATE };
+	}
+
+	function daysConfig(data) {
+	    return { state: data, type: NEWDAYSCONFIG };
+	}
+
+	function totalWeeks(data) {
+	    return { state: data, type: TOTALWEEKSUPDATE };
+	}
+
+	function updateTableIndex(data) {
+	    return { state: data, type: TABLEDISPLAYINDEX };
+	}
+
+	function daysAndChargesConfig(data) {
+	    return { state: data, type: NEWDAYSANDCHARGESCONFIG };
+	}
+
+	function dateRanges(data) {
+	    return { state: data, type: NEWDATERANGES };
+	}
+
+	function tableHeadData(data) {
+	    return { state: data, type: NEWTABLEHEADDATA };
+	}
+
+/***/ },
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24235,7 +24305,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _dateRangeStyles = __webpack_require__(234);
+	var _dateRangeStyles = __webpack_require__(235);
 
 	var _dateRangeStyles2 = _interopRequireDefault(_dateRangeStyles);
 
@@ -24243,7 +24313,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerDataActions = __webpack_require__(235);
+	var _actionsPickerDataActions = __webpack_require__(233);
 
 	var DateRange = (function (_React$Component) {
 	    _inherits(DateRange, _React$Component);
@@ -24327,75 +24397,11 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 234 */
+/* 235 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-range-select":"OX0IQ95QuEmxlWQhyiRs6","date-range":"_1yKpw1RLO3THHz9hnbX_Dt","date-range-ctrl":"znc2lrvqmWUjnbcbNbeIr","date-range-right":"_1AqK9xb6dHCKGPeJDRvBtw","date-range-left":"_8SLLaLIWkMBPftpcd_ldr"};
-
-/***/ },
-/* 235 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.availableDates = availableDates;
-	exports.chargesConfig = chargesConfig;
-	exports.basketTotal = basketTotal;
-	exports.daysConfig = daysConfig;
-	exports.totalWeeks = totalWeeks;
-	exports.updateTableIndex = updateTableIndex;
-	exports.daysAndChargesConfig = daysAndChargesConfig;
-	exports.dateRanges = dateRanges;
-	exports.tableHeadData = tableHeadData;
-	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
-	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
-	var NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
-	var NEWDAYSCONFIG = "NEWDAYSCONFIG";
-	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
-	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
-	var NEWDAYSANDCHARGESCONFIG = "NEWDAYSANDCHARGESCONFIG";
-	var NEWDATERANGES = "NEWDATERANGES";
-	var NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
-
-	function availableDates(data) {
-	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
-	}
-
-	function chargesConfig(data) {
-	    return { state: data, type: NEWCHARGESCONFIG };
-	}
-
-	function basketTotal(data) {
-	    return { state: data, type: BASKETTOTALUPDATE };
-	}
-
-	function daysConfig(data) {
-	    return { state: data, type: NEWDAYSCONFIG };
-	}
-
-	function totalWeeks(data) {
-	    return { state: data, type: TOTALWEEKSUPDATE };
-	}
-
-	function updateTableIndex(data) {
-	    return { state: data, type: TABLEDISPLAYINDEX };
-	}
-
-	function daysAndChargesConfig(data) {
-	    return { state: data, type: NEWDAYSANDCHARGESCONFIG };
-	}
-
-	function dateRanges(data) {
-	    return { state: data, type: NEWDATERANGES };
-	}
-
-	function tableHeadData(data) {
-	    return { state: data, type: NEWTABLEHEADDATA };
-	}
 
 /***/ },
 /* 236 */
@@ -24525,14 +24531,13 @@
 	        value: function createTableHeadRow() {
 	            var _this = this;
 
-	            console.log("TableHead state!", this.state);
-	            console.log(this.state.tableHeadData.map(function (th, i) {
+	            return this.state.tableHeadData[this.state.tableDisplayIndex].map(function (txt, i) {
 	                return _react2["default"].createElement(
 	                    "th",
 	                    { key: i },
-	                    _this.createTableHeadText(th)
+	                    _this.createTableHeadText(txt)
 	                );
-	            }));
+	            });
 	        }
 	    }, {
 	        key: "createTableHeadText",
@@ -24548,7 +24553,6 @@
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            this.createTableHeadRow();
 	            return _react2["default"].createElement(
 	                "thead",
 	                null,
@@ -24556,119 +24560,7 @@
 	                    "tr",
 	                    null,
 	                    _react2["default"].createElement("th", null),
-	                    _react2["default"].createElement(
-	                        "th",
-	                        null,
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-extra-info" },
-	                            "Same Day"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-day" },
-	                            "SUN"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-date" },
-	                            "11"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "th",
-	                        null,
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-extra-info" },
-	                            "Next Day"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-day" },
-	                            "MON"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-date" },
-	                            "12"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "th",
-	                        null,
-	                        _react2["default"].createElement("p", { styleName: "table-head-extra-info" }),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-day" },
-	                            "TUE"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-date" },
-	                            "13"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "th",
-	                        null,
-	                        _react2["default"].createElement("p", { styleName: "table-head-extra-info" }),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-day" },
-	                            "WED"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-date" },
-	                            "14"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "th",
-	                        null,
-	                        _react2["default"].createElement("p", { styleName: "table-head-extra-info" }),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-day" },
-	                            "THU"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-date" },
-	                            "15"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "th",
-	                        null,
-	                        _react2["default"].createElement("p", { styleName: "table-head-extra-info" }),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-day" },
-	                            "FRI"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-date" },
-	                            "16"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "th",
-	                        null,
-	                        _react2["default"].createElement("p", { styleName: "table-head-extra-info" }),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-day" },
-	                            "SAT"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "table-head-date" },
-	                            "17"
-	                        )
-	                    )
+	                    this.createTableHeadRow()
 	                )
 	            );
 	        }
@@ -24685,7 +24577,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"date-picker-table":"_2fFeFRwWZTf51bPpQfobX4","table-head-extra-info":"_2Ht-HdGhCcrmFwsNJshupA","table-head-day":"_3bMhcWyiP4_HF9MoPiOpcJ","table-head-date":"_3bdydUn81Z5uh-jrQnVgeF","timeslot-desc":"_1hDevQLx1cX9WGK-FjjTzA","delivery-selectable":"UxfKBkTslH3rIBNnXMpq5","delivery-selected":"_2ZLN9pk6FVHmxuwGqy430H","time":"_1wAzEU7Ejgu1QZRFEThzKp","extra-info":"_5TCarjPfCjbfr6P0nQ2dN","icon-tick2":"_6CweULWxOBGVTyOPqODEC"};
+	module.exports = {"date-picker-table":"_2fFeFRwWZTf51bPpQfobX4","timeslot-desc":"_1hDevQLx1cX9WGK-FjjTzA","delivery-selectable":"UxfKBkTslH3rIBNnXMpq5","delivery-selected":"_2ZLN9pk6FVHmxuwGqy430H","time":"_1wAzEU7Ejgu1QZRFEThzKp","extra-info":"_5TCarjPfCjbfr6P0nQ2dN","icon-tick2":"_6CweULWxOBGVTyOPqODEC"};
 
 /***/ },
 /* 239 */

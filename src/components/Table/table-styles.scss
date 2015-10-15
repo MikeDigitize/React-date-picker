@@ -18,20 +18,20 @@
         margin: 0 0 0 10px;
         font-size: 15px;
 
-        &.table-head-extra-info {
+        &:first-child {
           font-size: 11px;
           color: #969696;
           min-height: 20px;
         }
 
-        &.table-head-day {
+        &:nth-child(2) {
           color: #969696;
           text-transform: uppercase;
           font-size: 18px;
           font-weight: bold;
         }
 
-        &.table-head-date {
+        &:nth-child(3)  {
           color: #6f6f6f;
         }
 
