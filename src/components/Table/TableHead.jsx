@@ -1,6 +1,6 @@
 import React from "react";
 import CSSModule from "react-css-modules";
-import styles from "./table-styles";
+import styles from "./table-head-styles";
 import DatePickerStore from "../../stores/PickerStore";
 
 class TableHead extends React.Component {
@@ -39,7 +39,7 @@ class TableHead extends React.Component {
 
     render() {
         return (
-            <thead>
+            <thead styleName="date-picker-thead">
                 <tr>
                     <th></th>
                     { this.createTableHeadRow() }

@@ -11,7 +11,6 @@ class Table extends React.Component {
             tableHeadData : DatePickerStore.getState().tableHeadData,
             tableIndex : DatePickerStore.getState().tableDisplayIndex
         };
-        console.log(props);
     }
 
     render() {
