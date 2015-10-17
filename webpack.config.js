@@ -23,8 +23,12 @@ module.exports = {
             exclude: /node_modules|server.js$/,
             loader: "babel-loader"
         }, {
-            test: /\.scss|.css$/,
+            test: /\.scss$|\.css$/,
+            exclude : /global\.scss$/,
             loader: ExtractTextPlugin.extract("style-loader", "css-loader?modules!sass")
+        }, {
+            test: /global\.scss$/,
+            loader: ExtractTextPlugin.extract("style-loader", "css-loader?sass")
         }, {
             test: /\.(png|woff|woff2|eot|ttf|svg|json)$/,
             loader: "url-loader?limit=100000"

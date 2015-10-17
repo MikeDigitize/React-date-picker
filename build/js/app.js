@@ -66,6 +66,10 @@
 
 	var _dataAvailableDates = __webpack_require__(246);
 
+	var _stylesGlobal = __webpack_require__(247);
+
+	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
+
 	var App = (function (_React$Component) {
 	    _inherits(App, _React$Component);
 
@@ -23513,7 +23517,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"dashed-borders":"_2V3L5lAwAFNrVx91VMOZNL","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv"};
+	module.exports = {"timeslot-selected":"_1_i9rYWlxWAu7qy-QKg5qW","icon-tick2":"_6oEWH3PxmJ2ZdzkzXpBJz","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv"};
 
 /***/ },
 /* 223 */
@@ -24659,6 +24663,12 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
+	var _tableBodyStyles = __webpack_require__(241);
+
+	var _tableBodyStyles2 = _interopRequireDefault(_tableBodyStyles);
+
+	__webpack_require__(249);
+
 	var TableBody = (function (_React$Component) {
 	    _inherits(TableBody, _React$Component);
 
@@ -24669,419 +24679,426 @@
 	    }
 
 	    _createClass(TableBody, [{
+	        key: "toggleSelected",
+	        value: function toggleSelected(e) {
+	            console.log("clicky");
+	            var target = e.target || e.srcElement;
+	            target.classList.toggle("timeslot-selected");
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
 	                "tbody",
-	                null,
+	                { styleName: "date-picker-tbody" },
 	                _react2["default"].createElement(
 	                    "tr",
-	                    { className: "delivery-charge-desc" },
+	                    null,
 	                    _react2["default"].createElement(
 	                        "td",
-	                        { className: "timeslot-desc timeslot-sameday" },
+	                        { styleName: "timeslot-desc" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "time-desc" },
+	                            { styleName: "time-desc" },
 	                            "Same day time slot"
 	                        ),
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "time" },
+	                            { styleName: "time" },
 	                            "4:30PM - 10PM"
 	                        ),
-	                        _react2["default"].createElement("p", { className: "extra-info" })
+	                        _react2["default"].createElement("p", { styleName: "extra-info" })
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£29.99"
 	                        )
 	                    ),
-	                    _react2["default"].createElement("td", null),
-	                    _react2["default"].createElement("td", null),
-	                    _react2["default"].createElement("td", null),
-	                    _react2["default"].createElement("td", null),
-	                    _react2["default"].createElement("td", null),
-	                    _react2["default"].createElement("td", null)
+	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
+	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
+	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
+	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
+	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
+	                    _react2["default"].createElement("td", { styleName: "timeslot" })
 	                ),
 	                _react2["default"].createElement(
 	                    "tr",
-	                    { className: "delivery-charge-desc" },
+	                    null,
 	                    _react2["default"].createElement(
 	                        "td",
-	                        { className: "timeslot-desc timeslot-anytime" },
+	                        { styleName: "timeslot-desc" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "time-desc" },
+	                            { styleName: "time-desc" },
 	                            "Standard Delivery"
 	                        ),
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "extra-info" },
+	                            { styleName: "extra-info" },
 	                            _react2["default"].createElement("span", { className: "icon-tick2" }),
 	                            " We'll text a 4-hour time slot on the day"
 	                        ),
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "extra-info" },
+	                            { styleName: "extra-info" },
 	                            _react2["default"].createElement("span", { className: "icon-tick2" }),
 	                            " Online order tracking - no need to wait in"
 	                        ),
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "extra-info" },
+	                            { styleName: "extra-info" },
 	                            _react2["default"].createElement("span", { className: "icon-tick2" }),
 	                            " Delivery from 7AM - 7PM"
 	                        )
 	                    ),
-	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£9.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£4.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£ Free"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£ Free"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£ Free"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£4.99"
 	                        )
 	                    )
 	                ),
 	                _react2["default"].createElement(
 	                    "tr",
-	                    { className: "delivery-charge-desc timeslot-row" },
+	                    null,
 	                    _react2["default"].createElement(
 	                        "td",
-	                        { className: "timeslot-desc timeslot-morning" },
+	                        { styleName: "timeslot-desc" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "time-desc" },
+	                            { styleName: "time-desc" },
 	                            "Morning"
 	                        ),
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "time" },
+	                            { styleName: "time" },
 	                            "07:00 - 12:00"
 	                        )
 	                    ),
-	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£29.98"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£24.98"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£24.98"
 	                        )
 	                    )
 	                ),
 	                _react2["default"].createElement(
 	                    "tr",
-	                    { className: "delivery-charge-desc timeslot-row" },
+	                    null,
 	                    _react2["default"].createElement(
 	                        "td",
-	                        { className: "timeslot-desc timeslot-lunch" },
+	                        { styleName: "timeslot-desc" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "time-desc" },
+	                            { styleName: "time-desc" },
 	                            "Lunch"
 	                        ),
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "time" },
+	                            { styleName: "time" },
 	                            "10:00 - 14:00"
 	                        )
 	                    ),
-	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£29.98"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£24.98"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£24.98"
 	                        )
 	                    )
 	                ),
 	                _react2["default"].createElement(
 	                    "tr",
-	                    { className: "delivery-charge-desc timeslot-row" },
+	                    null,
 	                    _react2["default"].createElement(
 	                        "td",
-	                        { className: "timeslot-desc timeslot-afternoon" },
+	                        { styleName: "timeslot-desc" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "time-desc" },
+	                            { styleName: "time-desc" },
 	                            "Afternoon"
 	                        ),
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "time" },
+	                            { styleName: "time" },
 	                            "12:00 - 17:00"
 	                        )
 	                    ),
-	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£29.98"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£24.98"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£24.98"
 	                        )
 	                    )
 	                ),
 	                _react2["default"].createElement(
 	                    "tr",
-	                    { className: "delivery-charge-desc timeslot-row" },
+	                    null,
 	                    _react2["default"].createElement(
 	                        "td",
-	                        { className: "timeslot-desc timeslot-evening" },
+	                        { styleName: "timeslot-desc" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "time-desc" },
+	                            { styleName: "time-desc" },
 	                            "Evening"
 	                        ),
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "time" },
+	                            { styleName: "time" },
 	                            "18:00 - 22:00"
 	                        )
 	                    ),
-	                    _react2["default"].createElement("td", null),
+	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£29.98"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£24.98"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£19.99"
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
-	                        null,
+	                        { styleName: "timeslot" },
 	                        _react2["default"].createElement(
 	                            "p",
-	                            { className: "delivery-selectable" },
+	                            { styleName: "delivery-selectable", onClick: this.toggleSelected.bind(this) },
 	                            "£24.98"
 	                        )
 	                    )
@@ -25093,11 +25110,17 @@
 	    return TableBody;
 	})(_react2["default"].Component);
 
-	exports["default"] = TableBody;
+	exports["default"] = (0, _reactCssModules2["default"])(TableBody, _tableBodyStyles2["default"]);
 	module.exports = exports["default"];
 
 /***/ },
-/* 241 */,
+/* 241 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"date-picker-tbody":"_29vJ8JCK0woHtbMXWLpUK9","timeslot-desc":"_2j2BD-de5vLVDb31Pa_GhM","time-desc":"yDp_R-xp3fRkhHArKPlAi","time":"_1N07UKBt9GGpTfe-xOHvt0","extra-info":"_3r1C6csLCGcT3tnZcye8pQ","timeslot":"_2nbCK7KDaiFms044UxcM1m","delivery-selectable":"_1joTcdAy56WL7iY5YFerPM","delivery-selected":"OjDALIjGZUOIa7p-dpptf"};
+
+/***/ },
 /* 242 */
 /***/ function(module, exports) {
 
@@ -27354,13 +27377,7 @@
 
 /***/ },
 /* 243 */
-/***/ function(module, exports) {
-
-	/*
-	    Take the initial config object of shortdates and date description
-	    e.g. { 20151025 : "Sunday" }
-	    fill in any gaps (some dates maybe missing) and return the object
-	 */
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
@@ -27374,6 +27391,14 @@
 	exports.suffix = suffix;
 	exports.includeDayTypeCharges = includeDayTypeCharges;
 	exports.createDateRanges = createDateRanges;
+
+	__webpack_require__(248);
+
+	/*
+	    Take the initial config object of shortdates and date description
+	    e.g. { 20151025 : "Sunday" }
+	    fill in any gaps (some dates maybe missing) and return the object
+	 */
 
 	function fillInGaps(config) {
 
@@ -27757,6 +27782,267 @@
 	   }
 	};
 	exports.config = config;
+
+/***/ },
+/* 247 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 248 */
+/***/ function(module, exports) {
+
+	/*
+	    Object.assign() - combine mutliple objects into one
+	    src: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+	 */
+
+	"use strict";
+
+	if (!Object.assign) {
+	    Object.defineProperty(Object, "assign", {
+	        enumerable: false,
+	        configurable: true,
+	        writable: true,
+	        value: function value(target) {
+	            "use strict";
+	            if (target === undefined || target === null) {
+	                throw new TypeError("Cannot convert first argument to object");
+	            }
+
+	            var to = Object(target);
+	            for (var i = 1; i < arguments.length; i++) {
+	                var nextSource = arguments[i];
+	                if (nextSource === undefined || nextSource === null) {
+	                    continue;
+	                }
+	                nextSource = Object(nextSource);
+
+	                var keysArray = Object.keys(nextSource);
+	                for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+	                    var nextKey = keysArray[nextIndex];
+	                    var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+	                    if (desc !== undefined && desc.enumerable) {
+	                        to[nextKey] = nextSource[nextKey];
+	                    }
+	                }
+	            }
+	            return to;
+	        }
+	    });
+	}
+
+/***/ },
+/* 249 */
+/***/ function(module, exports) {
+
+	/*
+	    Classlist API for manipulating classes with DOM elements
+	    https://developer.mozilla.org/en/docs/Web/API/Element/classList
+	 */
+
+	"use strict";
+
+	if ("document" in self) {
+
+	    // Full polyfill for browsers with no classList support
+	    if (!("classList" in document.createElement("_"))) {
+
+	        (function (view) {
+
+	            "use strict";
+
+	            if (!('Element' in view)) return;
+
+	            var classListProp = "classList",
+	                protoProp = "prototype",
+	                elemCtrProto = view.Element[protoProp],
+	                objCtr = Object,
+	                strTrim = String[protoProp].trim || function () {
+	                return this.replace(/^\s+|\s+$/g, "");
+	            },
+	                arrIndexOf = Array[protoProp].indexOf || function (item) {
+	                var i = 0,
+	                    len = this.length;
+	                for (; i < len; i++) {
+	                    if (i in this && this[i] === item) {
+	                        return i;
+	                    }
+	                }
+	                return -1;
+	            },
+
+	            // Vendors: please allow content code to instantiate DOMExceptions
+	            DOMEx = function DOMEx(type, message) {
+	                this.name = type;
+	                this.code = DOMException[type];
+	                this.message = message;
+	            },
+	                checkTokenAndGetIndex = function checkTokenAndGetIndex(classList, token) {
+	                if (token === "") {
+	                    throw new DOMEx("SYNTAX_ERR", "An invalid or illegal string was specified");
+	                }
+	                if (/\s/.test(token)) {
+	                    throw new DOMEx("INVALID_CHARACTER_ERR", "String contains an invalid character");
+	                }
+	                return arrIndexOf.call(classList, token);
+	            },
+	                ClassList = function ClassList(elem) {
+	                var trimmedClasses = strTrim.call(elem.getAttribute("class") || ""),
+	                    classes = trimmedClasses ? trimmedClasses.split(/\s+/) : [],
+	                    i = 0,
+	                    len = classes.length;
+	                for (; i < len; i++) {
+	                    this.push(classes[i]);
+	                }
+	                this._updateClassName = function () {
+	                    elem.setAttribute("class", this.toString());
+	                };
+	            },
+	                classListProto = ClassList[protoProp] = [],
+	                classListGetter = function classListGetter() {
+	                return new ClassList(this);
+	            };
+	            // Most DOMException implementations don't allow calling DOMException's toString()
+	            // on non-DOMExceptions. Error's toString() is sufficient here.
+	            DOMEx[protoProp] = Error[protoProp];
+	            classListProto.item = function (i) {
+	                return this[i] || null;
+	            };
+	            classListProto.contains = function (token) {
+	                token += "";
+	                return checkTokenAndGetIndex(this, token) !== -1;
+	            };
+	            classListProto.add = function () {
+	                var tokens = arguments,
+	                    i = 0,
+	                    l = tokens.length,
+	                    token,
+	                    updated = false;
+	                do {
+	                    token = tokens[i] + "";
+	                    if (checkTokenAndGetIndex(this, token) === -1) {
+	                        this.push(token);
+	                        updated = true;
+	                    }
+	                } while (++i < l);
+
+	                if (updated) {
+	                    this._updateClassName();
+	                }
+	            };
+	            classListProto.remove = function () {
+	                var tokens = arguments,
+	                    i = 0,
+	                    l = tokens.length,
+	                    token,
+	                    updated = false,
+	                    index;
+	                do {
+	                    token = tokens[i] + "";
+	                    index = checkTokenAndGetIndex(this, token);
+	                    while (index !== -1) {
+	                        this.splice(index, 1);
+	                        updated = true;
+	                        index = checkTokenAndGetIndex(this, token);
+	                    }
+	                } while (++i < l);
+
+	                if (updated) {
+	                    this._updateClassName();
+	                }
+	            };
+	            classListProto.toggle = function (token, force) {
+	                token += "";
+
+	                var result = this.contains(token),
+	                    method = result ? force !== true && "remove" : force !== false && "add";
+
+	                if (method) {
+	                    this[method](token);
+	                }
+
+	                if (force === true || force === false) {
+	                    return force;
+	                } else {
+	                    return !result;
+	                }
+	            };
+	            classListProto.toString = function () {
+	                return this.join(" ");
+	            };
+
+	            if (objCtr.defineProperty) {
+	                var classListPropDesc = {
+	                    get: classListGetter,
+	                    enumerable: true,
+	                    configurable: true
+	                };
+	                try {
+	                    objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+	                } catch (ex) {
+	                    // IE 8 doesn't support enumerable:true
+	                    if (ex.number === -0x7FF5EC54) {
+	                        classListPropDesc.enumerable = false;
+	                        objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+	                    }
+	                }
+	            } else if (objCtr[protoProp].__defineGetter__) {
+	                elemCtrProto.__defineGetter__(classListProp, classListGetter);
+	            }
+	        })(self);
+	    } else {
+	        // There is full or partial native classList support, so just check if we need
+	        // to normalize the add/remove and toggle APIs.
+
+	        (function () {
+	            "use strict";
+
+	            var testElement = document.createElement("_");
+
+	            testElement.classList.add("c1", "c2");
+
+	            // Polyfill for IE 10/11 and Firefox <26, where classList.add and
+	            // classList.remove exist but support only one argument at a time.
+	            if (!testElement.classList.contains("c2")) {
+	                var createMethod = function createMethod(method) {
+	                    var original = DOMTokenList.prototype[method];
+
+	                    DOMTokenList.prototype[method] = function (token) {
+	                        var i,
+	                            len = arguments.length;
+
+	                        for (i = 0; i < len; i++) {
+	                            token = arguments[i];
+	                            original.call(this, token);
+	                        }
+	                    };
+	                };
+	                createMethod('add');
+	                createMethod('remove');
+	            }
+
+	            testElement.classList.toggle("c3", false);
+
+	            // Polyfill for IE 10 and Firefox <24, where classList.toggle does not
+	            // support the second argument.
+	            if (testElement.classList.contains("c3")) {
+	                var _toggle = DOMTokenList.prototype.toggle;
+
+	                DOMTokenList.prototype.toggle = function (token, force) {
+	                    if (1 in arguments && !this.contains(token) === !force) {
+	                        return force;
+	                    } else {
+	                        return _toggle.call(this, token);
+	                    }
+	                };
+	            }
+
+	            testElement = null;
+	        })();
+	    }
+	}
 
 /***/ }
 /******/ ]);

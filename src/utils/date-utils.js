@@ -1,3 +1,5 @@
+import "./Object-assign-polyfill";
+
 /*
     Take the initial config object of shortdates and date description
     e.g. { 20151025 : "Sunday" }

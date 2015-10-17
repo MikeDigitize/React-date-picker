@@ -1,172 +1,183 @@
 import React from "react";
 import CSSModule from "react-css-modules";
+import styles from "./table-body-styles";
+import "../../utils/classList-polyfill";
 
-export default class TableBody extends React.Component {
+class TableBody extends React.Component {
+
+    toggleSelected(e) {
+        console.log("clicky");
+        let target = e.target || e.srcElement;
+        target.classList.toggle("timeslot-selected");
+    }
+
     render() {
         return(
-            <tbody>
-                <tr className="delivery-charge-desc">
-                    <td className="timeslot-desc timeslot-sameday">
-                        <p className="time-desc">Same day time slot</p>
-                        <p className="time">4:30PM - 10PM</p>
-                        <p className="extra-info"></p>
+            <tbody styleName="date-picker-tbody">
+                <tr>
+                    <td styleName="timeslot-desc">
+                        <p styleName="time-desc">Same day time slot</p>
+                        <p styleName="time">4:30PM - 10PM</p>
+                        <p styleName="extra-info"></p>
 
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;29.99</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;29.99</p>
                     </td>
-                    <td>
+                    <td styleName="timeslot">
 
                     </td>
-                    <td>
+                    <td styleName="timeslot">
 
                     </td>
-                    <td>
+                    <td styleName="timeslot">
 
                     </td>
-                    <td>
+                    <td styleName="timeslot">
 
                     </td>
-                    <td>
+                    <td styleName="timeslot">
 
                     </td>
-                    <td>
+                    <td styleName="timeslot">
 
                     </td>
                 </tr>
-                <tr className="delivery-charge-desc">
-                    <td className="timeslot-desc timeslot-anytime">
-                        <p className="time-desc">Standard Delivery</p>
-                        <p className="extra-info"><span className="icon-tick2"></span> We'll text a 4-hour time slot on the day</p>
-                        <p className="extra-info"><span className="icon-tick2"></span> Online order tracking - no need to wait in</p>
-                        <p className="extra-info"><span className="icon-tick2"></span> Delivery from 7AM - 7PM</p>
+                <tr>
+                    <td styleName="timeslot-desc">
+                        <p styleName="time-desc">Standard Delivery</p>
+                        <p styleName="extra-info"><span className="icon-tick2"></span> We'll text a 4-hour time slot on the day</p>
+                        <p styleName="extra-info"><span className="icon-tick2"></span> Online order tracking - no need to wait in</p>
+                        <p styleName="extra-info"><span className="icon-tick2"></span> Delivery from 7AM - 7PM</p>
                     </td>
-                    <td>
+                    <td styleName="timeslot">
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;9.99</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;9.99</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;4.99</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;4.99</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound; Free</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound; Free</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound; Free</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound; Free</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound; Free</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound; Free</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;4.99</p>
-                    </td>
-                </tr>
-                <tr className="delivery-charge-desc timeslot-row">
-                    <td className="timeslot-desc timeslot-morning">
-                        <p className="time-desc">Morning</p>
-                        <p className="time">07:00 - 12:00</p>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;29.98</p>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;24.98</p>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;24.98</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;4.99</p>
                     </td>
                 </tr>
-                <tr className="delivery-charge-desc timeslot-row">
-                    <td className="timeslot-desc timeslot-lunch">
-                        <p className="time-desc">Lunch</p>
-                        <p className="time">10:00 - 14:00</p>
+                <tr>
+                    <td styleName="timeslot-desc">
+                        <p styleName="time-desc">Morning</p>
+                        <p styleName="time">07:00 - 12:00</p>
                     </td>
-                    <td>
+                    <td styleName="timeslot">
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;29.98</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;29.98</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;24.98</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;24.98</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;24.98</p>
-                    </td>
-                </tr>
-                <tr className="delivery-charge-desc timeslot-row">
-                    <td className="timeslot-desc timeslot-afternoon">
-                        <p className="time-desc">Afternoon</p>
-                        <p className="time">12:00 - 17:00</p>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;29.98</p>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;24.98</p>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
-                    </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;24.98</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;24.98</p>
                     </td>
                 </tr>
-                <tr className="delivery-charge-desc timeslot-row">
-                    <td className="timeslot-desc timeslot-evening">
-                        <p className="time-desc">Evening</p>
-                        <p className="time">18:00 - 22:00</p>
+                <tr>
+                    <td styleName="timeslot-desc">
+                        <p styleName="time-desc">Lunch</p>
+                        <p styleName="time">10:00 - 14:00</p>
                     </td>
-                    <td>
+                    <td styleName="timeslot">
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;29.98</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;29.98</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;24.98</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;24.98</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;19.99</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
                     </td>
-                    <td>
-                        <p className="delivery-selectable">&pound;24.98</p>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;24.98</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td styleName="timeslot-desc">
+                        <p styleName="time-desc">Afternoon</p>
+                        <p styleName="time">12:00 - 17:00</p>
+                    </td>
+                    <td styleName="timeslot">
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;29.98</p>
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;24.98</p>
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;24.98</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td styleName="timeslot-desc">
+                        <p styleName="time-desc">Evening</p>
+                        <p styleName="time">18:00 - 22:00</p>
+                    </td>
+                    <td styleName="timeslot">
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;29.98</p>
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;24.98</p>
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;19.99</p>
+                    </td>
+                    <td styleName="timeslot">
+                        <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;24.98</p>
                     </td>
                 </tr>
             </tbody>
         );
     }
 }
+
+export default CSSModule(TableBody, styles);

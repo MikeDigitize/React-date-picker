@@ -1,6 +1,7 @@
 import React from "react";
 import PickerContainer from "./Picker/PickerContainer";
 import { config } from "../data/available-dates";
+import styles from "../styles/global";
 
 class App extends React.Component {
     constructor(){
