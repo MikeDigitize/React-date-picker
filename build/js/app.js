@@ -64,11 +64,11 @@
 
 	var _PickerPickerContainer2 = _interopRequireDefault(_PickerPickerContainer);
 
-	var _stylesGlobal = __webpack_require__(248);
+	var _stylesGlobal = __webpack_require__(246);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
 
-	var _utilsGetConfig = __webpack_require__(249);
+	var _utilsGetConfig = __webpack_require__(247);
 
 	var config = {};
 
@@ -20525,7 +20525,9 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerDataActions = __webpack_require__(233);
+	var _actionsPickerActions = __webpack_require__(235);
+
+	var _actionsExternalActions = __webpack_require__(245);
 
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
@@ -20590,8 +20592,8 @@
 	                        }
 	                    });
 
-	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.basketTotal)(nextProps.config.basketTotal));
-	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(nextProps.config.dates));
+	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(nextProps.config.basketTotal));
+	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.availableDates)(nextProps.config.dates));
 
 	                    // simulate ajax call to keep loading screen visible
 	                    setTimeout(function () {
@@ -20604,10 +20606,10 @@
 	        key: "preparePickerData",
 	        value: function preparePickerData(config) {
 
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.totalWeeks)(config.weeksInConfig));
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.dateRanges)(config.dateRanges));
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.tableHeadData)(config.tableHeadData));
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.tableBodyData)(config.tableBodyData));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.totalWeeks)(config.weeksInConfig));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.dateRanges)(config.dateRanges));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.tableHeadData)(config.tableHeadData));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.tableBodyData)(config.tableBodyData));
 
 	            this.setState({
 	                pickerState: {
@@ -20685,7 +20687,7 @@
 	};
 
 	PickerContainer.propTypes = {
-	    config: _react2["default"].PropTypes.object
+	    config: _react2["default"].PropTypes.object.isRequired
 	};
 	module.exports = exports["default"];
 
@@ -20725,13 +20727,13 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerDataActions = __webpack_require__(233);
+	var _actionsPickerActions = __webpack_require__(235);
 
-	var _DateRangeDateRange = __webpack_require__(234);
+	var _DateRangeDateRange = __webpack_require__(236);
 
 	var _DateRangeDateRange2 = _interopRequireDefault(_DateRangeDateRange);
 
-	var _TableTable = __webpack_require__(236);
+	var _TableTable = __webpack_require__(238);
 
 	var _TableTable2 = _interopRequireDefault(_TableTable);
 
@@ -20747,7 +20749,7 @@
 	        if (tableIndex >= ranges.length) {
 	            tableIndex = ranges.length - 1;
 	        }
-	        _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.updateTableIndex)(tableIndex));
+	        _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(tableIndex));
 	        this.state = {
 	            dateRanges: ranges,
 	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
@@ -23463,9 +23465,9 @@
 
 	var _redux = __webpack_require__(224);
 
-	var _externalStores = __webpack_require__(250);
+	var _externalStores = __webpack_require__(233);
 
-	var _pickerDataStores = __webpack_require__(251);
+	var _pickerDataStores = __webpack_require__(234);
 
 	function DatePicker() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -24072,26 +24074,129 @@
 	});
 	exports.availableDates = availableDates;
 	exports.basketTotal = basketTotal;
+
+	function availableDates() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWAVAILABLEDATESANDCHARGES":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function basketTotal() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "BASKETTOTALUPDATE":
+	            return action.state;
+	        case "ADDTOTOTAL":
+	            return state + action.state;
+	        case "SUBTRACTFROMTOTAL":
+	            return state - action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+/***/ },
+/* 234 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.totalWeeks = totalWeeks;
+	exports.tableDisplayIndex = tableDisplayIndex;
+	exports.dateRanges = dateRanges;
+	exports.tableHeadData = tableHeadData;
+	exports.tableBodyData = tableBodyData;
+
+	function totalWeeks() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "TOTALWEEKSUPDATE":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function tableDisplayIndex() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "TABLEDISPLAYINDEX":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function dateRanges() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWDATERANGES":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function tableHeadData() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWTABLEHEADDATA":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function tableBodyData() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWTABLEBODYDATA":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+/***/ },
+/* 235 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.totalWeeks = totalWeeks;
 	exports.updateTableIndex = updateTableIndex;
 	exports.dateRanges = dateRanges;
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
-	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
-	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDATERANGES = "NEWDATERANGES";
 	var NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 	var NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
-
-	function availableDates(data) {
-	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
-	}
-
-	function basketTotal(data) {
-	    return { state: data, type: BASKETTOTALUPDATE };
-	}
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24114,7 +24219,7 @@
 	}
 
 /***/ },
-/* 234 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24141,7 +24246,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _dateRangeStyles = __webpack_require__(235);
+	var _dateRangeStyles = __webpack_require__(237);
 
 	var _dateRangeStyles2 = _interopRequireDefault(_dateRangeStyles);
 
@@ -24149,7 +24254,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerDataActions = __webpack_require__(233);
+	var _actionsPickerActions = __webpack_require__(235);
 
 	var DateRange = (function (_React$Component) {
 	    _inherits(DateRange, _React$Component);
@@ -24185,7 +24290,7 @@
 	            this.setState({
 	                index: this.state.index === 0 ? this.state.dates.length - 1 : --this.state.index
 	            }, function () {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.updateTableIndex)(_this.state.index));
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(_this.state.index));
 	            });
 	        }
 	    }, {
@@ -24196,7 +24301,7 @@
 	            this.setState({
 	                index: this.state.index === this.state.dates.length - 1 ? 0 : ++this.state.index
 	            }, function () {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.updateTableIndex)(_this2.state.index));
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(_this2.state.index));
 	            });
 	        }
 	    }, {
@@ -24225,22 +24330,22 @@
 	};
 
 	DateRange.propTypes = {
-	    dateRanges: _react2["default"].PropTypes.array,
-	    tableIndex: _react2["default"].PropTypes.number
+	    dateRanges: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.string).isRequired,
+	    tableIndex: _react2["default"].PropTypes.number.isRequired
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(DateRange, _dateRangeStyles2["default"], { allowMultiple: true });
 	module.exports = exports["default"];
 
 /***/ },
-/* 235 */
+/* 237 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-range-select":"OX0IQ95QuEmxlWQhyiRs6","date-range":"_1yKpw1RLO3THHz9hnbX_Dt","date-range-ctrl":"znc2lrvqmWUjnbcbNbeIr","date-range-right":"_1AqK9xb6dHCKGPeJDRvBtw","date-range-left":"_8SLLaLIWkMBPftpcd_ldr"};
 
 /***/ },
-/* 236 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24267,15 +24372,15 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _TableTableHead = __webpack_require__(237);
+	var _TableTableHead = __webpack_require__(239);
 
 	var _TableTableHead2 = _interopRequireDefault(_TableTableHead);
 
-	var _TableTableBody = __webpack_require__(240);
+	var _TableTableBody = __webpack_require__(241);
 
 	var _TableTableBody2 = _interopRequireDefault(_TableTableBody);
 
-	var _tableStyles = __webpack_require__(239);
+	var _tableStyles = __webpack_require__(244);
 
 	var _tableStyles2 = _interopRequireDefault(_tableStyles);
 
@@ -24322,7 +24427,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 237 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24349,7 +24454,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _tableHeadStyles = __webpack_require__(238);
+	var _tableHeadStyles = __webpack_require__(240);
 
 	var _tableHeadStyles2 = _interopRequireDefault(_tableHeadStyles);
 
@@ -24434,29 +24539,22 @@
 	};
 
 	TableHead.propTypes = {
-	    tableDisplayIndex: _react2["default"].PropTypes.number,
-	    tableHeadData: _react2["default"].PropTypes.array
+	    tableDisplayIndex: _react2["default"].PropTypes.number.isRequired,
+	    tableHeadData: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.array).isRequired
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(TableHead, _tableHeadStyles2["default"]);
 	module.exports = exports["default"];
 
 /***/ },
-/* 238 */
+/* 240 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-picker-thead":"I0Zsu_vOjbLH-qTh5jbMr"};
 
 /***/ },
-/* 239 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-	module.exports = {"date-picker-table":"_2fFeFRwWZTf51bPpQfobX4"};
-
-/***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24483,7 +24581,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _tableBodyStyles = __webpack_require__(241);
+	var _tableBodyStyles = __webpack_require__(242);
 
 	var _tableBodyStyles2 = _interopRequireDefault(_tableBodyStyles);
 
@@ -24491,7 +24589,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	__webpack_require__(242);
+	__webpack_require__(243);
 
 	var TableBody = (function (_React$Component) {
 	    _inherits(TableBody, _React$Component);
@@ -24937,28 +25035,28 @@
 	    return TableBody;
 	})(_react2["default"].Component);
 
-	TableHead.defaultProps = {
+	TableBody.defaultProps = {
 	    tableDisplayIndex: 0,
 	    tableBodyData: []
 	};
 
-	TableHead.propTypes = {
-	    tableDisplayIndex: _react2["default"].PropTypes.number,
-	    tableBodyData: _react2["default"].PropTypes.array
+	TableBody.propTypes = {
+	    tableDisplayIndex: _react2["default"].PropTypes.number.isRequired,
+	    tableBodyData: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.array).isRequired
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(TableBody, _tableBodyStyles2["default"]);
 	module.exports = exports["default"];
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-picker-tbody":"_29vJ8JCK0woHtbMXWLpUK9","timeslot-desc":"_2j2BD-de5vLVDb31Pa_GhM","time-desc":"yDp_R-xp3fRkhHArKPlAi","time":"_1N07UKBt9GGpTfe-xOHvt0","extra-info":"_3r1C6csLCGcT3tnZcye8pQ","timeslot":"_2nbCK7KDaiFms044UxcM1m","delivery-selectable":"_1joTcdAy56WL7iY5YFerPM","delivery-selected":"OjDALIjGZUOIa7p-dpptf"};
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports) {
 
 	/*
@@ -25169,18 +25267,42 @@
 	}
 
 /***/ },
-/* 243 */,
-/* 244 */,
-/* 245 */,
-/* 246 */,
-/* 247 */,
-/* 248 */
+/* 244 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"date-picker-table":"_2fFeFRwWZTf51bPpQfobX4"};
+
+/***/ },
+/* 245 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.availableDates = availableDates;
+	exports.basketTotal = basketTotal;
+	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
+	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
+
+	function availableDates(data) {
+	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
+	}
+
+	function basketTotal(data) {
+	    return { state: data, type: BASKETTOTALUPDATE };
+	}
+
+/***/ },
+/* 246 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 249 */
+/* 247 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25194,121 +25316,6 @@
 	    return fetch('/data/picker-config1.json').then(function (response) {
 	        return response.json();
 	    });
-	}
-
-/***/ },
-/* 250 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.availableDates = availableDates;
-	exports.basketTotal = basketTotal;
-
-	function availableDates() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWAVAILABLEDATESANDCHARGES":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function basketTotal() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "BASKETTOTALUPDATE":
-	            return action.state;
-	        case "ADDTOTOTAL":
-	            return state + action.state;
-	        case "SUBTRACTFROMTOTAL":
-	            return state - action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-/***/ },
-/* 251 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.totalWeeks = totalWeeks;
-	exports.tableDisplayIndex = tableDisplayIndex;
-	exports.dateRanges = dateRanges;
-	exports.tableHeadData = tableHeadData;
-	exports.tableBodyData = tableBodyData;
-
-	function totalWeeks() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "TOTALWEEKSUPDATE":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function tableDisplayIndex() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "TABLEDISPLAYINDEX":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function dateRanges() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWDATERANGES":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function tableHeadData() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWTABLEHEADDATA":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function tableBodyData() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWTABLEBODYDATA":
-	            return action.state;
-	        default:
-	            return state;
-	    }
 	}
 
 /***/ }

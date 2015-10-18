@@ -189,14 +189,14 @@ class TableBody extends React.Component {
 }
 
 
-TableHead.defaultProps = {
+TableBody.defaultProps = {
     tableDisplayIndex : 0,
     tableBodyData : []
 };
 
-TableHead.propTypes = {
-    tableDisplayIndex : React.PropTypes.number,
-    tableBodyData : React.PropTypes.array
+TableBody.propTypes = {
+    tableDisplayIndex : React.PropTypes.number.isRequired,
+    tableBodyData : React.PropTypes.arrayOf(React.PropTypes.array).isRequired
 };
 
 export default CSSModule(TableBody, styles);

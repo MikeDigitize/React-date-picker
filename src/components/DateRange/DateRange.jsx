@@ -2,7 +2,7 @@ import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./date-range-styles";
 import DatePickerStore from "../../stores/PickerStore";
-import { updateTableIndex } from "../../actions/picker-data-actions";
+import { updateTableIndex } from "../../actions/picker-actions";
 
 class DateRange extends React.Component {
 
@@ -59,8 +59,8 @@ DateRange.defaultProps = {
 };
 
 DateRange.propTypes = {
-    dateRanges : React.PropTypes.array,
-    tableIndex : React.PropTypes.number
+    dateRanges : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+    tableIndex : React.PropTypes.number.isRequired
 };
 
 export default CSSModule(DateRange, styles, { allowMultiple : true });

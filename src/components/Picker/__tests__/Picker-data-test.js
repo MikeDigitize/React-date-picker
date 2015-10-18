@@ -5,7 +5,7 @@ jest.dontMock("../../../actions/picker-data-actions");
 let React = require("react/addons");
 let DatePickerStore = require ("../../../stores/PickerStore");
 let data = require ("../../../data/available-dates");
-let actions = require ("../../../actions/picker-data-actions");
+let actions = require ("../../../actions/picker-actions");
 
 describe("Passing the Date Picker's initial data into the Store", function() {
 

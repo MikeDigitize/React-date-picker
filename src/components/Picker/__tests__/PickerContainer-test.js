@@ -3,7 +3,7 @@ let React = require("react/addons");
 let PickerContainer = require ("../PickerContainer");
 let DatePickerStore = require ("../../../stores/PickerStore");
 let data = require ("../../../data/available-dates");
-let actions = require ("../../../actions/picker-data-actions");
+let actions = require ("../../../actions/picker-actions");
 
 describe("Date Picker Container", function() {
 

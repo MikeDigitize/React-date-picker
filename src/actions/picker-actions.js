@@ -1,18 +1,8 @@
-const NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
-const BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 const TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 const TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 const NEWDATERANGES = "NEWDATERANGES";
 const NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 const NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
-
-export function availableDates(data) {
-    return { state : data, type: NEWAVAILABLEDATESANDCHARGES };
-}
-
-export function basketTotal(data) {
-    return { state : data, type: BASKETTOTALUPDATE };
-}
 
 export function totalWeeks(data) {
     return { state : data, type: TOTALWEEKSUPDATE };

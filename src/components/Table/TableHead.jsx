@@ -56,8 +56,8 @@ TableHead.defaultProps = {
 };
 
 TableHead.propTypes = {
-    tableDisplayIndex : React.PropTypes.number,
-    tableHeadData : React.PropTypes.array
+    tableDisplayIndex : React.PropTypes.number.isRequired,
+    tableHeadData : React.PropTypes.arrayOf(React.PropTypes.array).isRequired
 };
 
 export default CSSModule(TableHead, styles);

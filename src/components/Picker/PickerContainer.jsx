@@ -1,7 +1,8 @@
 import React from "react";
 import Picker from "./Picker";
 import DatePickerStore from "../../stores/PickerStore";
-import { basketTotal, availableDates, totalWeeks, dateRanges, tableHeadData, tableBodyData } from "../../actions/picker-data-actions";
+import { totalWeeks, dateRanges, tableHeadData, tableBodyData } from "../../actions/picker-actions";
+import { basketTotal, availableDates } from "../../actions/external-actions";
 
 export default class PickerContainer extends React.Component {
 
@@ -146,5 +147,5 @@ PickerContainer.defaultProps = {
 };
 
 PickerContainer.propTypes = {
-    config : React.PropTypes.object
+    config : React.PropTypes.object.isRequired
 };
