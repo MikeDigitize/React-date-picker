@@ -1,14 +1,19 @@
 import React from "react";
 import PickerContainer from "./Picker/PickerContainer";
-import { config } from "../data/available-dates";
 import styles from "../styles/global";
+import { getProducts } from "../utils/getConfig";
+
+let config = {};
 
 class App extends React.Component {
     constructor(){
         super();
         this.state = {
             config : {}
-        }
+        };
+        getProducts().then(data => {
+           config = data;
+        });
     }
 
     passNewConfig() {

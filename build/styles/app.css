@@ -71,10 +71,6 @@
         font-weight: bold; }
       .I0Zsu_vOjbLH-qTh5jbMr th p:nth-child(3) {
         color: #6f6f6f; }
-._2fFeFRwWZTf51bPpQfobX4 {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%; }
 ._29vJ8JCK0woHtbMXWLpUK9 ._2j2BD-de5vLVDb31Pa_GhM {
   color: #737272;
   padding: 15px;
@@ -130,6 +126,10 @@
       filter: progid:DXImageTransform.Microsoft.gradient(enabled=false); }
       ._29vJ8JCK0woHtbMXWLpUK9 ._2nbCK7KDaiFms044UxcM1m ._1joTcdAy56WL7iY5YFerPM.OjDALIjGZUOIa7p-dpptf:hover {
         border: 1px solid #008caf; }
+._2fFeFRwWZTf51bPpQfobX4 {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%; }
 .timeslot-selected {
   color: #fff !important;
   background: #00b5e2 !important;

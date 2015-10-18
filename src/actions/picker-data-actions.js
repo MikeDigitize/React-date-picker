@@ -1,27 +1,17 @@
 const NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 const BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
-const NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
-const NEWDAYSCONFIG = "NEWDAYSCONFIG";
 const TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 const TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
-const NEWDAYSANDCHARGESCONFIG = "NEWDAYSANDCHARGESCONFIG";
 const NEWDATERANGES = "NEWDATERANGES";
 const NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
+const NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 
 export function availableDates(data) {
     return { state : data, type: NEWAVAILABLEDATESANDCHARGES };
 }
 
-export function chargesConfig(data) {
-    return { state : data, type: NEWCHARGESCONFIG };
-}
-
 export function basketTotal(data) {
     return { state : data, type: BASKETTOTALUPDATE };
-}
-
-export function daysConfig(data) {
-    return { state : data, type: NEWDAYSCONFIG };
 }
 
 export function totalWeeks(data) {
@@ -32,14 +22,14 @@ export function updateTableIndex(data) {
     return { state : data, type: TABLEDISPLAYINDEX };
 }
 
-export function daysAndChargesConfig(data) {
-    return { state : data, type : NEWDAYSANDCHARGESCONFIG };
-}
-
 export function dateRanges(data) {
     return { state : data, type : NEWDATERANGES };
 }
 
 export function tableHeadData(data) {
     return { state : data, type : NEWTABLEHEADDATA };
+}
+
+export function tableBodyData(data) {
+    return { state : data, type : NEWTABLEBODYDATA };
 }

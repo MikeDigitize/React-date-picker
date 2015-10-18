@@ -1,11 +1,7 @@
 import React from "react";
 import Picker from "./Picker";
 import DatePickerStore from "../../stores/PickerStore";
-import { basketTotal, availableDates, chargesConfig, daysConfig, totalWeeks, daysAndChargesConfig, dateRanges, tableHeadData } from "../../actions/picker-data-actions";
-import { dateCharges } from "../../data/date-charges";
-import { fillInGaps, formatDates, includeDayTypeCharges,createDateRanges } from "../../utils/date-utils";
-import { createTableHeadData } from "../../utils/table-data-utils";
-import "../../utils/Object-is-polyfill";
+import { basketTotal, availableDates, totalWeeks, dateRanges, tableHeadData, tableBodyData } from "../../actions/picker-data-actions";
 
 export default class PickerContainer extends React.Component {
 
@@ -25,19 +21,9 @@ export default class PickerContainer extends React.Component {
 
     componentWillReceiveProps(nextProps) {
 
-        /*
-            When props contain an object with a key we know we have some data to work with.
-            The first config arrives with some data we need to send to the store -
-                - the available dates and date types
-                - the charge configuration
-                - the order totals
-            We then need to create a comma separated list of shortdates to send off to a second handler
-            which returns the detailed date info.
-         */
-
         if(Object.keys(nextProps).length) {
 
-            if(nextProps.config.calendarConfiguration.dataState === "ThirdParty") {
+            if(nextProps.config.state === "ThirdParty") {
                 this.setState({
                     pickerState : {
                         closed : false,
@@ -49,7 +35,7 @@ export default class PickerContainer extends React.Component {
                 });
             }
 
-            else if(!Object.keys(nextProps.config.calendarConfiguration.availableDays).length){
+            else if(!nextProps.config.hasDeliveryDates){
                 this.setState({
                     pickerState : {
                         closed : false,
@@ -79,13 +65,12 @@ export default class PickerContainer extends React.Component {
                     }
                 });
 
-                DatePickerStore.dispatch(basketTotal(nextProps.config.orderTotals.OverallTotalNumber));
-                DatePickerStore.dispatch(availableDates(nextProps.config.calendarConfiguration.availableDays));
-                DatePickerStore.dispatch(chargesConfig(nextProps.config.calendarConfiguration.chargeConfigurationCollection));
+                DatePickerStore.dispatch(basketTotal(nextProps.config.basketTotal));
+                DatePickerStore.dispatch(availableDates(nextProps.config.dates));
 
-                // simulate ajax call
+                // simulate ajax call to keep loading screen visible
                 setTimeout(()=> {
-                    this.preparePickerData();
+                    this.preparePickerData(nextProps.config);
                 }, 1000);
 
             }
@@ -94,20 +79,12 @@ export default class PickerContainer extends React.Component {
 
     }
 
-    preparePickerData() {
-        let dates = fillInGaps(DatePickerStore.getState().availableDates);
-        let formattedDates = formatDates(dates);
-        let weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
-        formattedDates = includeDayTypeCharges(formattedDates, DatePickerStore.getState().chargesConfig);
-        let thData = createTableHeadData(formattedDates);
-        let ranges = createDateRanges(formattedDates, weeks);
+    preparePickerData(config) {
 
-        DatePickerStore.dispatch(availableDates(dates));
-        DatePickerStore.dispatch(daysConfig(formattedDates));
-        DatePickerStore.dispatch(totalWeeks(weeks));
-        DatePickerStore.dispatch(daysAndChargesConfig(dateCharges));
-        DatePickerStore.dispatch(dateRanges(ranges));
-        DatePickerStore.dispatch(tableHeadData(thData));
+        DatePickerStore.dispatch(totalWeeks(config.weeksInConfig));
+        DatePickerStore.dispatch(dateRanges(config.dateRanges));
+        DatePickerStore.dispatch(tableHeadData(config.tableHeadData));
+        DatePickerStore.dispatch(tableBodyData(config.tableBodyData));
 
         this.setState({
             pickerState : {
@@ -118,41 +95,6 @@ export default class PickerContainer extends React.Component {
                 ready : true
             }
         });
-
-        var counter = 0, timeslotDescriptions = [];
-
-        for (var i in dateCharges) {
-
-            if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
-                timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-            } else {
-                timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-            }
-
-            for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
-
-                if (!dateCharges[i][j]) {
-                    dateCharges[i].splice(j, 0, { WebDescription: null });
-                }
-                else if (dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
-                    dateCharges[i].splice(j, 0, { WebDescription: null });
-                }
-
-            }
-
-            counter++;
-
-        }
-
-        function createArrayOfConfigs(config, size) {
-            return [].concat.apply([],
-                config.map(function(_,i) {
-                    return i % size ? [] : [config.slice(i, i+size)];
-                })
-            );
-        }
-
-        console.log(pickerDates);
 
     }
 

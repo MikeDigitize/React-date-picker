@@ -1,9 +1,18 @@
 import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./table-body-styles";
+import DatePickerStore from "../../stores/PickerStore";
 import "../../utils/classList-polyfill";
 
 class TableBody extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            tableHeadData : this.props.tableBodyData,
+            tableIndex : this.props.tableDisplayIndex
+        };
+    }
 
     toggleSelected(e) {
         let target = e.target || e.srcElement;
@@ -178,5 +187,16 @@ class TableBody extends React.Component {
         );
     }
 }
+
+
+TableHead.defaultProps = {
+    tableDisplayIndex : 0,
+    tableBodyData : []
+};
+
+TableHead.propTypes = {
+    tableDisplayIndex : React.PropTypes.number,
+    tableBodyData : React.PropTypes.array
+};
 
 export default CSSModule(TableBody, styles);

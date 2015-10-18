@@ -64,11 +64,13 @@
 
 	var _PickerPickerContainer2 = _interopRequireDefault(_PickerPickerContainer);
 
-	var _dataAvailableDates = __webpack_require__(248);
-
-	var _stylesGlobal = __webpack_require__(249);
+	var _stylesGlobal = __webpack_require__(248);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
+
+	var _utilsGetConfig = __webpack_require__(249);
+
+	var config = {};
 
 	var App = (function (_React$Component) {
 	    _inherits(App, _React$Component);
@@ -80,13 +82,16 @@
 	        this.state = {
 	            config: {}
 	        };
+	        (0, _utilsGetConfig.getProducts)().then(function (data) {
+	            config = data;
+	        });
 	    }
 
 	    _createClass(App, [{
 	        key: "passNewConfig",
 	        value: function passNewConfig() {
 	            this.setState({
-	                config: _dataAvailableDates.config
+	                config: config
 	            });
 	        }
 	    }, {
@@ -20522,14 +20527,6 @@
 
 	var _actionsPickerDataActions = __webpack_require__(233);
 
-	var _dataDateCharges = __webpack_require__(243);
-
-	var _utilsDateUtils = __webpack_require__(244);
-
-	var _utilsTableDataUtils = __webpack_require__(246);
-
-	__webpack_require__(247);
-
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
 
@@ -20554,19 +20551,9 @@
 	        value: function componentWillReceiveProps(nextProps) {
 	            var _this = this;
 
-	            /*
-	                When props contain an object with a key we know we have some data to work with.
-	                The first config arrives with some data we need to send to the store -
-	                    - the available dates and date types
-	                    - the charge configuration
-	                    - the order totals
-	                We then need to create a comma separated list of shortdates to send off to a second handler
-	                which returns the detailed date info.
-	             */
-
 	            if (Object.keys(nextProps).length) {
 
-	                if (nextProps.config.calendarConfiguration.dataState === "ThirdParty") {
+	                if (nextProps.config.state === "ThirdParty") {
 	                    this.setState({
 	                        pickerState: {
 	                            closed: false,
@@ -20576,7 +20563,7 @@
 	                            ready: false
 	                        }
 	                    });
-	                } else if (!Object.keys(nextProps.config.calendarConfiguration.availableDays).length) {
+	                } else if (!nextProps.config.hasDeliveryDates) {
 	                    this.setState({
 	                        pickerState: {
 	                            closed: false,
@@ -20603,33 +20590,24 @@
 	                        }
 	                    });
 
-	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.basketTotal)(nextProps.config.orderTotals.OverallTotalNumber));
-	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(nextProps.config.calendarConfiguration.availableDays));
-	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.chargesConfig)(nextProps.config.calendarConfiguration.chargeConfigurationCollection));
+	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.basketTotal)(nextProps.config.basketTotal));
+	                    _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(nextProps.config.dates));
 
-	                    // simulate ajax call
+	                    // simulate ajax call to keep loading screen visible
 	                    setTimeout(function () {
-	                        _this.preparePickerData();
+	                        _this.preparePickerData(nextProps.config);
 	                    }, 1000);
 	                }
 	            }
 	        }
 	    }, {
 	        key: "preparePickerData",
-	        value: function preparePickerData() {
-	            var dates = (0, _utilsDateUtils.fillInGaps)(_storesPickerStore2["default"].getState().availableDates);
-	            var formattedDates = (0, _utilsDateUtils.formatDates)(dates);
-	            var weeks = formattedDates.length % 7 === 0 ? formattedDates.length / 7 : Math.floor(formattedDates.length / 7) + 1;
-	            formattedDates = (0, _utilsDateUtils.includeDayTypeCharges)(formattedDates, _storesPickerStore2["default"].getState().chargesConfig);
-	            var thData = (0, _utilsTableDataUtils.createTableHeadData)(formattedDates);
-	            var ranges = (0, _utilsDateUtils.createDateRanges)(formattedDates, weeks);
+	        value: function preparePickerData(config) {
 
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.availableDates)(dates));
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.daysConfig)(formattedDates));
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.totalWeeks)(weeks));
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.daysAndChargesConfig)(_dataDateCharges.dateCharges));
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.dateRanges)(ranges));
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.tableHeadData)(thData));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.totalWeeks)(config.weeksInConfig));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.dateRanges)(config.dateRanges));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.tableHeadData)(config.tableHeadData));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerDataActions.tableBodyData)(config.tableBodyData));
 
 	            this.setState({
 	                pickerState: {
@@ -20640,37 +20618,6 @@
 	                    ready: true
 	                }
 	            });
-
-	            var counter = 0,
-	                timeslotDescriptions = [];
-
-	            for (var i in _dataDateCharges.dateCharges) {
-
-	                if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
-	                    timeslotDescriptions = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-	                } else {
-	                    timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
-	                }
-
-	                for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
-
-	                    if (!_dataDateCharges.dateCharges[i][j]) {
-	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
-	                    } else if (_dataDateCharges.dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
-	                        _dataDateCharges.dateCharges[i].splice(j, 0, { WebDescription: null });
-	                    }
-	                }
-
-	                counter++;
-	            }
-
-	            function createArrayOfConfigs(config, size) {
-	                return [].concat.apply([], config.map(function (_, i) {
-	                    return i % size ? [] : [config.slice(i, i + size)];
-	                }));
-	            }
-
-	            console.log(pickerDates);
 	        }
 	    }, {
 	        key: "onNewData",
@@ -20788,10 +20735,6 @@
 
 	var _TableTable2 = _interopRequireDefault(_TableTable);
 
-	var _TableTableBody = __webpack_require__(240);
-
-	var _TableTableBody2 = _interopRequireDefault(_TableTableBody);
-
 	var Picker = (function (_React$Component) {
 	    _inherits(Picker, _React$Component);
 
@@ -20822,7 +20765,7 @@
 	                    dateRanges: this.state.dateRanges,
 	                    tableIndex: this.state.tableIndex
 	                }),
-	                _react2["default"].createElement(_TableTable2["default"], { body: _TableTableBody2["default"] })
+	                _react2["default"].createElement(_TableTable2["default"], null)
 	            );
 	        }
 	    }]);
@@ -23517,138 +23460,31 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.tableHeadData = tableHeadData;
 
 	var _redux = __webpack_require__(224);
+
+	var _externalStores = __webpack_require__(250);
+
+	var _pickerDataStores = __webpack_require__(251);
 
 	function DatePicker() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    return {
-	        availableDates: availableDates(state.availableDates, action),
-	        basketTotal: basketTotal(state.basketTotal, action),
-	        chargesConfig: chargesConfig(state.dateChargesConfig, action),
-	        daysConfig: daysConfig(state.daysConfig, action),
-	        totalWeeks: totalWeeks(state.totalWeeks, action),
-	        tableDisplayIndex: tableDisplayIndex(state.tableDisplayIndex, action),
-	        daysAndChargesConfig: daysAndChargesConfig(state.daysAndChargesConfig, action),
-	        dateRanges: dateRanges(state.dateRanges, action),
-	        tableHeadData: tableHeadData(state.tableHeadData, action)
+	        availableDates: (0, _externalStores.availableDates)(state.availableDates, action),
+	        basketTotal: (0, _externalStores.basketTotal)(state.basketTotal, action),
+	        totalWeeks: (0, _pickerDataStores.totalWeeks)(state.totalWeeks, action),
+	        tableDisplayIndex: (0, _pickerDataStores.tableDisplayIndex)(state.tableDisplayIndex, action),
+	        dateRanges: (0, _pickerDataStores.dateRanges)(state.dateRanges, action),
+	        tableHeadData: (0, _pickerDataStores.tableHeadData)(state.tableHeadData, action),
+	        tableBodyData: (0, _pickerDataStores.tableBodyData)(state.tableBodyData, action)
 	    };
-	}
-
-	function availableDates() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWAVAILABLEDATESANDCHARGES":
-
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function basketTotal() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "BASKETTOTALUPDATE":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function chargesConfig() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWCHARGESCONFIG":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function daysConfig() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWDAYSCONFIG":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function totalWeeks() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "TOTALWEEKSUPDATE":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function tableDisplayIndex() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "TABLEDISPLAYINDEX":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function daysAndChargesConfig() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWDAYSANDCHARGESCONFIG":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function dateRanges() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWDATERANGES":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function tableHeadData() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWTABLEHEADDATA":
-	            return action.state;
-	        default:
-	            return state;
-	    }
 	}
 
 	var DatePickerStore = (0, _redux.createStore)(DatePicker);
 	exports["default"] = DatePickerStore;
+	module.exports = exports["default"];
 
 /***/ },
 /* 224 */
@@ -24235,38 +24071,26 @@
 	    value: true
 	});
 	exports.availableDates = availableDates;
-	exports.chargesConfig = chargesConfig;
 	exports.basketTotal = basketTotal;
-	exports.daysConfig = daysConfig;
 	exports.totalWeeks = totalWeeks;
 	exports.updateTableIndex = updateTableIndex;
-	exports.daysAndChargesConfig = daysAndChargesConfig;
 	exports.dateRanges = dateRanges;
 	exports.tableHeadData = tableHeadData;
+	exports.tableBodyData = tableBodyData;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
-	var NEWCHARGESCONFIG = "NEWCHARGESCONFIG";
-	var NEWDAYSCONFIG = "NEWDAYSCONFIG";
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
-	var NEWDAYSANDCHARGESCONFIG = "NEWDAYSANDCHARGESCONFIG";
 	var NEWDATERANGES = "NEWDATERANGES";
 	var NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
+	var NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
 	}
 
-	function chargesConfig(data) {
-	    return { state: data, type: NEWCHARGESCONFIG };
-	}
-
 	function basketTotal(data) {
 	    return { state: data, type: BASKETTOTALUPDATE };
-	}
-
-	function daysConfig(data) {
-	    return { state: data, type: NEWDAYSCONFIG };
 	}
 
 	function totalWeeks(data) {
@@ -24277,16 +24101,16 @@
 	    return { state: data, type: TABLEDISPLAYINDEX };
 	}
 
-	function daysAndChargesConfig(data) {
-	    return { state: data, type: NEWDAYSANDCHARGESCONFIG };
-	}
-
 	function dateRanges(data) {
 	    return { state: data, type: NEWDATERANGES };
 	}
 
 	function tableHeadData(data) {
 	    return { state: data, type: NEWTABLEHEADDATA };
+	}
+
+	function tableBodyData(data) {
+	    return { state: data, type: NEWTABLEBODYDATA };
 	}
 
 /***/ },
@@ -24447,6 +24271,10 @@
 
 	var _TableTableHead2 = _interopRequireDefault(_TableTableHead);
 
+	var _TableTableBody = __webpack_require__(240);
+
+	var _TableTableBody2 = _interopRequireDefault(_TableTableBody);
+
 	var _tableStyles = __webpack_require__(239);
 
 	var _tableStyles2 = _interopRequireDefault(_tableStyles);
@@ -24458,12 +24286,13 @@
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
 
-	    function Table(props) {
+	    function Table() {
 	        _classCallCheck(this, Table);
 
-	        _get(Object.getPrototypeOf(Table.prototype), "constructor", this).call(this, props);
+	        _get(Object.getPrototypeOf(Table.prototype), "constructor", this).call(this);
 	        this.state = {
 	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
+	            tableBodyData: _storesPickerStore2["default"].getState().tableBodyData,
 	            tableIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
 	        };
 	    }
@@ -24471,7 +24300,6 @@
 	    _createClass(Table, [{
 	        key: "render",
 	        value: function render() {
-	            var body = _react2["default"].createElement(this.props.body);
 	            return _react2["default"].createElement(
 	                "table",
 	                { styleName: "date-picker-table" },
@@ -24479,7 +24307,10 @@
 	                    tableHeadData: this.state.tableHeadData,
 	                    tableIndex: this.state.tableIndex
 	                }),
-	                body
+	                _react2["default"].createElement(_TableTableBody2["default"], {
+	                    tableBodyData: this.state.tableBodyData,
+	                    tableIndex: this.state.tableIndex
+	                })
 	            );
 	        }
 	    }]);
@@ -24656,15 +24487,23 @@
 
 	var _tableBodyStyles2 = _interopRequireDefault(_tableBodyStyles);
 
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
 	__webpack_require__(242);
 
 	var TableBody = (function (_React$Component) {
 	    _inherits(TableBody, _React$Component);
 
-	    function TableBody() {
+	    function TableBody(props) {
 	        _classCallCheck(this, TableBody);
 
-	        _get(Object.getPrototypeOf(TableBody.prototype), "constructor", this).apply(this, arguments);
+	        _get(Object.getPrototypeOf(TableBody.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            tableHeadData: this.props.tableBodyData,
+	            tableIndex: this.props.tableDisplayIndex
+	        };
 	    }
 
 	    _createClass(TableBody, [{
@@ -25098,6 +24937,16 @@
 	    return TableBody;
 	})(_react2["default"].Component);
 
+	TableHead.defaultProps = {
+	    tableDisplayIndex: 0,
+	    tableBodyData: []
+	};
+
+	TableHead.propTypes = {
+	    tableDisplayIndex: _react2["default"].PropTypes.number,
+	    tableBodyData: _react2["default"].PropTypes.array
+	};
+
 	exports["default"] = (0, _reactCssModules2["default"])(TableBody, _tableBodyStyles2["default"]);
 	module.exports = exports["default"];
 
@@ -25320,2717 +25169,147 @@
 	}
 
 /***/ },
-/* 243 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	   value: true
-	});
-	var dateCharges = {
-	   "20151009": [{
-	      "TimeSlotId": 213,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "Same Day (16.30 - 22.00)",
-	      "WebDescription": "Same",
-	      "StartHour": 16,
-	      "EndHour": 22,
-	      "StartMinute": 30,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "4.30pm &#8211; 10pm"
-	   }],
-	   "20151010": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151011": [{
-	      "TimeSlotId": 105,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "08:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 8,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "8am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151012": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151013": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151014": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151015": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151016": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151017": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151018": [{
-	      "TimeSlotId": 105,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "08:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 8,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "8am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151019": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151020": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151021": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151022": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151023": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151024": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151025": [{
-	      "TimeSlotId": 105,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "08:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 8,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "8am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151026": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151027": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151028": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151029": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151030": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151031": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151101": [{
-	      "TimeSlotId": 105,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "08:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 8,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "8am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151102": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151103": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151104": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151105": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151106": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151107": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151108": [{
-	      "TimeSlotId": 105,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "08:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 8,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "8am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151109": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151110": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151111": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151112": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151113": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151114": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151115": [{
-	      "TimeSlotId": 105,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "08:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 8,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "8am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151116": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151117": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151118": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }],
-	   "20151119": [{
-	      "TimeSlotId": 104,
-	      "ChargeIncVat": 0.0,
-	      "ChargeExVat": 0.0,
-	      "Description": "07:00 - 19:00",
-	      "WebDescription": "Anytime",
-	      "StartHour": 7,
-	      "EndHour": 19,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 7pm"
-	   }, {
-	      "TimeSlotId": 106,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "07:00 - 12:00",
-	      "WebDescription": "Morning",
-	      "StartHour": 7,
-	      "EndHour": 12,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "7am &#8211; 12pm"
-	   }, {
-	      "TimeSlotId": 107,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "10:00 - 14:00",
-	      "WebDescription": "Lunch",
-	      "StartHour": 10,
-	      "EndHour": 14,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "10am &#8211; 2pm"
-	   }, {
-	      "TimeSlotId": 108,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "12:00 - 17:00",
-	      "WebDescription": "Afternoon",
-	      "StartHour": 12,
-	      "EndHour": 17,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "12pm &#8211; 5pm"
-	   }, {
-	      "TimeSlotId": 215,
-	      "ChargeIncVat": 19.99,
-	      "ChargeExVat": 16.66,
-	      "Description": "18:00 - 22:00",
-	      "WebDescription": "Evening",
-	      "StartHour": 18,
-	      "EndHour": 22,
-	      "StartMinute": 0,
-	      "EndMinute": 0,
-	      "WebTimeDesc": "6pm &#8211; 10pm"
-	   }]
-	};
-	exports.dateCharges = dateCharges;
-
-/***/ },
-/* 244 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.fillInGaps = fillInGaps;
-	exports.getNextDate = getNextDate;
-	exports.getDaysInMonth = getDaysInMonth;
-	exports.formatDates = formatDates;
-	exports.suffix = suffix;
-	exports.includeDayTypeCharges = includeDayTypeCharges;
-	exports.createDateRanges = createDateRanges;
-
-	__webpack_require__(245);
-
-	/*
-	    Take the initial config object of shortdates and date description
-	    e.g. { 20151025 : "Sunday" }
-	    fill in any gaps (some dates maybe missing) and return the object
-	 */
-
-	function fillInGaps(config) {
-
-	    var tempDaysArray = [];
-	    var tempDaysObject = {};
-	    var totalDiff, totalDaysInMonth, a, b, i, j;
-
-	    tempDaysArray = Object.keys(config).map(function (date) {
-	        return date;
-	    });
-
-	    for (i = 0; i < tempDaysArray.length; i++) {
-
-	        if (i < tempDaysArray.length - 1) {
-
-	            // create an object key for shortdate
-	            tempDaysObject[tempDaysArray[i]] = config[tempDaysArray[i]];
-
-	            // get the next date and the next date after that
-	            a = getNextDate(tempDaysArray[i]);
-	            b = getNextDate(tempDaysArray[i + 1]);
-
-	            // if the next shortdate is not the expected shortdate there is a gap that needs to be filled!
-	            if (a.nextDay !== b.today) {
-
-	                // work out the difference between the two dates
-	                if (a.nextDay > b.today) {
-
-	                    totalDaysInMonth = getDaysInMonth(a.month, a.year);
-	                    totalDiff = totalDaysInMonth - Number(a.nextDay) + Number(b.today);
-	                } else {
-	                    totalDiff = b.today - a.nextDay;
-	                }
-
-	                // loop through the gap in dates and create a N/A record for each unavailable date
-	                for (j = 0; j < totalDiff; j++) {
-
-	                    // use N/A as a flag to determine later whether to render as a valid selectable date
-	                    tempDaysObject[a.nextDayShortDate] = "N/A";
-	                    a = getNextDate(a.nextDayShortDate);
-	                }
-	            }
-	        } else {
-	            tempDaysObject[tempDaysArray[i]] = config[tempDaysArray[i]];
-	        }
-	    }
-
-	    return tempDaysObject;
-	}
-
-	/*
-	    Pass in a shortdate, return an object of stats based on that date
-	 */
-
-	function getNextDate(date) {
-
-	    var shortdate = date.split("");
-	    var year = shortdate[0] + shortdate[1] + shortdate[2] + shortdate[3];
-	    var month = shortdate[4] + shortdate[5];
-	    var day = shortdate[6] + shortdate[7];
-	    var daysInCurrentMonth = getDaysInMonth(month, year);
-	    var nextDay, nextMonth, nextYear;
-
-	    if (day == daysInCurrentMonth) {
-
-	        nextDay = "01";
-
-	        if (month === "12") {
-
-	            nextMonth = "01";
-	            nextYear = Number(year) + 1;
-	        } else {
-
-	            nextMonth = String(Number(month) + 1);
-	            nextYear = String(Number(year));
-
-	            if (nextMonth.length === 1) {
-	                nextMonth = "0" + nextMonth;
-	            }
-	        }
-	    } else {
-
-	        nextDay = String(Number(day) + 1);
-
-	        if (nextDay.length === 1) {
-	            nextDay = "0" + nextDay;
-	        }
-
-	        nextMonth = month;
-	        nextYear = year;
-	    }
-
-	    return {
-	        today: day,
-	        nextDay: nextDay,
-	        year: year,
-	        nextYear: nextYear,
-	        month: month,
-	        nextMonth: nextMonth,
-	        totalDays: daysInCurrentMonth,
-	        todayShortDate: date,
-	        nextDayShortDate: nextYear + nextMonth + nextDay
-	    };
-	}
-
-	function getDaysInMonth(m, y) {
-	    return (/8|3|5|10/.test(--m) ? 30 : m == 1 ? !(y % 4) && y % 100 || !(y % 400) ? 29 : 28 : 31
-	    );
-	}
-
-	/*
-	    Create an array of formatted date objects with details of each delivery date
-	 */
-
-	function formatDates(dates) {
-
-	    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-	    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-	    return Object.keys(dates).map(function (date) {
-	        var datearr = date.split("");
-	        var year = datearr.slice(0, 4).reduce(function (a, b) {
-	            return a + b;
-	        });
-	        var month = datearr.slice(4, 6).slice(0, 2).reduce(function (a, b) {
-	            return a + b;
-	        });
-	        var day = datearr[6] === "0" ? datearr[7] : datearr.slice(6, 8).reduce(function (a, b) {
-	            return a + b;
-	        });
-	        var datestring = new Date(year + "/" + month + "/" + day);
-	        return {
-	            year: year,
-	            month: months[datestring.getMonth()],
-	            day: days[datestring.getDay()],
-	            dayOfWeek: datestring.getDay(),
-	            date: day,
-	            dateSuffix: suffix(day),
-	            desc: dates[date],
-	            shortdate: date
-	        };
-	    });
-	}
-
-	/*
-	    Get the correct date suffix
-	 */
-
-	function suffix(i) {
-
-	    var j = i % 10,
-	        k = i % 100;
-	    if (j == 1 && k != 11) {
-	        return "st";
-	    }
-	    if (j == 2 && k != 12) {
-	        return "nd";
-	    }
-	    if (j == 3 && k != 13) {
-	        return "rd";
-	    }
-	    return "th";
-	}
-
-	/*
-	    Bolt on the day charge for each object in the dates array
-	 */
-
-	function includeDayTypeCharges(dates, charges) {
-	    return dates.map(function (date) {
-	        return Object.assign({}, date, { dayTypeCharge: date.desc === "N/A" ? 0 : charges[date.desc].charge });
-	    });
-	}
-
-	function createDateRanges(dates, totalAmountOfWeeks) {
-
-	    var amountOfDays = dates.length;
-	    var datesArray = [];
-	    var endOfWeek = undefined;
-
-	    for (var i = 0; i < totalAmountOfWeeks; i++) {
-
-	        // if not the last week
-	        if (i < totalAmountOfWeeks - 1) {
-	            endOfWeek = 6;
-	        }
-
-	        // if the days in the last week is not exactly 7, use the remainder after dividing days by 7 (minus 1 as index based)
-	        else {
-	                endOfWeek = amountOfDays % 7 === 0 ? 6 : amountOfDays % 7 - 1;
-	            }
-
-	        // construct date range
-	        // if only day in the date range i.e. aug 5 - aug 5, only show one date
-	        if (dates[i * 7].month + " " + dates[i * 7].date === dates[i * 7 + endOfWeek].month + " " + dates[i * 7 + endOfWeek].date) {
-	            var month = dates[i * 7].month;
-	            var date = dates[i * 7].date;
-	            datesArray.push(month + date);
-	        } else {
-	            var fromMonth = dates[i * 7].month;
-	            var fromDate = dates[i * 7].date;
-	            var toMonth = dates[i * 7 + endOfWeek].month;
-	            var toDate = dates[i * 7 + endOfWeek].date;
-	            datesArray.push(fromMonth + fromDate + " - " + toMonth + toDate);
-	        }
-	    }
-
-	    return datesArray;
-	}
-
-/***/ },
-/* 245 */
-/***/ function(module, exports) {
-
-	/*
-	    Object.assign() - combine mutliple objects into one
-	    src: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
-	 */
-
-	"use strict";
-
-	if (!Object.assign) {
-	    Object.defineProperty(Object, "assign", {
-	        enumerable: false,
-	        configurable: true,
-	        writable: true,
-	        value: function value(target) {
-	            "use strict";
-	            if (target === undefined || target === null) {
-	                throw new TypeError("Cannot convert first argument to object");
-	            }
-
-	            var to = Object(target);
-	            for (var i = 1; i < arguments.length; i++) {
-	                var nextSource = arguments[i];
-	                if (nextSource === undefined || nextSource === null) {
-	                    continue;
-	                }
-	                nextSource = Object(nextSource);
-
-	                var keysArray = Object.keys(nextSource);
-	                for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-	                    var nextKey = keysArray[nextIndex];
-	                    var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-	                    if (desc !== undefined && desc.enumerable) {
-	                        to[nextKey] = nextSource[nextKey];
-	                    }
-	                }
-	            }
-	            return to;
-	        }
-	    });
-	}
-
-/***/ },
-/* 246 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.createTableHeadData = createTableHeadData;
-	exports.createArrayOfTheadConfigs = createArrayOfTheadConfigs;
-
-	function createTableHeadData(dates) {
-
-	    var daysConfig = dates.map(function (date) {
-	        return {
-	            desc: date.desc,
-	            day: date.day,
-	            date: date.date
-	        };
-	    });
-
-	    return createArrayOfTheadConfigs(daysConfig, 7);
-	}
-
-	function createArrayOfTheadConfigs(daysConfig, size) {
-	    return [].concat.apply([], daysConfig.map(function (_, i) {
-	        return i % size ? [] : [daysConfig.slice(i, i + size)];
-	    }));
-	}
-
-/***/ },
-/* 247 */
-/***/ function(module, exports) {
-
-	/*
-	    Object.is() - compares two values inc object comparison
-	    src: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-	 */
-
-	"use strict";
-
-	if (!Object.is) {
-	    Object.is = function (x, y) {
-	        if (x === y) {
-	            return x !== 0 || 1 / x === 1 / y;
-	        } else {
-	            return x !== x && y !== y;
-	        }
-	    };
-	}
-
-/***/ },
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
 /* 248 */
 /***/ function(module, exports) {
 
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	   value: true
-	});
-	var config = {
-	   "calendarConfiguration": {
-	      "chargeConfigurationCollection": {
-	         "NextDay": {
-	            "charge": 20.00,
-	            "chargeExVat": 16.67,
-	            "text": "Next Day"
-	         },
-	         "Monday": {
-	            "charge": 16.99,
-	            "chargeExVat": 14.16,
-	            "text": "Monday"
-	         },
-	         "Tuesday": {
-	            "charge": 17.99,
-	            "chargeExVat": 14.99,
-	            "text": "Tuesday"
-	         },
-	         "Wednesday": {
-	            "charge": 18.99,
-	            "chargeExVat": 15.83,
-	            "text": "Wednesday"
-	         },
-	         "Thursday": {
-	            "charge": 19.99,
-	            "chargeExVat": 16.66,
-	            "text": "Thursday"
-	         },
-	         "Friday": {
-	            "charge": 18.69,
-	            "chargeExVat": 15.58,
-	            "text": "Friday"
-	         },
-	         "Saturday": {
-	            "charge": 21.99,
-	            "chargeExVat": 18.33,
-	            "text": "Saturday"
-	         },
-	         "Sunday": {
-	            "charge": 22.99,
-	            "chargeExVat": 19.16,
-	            "text": "Sunday"
-	         },
-	         "Standard": {
-	            "charge": 15.00,
-	            "chargeExVat": 12.50,
-	            "text": ""
-	         },
-	         "SameDay": {
-	            "charge": 25.00,
-	            "chargeExVat": 12.50,
-	            "text": "Same Day"
-	         },
-	         "GreenDay": {
-	            "charge": 15.00,
-	            "chargeExVat": 12.50,
-	            "text": "Eco"
-	         }
-	      },
-	      "availableDays": {
-	         "20151009": "SameDay",
-	         "20151010": "Saturday",
-	         "20151012": "Monday",
-	         "20151013": "Tuesday",
-	         "20151014": "Wednesday",
-	         "20151015": "Thursday",
-	         "20151016": "Friday",
-	         "20151017": "Saturday",
-	         "20151018": "Sunday",
-	         "20151019": "Monday",
-	         "20151020": "Tuesday",
-	         "20151025": "Sunday",
-	         "20151026": "Monday",
-	         "20151027": "Tuesday",
-	         "20151028": "Wednesday",
-	         "20151029": "Thursday",
-	         "20151030": "Friday",
-	         "20151031": "Saturday",
-	         "20151101": "Sunday",
-	         "20151102": "Monday",
-	         "20151103": "Tuesday",
-	         "20151104": "Wednesday",
-	         "20151105": "Thursday",
-	         "20151110": "Tuesday",
-	         "20151111": "Wednesday",
-	         "20151112": "Thursday",
-	         "20151113": "Friday",
-	         "20151114": "Saturday",
-	         "20151115": "Sunday",
-	         "20151116": "Monday",
-	         "20151117": "Tuesday",
-	         "20151118": "Wednesday",
-	         "20151119": "Thursday"
-	      },
-	      "dataState": "Populated"
-	   },
-	   "orderTotals": {
-	      "HandshakeId": null,
-	      "BasketProductValueTotal": "&#163;269.00",
-	      "BasketProductValueTotalNumber": 269.0,
-	      "BasketAndDeliveryTotal": "&#163;284.00",
-	      "BasketAndDeliveryTotalNumber": 284.00,
-	      "OverallTotal": "&#163;284.00",
-	      "OverallTotalNumber": 284.00,
-	      "DatedDeliveryCharge": "15.00",
-	      "TimeslotCharge": "0.00",
-	      "ManualPromotionViewModel": null,
-	      "LoyaltyPoints": "0",
-	      "ItemSellPriceExVatAfterAllDiscounts": null
-	   }
-	};
-	exports.config = config;
+	// removed by extract-text-webpack-plugin
 
 /***/ },
 /* 249 */
 /***/ function(module, exports) {
 
-	// removed by extract-text-webpack-plugin
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	exports.getProducts = getProducts;
+
+	function getProducts() {
+	    return fetch('/data/picker-config1.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+/***/ },
+/* 250 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.availableDates = availableDates;
+	exports.basketTotal = basketTotal;
+
+	function availableDates() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWAVAILABLEDATESANDCHARGES":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function basketTotal() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "BASKETTOTALUPDATE":
+	            return action.state;
+	        case "ADDTOTOTAL":
+	            return state + action.state;
+	        case "SUBTRACTFROMTOTAL":
+	            return state - action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+/***/ },
+/* 251 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.totalWeeks = totalWeeks;
+	exports.tableDisplayIndex = tableDisplayIndex;
+	exports.dateRanges = dateRanges;
+	exports.tableHeadData = tableHeadData;
+	exports.tableBodyData = tableBodyData;
+
+	function totalWeeks() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "TOTALWEEKSUPDATE":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function tableDisplayIndex() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "TABLEDISPLAYINDEX":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function dateRanges() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWDATERANGES":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function tableHeadData() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWTABLEHEADDATA":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function tableBodyData() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWTABLEBODYDATA":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
 
 /***/ }
 /******/ ]);

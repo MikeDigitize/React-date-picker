@@ -10,7 +10,7 @@ module.exports = {
     },
     resolve: {
         root: path.resolve(__dirname + "/src"),
-        extensions: ["", ".js", ".jsx", ".scss"]
+        extensions: ["", ".js", ".jsx", ".json", ".scss"]
     },
     output: {
         path: __dirname + "/build",

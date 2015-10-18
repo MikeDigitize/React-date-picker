@@ -1,5 +1,6 @@
 {
     "basketTotal": 284,
+    "state": "Populated",
     "dates": [
         {
             "year": "2015",
@@ -464,6 +465,7 @@
             "dayTypeCharge": 19.99
         }
     ],
+    "hasDeliveryDates": true,
     "weeksInConfig": 6,
     "dateRanges": [
         "Oct9 - Oct15",
