@@ -1,9 +1,9 @@
 import React from "react";
 import PickerContainer from "./Picker/PickerContainer";
 import styles from "../styles/global";
-import { getProducts } from "../utils/getConfig";
+import { getData1, getData2 } from "../utils/getConfig";
 
-let config = {};
+let config;
 
 class App extends React.Component {
     constructor(){
@@ -11,14 +11,16 @@ class App extends React.Component {
         this.state = {
             config : {}
         };
-        getProducts().then(data => {
-           config = data;
+        Promise.all([getData1(), getData2()]).then(data => {
+            config = data;
         });
     }
 
     passNewConfig() {
+        var random = Math.floor(Math.random() * 2);
+        console.log("new", config[random], random);
         this.setState({
-           config : config
+           config : config[random]
         });
     }
 

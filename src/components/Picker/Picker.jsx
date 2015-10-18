@@ -5,7 +5,7 @@ import DatePickerStore from "../../stores/PickerStore";
 import { updateTableIndex } from "../../actions/picker-actions";
 
 import DateRange from "../DateRange/DateRange";
-import Table from "../Table/Table";
+import Table from "../Table/TableContainer";
 
 class Picker extends React.Component {
 

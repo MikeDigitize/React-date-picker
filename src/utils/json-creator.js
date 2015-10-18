@@ -1,3 +1,7 @@
+/*
+    Run from command line: node json-creator.js `path-to-config.json` `path-to-dates.json` `name-to-output-to`
+ */
+
 var fs = require("fs");
 require("./Object-assign-polyfill");
 var utils = require("./node-utils");

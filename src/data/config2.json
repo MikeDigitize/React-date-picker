@@ -1,0 +1,51 @@
+{
+  "calendarConfiguration":{
+    "chargeConfigurationCollection":{
+    "NextDay":{
+      "charge": 0,
+      "text": "Next Day"
+    }
+    ,
+    "Saturday": {
+      "charge": 0,
+      "text": "Saturday"
+    },
+    "Sunday": {
+      "charge": 0,
+      "text": "Sunday"
+    },
+    "Standard": {
+      "charge": 0,
+      "text": ""
+    }
+    ,
+    "SameDay": {
+      "charge": 29.99,
+      "text": "Same Day"
+    }
+    ,
+    "GreenDay": {
+      "charge": 0,
+      "text": "Eco"
+      }
+    },
+    "availableDays": {
+      "20140830": "Standard",
+      "20140831":"Standard",
+      "20140904": "GreenDay",
+      "20140905": "Standard",
+      "20140909": "GreenDay",
+      "20140910": "Standard"
+    },
+    "dataState": "Populated"
+  },
+  "orderTotals": {
+  "HandshakeId": null,
+  "BasketProductValueTotal": "&#163;899.00",
+  "BasketAndDeliveryTotal": "&#163;899.00",
+  "OverallTotal": "&#163;899.00",
+  "OverallTotalNumber":899,
+  "DatedDeliveryCharge": "0.00",
+  "TimeslotCharge": "0.00"
+  }
+}

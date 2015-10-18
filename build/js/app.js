@@ -70,7 +70,7 @@
 
 	var _utilsGetConfig = __webpack_require__(250);
 
-	var config = {};
+	var config = undefined;
 
 	var App = (function (_React$Component) {
 	    _inherits(App, _React$Component);
@@ -82,7 +82,7 @@
 	        this.state = {
 	            config: {}
 	        };
-	        (0, _utilsGetConfig.getProducts)().then(function (data) {
+	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)()]).then(function (data) {
 	            config = data;
 	        });
 	    }
@@ -90,8 +90,10 @@
 	    _createClass(App, [{
 	        key: "passNewConfig",
 	        value: function passNewConfig() {
+	            var random = Math.floor(Math.random() * 2);
+	            console.log("new", config[random], random);
 	            this.setState({
-	                config: config
+	                config: config[random]
 	            });
 	        }
 	    }, {
@@ -20624,7 +20626,7 @@
 	    }, {
 	        key: "onNewData",
 	        value: function onNewData() {
-	            console.log("on new data!!", _storesPickerStore2["default"].getState());
+	            console.log("store updated", _storesPickerStore2["default"].getState());
 	        }
 	    }, {
 	        key: "render",
@@ -20733,9 +20735,9 @@
 
 	var _DateRangeDateRange2 = _interopRequireDefault(_DateRangeDateRange);
 
-	var _TableTable = __webpack_require__(238);
+	var _TableTableContainer = __webpack_require__(238);
 
-	var _TableTable2 = _interopRequireDefault(_TableTable);
+	var _TableTableContainer2 = _interopRequireDefault(_TableTableContainer);
 
 	var Picker = (function (_React$Component) {
 	    _inherits(Picker, _React$Component);
@@ -20767,7 +20769,7 @@
 	                    dateRanges: this.state.dateRanges,
 	                    tableIndex: this.state.tableIndex
 	                }),
-	                _react2["default"].createElement(_TableTable2["default"], null)
+	                _react2["default"].createElement(_TableTableContainer2["default"], null)
 	            );
 	        }
 	    }]);
@@ -24621,13 +24623,15 @@
 	    }, {
 	        key: "createSameDayDeliveryRow",
 	        value: function createSameDayDeliveryRow(data) {
-	            console.log(data);
+	            console.log("same day available", data[5].WebDescription);
 	        }
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            if (this.state.tableBodyData[0][0][5].WebDescription === "Same") {
+	            if (this.state.tableBodyData[0][0][5] && this.state.tableBodyData[0][0][5].WebDescription === "Same") {
 	                this.createSameDayDeliveryRow(this.state.tableBodyData[0][0]);
+	            } else {
+	                console.log("no same day available", this.state.tableBodyData[0][0][0].WebDescription);
 	            }
 	            return _react2["default"].createElement(
 	                "tbody",
@@ -25413,10 +25417,17 @@
 	Object.defineProperty(exports, '__esModule', {
 	    value: true
 	});
-	exports.getProducts = getProducts;
+	exports.getData1 = getData1;
+	exports.getData2 = getData2;
 
-	function getProducts() {
+	function getData1() {
 	    return fetch('/data/picker-config1.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData2() {
+	    return fetch('/data/picker-config2.json').then(function (response) {
 	        return response.json();
 	    });
 	}

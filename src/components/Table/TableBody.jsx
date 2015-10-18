@@ -22,12 +22,15 @@ class TableBody extends React.Component {
     }
 
     createSameDayDeliveryRow(data) {
-        console.log(data);
+        console.log("same day available", data[5].WebDescription);
     }
 
     render() {
-        if(this.state.tableBodyData[0][0][5].WebDescription === "Same") {
+        if(this.state.tableBodyData[0][0][5] && this.state.tableBodyData[0][0][5].WebDescription === "Same") {
             this.createSameDayDeliveryRow(this.state.tableBodyData[0][0]);
+        }
+        else {
+            console.log("no same day available", this.state.tableBodyData[0][0][0].WebDescription);
         }
         return(
             <tbody styleName="date-picker-tbody">

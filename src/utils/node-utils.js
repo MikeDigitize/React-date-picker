@@ -16,6 +16,7 @@ function sortDates(config, dateConfig) {
     var days = config.calendarConfiguration.availableDays;
     var charges = config.calendarConfiguration.chargeConfigurationCollection;
     var dates = fillInGaps(days);
+    dates = padLastWeek(dates);
     return includeDayTypeCharges(formatDates(dates), charges);
 }
 
@@ -71,6 +72,32 @@ function fillInGaps(config) {
 
     return tempDaysObject;
 
+}
+
+function padLastWeek(tempDaysObject) {
+    var keys = Object.keys(tempDaysObject);
+
+    if(keys.length % 7 !== 0) {
+        var diff = 7 - keys.length % 7;
+        var lastdate = keys[keys.length -1];
+        var shortdate = lastdate.substr(0,4) + "-" + lastdate.substr(4,2) + "-" + lastdate.substr(6,2);
+        var result = new Date(shortdate);
+        result.setDate(result.getDate() + diff);
+        var month = String(result.getMonth() + 1);
+        if(month.length === 1) {
+            month = "0" + month;
+        }
+        var day = String(result.getDate());
+        if(day.length === 1) {
+            day = "0" + day;
+        }
+        var correctLastDate = result.getFullYear() + month + day;
+        tempDaysObject[correctLastDate] = "N/A";
+        return fillInGaps(tempDaysObject);
+    }
+    else {
+        return tempDaysObject;
+    }
 }
 
 function getNextDate(date) {
@@ -254,10 +281,7 @@ function createTableBodyData(dates, dateCharges) {
 
         for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
 
-            if (!dateCharges[i][j]) {
-                dateCharges[i].splice(j, 0, { WebDescription: null });
-            }
-            else if (dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
+            if (!dateCharges[i][j] || dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
                 dateCharges[i].splice(j, 0, { WebDescription: null });
             }
 
