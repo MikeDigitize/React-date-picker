@@ -64,11 +64,11 @@
 
 	var _PickerPickerContainer2 = _interopRequireDefault(_PickerPickerContainer);
 
-	var _stylesGlobal = __webpack_require__(246);
+	var _stylesGlobal = __webpack_require__(249);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
 
-	var _utilsGetConfig = __webpack_require__(247);
+	var _utilsGetConfig = __webpack_require__(250);
 
 	var config = {};
 
@@ -20527,7 +20527,7 @@
 
 	var _actionsPickerActions = __webpack_require__(235);
 
-	var _actionsExternalActions = __webpack_require__(245);
+	var _actionsExternalActions = __webpack_require__(248);
 
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
@@ -24380,7 +24380,7 @@
 
 	var _TableTableBody2 = _interopRequireDefault(_TableTableBody);
 
-	var _tableStyles = __webpack_require__(244);
+	var _tableStyles = __webpack_require__(247);
 
 	var _tableStyles2 = _interopRequireDefault(_tableStyles);
 
@@ -24585,11 +24585,19 @@
 
 	var _tableBodyStyles2 = _interopRequireDefault(_tableBodyStyles);
 
+	var _DeliveryDescriptionsDesc = __webpack_require__(243);
+
+	var _DeliveryDescriptionsDesc2 = _interopRequireDefault(_DeliveryDescriptionsDesc);
+
+	var _DeliveryDescriptionsAnytime = __webpack_require__(245);
+
+	var _DeliveryDescriptionsAnytime2 = _interopRequireDefault(_DeliveryDescriptionsAnytime);
+
 	var _storesPickerStore = __webpack_require__(223);
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	__webpack_require__(243);
+	__webpack_require__(246);
 
 	var TableBody = (function (_React$Component) {
 	    _inherits(TableBody, _React$Component);
@@ -24599,7 +24607,7 @@
 
 	        _get(Object.getPrototypeOf(TableBody.prototype), "constructor", this).call(this, props);
 	        this.state = {
-	            tableHeadData: this.props.tableBodyData,
+	            tableBodyData: this.props.tableBodyData,
 	            tableIndex: this.props.tableDisplayIndex
 	        };
 	    }
@@ -24611,8 +24619,16 @@
 	            target.classList.toggle("timeslot-selected");
 	        }
 	    }, {
+	        key: "createSameDayDeliveryRow",
+	        value: function createSameDayDeliveryRow(data) {
+	            console.log(data);
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
+	            if (this.state.tableBodyData[0][0][5].WebDescription === "Same") {
+	                this.createSameDayDeliveryRow(this.state.tableBodyData[0][0]);
+	            }
 	            return _react2["default"].createElement(
 	                "tbody",
 	                { styleName: "date-picker-tbody" },
@@ -24622,17 +24638,7 @@
 	                    _react2["default"].createElement(
 	                        "td",
 	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "time-desc" },
-	                            "Same day time slot"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "time" },
-	                            "4:30PM - 10PM"
-	                        ),
-	                        _react2["default"].createElement("p", { styleName: "extra-info" })
+	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Same day time slot", time: "4:30PM - 10PM" })
 	                    ),
 	                    _react2["default"].createElement(
 	                        "td",
@@ -24656,29 +24662,7 @@
 	                    _react2["default"].createElement(
 	                        "td",
 	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "time-desc" },
-	                            "Standard Delivery"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "extra-info" },
-	                            _react2["default"].createElement("span", { className: "icon-tick2" }),
-	                            " We'll text a 4-hour time slot on the day"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "extra-info" },
-	                            _react2["default"].createElement("span", { className: "icon-tick2" }),
-	                            " Online order tracking - no need to wait in"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "extra-info" },
-	                            _react2["default"].createElement("span", { className: "icon-tick2" }),
-	                            " Delivery from 7AM - 7PM"
-	                        )
+	                        _react2["default"].createElement(_DeliveryDescriptionsAnytime2["default"], null)
 	                    ),
 	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
 	                    _react2["default"].createElement(
@@ -24742,16 +24726,7 @@
 	                    _react2["default"].createElement(
 	                        "td",
 	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "time-desc" },
-	                            "Morning"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "time" },
-	                            "07:00 - 12:00"
-	                        )
+	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Morning", time: "07:00 - 12:00" })
 	                    ),
 	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
 	                    _react2["default"].createElement(
@@ -24815,16 +24790,7 @@
 	                    _react2["default"].createElement(
 	                        "td",
 	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "time-desc" },
-	                            "Lunch"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "time" },
-	                            "10:00 - 14:00"
-	                        )
+	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Lunch", time: "10:00 - 14:00" })
 	                    ),
 	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
 	                    _react2["default"].createElement(
@@ -24888,16 +24854,7 @@
 	                    _react2["default"].createElement(
 	                        "td",
 	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "time-desc" },
-	                            "Afternoon"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "time" },
-	                            "12:00 - 17:00"
-	                        )
+	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Afternoon", time: "12:00 - 17:00" })
 	                    ),
 	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
 	                    _react2["default"].createElement(
@@ -24961,16 +24918,7 @@
 	                    _react2["default"].createElement(
 	                        "td",
 	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "time-desc" },
-	                            "Evening"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "time" },
-	                            "18:00 - 22:00"
-	                        )
+	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Evening", time: "18:00 - 22:00" })
 	                    ),
 	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
 	                    _react2["default"].createElement(
@@ -25053,10 +25001,165 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"date-picker-tbody":"_29vJ8JCK0woHtbMXWLpUK9","timeslot-desc":"_2j2BD-de5vLVDb31Pa_GhM","time-desc":"yDp_R-xp3fRkhHArKPlAi","time":"_1N07UKBt9GGpTfe-xOHvt0","extra-info":"_3r1C6csLCGcT3tnZcye8pQ","timeslot":"_2nbCK7KDaiFms044UxcM1m","delivery-selectable":"_1joTcdAy56WL7iY5YFerPM","delivery-selected":"OjDALIjGZUOIa7p-dpptf"};
+	module.exports = {"date-picker-tbody":"_29vJ8JCK0woHtbMXWLpUK9","timeslot-desc":"_2j2BD-de5vLVDb31Pa_GhM","timeslot":"_2nbCK7KDaiFms044UxcM1m","delivery-selectable":"_1joTcdAy56WL7iY5YFerPM","delivery-selected":"OjDALIjGZUOIa7p-dpptf"};
 
 /***/ },
 /* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _descriptionStyles = __webpack_require__(244);
+
+	var _descriptionStyles2 = _interopRequireDefault(_descriptionStyles);
+
+	var SameDayDesc = (function (_React$Component) {
+	    _inherits(SameDayDesc, _React$Component);
+
+	    function SameDayDesc(props) {
+	        _classCallCheck(this, SameDayDesc);
+
+	        _get(Object.getPrototypeOf(SameDayDesc.prototype), "constructor", this).call(this, props);
+	    }
+
+	    _createClass(SameDayDesc, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "span",
+	                null,
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "time-desc" },
+	                    this.props.desc
+	                ),
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "time" },
+	                    this.props.time
+	                ),
+	                _react2["default"].createElement("p", { styleName: "extra-info" })
+	            );
+	        }
+	    }]);
+
+	    return SameDayDesc;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(SameDayDesc, _descriptionStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
+/* 244 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"time-desc":"twEIetCF4STnzvQiPcYsl","time":"_3bdVbBScAd7I2p6YGPJEp","extra-info":"kGAWnSxKGyltFW8gS4zYX"};
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _descriptionStyles = __webpack_require__(244);
+
+	var _descriptionStyles2 = _interopRequireDefault(_descriptionStyles);
+
+	var AnytimeDesc = (function (_React$Component) {
+	    _inherits(AnytimeDesc, _React$Component);
+
+	    function AnytimeDesc() {
+	        _classCallCheck(this, AnytimeDesc);
+
+	        _get(Object.getPrototypeOf(AnytimeDesc.prototype), "constructor", this).apply(this, arguments);
+	    }
+
+	    _createClass(AnytimeDesc, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "span",
+	                null,
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "time-desc" },
+	                    "Standard Delivery"
+	                ),
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "extra-info" },
+	                    _react2["default"].createElement("span", { className: "icon-tick2" }),
+	                    " We'll text a 4-hour time slot on the day"
+	                ),
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "extra-info" },
+	                    _react2["default"].createElement("span", { className: "icon-tick2" }),
+	                    " Online order tracking - no need to wait in"
+	                ),
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "extra-info" },
+	                    _react2["default"].createElement("span", { className: "icon-tick2" }),
+	                    " Delivery from 7AM - 7PM"
+	                )
+	            );
+	        }
+	    }]);
+
+	    return AnytimeDesc;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(AnytimeDesc, _descriptionStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
+/* 246 */
 /***/ function(module, exports) {
 
 	/*
@@ -25267,14 +25370,14 @@
 	}
 
 /***/ },
-/* 244 */
+/* 247 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-picker-table":"_2fFeFRwWZTf51bPpQfobX4"};
 
 /***/ },
-/* 245 */
+/* 248 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -25296,13 +25399,13 @@
 	}
 
 /***/ },
-/* 246 */
+/* 249 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 247 */
+/* 250 */
 /***/ function(module, exports) {
 
 	'use strict';

@@ -1,6 +1,8 @@
 import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./table-body-styles";
+import Desc from "./DeliveryDescriptions/Desc";
+import Anytime from "./DeliveryDescriptions/Anytime";
 import DatePickerStore from "../../stores/PickerStore";
 import "../../utils/classList-polyfill";
 
@@ -9,7 +11,7 @@ class TableBody extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tableHeadData : this.props.tableBodyData,
+            tableBodyData : this.props.tableBodyData,
             tableIndex : this.props.tableDisplayIndex
         };
     }
@@ -19,15 +21,19 @@ class TableBody extends React.Component {
         target.classList.toggle("timeslot-selected");
     }
 
+    createSameDayDeliveryRow(data) {
+        console.log(data);
+    }
+
     render() {
+        if(this.state.tableBodyData[0][0][5].WebDescription === "Same") {
+            this.createSameDayDeliveryRow(this.state.tableBodyData[0][0]);
+        }
         return(
             <tbody styleName="date-picker-tbody">
                 <tr>
                     <td styleName="timeslot-desc">
-                        <p styleName="time-desc">Same day time slot</p>
-                        <p styleName="time">4:30PM - 10PM</p>
-                        <p styleName="extra-info"></p>
-
+                        <Desc desc="Same day time slot" time="4:30PM - 10PM"/>
                     </td>
                     <td styleName="timeslot">
                         <p styleName="delivery-selectable" onClick={this.toggleSelected.bind(this)}>&pound;29.99</p>
@@ -53,10 +59,7 @@ class TableBody extends React.Component {
                 </tr>
                 <tr>
                     <td styleName="timeslot-desc">
-                        <p styleName="time-desc">Standard Delivery</p>
-                        <p styleName="extra-info"><span className="icon-tick2"></span> We'll text a 4-hour time slot on the day</p>
-                        <p styleName="extra-info"><span className="icon-tick2"></span> Online order tracking - no need to wait in</p>
-                        <p styleName="extra-info"><span className="icon-tick2"></span> Delivery from 7AM - 7PM</p>
+                        <Anytime />
                     </td>
                     <td styleName="timeslot">
                     </td>
@@ -81,8 +84,7 @@ class TableBody extends React.Component {
                 </tr>
                 <tr>
                     <td styleName="timeslot-desc">
-                        <p styleName="time-desc">Morning</p>
-                        <p styleName="time">07:00 - 12:00</p>
+                        <Desc desc="Morning" time="07:00 - 12:00"/>
                     </td>
                     <td styleName="timeslot">
                     </td>
@@ -107,8 +109,7 @@ class TableBody extends React.Component {
                 </tr>
                 <tr>
                     <td styleName="timeslot-desc">
-                        <p styleName="time-desc">Lunch</p>
-                        <p styleName="time">10:00 - 14:00</p>
+                        <Desc desc="Lunch" time="10:00 - 14:00"/>
                     </td>
                     <td styleName="timeslot">
                     </td>
@@ -133,8 +134,7 @@ class TableBody extends React.Component {
                 </tr>
                 <tr>
                     <td styleName="timeslot-desc">
-                        <p styleName="time-desc">Afternoon</p>
-                        <p styleName="time">12:00 - 17:00</p>
+                        <Desc desc="Afternoon" time="12:00 - 17:00"/>
                     </td>
                     <td styleName="timeslot">
                     </td>
@@ -159,8 +159,7 @@ class TableBody extends React.Component {
                 </tr>
                 <tr>
                     <td styleName="timeslot-desc">
-                        <p styleName="time-desc">Evening</p>
-                        <p styleName="time">18:00 - 22:00</p>
+                        <Desc desc="Evening" time="18:00 - 22:00"/>
                     </td>
                     <td styleName="timeslot">
                     </td>
