@@ -129,8 +129,6 @@ export default class PickerContainer extends React.Component {
                 timeslotDescriptions = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
             }
 
-            //console.log(timeslotDescriptions);
-
             for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
 
                 if (!dateCharges[i][j]) {
@@ -146,27 +144,15 @@ export default class PickerContainer extends React.Component {
 
         }
 
-        console.log(dateCharges);
+        function createArrayOfConfigs(config, size) {
+            return [].concat.apply([],
+                config.map(function(_,i) {
+                    return i % size ? [] : [config.slice(i, i+size)];
+                })
+            );
+        }
 
-        /*
-            row -
-
-                row description : Same day timeslot, Anytime delivery, Morning etc.
-                hasSubDesc : true / false
-                time : 07:00 - 12:00 etc
-                subdesc : [We'll take a 4 hour time slot...]
-                isAvailable : true / false
-
-                    timeslot -
-
-                        element : htmlelement
-                        isAvailable : true / false
-                        timeslotcharge : number
-                        daytypecharge : type + type cost,
-                        totalcharge : total
-
-         */
-
+        console.log(pickerDates);
 
     }
 

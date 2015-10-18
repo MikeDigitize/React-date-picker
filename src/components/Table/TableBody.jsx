@@ -6,7 +6,6 @@ import "../../utils/classList-polyfill";
 class TableBody extends React.Component {
 
     toggleSelected(e) {
-        console.log("clicky");
         let target = e.target || e.srcElement;
         target.classList.toggle("timeslot-selected");
     }
