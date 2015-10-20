@@ -21,17 +21,36 @@ class TableBody extends React.Component {
         target.classList.toggle("timeslot-selected");
     }
 
-    createSameDayDeliveryRow(data) {
-        console.log("same day available", data[5].WebDescription);
+    createRows() {
+        let index = this.state.tableIndex;
+        let data = this.state.tableBodyData[index];
+        console.log(this.state.tableBodyData);
+        //let numOfRows = 4;
+        //if(data[0][5] && data[0][5].WebDescription === "Same") {
+        //    console.log("Same")
+        //    numOfRows = 5;
+        //}
+        //let rows = [];
+        //for(let i = 0; i < data.length; i++) {
+        //    rows.push(data[i][numOfRows])
+        //}
+        //this.createRow(rows);
+        //for(let i = 0; i < numOfRows; i++) {
+        //    let innerData = [];
+        //    for(let j = 0; j < 7; j++) {
+        //        innerData.push(data[j][numOfRows - (i + 1)])
+        //    }
+        //    rows.push(<tr>{ this.createRow(innerData) }</tr>)
+        //}
+    }
+
+    createRow(data) {
+        console.log("data", data);
+        return <p>Awesome</p>;
     }
 
     render() {
-        if(this.state.tableBodyData[0][0][5] && this.state.tableBodyData[0][0][5].WebDescription === "Same") {
-            this.createSameDayDeliveryRow(this.state.tableBodyData[0][0]);
-        }
-        else {
-            console.log("no same day available", this.state.tableBodyData[0][0][0].WebDescription);
-        }
+        this.createRows();
         return(
             <tbody styleName="date-picker-tbody">
                 <tr>
