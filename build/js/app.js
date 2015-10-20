@@ -82,7 +82,10 @@
 	        this.state = {
 	            config: {}
 	        };
-	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)()]).then(function (data) {
+	        //Promise.all([getData1(), getData2()]).then(data => {
+	        //    config = data;
+	        //});
+	        (0, _utilsGetConfig.getData1)().then(function (data) {
 	            config = data;
 	        });
 	    }
@@ -90,10 +93,10 @@
 	    _createClass(App, [{
 	        key: "passNewConfig",
 	        value: function passNewConfig() {
-	            var random = Math.floor(Math.random() * 2);
-	            console.log("new", config[random], random);
+	            //var random = Math.floor(Math.random() * 2);
+	            //console.log("new", config[random], random);
 	            this.setState({
-	                config: config[random]
+	                config: config
 	            });
 	        }
 	    }, {
@@ -24623,36 +24626,34 @@
 	    }, {
 	        key: "createRows",
 	        value: function createRows() {
-	            var index = this.state.tableIndex;
-	            var data = this.state.tableBodyData[index];
-	            console.log(this.state.tableBodyData);
-	            //let numOfRows = 4;
-	            //if(data[0][5] && data[0][5].WebDescription === "Same") {
-	            //    console.log("Same")
-	            //    numOfRows = 5;
-	            //}
-	            //let rows = [];
-	            //for(let i = 0; i < data.length; i++) {
-	            //    rows.push(data[i][numOfRows])
-	            //}
-	            //this.createRow(rows);
-	            //for(let i = 0; i < numOfRows; i++) {
-	            //    let innerData = [];
-	            //    for(let j = 0; j < 7; j++) {
-	            //        innerData.push(data[j][numOfRows - (i + 1)])
-	            //    }
-	            //    rows.push(<tr>{ this.createRow(innerData) }</tr>)
-	            //}
+	            var isSameDayWeek = this.state.tableBodyData[this.state.tableIndex][0][0].WebDescription === "SameDay";
+	            var columns = [];
+	            for (var i = 0; i < this.state.tableBodyData[this.state.tableIndex].length; i++) {
+	                columns.push(this.createColumn(this.state.tableBodyData[this.state.tableIndex][i], isSameDayWeek));
+	            }
+	            console.log(columns, this.state.tableBodyData[this.state.tableIndex]);
 	        }
 	    }, {
-	        key: "createRow",
-	        value: function createRow(data) {
-	            console.log("data", data);
-	            return _react2["default"].createElement(
-	                "p",
-	                null,
-	                "Awesome"
-	            );
+	        key: "createColumn",
+	        value: function createColumn(data, isSameDayWeek) {
+	            var count = isSameDayWeek ? 6 : 5,
+	                column = [];
+	            for (var i = 0; i < count; i++) {
+	                if (!data[i]) {
+	                    data[i] = {
+	                        WebDescription: null
+	                    };
+	                }
+	                var slot = {
+	                    desc: data[i].WebDescription
+	                };
+	                slot.hasTimeslot = !!data[i].WebDescription;
+	                if (slot.hasTimeslot) {
+	                    slot.cost = data[i].ChargeIncVat;
+	                }
+	                column.push(slot);
+	            }
+	            return column;
 	        }
 	    }, {
 	        key: "render",

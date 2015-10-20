@@ -5,7 +5,7 @@
       "ChargeIncVat":0.0,
       "ChargeExVat":0.0,
       "Description":"Same Day (16.30 - 22.00)",
-      "WebDescription":"Same",
+      "WebDescription":"SameDay",
       "StartHour":16,
       "EndHour":22,
       "StartMinute":30,

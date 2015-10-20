@@ -267,12 +267,12 @@ function createTableBodyData(dates, dateCharges) {
 
     var counter = 0,
         timeslotDescriptions,
-        sameDayDesc = ["Same", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"],
+        sameDayDesc = ["SameDay", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"],
         normalDesc = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
 
     for (var i in dateCharges) {
 
-        if (counter === 0 && dates[Object.keys(dates)[0]] === "SameDay") {
+        if (counter === 0 && dates[Object.keys(dates)[0]].desc === "SameDay") {
             timeslotDescriptions = sameDayDesc;
         }
         else {

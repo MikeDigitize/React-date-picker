@@ -22,31 +22,32 @@ class TableBody extends React.Component {
     }
 
     createRows() {
-        let index = this.state.tableIndex;
-        let data = this.state.tableBodyData[index];
-        console.log(this.state.tableBodyData);
-        //let numOfRows = 4;
-        //if(data[0][5] && data[0][5].WebDescription === "Same") {
-        //    console.log("Same")
-        //    numOfRows = 5;
-        //}
-        //let rows = [];
-        //for(let i = 0; i < data.length; i++) {
-        //    rows.push(data[i][numOfRows])
-        //}
-        //this.createRow(rows);
-        //for(let i = 0; i < numOfRows; i++) {
-        //    let innerData = [];
-        //    for(let j = 0; j < 7; j++) {
-        //        innerData.push(data[j][numOfRows - (i + 1)])
-        //    }
-        //    rows.push(<tr>{ this.createRow(innerData) }</tr>)
-        //}
+        let isSameDayWeek = this.state.tableBodyData[this.state.tableIndex][0][0].WebDescription === "SameDay";
+        let columns = [];
+        for(let i = 0; i < this.state.tableBodyData[this.state.tableIndex].length; i++) {
+            columns.push(this.createColumn(this.state.tableBodyData[this.state.tableIndex][i], isSameDayWeek))
+        }
+        console.log(columns, this.state.tableBodyData[this.state.tableIndex]);
     }
 
-    createRow(data) {
-        console.log("data", data);
-        return <p>Awesome</p>;
+    createColumn(data, isSameDayWeek) {
+        let count = isSameDayWeek ? 6 : 5, column = [];
+        for(let i = 0; i < count; i++) {
+            if(!data[i]){
+                data[i] = {
+                    WebDescription : null
+                };
+            }
+            let slot = {
+                desc : data[i].WebDescription
+            };
+            slot.hasTimeslot = !!data[i].WebDescription;
+            if(slot.hasTimeslot) {
+                slot.cost = data[i].ChargeIncVat;
+            }
+            column.push(slot);
+        }
+        return column;
     }
 
     render() {

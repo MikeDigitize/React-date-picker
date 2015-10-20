@@ -703,31 +703,31 @@
         [
             [
                 {
-                    "WebDescription": null
-                },
-                {
-                    "WebDescription": null
-                },
-                {
-                    "WebDescription": null
-                },
-                {
-                    "WebDescription": null
-                },
-                {
-                    "WebDescription": null
-                },
-                {
                     "TimeSlotId": 213,
                     "ChargeIncVat": 0,
                     "ChargeExVat": 0,
                     "Description": "Same Day (16.30 - 22.00)",
-                    "WebDescription": "Same",
+                    "WebDescription": "SameDay",
                     "StartHour": 16,
                     "EndHour": 22,
                     "StartMinute": 30,
                     "EndMinute": 0,
                     "WebTimeDesc": "4.30pm &#8211; 10pm"
+                },
+                {
+                    "WebDescription": null
+                },
+                {
+                    "WebDescription": null
+                },
+                {
+                    "WebDescription": null
+                },
+                {
+                    "WebDescription": null
+                },
+                {
+                    "WebDescription": null
                 }
             ],
             [
