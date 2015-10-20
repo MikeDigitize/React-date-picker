@@ -44,3 +44,5 @@ Temporary Items
 
 node_modules
 .idea
+src/utils/output.txt
+*.txt
