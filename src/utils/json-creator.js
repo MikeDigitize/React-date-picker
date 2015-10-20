@@ -39,7 +39,7 @@ function startParsingData(config, dates) {
     pickerData.weeksInConfig = utils.numOfWeeksInConfig(pickerData.dates);
     pickerData.dateRanges = utils.createDateRanges(pickerData.dates, pickerData.weeksInConfig);
     pickerData.tableHeadData = utils.createTableHeadData(pickerData.dates);
-    pickerData.tableBodyData = utils.createTableBodyData(pickerData.dates, dates);
+    pickerData.tableBodyData = utils.createTableBodyData(pickerData.dates, dates, config);
     fs.writeFile("../../build/data/" + filename + ".json", JSON.stringify(pickerData, null, 4), function (err) {
         if (err) return console.log(err);
     });

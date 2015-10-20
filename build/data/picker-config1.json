@@ -790,6 +790,9 @@
                     "StartMinute": 0,
                     "EndMinute": 0,
                     "WebTimeDesc": "6pm &#8211; 10pm"
+                },
+                {
+                    "WebDescription": null
                 }
             ],
             [
@@ -843,6 +846,9 @@
                     "StartMinute": 0,
                     "EndMinute": 0,
                     "WebTimeDesc": "6pm &#8211; 10pm"
+                },
+                {
+                    "WebDescription": null
                 }
             ],
             [
@@ -905,6 +911,9 @@
                     "StartMinute": 0,
                     "EndMinute": 0,
                     "WebTimeDesc": "6pm &#8211; 10pm"
+                },
+                {
+                    "WebDescription": null
                 }
             ],
             [
@@ -967,6 +976,9 @@
                     "StartMinute": 0,
                     "EndMinute": 0,
                     "WebTimeDesc": "6pm &#8211; 10pm"
+                },
+                {
+                    "WebDescription": null
                 }
             ],
             [
@@ -1029,6 +1041,9 @@
                     "StartMinute": 0,
                     "EndMinute": 0,
                     "WebTimeDesc": "6pm &#8211; 10pm"
+                },
+                {
+                    "WebDescription": null
                 }
             ],
             [
@@ -1091,6 +1106,9 @@
                     "StartMinute": 0,
                     "EndMinute": 0,
                     "WebTimeDesc": "6pm &#8211; 10pm"
+                },
+                {
+                    "WebDescription": null
                 }
             ]
         ],
