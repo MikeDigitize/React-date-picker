@@ -20626,7 +20626,7 @@
 	    }, {
 	        key: "onNewData",
 	        value: function onNewData() {
-	            console.log("store updated", _storesPickerStore2["default"].getState());
+	            //console.log("store updated", DatePickerStore.getState());
 	        }
 	    }, {
 	        key: "render",
@@ -24621,18 +24621,43 @@
 	            target.classList.toggle("timeslot-selected");
 	        }
 	    }, {
-	        key: "createSameDayDeliveryRow",
-	        value: function createSameDayDeliveryRow(data) {
-	            console.log("same day available", data[5].WebDescription);
+	        key: "createRows",
+	        value: function createRows() {
+	            var index = this.state.tableIndex;
+	            var data = this.state.tableBodyData[index];
+	            console.log(this.state.tableBodyData);
+	            //let numOfRows = 4;
+	            //if(data[0][5] && data[0][5].WebDescription === "Same") {
+	            //    console.log("Same")
+	            //    numOfRows = 5;
+	            //}
+	            //let rows = [];
+	            //for(let i = 0; i < data.length; i++) {
+	            //    rows.push(data[i][numOfRows])
+	            //}
+	            //this.createRow(rows);
+	            //for(let i = 0; i < numOfRows; i++) {
+	            //    let innerData = [];
+	            //    for(let j = 0; j < 7; j++) {
+	            //        innerData.push(data[j][numOfRows - (i + 1)])
+	            //    }
+	            //    rows.push(<tr>{ this.createRow(innerData) }</tr>)
+	            //}
+	        }
+	    }, {
+	        key: "createRow",
+	        value: function createRow(data) {
+	            console.log("data", data);
+	            return _react2["default"].createElement(
+	                "p",
+	                null,
+	                "Awesome"
+	            );
 	        }
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            if (this.state.tableBodyData[0][0][5] && this.state.tableBodyData[0][0][5].WebDescription === "Same") {
-	                this.createSameDayDeliveryRow(this.state.tableBodyData[0][0]);
-	            } else {
-	                console.log("no same day available", this.state.tableBodyData[0][0][0].WebDescription);
-	            }
+	            this.createRows();
 	            return _react2["default"].createElement(
 	                "tbody",
 	                { styleName: "date-picker-tbody" },
