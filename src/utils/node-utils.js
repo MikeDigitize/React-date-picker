@@ -81,6 +81,9 @@ function padLastWeek(tempDaysObject) {
     var keys = Object.keys(tempDaysObject);
 
     if(keys.length % 7 !== 0) {
+
+        console.log("not a full week!!");
+
         var diff = 7 - keys.length % 7;
         var lastdate = keys[keys.length -1];
         var shortdate = lastdate.substr(0,4) + "-" + lastdate.substr(4,2) + "-" + lastdate.substr(6,2);
@@ -204,17 +207,17 @@ function suffix(i) {
     return "th";
 }
 
-function numOfWeeksInConfig(dates) {
+function numOfWeeksInConfig() {
     return dates.length % 7 === 0 ? dates.length / 7 : Math.floor(dates.length / 7) + 1;
 }
 
-function includeDayTypeCharges(dates, charges) {
+function includeDayTypeCharges(charges) {
     return dates.map(date => {
         return Object.assign({}, date, { dayTypeCharge : date.desc === "N/A" ? 0 : charges[date.desc].charge });
     });
 }
 
-function createDateRanges(dates, totalAmountOfWeeks) {
+function createDateRanges(totalAmountOfWeeks) {
 
     var amountOfDays = dates.length;
     var datesArray = [];
@@ -260,7 +263,7 @@ function createArrayOfConfigs(config, size) {
     );
 }
 
-function createTableHeadData(dates) {
+function createTableHeadData() {
 
     var daysConfig = dates.map(date => {
         return {
@@ -274,7 +277,7 @@ function createTableHeadData(dates) {
 
 }
 
-function createTableBodyData(dates, dateCharges, charges) {
+function createTableBodyData(dateCharges, charges) {
 
     var counter = 0,
         timeslotDescriptions,
@@ -302,23 +305,26 @@ function createTableBodyData(dates, dateCharges, charges) {
 
     }
 
-    var pickerDates = Object.keys(dateCharges).map(function(date){
+
+    var pickerDates = Object.keys(dateCharges).map(function(date, i){
         return dateCharges[date];
     });
 
     pickerDates = createArrayOfConfigs(pickerDates, 7);
-    createRows(pickerDates, charges.calendarConfiguration.chargeConfigurationCollection);
-    return pickerDates;
+    return createRows(pickerDates, charges.calendarConfiguration.chargeConfigurationCollection);
+
 }
 
 function createRows(pickerDates, charges) {
-    var index = 0;
-    var isSameDayWeek = pickerDates[index][0][0].WebDescription === "SameDay";
     var columns = [];
-    for(var i = 0; i < pickerDates[index].length; i++) {
-        columns.push(createColumn(pickerDates[index][i], isSameDayWeek, dates[i], charges))
+    for(var i = 0; i < pickerDates.length; i++) {
+        var isSameDayWeek = pickerDates[i][0][0].WebDescription === "SameDay";
+        for(var j = 0; j < pickerDates[i].length; j++) {
+            columns.push(createColumn(pickerDates[i][j], isSameDayWeek, dates[j], charges))
+        }
     }
-    console.log(columns);
+
+    return columns;
 }
 
 function createColumn(data, isSameDayWeek, dateInfo, charges) {
@@ -332,14 +338,13 @@ function createColumn(data, isSameDayWeek, dateInfo, charges) {
         var slot = {
             type : data[i].WebDescription
         };
-
-        slot.hasTimeslot = !!data[i].WebDescription;
+        slot.shortdate = dateInfo.shortdate;
+        slot.hasTimeslot = !!data[i].WebDescription && dateInfo.desc !== "N/A";
         if(slot.hasTimeslot) {
             slot.dayCharge = data[i].ChargeIncVat;
             slot.timeCharge = dateInfo.dayTypeCharge;
             slot.timeDesc = dateInfo.desc;
-            slot.totalCharge = data[i].ChargeIncVat + dates[i].dayTypeCharge;
-            slot.shortdate = dateInfo.shortdate;
+            slot.totalCharge = Number((data[i].ChargeIncVat + dateInfo.dayTypeCharge).toFixed(2));
         }
         column.push(slot);
     }

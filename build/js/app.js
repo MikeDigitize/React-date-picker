@@ -24626,34 +24626,7 @@
 	    }, {
 	        key: "createRows",
 	        value: function createRows() {
-	            var isSameDayWeek = this.state.tableBodyData[this.state.tableIndex][0][0].WebDescription === "SameDay";
-	            var columns = [];
-	            for (var i = 0; i < this.state.tableBodyData[this.state.tableIndex].length; i++) {
-	                columns.push(this.createColumn(this.state.tableBodyData[this.state.tableIndex][i], isSameDayWeek));
-	            }
-	            console.log(columns, this.state.tableBodyData[this.state.tableIndex]);
-	        }
-	    }, {
-	        key: "createColumn",
-	        value: function createColumn(data, isSameDayWeek) {
-	            var count = isSameDayWeek ? 6 : 5,
-	                column = [];
-	            for (var i = 0; i < count; i++) {
-	                if (!data[i]) {
-	                    data[i] = {
-	                        WebDescription: null
-	                    };
-	                }
-	                var slot = {
-	                    desc: data[i].WebDescription
-	                };
-	                slot.hasTimeslot = !!data[i].WebDescription;
-	                if (slot.hasTimeslot) {
-	                    slot.cost = data[i].ChargeIncVat;
-	                }
-	                column.push(slot);
-	            }
-	            return column;
+	            console.log("table body", this.state.tableBodyData[this.state.tableIndex]);
 	        }
 	    }, {
 	        key: "render",

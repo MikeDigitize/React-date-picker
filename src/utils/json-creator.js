@@ -31,15 +31,15 @@ Promise.all([loadCalendarConfig, loadDatesConfig]).then(function(data) {
     }
 });
 
-function startParsingData(config, dates) {
+function startParsingData(config, dayConfigs) {
     pickerData.basketTotal = config.orderTotals.OverallTotalNumber;
     pickerData.state = config.calendarConfiguration.dataState;
-    pickerData.dates = utils.sortDates(config, dates);
+    pickerData.dates = utils.sortDates(config, dayConfigs);
     pickerData.hasDeliveryDates = !!pickerData.dates.length;
-    pickerData.weeksInConfig = utils.numOfWeeksInConfig(pickerData.dates);
-    pickerData.dateRanges = utils.createDateRanges(pickerData.dates, pickerData.weeksInConfig);
-    pickerData.tableHeadData = utils.createTableHeadData(pickerData.dates);
-    pickerData.tableBodyData = utils.createTableBodyData(pickerData.dates, dates, config);
+    pickerData.weeksInConfig = utils.numOfWeeksInConfig();
+    pickerData.dateRanges = utils.createDateRanges(pickerData.weeksInConfig);
+    pickerData.tableHeadData = utils.createTableHeadData();
+    pickerData.tableBodyData = utils.createTableBodyData(dayConfigs, config);
     fs.writeFile("../../build/data/" + filename + ".json", JSON.stringify(pickerData, null, 4), function (err) {
         if (err) return console.log(err);
     });
