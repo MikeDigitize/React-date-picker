@@ -19,7 +19,8 @@ function sortDates(config, dateConfig) {
     var charges = config.calendarConfiguration.chargeConfigurationCollection;
     dates = fillInGaps(days);
     dates = padLastWeek(dates);
-    dates = includeDayTypeCharges(formatDates(dates), charges);
+    dates = formatDates(dates);
+    dates = includeDayTypeCharges(charges);
     return dates;
 }
 
@@ -81,9 +82,6 @@ function padLastWeek(tempDaysObject) {
     var keys = Object.keys(tempDaysObject);
 
     if(keys.length % 7 !== 0) {
-
-        console.log("not a full week!!");
-
         var diff = 7 - keys.length % 7;
         var lastdate = keys[keys.length -1];
         var shortdate = lastdate.substr(0,4) + "-" + lastdate.substr(4,2) + "-" + lastdate.substr(6,2);
@@ -279,74 +277,51 @@ function createTableHeadData() {
 
 function createTableBodyData(dateCharges, charges) {
 
-    var counter = 0,
-        timeslotDescriptions,
-        sameDayDesc = ["SameDay", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"],
+    var sameDayDesc = ["SameDay", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"],
         normalDesc = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
 
-    for (var i in dateCharges) {
+    /*
+     Loop through dates and wrap each day in an array
+     e.g. [{ shortdate : 20150910, otherstuff... }], [{ shortdate : 20150911, otherstuff... }]
+     */
 
-        if (counter === 0 && dates[Object.keys(dates)[0]].desc === "SameDay") {
-            timeslotDescriptions = sameDayDesc;
-        }
-        else {
-            timeslotDescriptions = normalDesc;
-        }
-
-        for (var j = 0, len = timeslotDescriptions.length; j < len; j++) {
-
-            if (!dateCharges[i][j] || dateCharges[i][j].WebDescription !== timeslotDescriptions[j]) {
-                dateCharges[i].splice(j, 0, { WebDescription: null });
-            }
-
-        }
-
-        counter++;
-
-    }
-
-
-    var pickerDates = Object.keys(dateCharges).map(function(date, i){
-        return dateCharges[date];
+    var timeslots = dates.map(function (slot) {
+        return [slot];
     });
 
-    pickerDates = createArrayOfConfigs(pickerDates, 7);
-    return createRows(pickerDates, charges.calendarConfiguration.chargeConfigurationCollection);
+    timeslots = timeslots.map(function (slot, i) {
+        return slot.map(createRows);
+    });
 
-}
-
-function createRows(pickerDates, charges) {
-    var columns = [];
-    for(var i = 0; i < pickerDates.length; i++) {
-        var isSameDayWeek = pickerDates[i][0][0].WebDescription === "SameDay";
-        for(var j = 0; j < pickerDates[i].length; j++) {
-            columns.push(createColumn(pickerDates[i][j], isSameDayWeek, dates[j], charges))
-        }
+    function createRows(details) {
+        var timeslotDescriptions = details.desc === "SameDay" ? sameDayDesc : normalDesc;
+        return createColumn(timeslotDescriptions, details);
     }
 
-    return columns;
-}
-
-function createColumn(data, isSameDayWeek, dateInfo, charges) {
-    var count = isSameDayWeek ? 6 : 5, column = [];
-    for(var i = 0; i < count; i++) {
-        if(!data[i]){
-            data[i] = {
-                WebDescription : null
+    function createColumn(rows, details, isAvailable) {
+        var chargeConfig = dateCharges[details.shortdate];
+        return rows.map(function (row) {
+            var config = {
+                description: row,
+                hasTimeslot: !!chargeConfig,
+                shortdate: details.shortdate
             };
-        }
-        var slot = {
-            type : data[i].WebDescription
-        };
-        slot.shortdate = dateInfo.shortdate;
-        slot.hasTimeslot = !!data[i].WebDescription && dateInfo.desc !== "N/A";
-        if(slot.hasTimeslot) {
-            slot.dayCharge = data[i].ChargeIncVat;
-            slot.timeCharge = dateInfo.dayTypeCharge;
-            slot.timeDesc = dateInfo.desc;
-            slot.totalCharge = Number((data[i].ChargeIncVat + dateInfo.dayTypeCharge).toFixed(2));
-        }
-        column.push(slot);
+            if (config.hasTimeslot) {
+                var charge = chargeConfig.filter(function(charges){
+                    return charges.WebDescription === row;
+                });
+                config.charge = details.dayTypeCharge + charge[0].ChargeIncVat;
+            }
+            return config;
+        });
     }
-    return column;
+
+    timeslots = timeslots.map(function(slot){
+        return slot.map(function(s){
+            return s;
+        })
+    });
+
+    console.log(timeslots);
+
 }
