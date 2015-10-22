@@ -310,22 +310,31 @@ function createColumn(rows, details, dateCharges) {
 }
 
 function padOutSameDayWeek(timeslots) {
-    return timeslots.map(function(slots) {
-        if(slots[0][0].description === "SameDay") {
-            var shortdate = slots[0][0].shortdate;
-            return slots.map(function (slot) {
-                if(slot[0].shortdate !== shortdate) {
-                    slot.unshift({
-                        description : "SameDay",
-                        hasTimelot : false,
-                        shortdate : shortdate
-                    });
-                }
-                return slot;
-            });
-        }
-        else {
+    var fuck;
+    try {
+        fuck = timeslots.map(function (slots, i) {
+            if (slots[0][0].description === "SameDay") {
+                var shortdate = slots[0][0].shortdate;
+                return slots.map(function (slot) {
+                    if (slot[0].shortdate !== shortdate) {
+                        slot.unshift({
+                            description: "SameDay",
+                            hasTimelot: false,
+                            shortdate: slot[i].shortdate
+                        });
+                    }
+                    //console.log(slot);
+                    return slot;
+                });
+            }
             return slots;
-        }
-    });
+        });
+    }
+    catch(e) {
+        console.log(e)
+    }
+    return fuck;
 }
+
+
+

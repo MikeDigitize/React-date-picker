@@ -67,7 +67,6 @@ export default class PickerContainer extends React.Component {
                 });
 
                 DatePickerStore.dispatch(basketTotal(nextProps.config.basketTotal));
-                //DatePickerStore.dispatch(availableDates(nextProps.config.dates));
 
                 // simulate ajax call to keep loading screen visible
                 setTimeout(()=> {
