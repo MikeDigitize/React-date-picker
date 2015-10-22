@@ -1,470 +1,6 @@
 {
     "basketTotal": 284,
     "state": "Populated",
-    "dates": [
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Fri",
-            "dayOfWeek": 5,
-            "date": "9",
-            "dateSuffix": "th",
-            "desc": "SameDay",
-            "shortdate": "20151009",
-            "dayTypeCharge": 25
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Sat",
-            "dayOfWeek": 6,
-            "date": "10",
-            "dateSuffix": "th",
-            "desc": "Saturday",
-            "shortdate": "20151010",
-            "dayTypeCharge": 21.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Sun",
-            "dayOfWeek": 0,
-            "date": "11",
-            "dateSuffix": "th",
-            "desc": "N/A",
-            "shortdate": "20151011",
-            "dayTypeCharge": 0
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Mon",
-            "dayOfWeek": 1,
-            "date": "12",
-            "dateSuffix": "th",
-            "desc": "Monday",
-            "shortdate": "20151012",
-            "dayTypeCharge": 16.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Tue",
-            "dayOfWeek": 2,
-            "date": "13",
-            "dateSuffix": "th",
-            "desc": "Tuesday",
-            "shortdate": "20151013",
-            "dayTypeCharge": 17.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Wed",
-            "dayOfWeek": 3,
-            "date": "14",
-            "dateSuffix": "th",
-            "desc": "Wednesday",
-            "shortdate": "20151014",
-            "dayTypeCharge": 18.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Thu",
-            "dayOfWeek": 4,
-            "date": "15",
-            "dateSuffix": "th",
-            "desc": "Thursday",
-            "shortdate": "20151015",
-            "dayTypeCharge": 19.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Fri",
-            "dayOfWeek": 5,
-            "date": "16",
-            "dateSuffix": "th",
-            "desc": "Friday",
-            "shortdate": "20151016",
-            "dayTypeCharge": 18.69
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Sat",
-            "dayOfWeek": 6,
-            "date": "17",
-            "dateSuffix": "th",
-            "desc": "Saturday",
-            "shortdate": "20151017",
-            "dayTypeCharge": 21.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Sun",
-            "dayOfWeek": 0,
-            "date": "18",
-            "dateSuffix": "th",
-            "desc": "Sunday",
-            "shortdate": "20151018",
-            "dayTypeCharge": 22.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Mon",
-            "dayOfWeek": 1,
-            "date": "19",
-            "dateSuffix": "th",
-            "desc": "Monday",
-            "shortdate": "20151019",
-            "dayTypeCharge": 16.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Tue",
-            "dayOfWeek": 2,
-            "date": "20",
-            "dateSuffix": "th",
-            "desc": "Tuesday",
-            "shortdate": "20151020",
-            "dayTypeCharge": 17.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Wed",
-            "dayOfWeek": 3,
-            "date": "21",
-            "dateSuffix": "st",
-            "desc": "N/A",
-            "shortdate": "20151021",
-            "dayTypeCharge": 0
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Thu",
-            "dayOfWeek": 4,
-            "date": "22",
-            "dateSuffix": "nd",
-            "desc": "N/A",
-            "shortdate": "20151022",
-            "dayTypeCharge": 0
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Fri",
-            "dayOfWeek": 5,
-            "date": "23",
-            "dateSuffix": "rd",
-            "desc": "N/A",
-            "shortdate": "20151023",
-            "dayTypeCharge": 0
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Sat",
-            "dayOfWeek": 6,
-            "date": "24",
-            "dateSuffix": "th",
-            "desc": "N/A",
-            "shortdate": "20151024",
-            "dayTypeCharge": 0
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Sun",
-            "dayOfWeek": 0,
-            "date": "25",
-            "dateSuffix": "th",
-            "desc": "Sunday",
-            "shortdate": "20151025",
-            "dayTypeCharge": 22.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Mon",
-            "dayOfWeek": 1,
-            "date": "26",
-            "dateSuffix": "th",
-            "desc": "Monday",
-            "shortdate": "20151026",
-            "dayTypeCharge": 16.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Tue",
-            "dayOfWeek": 2,
-            "date": "27",
-            "dateSuffix": "th",
-            "desc": "Tuesday",
-            "shortdate": "20151027",
-            "dayTypeCharge": 17.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Wed",
-            "dayOfWeek": 3,
-            "date": "28",
-            "dateSuffix": "th",
-            "desc": "Wednesday",
-            "shortdate": "20151028",
-            "dayTypeCharge": 18.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Thu",
-            "dayOfWeek": 4,
-            "date": "29",
-            "dateSuffix": "th",
-            "desc": "Thursday",
-            "shortdate": "20151029",
-            "dayTypeCharge": 19.99
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Fri",
-            "dayOfWeek": 5,
-            "date": "30",
-            "dateSuffix": "th",
-            "desc": "Friday",
-            "shortdate": "20151030",
-            "dayTypeCharge": 18.69
-        },
-        {
-            "year": "2015",
-            "month": "Oct",
-            "day": "Sat",
-            "dayOfWeek": 6,
-            "date": "31",
-            "dateSuffix": "st",
-            "desc": "Saturday",
-            "shortdate": "20151031",
-            "dayTypeCharge": 21.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Sun",
-            "dayOfWeek": 0,
-            "date": "1",
-            "dateSuffix": "st",
-            "desc": "Sunday",
-            "shortdate": "20151101",
-            "dayTypeCharge": 22.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Mon",
-            "dayOfWeek": 1,
-            "date": "2",
-            "dateSuffix": "nd",
-            "desc": "Monday",
-            "shortdate": "20151102",
-            "dayTypeCharge": 16.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Tue",
-            "dayOfWeek": 2,
-            "date": "3",
-            "dateSuffix": "rd",
-            "desc": "Tuesday",
-            "shortdate": "20151103",
-            "dayTypeCharge": 17.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Wed",
-            "dayOfWeek": 3,
-            "date": "4",
-            "dateSuffix": "th",
-            "desc": "Wednesday",
-            "shortdate": "20151104",
-            "dayTypeCharge": 18.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Thu",
-            "dayOfWeek": 4,
-            "date": "5",
-            "dateSuffix": "th",
-            "desc": "Thursday",
-            "shortdate": "20151105",
-            "dayTypeCharge": 19.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Fri",
-            "dayOfWeek": 5,
-            "date": "6",
-            "dateSuffix": "th",
-            "desc": "N/A",
-            "shortdate": "20151106",
-            "dayTypeCharge": 0
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Sat",
-            "dayOfWeek": 6,
-            "date": "7",
-            "dateSuffix": "th",
-            "desc": "N/A",
-            "shortdate": "20151107",
-            "dayTypeCharge": 0
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Sun",
-            "dayOfWeek": 0,
-            "date": "8",
-            "dateSuffix": "th",
-            "desc": "N/A",
-            "shortdate": "20151108",
-            "dayTypeCharge": 0
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Mon",
-            "dayOfWeek": 1,
-            "date": "9",
-            "dateSuffix": "th",
-            "desc": "N/A",
-            "shortdate": "20151109",
-            "dayTypeCharge": 0
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Tue",
-            "dayOfWeek": 2,
-            "date": "10",
-            "dateSuffix": "th",
-            "desc": "Tuesday",
-            "shortdate": "20151110",
-            "dayTypeCharge": 17.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Wed",
-            "dayOfWeek": 3,
-            "date": "11",
-            "dateSuffix": "th",
-            "desc": "Wednesday",
-            "shortdate": "20151111",
-            "dayTypeCharge": 18.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Thu",
-            "dayOfWeek": 4,
-            "date": "12",
-            "dateSuffix": "th",
-            "desc": "Thursday",
-            "shortdate": "20151112",
-            "dayTypeCharge": 19.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Fri",
-            "dayOfWeek": 5,
-            "date": "13",
-            "dateSuffix": "th",
-            "desc": "Friday",
-            "shortdate": "20151113",
-            "dayTypeCharge": 18.69
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Sat",
-            "dayOfWeek": 6,
-            "date": "14",
-            "dateSuffix": "th",
-            "desc": "Saturday",
-            "shortdate": "20151114",
-            "dayTypeCharge": 21.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Sun",
-            "dayOfWeek": 0,
-            "date": "15",
-            "dateSuffix": "th",
-            "desc": "Sunday",
-            "shortdate": "20151115",
-            "dayTypeCharge": 22.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Mon",
-            "dayOfWeek": 1,
-            "date": "16",
-            "dateSuffix": "th",
-            "desc": "Monday",
-            "shortdate": "20151116",
-            "dayTypeCharge": 16.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Tue",
-            "dayOfWeek": 2,
-            "date": "17",
-            "dateSuffix": "th",
-            "desc": "Tuesday",
-            "shortdate": "20151117",
-            "dayTypeCharge": 17.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Wed",
-            "dayOfWeek": 3,
-            "date": "18",
-            "dateSuffix": "th",
-            "desc": "Wednesday",
-            "shortdate": "20151118",
-            "dayTypeCharge": 18.99
-        },
-        {
-            "year": "2015",
-            "month": "Nov",
-            "day": "Thu",
-            "dayOfWeek": 4,
-            "date": "19",
-            "dateSuffix": "th",
-            "desc": "Thursday",
-            "shortdate": "20151119",
-            "dayTypeCharge": 19.99
-        }
-    ],
     "hasDeliveryDates": true,
     "weeksInConfig": 6,
     "dateRanges": [
@@ -697,6 +233,1389 @@
                 "day": "Thu",
                 "date": "19"
             }
+        ]
+    ],
+    "tableBodyData": [
+        [
+            [
+                {
+                    "description": "SameDay",
+                    "hasTimeslot": true,
+                    "shortdate": "20151009",
+                    "charge": 25
+                },
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": false,
+                    "shortdate": "20151009"
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": false,
+                    "shortdate": "20151009"
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20151009"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": false,
+                    "shortdate": "20151009"
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": false,
+                    "shortdate": "20151009"
+                }
+            ],
+            [
+                {
+                    "description": "SameDay",
+                    "hasTimelot": false,
+                    "shortdate": "20151009"
+                },
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151010",
+                    "charge": 21.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151010",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151010",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151010",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151010",
+                    "charge": 41.98
+                }
+            ],
+            [
+                {
+                    "description": "SameDay",
+                    "hasTimelot": false,
+                    "shortdate": "20151009"
+                },
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151011",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151011",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20151011"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151011",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151011",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "SameDay",
+                    "hasTimelot": false,
+                    "shortdate": "20151009"
+                },
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151012",
+                    "charge": 16.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151012",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151012",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151012",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151012",
+                    "charge": 36.98
+                }
+            ],
+            [
+                {
+                    "description": "SameDay",
+                    "hasTimelot": false,
+                    "shortdate": "20151009"
+                },
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151013",
+                    "charge": 17.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151013",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151013",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151013",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151013",
+                    "charge": 37.98
+                }
+            ],
+            [
+                {
+                    "description": "SameDay",
+                    "hasTimelot": false,
+                    "shortdate": "20151009"
+                },
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151014",
+                    "charge": 18.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151014",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151014",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151014",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151014",
+                    "charge": 38.98
+                }
+            ],
+            [
+                {
+                    "description": "SameDay",
+                    "hasTimelot": false,
+                    "shortdate": "20151009"
+                },
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151015",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151015",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151015",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151015",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151015",
+                    "charge": 39.98
+                }
+            ]
+        ],
+        [
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151016",
+                    "charge": 18.69
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151016",
+                    "charge": 38.68
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151016",
+                    "charge": 38.68
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151016",
+                    "charge": 38.68
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151016",
+                    "charge": 38.68
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151017",
+                    "charge": 21.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151017",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151017",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151017",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151017",
+                    "charge": 41.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151018",
+                    "charge": 22.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151018",
+                    "charge": 42.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20151018"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151018",
+                    "charge": 42.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151018",
+                    "charge": 42.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151019",
+                    "charge": 16.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151019",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151019",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151019",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151019",
+                    "charge": 36.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151020",
+                    "charge": 17.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151020",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151020",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151020",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151020",
+                    "charge": 37.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151021",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151021",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151021",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151021",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151021",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151022",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151022",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151022",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151022",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151022",
+                    "charge": 19.99
+                }
+            ]
+        ],
+        [
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151023",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151023",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151023",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151023",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151023",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151024",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151024",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151024",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151024",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151024",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151025",
+                    "charge": 22.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151025",
+                    "charge": 42.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20151025"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151025",
+                    "charge": 42.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151025",
+                    "charge": 42.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151026",
+                    "charge": 16.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151026",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151026",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151026",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151026",
+                    "charge": 36.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151027",
+                    "charge": 17.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151027",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151027",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151027",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151027",
+                    "charge": 37.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151028",
+                    "charge": 18.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151028",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151028",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151028",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151028",
+                    "charge": 38.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151029",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151029",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151029",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151029",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151029",
+                    "charge": 39.98
+                }
+            ]
+        ],
+        [
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151030",
+                    "charge": 18.69
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151030",
+                    "charge": 38.68
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151030",
+                    "charge": 38.68
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151030",
+                    "charge": 38.68
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151030",
+                    "charge": 38.68
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151031",
+                    "charge": 21.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151031",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151031",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151031",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151031",
+                    "charge": 41.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151101",
+                    "charge": 22.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151101",
+                    "charge": 42.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20151101"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151101",
+                    "charge": 42.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151101",
+                    "charge": 42.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151102",
+                    "charge": 16.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151102",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151102",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151102",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151102",
+                    "charge": 36.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151103",
+                    "charge": 17.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151103",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151103",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151103",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151103",
+                    "charge": 37.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151104",
+                    "charge": 18.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151104",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151104",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151104",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151104",
+                    "charge": 38.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151105",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151105",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151105",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151105",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151105",
+                    "charge": 39.98
+                }
+            ]
+        ],
+        [
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151106",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151106",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151106",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151106",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151106",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151107",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151107",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151107",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151107",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151107",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151108",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151108",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20151108"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151108",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151108",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151109",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151109",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151109",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151109",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151109",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151110",
+                    "charge": 17.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151110",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151110",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151110",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151110",
+                    "charge": 37.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151111",
+                    "charge": 18.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151111",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151111",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151111",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151111",
+                    "charge": 38.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151112",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151112",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151112",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151112",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151112",
+                    "charge": 39.98
+                }
+            ]
+        ],
+        [
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151113",
+                    "charge": 18.69
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151113",
+                    "charge": 38.68
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151113",
+                    "charge": 38.68
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151113",
+                    "charge": 38.68
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151113",
+                    "charge": 38.68
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151114",
+                    "charge": 21.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151114",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151114",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151114",
+                    "charge": 41.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151114",
+                    "charge": 41.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151115",
+                    "charge": 22.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151115",
+                    "charge": 42.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20151115"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151115",
+                    "charge": 42.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151115",
+                    "charge": 42.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151116",
+                    "charge": 16.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151116",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151116",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151116",
+                    "charge": 36.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151116",
+                    "charge": 36.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151117",
+                    "charge": 17.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151117",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151117",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151117",
+                    "charge": 37.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151117",
+                    "charge": 37.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151118",
+                    "charge": 18.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151118",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151118",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151118",
+                    "charge": 38.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151118",
+                    "charge": 38.98
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20151119",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20151119",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20151119",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20151119",
+                    "charge": 39.98
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20151119",
+                    "charge": 39.98
+                }
+            ]
         ]
     ]
 }

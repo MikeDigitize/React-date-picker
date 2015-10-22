@@ -82,9 +82,6 @@
 	        this.state = {
 	            config: {}
 	        };
-	        //Promise.all([getData1(), getData2()]).then(data => {
-	        //    config = data;
-	        //});
 	        (0, _utilsGetConfig.getData1)().then(function (data) {
 	            config = data;
 	        });
@@ -93,8 +90,6 @@
 	    _createClass(App, [{
 	        key: "passNewConfig",
 	        value: function passNewConfig() {
-	            //var random = Math.floor(Math.random() * 2);
-	            //console.log("new", config[random], random);
 	            this.setState({
 	                config: config
 	            });
@@ -20598,7 +20593,7 @@
 	                    });
 
 	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(nextProps.config.basketTotal));
-	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.availableDates)(nextProps.config.dates));
+	                    //DatePickerStore.dispatch(availableDates(nextProps.config.dates));
 
 	                    // simulate ajax call to keep loading screen visible
 	                    setTimeout(function () {
@@ -24626,7 +24621,7 @@
 	    }, {
 	        key: "createRows",
 	        value: function createRows() {
-	            console.log("table body", this.state.tableBodyData[this.state.tableIndex]);
+	            console.log("table body", this.state.tableBodyData);
 	        }
 	    }, {
 	        key: "render",

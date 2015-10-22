@@ -262,7 +262,6 @@ function createArrayOfConfigs(config, size) {
 }
 
 function createTableHeadData() {
-
     var daysConfig = dates.map(date => {
         return {
             desc : date.desc,
@@ -270,58 +269,63 @@ function createTableHeadData() {
             date : date.date
         };
     });
-
     return createArrayOfConfigs(daysConfig, 7);
-
 }
 
-function createTableBodyData(dateCharges, charges) {
-
+function createTableBodyData(dateCharges) {
     var sameDayDesc = ["SameDay", "Anytime", "Morning", "Lunch", "Afternoon", "Evening"],
         normalDesc = ["Anytime", "Morning", "Lunch", "Afternoon", "Evening"];
 
-    /*
-     Loop through dates and wrap each day in an array
-     e.g. [{ shortdate : 20150910, otherstuff... }], [{ shortdate : 20150911, otherstuff... }]
-     */
-
     var timeslots = dates.map(function (slot) {
-        return [slot];
+        var timeslotDescriptions = slot.desc === "SameDay" ? sameDayDesc : normalDesc;
+        return createColumn(timeslotDescriptions, slot, dateCharges);
     });
 
-    timeslots = timeslots.map(function (slot, i) {
-        return slot.map(createRows);
-    });
+    timeslots = createArrayOfConfigs(timeslots, 7);
+    timeslots = padOutSameDayWeek(timeslots);
+    return timeslots;
+}
 
-    function createRows(details) {
-        var timeslotDescriptions = details.desc === "SameDay" ? sameDayDesc : normalDesc;
-        return createColumn(timeslotDescriptions, details);
-    }
-
-    function createColumn(rows, details, isAvailable) {
-        var chargeConfig = dateCharges[details.shortdate];
-        return rows.map(function (row) {
-            var config = {
-                description: row,
-                hasTimeslot: !!chargeConfig,
-                shortdate: details.shortdate
-            };
-            if (config.hasTimeslot) {
-                var charge = chargeConfig.filter(function(charges){
-                    return charges.WebDescription === row;
-                });
+function createColumn(rows, details, dateCharges) {
+    var chargeConfig = dateCharges[details.shortdate];
+    return rows.map(function (row) {
+        var config = {
+            description: row,
+            hasTimeslot: !!chargeConfig,
+            shortdate: details.shortdate
+        };
+        if (config.hasTimeslot) {
+            var charge = chargeConfig.filter(function(charges){
+                return charges.WebDescription === row;
+            });
+            if(!charge.length) {
+                config.hasTimeslot = false;
+            }
+            else {
                 config.charge = details.dayTypeCharge + charge[0].ChargeIncVat;
             }
-            return config;
-        });
-    }
-
-    timeslots = timeslots.map(function(slot){
-        return slot.map(function(s){
-            return s;
-        })
+        }
+        return config;
     });
+}
 
-    console.log(timeslots);
-
+function padOutSameDayWeek(timeslots) {
+    return timeslots.map(function(slots) {
+        if(slots[0][0].description === "SameDay") {
+            var shortdate = slots[0][0].shortdate;
+            return slots.map(function (slot) {
+                if(slot[0].shortdate !== shortdate) {
+                    slot.unshift({
+                        description : "SameDay",
+                        hasTimelot : false,
+                        shortdate : shortdate
+                    });
+                }
+                return slot;
+            });
+        }
+        else {
+            return slots;
+        }
+    });
 }

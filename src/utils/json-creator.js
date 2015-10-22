@@ -32,10 +32,12 @@ Promise.all([loadCalendarConfig, loadDatesConfig]).then(function(data) {
 });
 
 function startParsingData(config, dayConfigs) {
+
+    var dates = utils.sortDates(config, dayConfigs);;
+
     pickerData.basketTotal = config.orderTotals.OverallTotalNumber;
     pickerData.state = config.calendarConfiguration.dataState;
-    pickerData.dates = utils.sortDates(config, dayConfigs);
-    pickerData.hasDeliveryDates = !!pickerData.dates.length;
+    pickerData.hasDeliveryDates = !!dates.length;
     pickerData.weeksInConfig = utils.numOfWeeksInConfig();
     pickerData.dateRanges = utils.createDateRanges(pickerData.weeksInConfig);
     pickerData.tableHeadData = utils.createTableHeadData();
