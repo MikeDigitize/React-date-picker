@@ -24668,32 +24668,13 @@
 	            return rows;
 	        }
 	    }, {
-	        key: "createRowDescription",
-	        value: function createRowDescription(desc, i) {
-	            var random = Math.floor(Math.random() * 1000) + Math.floor(Math.random() * i + 1);
-	            if (desc === "Anytime") {
-	                return _react2["default"].createElement(
-	                    "td",
-	                    { key: random, styleName: "timeslot-desc" },
-	                    _react2["default"].createElement(_DeliveryDescriptionsAnytime2["default"], null)
-	                );
-	            } else {
-	                var info = this.state.timeDescriptions[desc].desc;
-	                var time = this.state.timeDescriptions[desc].times;
-	                return _react2["default"].createElement(
-	                    "td",
-	                    { key: random, styleName: "timeslot-desc" },
-	                    _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: info, time: time })
-	                );
-	            }
-	        }
-	    }, {
 	        key: "createTds",
 	        value: function createTds(i) {
 	            var _this2 = this;
 
 	            var data = this.state.tableBodyData[this.state.tableDisplayIndex];
 	            return data.map(function (details, j) {
+	                console.log(details[j]);
 	                var tdContent = undefined;
 	                if (details[i].charge === 0) {
 	                    tdContent = _react2["default"].createElement(
@@ -24721,6 +24702,26 @@
 	                    tdContent
 	                );
 	            });
+	        }
+	    }, {
+	        key: "createRowDescription",
+	        value: function createRowDescription(desc, i) {
+	            var random = Math.floor(Math.random() * 1000) + Math.floor(Math.random() * i + 1);
+	            if (desc === "Anytime") {
+	                return _react2["default"].createElement(
+	                    "td",
+	                    { key: random, styleName: "timeslot-desc" },
+	                    _react2["default"].createElement(_DeliveryDescriptionsAnytime2["default"], null)
+	                );
+	            } else {
+	                var info = this.state.timeDescriptions[desc].desc;
+	                var time = this.state.timeDescriptions[desc].times;
+	                return _react2["default"].createElement(
+	                    "td",
+	                    { key: random, styleName: "timeslot-desc" },
+	                    _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: info, time: time })
+	                );
+	            }
 	        }
 	    }, {
 	        key: "render",
@@ -24752,6 +24753,10 @@
 	    var target = e.target || e.srcElement;
 	    if (target.tagName === "SPAN") {
 	        target = target.parentNode;
+	    }
+	    var currentTarget = document.querySelector(".timeslot-selected");
+	    if (currentTarget) {
+	        currentTarget.classList.toggle("timeslot-selected");
 	    }
 	    target.classList.toggle("timeslot-selected");
 	};

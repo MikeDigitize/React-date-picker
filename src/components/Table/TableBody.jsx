@@ -39,21 +39,10 @@ class TableBody extends React.Component {
         return rows;
     }
 
-    createRowDescription(desc, i){
-        let random = Math.floor(Math.random() * 1000) + Math.floor(Math.random() * i+1);
-        if(desc === "Anytime"){
-            return <td key={random} styleName="timeslot-desc"><Anytime /></td>;
-        }
-        else {
-            let info = this.state.timeDescriptions[desc].desc;
-            let time = this.state.timeDescriptions[desc].times;
-            return <td key={random} styleName="timeslot-desc"><Desc desc={ info } time={ time }/></td>
-        }
-    }
-
     createTds(i) {
         let data = this.state.tableBodyData[this.state.tableDisplayIndex];
         return data.map((details, j) => {
+            console.log(details[j]);
             let tdContent;
             if(details[i].charge === 0){
                 tdContent = <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>Free</p>;
@@ -66,6 +55,18 @@ class TableBody extends React.Component {
             }
             return (<td key={j} styleName="timeslot">{ tdContent }</td>)
         });
+    }
+
+    createRowDescription(desc, i){
+        let random = Math.floor(Math.random() * 1000) + Math.floor(Math.random() * i+1);
+        if(desc === "Anytime"){
+            return <td key={random} styleName="timeslot-desc"><Anytime /></td>;
+        }
+        else {
+            let info = this.state.timeDescriptions[desc].desc;
+            let time = this.state.timeDescriptions[desc].times;
+            return <td key={random} styleName="timeslot-desc"><Desc desc={ info } time={ time }/></td>
+        }
     }
 
     render() {
@@ -94,6 +95,10 @@ TableBody.toggleSelected = function(e) {
     let target = e.target || e.srcElement;
     if(target.tagName === "SPAN") {
         target = target.parentNode;
+    }
+    let currentTarget = document.querySelector(".timeslot-selected");
+    if(currentTarget) {
+        currentTarget.classList.toggle("timeslot-selected");
     }
     target.classList.toggle("timeslot-selected");
 };
