@@ -20592,8 +20592,6 @@
 	                        }
 	                    });
 
-	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(nextProps.config.basketTotal));
-
 	                    // simulate ajax call to keep loading screen visible
 	                    setTimeout(function () {
 	                        _this.preparePickerData(nextProps.config);
@@ -20605,10 +20603,12 @@
 	        key: "preparePickerData",
 	        value: function preparePickerData(config) {
 
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(config.basketTotal));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.totalWeeks)(config.weeksInConfig));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.dateRanges)(config.dateRanges));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.tableHeadData)(config.tableHeadData));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.tableBodyData)(config.tableBodyData));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.timeDescriptions)(config.timeDescriptions));
 
 	            this.setState({
 	                pickerState: {
@@ -20623,7 +20623,7 @@
 	    }, {
 	        key: "onNewData",
 	        value: function onNewData() {
-	            //console.log("store updated", DatePickerStore.getState());
+	            console.log("store updated", _storesPickerStore2["default"].getState());
 	        }
 	    }, {
 	        key: "render",
@@ -23479,7 +23479,8 @@
 	        tableDisplayIndex: (0, _pickerDataStores.tableDisplayIndex)(state.tableDisplayIndex, action),
 	        dateRanges: (0, _pickerDataStores.dateRanges)(state.dateRanges, action),
 	        tableHeadData: (0, _pickerDataStores.tableHeadData)(state.tableHeadData, action),
-	        tableBodyData: (0, _pickerDataStores.tableBodyData)(state.tableBodyData, action)
+	        tableBodyData: (0, _pickerDataStores.tableBodyData)(state.tableBodyData, action),
+	        timeDescriptions: (0, _pickerDataStores.timeDescriptions)(state.timeDescriptions, action)
 	    };
 	}
 
@@ -24116,6 +24117,7 @@
 	exports.dateRanges = dateRanges;
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
+	exports.timeDescriptions = timeDescriptions;
 
 	function totalWeeks() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -24177,6 +24179,18 @@
 	    }
 	}
 
+	function timeDescriptions() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWTIMEDESCRIPTIONS":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
 /***/ },
 /* 235 */
 /***/ function(module, exports) {
@@ -24189,6 +24203,7 @@
 	exports.totalWeeks = totalWeeks;
 	exports.updateTableIndex = updateTableIndex;
 	exports.dateRanges = dateRanges;
+	exports.timeDescriptions = timeDescriptions;
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
@@ -24196,6 +24211,7 @@
 	var NEWDATERANGES = "NEWDATERANGES";
 	var NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 	var NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
+	var NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24207,6 +24223,10 @@
 
 	function dateRanges(data) {
 	    return { state: data, type: NEWDATERANGES };
+	}
+
+	function timeDescriptions(data) {
+	    return { state: data, type: NEWTIMEDESCRIPTIONS };
 	}
 
 	function tableHeadData(data) {
@@ -24397,7 +24417,8 @@
 	        this.state = {
 	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
 	            tableBodyData: _storesPickerStore2["default"].getState().tableBodyData,
-	            tableIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
+	            tableIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
+	            timeDescriptions: _storesPickerStore2["default"].getState().timeDescriptions
 	        };
 	    }
 
@@ -24413,7 +24434,8 @@
 	                }),
 	                _react2["default"].createElement(_TableTableBody2["default"], {
 	                    tableBodyData: this.state.tableBodyData,
-	                    tableIndex: this.state.tableIndex
+	                    tableIndex: this.state.tableIndex,
+	                    timeDescriptions: this.state.timeDescriptions
 	                })
 	            );
 	        }
@@ -24607,7 +24629,8 @@
 	        _get(Object.getPrototypeOf(TableBody.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            tableBodyData: this.props.tableBodyData,
-	            tableIndex: this.props.tableDisplayIndex
+	            tableIndex: this.props.tableDisplayIndex,
+	            timeDescriptions: this.props.timeDescriptions
 	        };
 	    }
 
@@ -24618,46 +24641,9 @@
 
 	            var rows = [];
 	            var data = this.state.tableBodyData[this.state.tableIndex];
-	            var random = Math.floor(Math.random() * 100);
 	            data[0].forEach(function (_, i) {
-	                var tds = _this.createTds(i, _.description);
-	                if (_.description === "SameDay") {
-	                    tds.unshift(_react2["default"].createElement(
-	                        "td",
-	                        { key: random, styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Same day time slot", time: "4:30PM - 10PM" })
-	                    ));
-	                } else if (_.description === "Anytime") {
-	                    tds.unshift(_react2["default"].createElement(
-	                        "td",
-	                        { key: random, styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsAnytime2["default"], null)
-	                    ));
-	                } else if (_.description === "Morning") {
-	                    tds.unshift(_react2["default"].createElement(
-	                        "td",
-	                        { key: random, styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Morning", time: "07:00 - 12:00" })
-	                    ));
-	                } else if (_.description === "Lunch") {
-	                    tds.unshift(_react2["default"].createElement(
-	                        "td",
-	                        { key: random, styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Lunch", time: "10:00 - 14:00" })
-	                    ));
-	                } else if (_.description === "Afternoon") {
-	                    tds.unshift(_react2["default"].createElement(
-	                        "td",
-	                        { key: random, styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Afternoon", time: "12:00 - 17:00" })
-	                    ));
-	                } else if (_.description === "Evening") {
-	                    tds.unshift(_react2["default"].createElement(
-	                        "td",
-	                        { key: random, styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Evening", time: "18:00 - 22:00" })
-	                    ));
-	                }
+	                var tds = _this.createTds(i);
+	                tds.unshift(_this.createRowDescription(_.description));
 	                rows.push(_react2["default"].createElement(
 	                    "tr",
 	                    { key: i },
@@ -24667,13 +24653,35 @@
 	            return rows;
 	        }
 	    }, {
+	        key: "createRowDescription",
+	        value: function createRowDescription(desc) {
+	            var random = Math.floor(Math.random() * 1000);
+	            if (desc === "Anytime") {
+	                return _react2["default"].createElement(
+	                    "td",
+	                    { key: random, styleName: "timeslot-desc" },
+	                    _react2["default"].createElement(_DeliveryDescriptionsAnytime2["default"], null)
+	                );
+	            } else {
+	                var info = this.state.timeDescriptions[desc].desc;
+	                var time = this.state.timeDescriptions[desc].times;
+	                return _react2["default"].createElement(
+	                    "td",
+	                    { key: random, styleName: "timeslot-desc" },
+	                    _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: info, time: time })
+	                );
+	            }
+	        }
+	    }, {
 	        key: "createTds",
 	        value: function createTds(i) {
+	            var _this2 = this;
+
 	            var data = this.state.tableBodyData[this.state.tableIndex];
 	            return data.map(function (details, j) {
 	                var charge = details[i].charge === 0 ? _react2["default"].createElement(
 	                    "p",
-	                    null,
+	                    { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(_this2) },
 	                    "Free"
 	                ) : !details[i].charge ? _react2["default"].createElement(
 	                    "p",
@@ -24681,7 +24689,7 @@
 	                    "N/A"
 	                ) : _react2["default"].createElement(
 	                    "p",
-	                    null,
+	                    { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(_this2) },
 	                    "£",
 	                    details[i].charge
 	                );
@@ -24698,351 +24706,7 @@
 	            return _react2["default"].createElement(
 	                "tbody",
 	                { styleName: "date-picker-tbody" },
-	                this.createRows(),
-	                _react2["default"].createElement(
-	                    "tr",
-	                    null,
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Same day time slot", time: "4:30PM - 10PM" })
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", ref: "testes", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£29.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
-	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
-	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
-	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
-	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
-	                    _react2["default"].createElement("td", { styleName: "timeslot" })
-	                ),
-	                _react2["default"].createElement(
-	                    "tr",
-	                    null,
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsAnytime2["default"], null)
-	                    ),
-	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£9.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£4.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£ Free"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£ Free"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£ Free"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£4.99"
-	                        )
-	                    )
-	                ),
-	                _react2["default"].createElement(
-	                    "tr",
-	                    null,
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Morning", time: "07:00 - 12:00" })
-	                    ),
-	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£29.98"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£24.98"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£24.98"
-	                        )
-	                    )
-	                ),
-	                _react2["default"].createElement(
-	                    "tr",
-	                    null,
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Lunch", time: "10:00 - 14:00" })
-	                    ),
-	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£29.98"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£24.98"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£24.98"
-	                        )
-	                    )
-	                ),
-	                _react2["default"].createElement(
-	                    "tr",
-	                    null,
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Afternoon", time: "12:00 - 17:00" })
-	                    ),
-	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£29.98"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£24.98"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£24.98"
-	                        )
-	                    )
-	                ),
-	                _react2["default"].createElement(
-	                    "tr",
-	                    null,
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot-desc" },
-	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Evening", time: "18:00 - 22:00" })
-	                    ),
-	                    _react2["default"].createElement("td", { styleName: "timeslot" }),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£29.98"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£24.98"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£19.99"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "td",
-	                        { styleName: "timeslot" },
-	                        _react2["default"].createElement(
-	                            "p",
-	                            { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(this) },
-	                            "£24.98"
-	                        )
-	                    )
-	                )
+	                this.createRows()
 	            );
 	        }
 	    }]);
@@ -25052,12 +24716,14 @@
 
 	TableBody.defaultProps = {
 	    tableDisplayIndex: 0,
+	    timeDescriptions: {},
 	    tableBodyData: []
 	};
 
 	TableBody.propTypes = {
 	    tableDisplayIndex: _react2["default"].PropTypes.number.isRequired,
-	    tableBodyData: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.array).isRequired
+	    tableBodyData: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.array).isRequired,
+	    timeDescriptions: _react2["default"].PropTypes.object
 	};
 
 	TableBody.toggleSelected = function (e) {

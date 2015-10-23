@@ -11,7 +11,8 @@ class Table extends React.Component {
         this.state = {
             tableHeadData : DatePickerStore.getState().tableHeadData,
             tableBodyData : DatePickerStore.getState().tableBodyData,
-            tableIndex : DatePickerStore.getState().tableDisplayIndex
+            tableIndex : DatePickerStore.getState().tableDisplayIndex,
+            timeDescriptions : DatePickerStore.getState().timeDescriptions
         };
     }
 
@@ -25,6 +26,7 @@ class Table extends React.Component {
                 <TableBody
                     tableBodyData={ this.state.tableBodyData }
                     tableIndex={ this.state.tableIndex }
+                    timeDescriptions={ this.state.timeDescriptions }
                 />
              </table>
         );

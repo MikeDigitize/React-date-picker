@@ -3,6 +3,7 @@ const TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 const NEWDATERANGES = "NEWDATERANGES";
 const NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 const NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
+const NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
 
 export function totalWeeks(data) {
     return { state : data, type: TOTALWEEKSUPDATE };
@@ -14,6 +15,10 @@ export function updateTableIndex(data) {
 
 export function dateRanges(data) {
     return { state : data, type : NEWDATERANGES };
+}
+
+export function timeDescriptions(data) {
+    return { state : data, type : NEWTIMEDESCRIPTIONS };
 }
 
 export function tableHeadData(data) {

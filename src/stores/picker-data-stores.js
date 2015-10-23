@@ -42,3 +42,12 @@ export function tableBodyData(state = [], action = {}) {
             return state;
     }
 }
+
+export function timeDescriptions(state = {}, action = {}) {
+    switch(action.type) {
+        case "NEWTIMEDESCRIPTIONS" :
+            return action.state;
+        default :
+            return state;
+    }
+}

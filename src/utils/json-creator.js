@@ -37,6 +37,7 @@ function startParsingData(config, dayConfigs) {
 
     pickerData.basketTotal = config.orderTotals.OverallTotalNumber;
     pickerData.state = config.calendarConfiguration.dataState;
+    pickerData.timeDescriptions = config.calendarConfiguration.descriptions;
     pickerData.hasDeliveryDates = !!dates.length;
     pickerData.weeksInConfig = utils.numOfWeeksInConfig();
     pickerData.dateRanges = utils.createDateRanges(pickerData.weeksInConfig);

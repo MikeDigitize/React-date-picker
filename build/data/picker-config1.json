@@ -1,6 +1,28 @@
 {
     "basketTotal": 284,
     "state": "Populated",
+    "timeDescriptions": {
+        "SameDay": {
+            "desc": "Same day time slot",
+            "times": "4:30PM - 10PM"
+        },
+        "Morning": {
+            "desc": "Morning",
+            "times": "07:00 - 12:00"
+        },
+        "Lunch": {
+            "desc": "Lunch",
+            "times": "10:00 - 14:00"
+        },
+        "Afternoon": {
+            "desc": "Afternoon",
+            "times": "12:00 - 17:00"
+        },
+        "Evening": {
+            "desc": "Evening",
+            "times": "18:00 - 22:00"
+        }
+    },
     "hasDeliveryDates": true,
     "weeksInConfig": 6,
     "dateRanges": [

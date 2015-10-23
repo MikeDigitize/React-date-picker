@@ -1,7 +1,7 @@
 import React from "react";
 import Picker from "./Picker";
 import DatePickerStore from "../../stores/PickerStore";
-import { totalWeeks, dateRanges, tableHeadData, tableBodyData } from "../../actions/picker-actions";
+import { totalWeeks, dateRanges, tableHeadData, tableBodyData, timeDescriptions } from "../../actions/picker-actions";
 import { basketTotal, availableDates } from "../../actions/external-actions";
 
 export default class PickerContainer extends React.Component {
@@ -66,8 +66,6 @@ export default class PickerContainer extends React.Component {
                     }
                 });
 
-                DatePickerStore.dispatch(basketTotal(nextProps.config.basketTotal));
-
                 // simulate ajax call to keep loading screen visible
                 setTimeout(()=> {
                     this.preparePickerData(nextProps.config);
@@ -81,10 +79,12 @@ export default class PickerContainer extends React.Component {
 
     preparePickerData(config) {
 
+        DatePickerStore.dispatch(basketTotal(config.basketTotal));
         DatePickerStore.dispatch(totalWeeks(config.weeksInConfig));
         DatePickerStore.dispatch(dateRanges(config.dateRanges));
         DatePickerStore.dispatch(tableHeadData(config.tableHeadData));
         DatePickerStore.dispatch(tableBodyData(config.tableBodyData));
+        DatePickerStore.dispatch(timeDescriptions(config.timeDescriptions));
 
         this.setState({
             pickerState : {
@@ -99,7 +99,7 @@ export default class PickerContainer extends React.Component {
     }
 
     onNewData(){
-        //console.log("store updated", DatePickerStore.getState());
+        console.log("store updated", DatePickerStore.getState());
     }
 
     render() {

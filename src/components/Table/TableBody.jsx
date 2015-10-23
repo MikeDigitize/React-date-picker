@@ -12,43 +12,38 @@ class TableBody extends React.Component {
         super(props);
         this.state = {
             tableBodyData : this.props.tableBodyData,
-            tableIndex : this.props.tableDisplayIndex
+            tableIndex : this.props.tableDisplayIndex,
+            timeDescriptions : this.props.timeDescriptions
         };
     }
 
     createRows() {
         let rows = [];
         let data = this.state.tableBodyData[this.state.tableIndex];
-        let random = Math.floor(Math.random() * 100);
         data[0].forEach((_, i) => {
-            let tds = this.createTds(i, _.description);
-            if(_.description === "SameDay"){
-                tds.unshift(<td key={random} styleName="timeslot-desc"><Desc desc="Same day time slot" time="4:30PM - 10PM"/></td>);
-            }
-            else if(_.description === "Anytime") {
-                tds.unshift(<td key={random} styleName="timeslot-desc"><Anytime /></td>);
-            }
-            else if(_.description === "Morning"){
-                tds.unshift(<td key={random} styleName="timeslot-desc"><Desc desc="Morning" time="07:00 - 12:00"/></td>);
-            }
-            else if(_.description === "Lunch"){
-                tds.unshift(<td key={random} styleName="timeslot-desc"><Desc desc="Lunch" time="10:00 - 14:00"/></td>);
-            }
-            else if(_.description === "Afternoon"){
-                tds.unshift(<td key={random} styleName="timeslot-desc"><Desc desc="Afternoon" time="12:00 - 17:00"/></td>);
-            }
-            else if(_.description === "Evening"){
-                tds.unshift(<td key={random} styleName="timeslot-desc"><Desc desc="Evening" time="18:00 - 22:00"/></td>);
-            }
+            let tds = this.createTds(i);
+            tds.unshift(this.createRowDescription(_.description));
             rows.push(<tr key={i}>{ tds }</tr>)
         });
         return rows;
     }
 
+    createRowDescription(desc){
+        let random = Math.floor(Math.random() * 1000);
+        if(desc === "Anytime"){
+            return <td key={random} styleName="timeslot-desc"><Anytime /></td>;
+        }
+        else {
+            let info = this.state.timeDescriptions[desc].desc;
+            let time = this.state.timeDescriptions[desc].times;
+            return <td key={random} styleName="timeslot-desc"><Desc desc={ info } time={ time }/></td>
+        }
+    }
+
     createTds(i) {
         let data = this.state.tableBodyData[this.state.tableIndex];
         return data.map((details, j) => {
-            let charge = details[i].charge === 0 ? <p>Free</p> : !details[i].charge ? <p>N/A</p> : <p>&pound;{ details[i].charge }</p>;
+            let charge = details[i].charge === 0 ? <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>Free</p> : !details[i].charge ? <p>N/A</p> : <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;{ details[i].charge }</p>;
             return (<td key={j} styleName="timeslot">{ charge }</td>)
         });
     }
@@ -57,157 +52,6 @@ class TableBody extends React.Component {
         return(
             <tbody styleName="date-picker-tbody">
                 { this.createRows() }
-                <tr>
-                    <td styleName="timeslot-desc">
-                        <Desc desc="Same day time slot" time="4:30PM - 10PM"/>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" ref="testes" onClick={TableBody.toggleSelected.bind(this)}>&pound;29.99</p>
-                    </td>
-                    <td styleName="timeslot">
-
-                    </td>
-                    <td styleName="timeslot">
-
-                    </td>
-                    <td styleName="timeslot">
-
-                    </td>
-                    <td styleName="timeslot">
-
-                    </td>
-                    <td styleName="timeslot">
-
-                    </td>
-                    <td styleName="timeslot">
-
-                    </td>
-                </tr>
-                <tr>
-                    <td styleName="timeslot-desc">
-                        <Anytime />
-                    </td>
-                    <td styleName="timeslot">
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;9.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;4.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound; Free</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound; Free</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound; Free</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;4.99</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td styleName="timeslot-desc">
-                        <Desc desc="Morning" time="07:00 - 12:00"/>
-                    </td>
-                    <td styleName="timeslot">
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;29.98</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;24.98</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;24.98</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td styleName="timeslot-desc">
-                        <Desc desc="Lunch" time="10:00 - 14:00"/>
-                    </td>
-                    <td styleName="timeslot">
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;29.98</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;24.98</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;24.98</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td styleName="timeslot-desc">
-                        <Desc desc="Afternoon" time="12:00 - 17:00"/>
-                    </td>
-                    <td styleName="timeslot">
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;29.98</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;24.98</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;24.98</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td styleName="timeslot-desc">
-                        <Desc desc="Evening" time="18:00 - 22:00"/>
-                    </td>
-                    <td styleName="timeslot">
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;29.98</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;24.98</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;19.99</p>
-                    </td>
-                    <td styleName="timeslot">
-                        <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;24.98</p>
-                    </td>
-                </tr>
             </tbody>
         );
     }
@@ -216,12 +60,14 @@ class TableBody extends React.Component {
 
 TableBody.defaultProps = {
     tableDisplayIndex : 0,
+    timeDescriptions : {},
     tableBodyData : []
 };
 
 TableBody.propTypes = {
     tableDisplayIndex : React.PropTypes.number.isRequired,
-    tableBodyData : React.PropTypes.arrayOf(React.PropTypes.array).isRequired
+    tableBodyData : React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
+    timeDescriptions : React.PropTypes.object
 };
 
 TableBody.toggleSelected = function(e) {
