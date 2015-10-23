@@ -21,6 +21,12 @@ export default class PickerContainer extends React.Component {
         };
     }
 
+    componentWillUnmount() {
+        if(typeof this.state.unsubscribe === "function") {
+            this.state.unsubscribe();
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
 
         if(Object.keys(nextProps).length) {

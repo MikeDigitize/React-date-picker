@@ -20554,6 +20554,13 @@
 	    }
 
 	    _createClass(PickerContainer, [{
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            if (typeof this.state.unsubscribe === "function") {
+	                this.state.unsubscribe();
+	            }
+	        }
+	    }, {
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
 	            var _this = this;
@@ -20752,8 +20759,8 @@
 	        _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(tableDisplayIndex));
 	        this.state = {
 	            dateRanges: ranges,
-	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
-	            tableDisplayIndex: tableDisplayIndex
+	            tableDisplayIndex: tableDisplayIndex,
+	            basketTotal: _storesPickerStore2["default"].getState().basketTotal
 	        };
 	    }
 
@@ -20768,7 +20775,9 @@
 	                    tableDisplayIndex: this.state.tableDisplayIndex
 	                }),
 	                _react2["default"].createElement(_TableTableContainer2["default"], null),
-	                _react2["default"].createElement(_SummarySummary2["default"], null)
+	                _react2["default"].createElement(_SummarySummary2["default"], {
+	                    basketTotal: this.state.basketTotal
+	                })
 	            );
 	        }
 	    }]);
@@ -24294,7 +24303,9 @@
 	    _createClass(DateRange, [{
 	        key: "componentWillUnmount",
 	        value: function componentWillUnmount() {
-	            this.state.unsubscribe();
+	            if (typeof this.state.unsubscribe === "function") {
+	                this.state.unsubscribe();
+	            }
 	        }
 	    }, {
 	        key: "onTableDisplayIndexUpdate",
@@ -24641,7 +24652,9 @@
 	    _createClass(TableBody, [{
 	        key: "componentWillUnmount",
 	        value: function componentWillUnmount() {
-	            this.state.unsubscribe();
+	            if (typeof this.state.unsubscribe === "function") {
+	                this.state.unsubscribe();
+	            }
 	        }
 	    }, {
 	        key: "onTableDisplayIndexUpdate",
@@ -24770,7 +24783,7 @@
 	TableBody.propTypes = {
 	    tableDisplayIndex: _react2["default"].PropTypes.number.isRequired,
 	    tableBodyData: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.array).isRequired,
-	    timeDescriptions: _react2["default"].PropTypes.object
+	    timeDescriptions: _react2["default"].PropTypes.object.isRequired
 	};
 
 	TableBody.toggleSelected = function (e) {
@@ -24837,6 +24850,10 @@
 	        _classCallCheck(this, SameDayDesc);
 
 	        _get(Object.getPrototypeOf(SameDayDesc.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            desc: this.props.desc,
+	            time: this.props.time
+	        };
 	    }
 
 	    _createClass(SameDayDesc, [{
@@ -24848,12 +24865,12 @@
 	                _react2["default"].createElement(
 	                    "p",
 	                    { styleName: "time-desc" },
-	                    this.props.desc
+	                    this.state.desc
 	                ),
 	                _react2["default"].createElement(
 	                    "p",
 	                    { styleName: "time" },
-	                    this.props.time
+	                    this.state.time
 	                ),
 	                _react2["default"].createElement("p", { styleName: "extra-info" })
 	            );
@@ -24862,6 +24879,16 @@
 
 	    return SameDayDesc;
 	})(_react2["default"].Component);
+
+	SameDayDesc.defaultProps = {
+	    desc: "",
+	    time: ""
+	};
+
+	SameDayDesc.propTypes = {
+	    desc: _react2["default"].PropTypes.string.isRequired,
+	    time: _react2["default"].PropTypes.string.isRequired
+	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(SameDayDesc, _descriptionStyles2["default"]);
 	module.exports = exports["default"];
@@ -25210,12 +25237,12 @@
 	var Summary = (function (_React$Component) {
 	    _inherits(Summary, _React$Component);
 
-	    function Summary() {
+	    function Summary(props) {
 	        _classCallCheck(this, Summary);
 
-	        _get(Object.getPrototypeOf(Summary.prototype), "constructor", this).call(this);
+	        _get(Object.getPrototypeOf(Summary.prototype), "constructor", this).call(this, props);
 	        this.state = {
-	            basketTotal: 0,
+	            basketTotal: this.props.basketTotal,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTotalUpdate.bind(this))
 	        };
 	    }
@@ -25223,7 +25250,9 @@
 	    _createClass(Summary, [{
 	        key: "componentWillUnmount",
 	        value: function componentWillUnmount() {
-	            this.state.unsubscribe();
+	            if (typeof this.state.unsubscribe === "function") {
+	                this.state.unsubscribe();
+	            }
 	        }
 	    }, {
 	        key: "onTotalUpdate",
@@ -25266,6 +25295,7 @@
 	                        _react2["default"].createElement(
 	                            "span",
 	                            { styleName: "summary-price" },
+	                            "£",
 	                            this.state.basketTotal
 	                        )
 	                    )
@@ -25276,6 +25306,14 @@
 
 	    return Summary;
 	})(_react2["default"].Component);
+
+	Summary.defaultProps = {
+	    basketTotal: 0
+	};
+
+	Summary.propTypes = {
+	    basketTotal: _react2["default"].PropTypes.number.isRequired
+	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(Summary, _summaryStyles2["default"]);
 	module.exports = exports["default"];

@@ -16,7 +16,9 @@ class DateRange extends React.Component {
     }
 
     componentWillUnmount() {
-        this.state.unsubscribe();
+        if(typeof this.state.unsubscribe === "function") {
+            this.state.unsubscribe();
+        }
     }
 
     onTableDisplayIndexUpdate() {

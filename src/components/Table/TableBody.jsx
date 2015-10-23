@@ -20,7 +20,9 @@ class TableBody extends React.Component {
     }
 
     componentWillUnmount() {
-        this.state.unsubscribe();
+        if(typeof this.state.unsubscribe === "function") {
+            this.state.unsubscribe();
+        }
     }
 
     onTableDisplayIndexUpdate() {
@@ -111,7 +113,7 @@ TableBody.defaultProps = {
 TableBody.propTypes = {
     tableDisplayIndex : React.PropTypes.number.isRequired,
     tableBodyData : React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
-    timeDescriptions : React.PropTypes.object
+    timeDescriptions : React.PropTypes.object.isRequired
 };
 
 TableBody.toggleSelected = function(e) {

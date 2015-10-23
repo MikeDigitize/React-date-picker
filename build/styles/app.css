@@ -158,7 +158,9 @@ body {
     ._2ov1icXwgaSbINDvctnl-W ._16ev4A4zbVxa782BG6rEwq ._17Oslj9Asc7k4sY1nehkuW {
       margin-right: 50px; }
     ._2ov1icXwgaSbINDvctnl-W ._16ev4A4zbVxa782BG6rEwq ._1X8ETpdII5jGksb51q-xXj {
-      font-weight: bold; }
+      font-weight: bold;
+      display: inline-block;
+      width: 25px; }
 body { padding: 20px; }
 .timeslot-selected {
   color: #fff !important;

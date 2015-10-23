@@ -20,8 +20,8 @@ class Picker extends React.Component {
         DatePickerStore.dispatch(updateTableIndex(tableDisplayIndex));
         this.state = {
             dateRanges : ranges,
-            tableHeadData : DatePickerStore.getState().tableHeadData,
-            tableDisplayIndex : tableDisplayIndex
+            tableDisplayIndex : tableDisplayIndex,
+            basketTotal : DatePickerStore.getState().basketTotal
         };
     }
 
@@ -33,7 +33,9 @@ class Picker extends React.Component {
                     tableDisplayIndex={ this.state.tableDisplayIndex }
                 />
                 <Table />
-                <Summary />
+                <Summary
+                    basketTotal={ this.state.basketTotal }
+                />
             </section>
         );
     }
