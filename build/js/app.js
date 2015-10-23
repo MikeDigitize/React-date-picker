@@ -20760,6 +20760,7 @@
 	        this.state = {
 	            dateRanges: ranges,
 	            tableDisplayIndex: tableDisplayIndex,
+	            discountTotal: _storesPickerStore2["default"].getState().chosenTimeslot.charge || 0,
 	            basketTotal: _storesPickerStore2["default"].getState().basketTotal
 	        };
 	    }
@@ -20776,7 +20777,8 @@
 	                }),
 	                _react2["default"].createElement(_TableTableContainer2["default"], null),
 	                _react2["default"].createElement(_SummarySummary2["default"], {
-	                    basketTotal: this.state.basketTotal
+	                    basketTotal: this.state.basketTotal,
+	                    discountTotal: this.state.discountTotal
 	                })
 	            );
 	        }
@@ -23491,7 +23493,8 @@
 	        dateRanges: (0, _pickerDataStores.dateRanges)(state.dateRanges, action),
 	        tableHeadData: (0, _pickerDataStores.tableHeadData)(state.tableHeadData, action),
 	        tableBodyData: (0, _pickerDataStores.tableBodyData)(state.tableBodyData, action),
-	        timeDescriptions: (0, _pickerDataStores.timeDescriptions)(state.timeDescriptions, action)
+	        timeDescriptions: (0, _pickerDataStores.timeDescriptions)(state.timeDescriptions, action),
+	        chosenTimeslot: (0, _pickerDataStores.chosenTimeslot)(state.chosenTimeslot, action)
 	    };
 	}
 
@@ -24129,6 +24132,7 @@
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
 	exports.timeDescriptions = timeDescriptions;
+	exports.chosenTimeslot = chosenTimeslot;
 
 	function totalWeeks() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -24202,6 +24206,18 @@
 	    }
 	}
 
+	function chosenTimeslot() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWCHOSENTIMELOT":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
 /***/ },
 /* 235 */
 /***/ function(module, exports) {
@@ -24217,12 +24233,14 @@
 	exports.timeDescriptions = timeDescriptions;
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
+	exports.chosenTimeslot = chosenTimeslot;
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDATERANGES = "NEWDATERANGES";
 	var NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 	var NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 	var NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
+	var NEWCHOSENTIMELOT = "NEWCHOSENTIMELOT";
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24246,6 +24264,10 @@
 
 	function tableBodyData(data) {
 	    return { state: data, type: NEWTABLEBODYDATA };
+	}
+
+	function chosenTimeslot(data) {
+	    return { state: data, type: NEWCHOSENTIMELOT };
 	}
 
 /***/ },
@@ -24431,7 +24453,8 @@
 	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
 	            tableBodyData: _storesPickerStore2["default"].getState().tableBodyData,
 	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
-	            timeDescriptions: _storesPickerStore2["default"].getState().timeDescriptions
+	            timeDescriptions: _storesPickerStore2["default"].getState().timeDescriptions,
+	            selectedTimeslot: {}
 	        };
 	    }
 
@@ -24448,7 +24471,8 @@
 	                _react2["default"].createElement(_TableTableBody2["default"], {
 	                    tableBodyData: this.state.tableBodyData,
 	                    tableDisplayIndex: this.state.tableDisplayIndex,
-	                    timeDescriptions: this.state.timeDescriptions
+	                    timeDescriptions: this.state.timeDescriptions,
+	                    selectedTimeslot: this.state.selectedTimeslot
 	                })
 	            );
 	        }
@@ -24633,6 +24657,8 @@
 
 	var _actionsExternalActions = __webpack_require__(251);
 
+	var _actionsPickerActions = __webpack_require__(235);
+
 	__webpack_require__(246);
 
 	var TableBody = (function (_React$Component) {
@@ -24646,7 +24672,7 @@
 	            tableBodyData: this.props.tableBodyData,
 	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            timeDescriptions: this.props.timeDescriptions,
-	            selectedTimeslot: {},
+	            selectedTimeslot: this.props.selectedTimeslot,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this))
 	        };
 	    }
@@ -24744,6 +24770,8 @@
 	    }, {
 	        key: "findTimeslot",
 	        value: function findTimeslot(target) {
+	            var _this3 = this;
+
 	            var ref = target.getAttribute("data-ref");
 	            var selectedTimeslot = [];
 	            this.state.tableBodyData[this.state.tableDisplayIndex].forEach(function (data) {
@@ -24762,7 +24790,10 @@
 	            }
 	            this.setState({
 	                selectedTimeslot: selectedTimeslot
+	            }, function () {
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.chosenTimeslot)(_this3.state.selectedTimeslot));
 	            });
+
 	            console.log("target!", selectedTimeslot);
 	        }
 	    }, {
@@ -24782,13 +24813,15 @@
 	TableBody.defaultProps = {
 	    tableDisplayIndex: 0,
 	    timeDescriptions: {},
-	    tableBodyData: []
+	    tableBodyData: [],
+	    selectedTimeslot: {}
 	};
 
 	TableBody.propTypes = {
 	    tableDisplayIndex: _react2["default"].PropTypes.number.isRequired,
 	    tableBodyData: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.array).isRequired,
-	    timeDescriptions: _react2["default"].PropTypes.object.isRequired
+	    timeDescriptions: _react2["default"].PropTypes.object.isRequired,
+	    selectedTimeslot: _react2["default"].PropTypes.object.isRequired
 	};
 
 	TableBody.toggleSelected = function (e) {
@@ -25248,7 +25281,8 @@
 	        _get(Object.getPrototypeOf(Summary.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            basketTotal: this.props.basketTotal,
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTotalUpdate.bind(this))
+	            discountTotal: this.props.discountTotal,
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onUpdate.bind(this))
 	        };
 	    }
 
@@ -25260,10 +25294,11 @@
 	            }
 	        }
 	    }, {
-	        key: "onTotalUpdate",
-	        value: function onTotalUpdate() {
+	        key: "onUpdate",
+	        value: function onUpdate() {
 	            this.setState({
-	                basketTotal: _storesPickerStore2["default"].getState().basketTotal
+	                basketTotal: _storesPickerStore2["default"].getState().basketTotal,
+	                discountTotal: _storesPickerStore2["default"].getState().chosenTimeslot.charge || 0
 	            });
 	        }
 	    }, {
@@ -25286,7 +25321,8 @@
 	                        _react2["default"].createElement(
 	                            "span",
 	                            { styleName: "summary-price" },
-	                            "-"
+	                            "£",
+	                            this.state.discountTotal
 	                        )
 	                    ),
 	                    _react2["default"].createElement(

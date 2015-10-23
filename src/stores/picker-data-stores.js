@@ -51,3 +51,12 @@ export function timeDescriptions(state = {}, action = {}) {
             return state;
     }
 }
+
+export function chosenTimeslot(state = {}, action = {}) {
+    switch(action.type) {
+        case "NEWCHOSENTIMELOT" :
+            return action.state;
+        default :
+            return state;
+    }
+}

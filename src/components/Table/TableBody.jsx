@@ -5,6 +5,7 @@ import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
 import DatePickerStore from "../../stores/PickerStore";
 import { addToBasketTotal, subtractFromBasketTotal } from "../../actions/external-actions";
+import { chosenTimeslot } from "../../actions/picker-actions";
 import "../../utils/classList-polyfill";
 
 class TableBody extends React.Component {
@@ -15,7 +16,7 @@ class TableBody extends React.Component {
             tableBodyData : this.props.tableBodyData,
             tableDisplayIndex : this.props.tableDisplayIndex,
             timeDescriptions : this.props.timeDescriptions,
-            selectedTimeslot : {},
+            selectedTimeslot : this.props.selectedTimeslot,
             unsubscribe : DatePickerStore.subscribe(this.onTableDisplayIndexUpdate.bind(this))
         };
     }
@@ -95,7 +96,10 @@ class TableBody extends React.Component {
         }
         this.setState({
             selectedTimeslot : selectedTimeslot
+        }, () => {
+            DatePickerStore.dispatch(chosenTimeslot(this.state.selectedTimeslot));
         });
+
         console.log("target!", selectedTimeslot);
     };
 
@@ -112,13 +116,15 @@ class TableBody extends React.Component {
 TableBody.defaultProps = {
     tableDisplayIndex : 0,
     timeDescriptions : {},
-    tableBodyData : []
+    tableBodyData : [],
+    selectedTimeslot : {}
 };
 
 TableBody.propTypes = {
     tableDisplayIndex : React.PropTypes.number.isRequired,
     tableBodyData : React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
-    timeDescriptions : React.PropTypes.object.isRequired
+    timeDescriptions : React.PropTypes.object.isRequired,
+    selectedTimeslot :  React.PropTypes.object.isRequired
 };
 
 TableBody.toggleSelected = function(e) {

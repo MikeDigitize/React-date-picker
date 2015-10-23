@@ -21,6 +21,7 @@ class Picker extends React.Component {
         this.state = {
             dateRanges : ranges,
             tableDisplayIndex : tableDisplayIndex,
+            discountTotal : DatePickerStore.getState().chosenTimeslot.charge || 0,
             basketTotal : DatePickerStore.getState().basketTotal
         };
     }
@@ -35,6 +36,7 @@ class Picker extends React.Component {
                 <Table />
                 <Summary
                     basketTotal={ this.state.basketTotal }
+                    discountTotal={ this.state.discountTotal }
                 />
             </section>
         );
