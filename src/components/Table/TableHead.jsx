@@ -8,7 +8,7 @@ class TableHead extends React.Component {
         super(props);
         this.state = {
             unsubscribe : DatePickerStore.subscribe(this.updateTableIndex.bind(this)),
-            tableDisplayIndex : this.props.tableIndex,
+            tableDisplayIndex : this.props.tableDisplayIndex,
             tableHeadData : this.props.tableHeadData
         };
     }

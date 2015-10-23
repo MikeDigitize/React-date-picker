@@ -64,11 +64,11 @@
 
 	var _PickerPickerContainer2 = _interopRequireDefault(_PickerPickerContainer);
 
-	var _stylesGlobal = __webpack_require__(249);
+	var _stylesGlobal = __webpack_require__(252);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
 
-	var _utilsGetConfig = __webpack_require__(250);
+	var _utilsGetConfig = __webpack_require__(253);
 
 	var config = undefined;
 
@@ -20522,13 +20522,17 @@
 
 	var _Picker2 = _interopRequireDefault(_Picker);
 
+	var _PickerClosed = __webpack_require__(250);
+
+	var _PickerClosed2 = _interopRequireDefault(_PickerClosed);
+
 	var _storesPickerStore = __webpack_require__(223);
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
 	var _actionsPickerActions = __webpack_require__(235);
 
-	var _actionsExternalActions = __webpack_require__(248);
+	var _actionsExternalActions = __webpack_require__(251);
 
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
@@ -20630,15 +20634,7 @@
 	        key: "render",
 	        value: function render() {
 	            if (this.state.pickerState.closed) {
-	                return _react2["default"].createElement(
-	                    "div",
-	                    null,
-	                    _react2["default"].createElement(
-	                        "p",
-	                        null,
-	                        "Closed"
-	                    )
-	                );
+	                return _react2["default"].createElement(_PickerClosed2["default"], null);
 	            } else if (this.state.pickerState.thirdparty) {
 	                return _react2["default"].createElement(
 	                    "div",
@@ -20737,6 +20733,10 @@
 
 	var _TableTableContainer2 = _interopRequireDefault(_TableTableContainer);
 
+	var _SummarySummary = __webpack_require__(248);
+
+	var _SummarySummary2 = _interopRequireDefault(_SummarySummary);
+
 	var Picker = (function (_React$Component) {
 	    _inherits(Picker, _React$Component);
 
@@ -20744,16 +20744,16 @@
 	        _classCallCheck(this, Picker);
 
 	        _get(Object.getPrototypeOf(Picker.prototype), "constructor", this).call(this);
-	        var tableIndex = _storesPickerStore2["default"].getState().tableDisplayIndex;
+	        var tableDisplayIndex = _storesPickerStore2["default"].getState().tableDisplayIndex;
 	        var ranges = _storesPickerStore2["default"].getState().dateRanges;
-	        if (tableIndex >= ranges.length) {
-	            tableIndex = ranges.length - 1;
+	        if (tableDisplayIndex >= ranges.length) {
+	            tableDisplayIndex = ranges.length - 1;
 	        }
-	        _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(tableIndex));
+	        _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(tableDisplayIndex));
 	        this.state = {
 	            dateRanges: ranges,
 	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
-	            tableIndex: tableIndex
+	            tableDisplayIndex: tableDisplayIndex
 	        };
 	    }
 
@@ -20765,9 +20765,10 @@
 	                { styleName: "date-picker" },
 	                _react2["default"].createElement(_DateRangeDateRange2["default"], {
 	                    dateRanges: this.state.dateRanges,
-	                    tableIndex: this.state.tableIndex
+	                    tableDisplayIndex: this.state.tableDisplayIndex
 	                }),
-	                _react2["default"].createElement(_TableTableContainer2["default"], null)
+	                _react2["default"].createElement(_TableTableContainer2["default"], null),
+	                _react2["default"].createElement(_SummarySummary2["default"], null)
 	            );
 	        }
 	    }]);
@@ -23451,7 +23452,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"timeslot-selected":"_1_i9rYWlxWAu7qy-QKg5qW","icon-tick2":"_6oEWH3PxmJ2ZdzkzXpBJz","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv"};
+	module.exports = {"timeslot-selected":"_1_i9rYWlxWAu7qy-QKg5qW","icon-tick2":"_6oEWH3PxmJ2ZdzkzXpBJz","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv","date-picker-closed":"_1RLvasQ2_ORGKHTkfRoisz","date-picker-closed-text":"_2yiu8PoIECOUO7nvxoJttb"};
 
 /***/ },
 /* 223 */
@@ -24285,7 +24286,7 @@
 	        _get(Object.getPrototypeOf(DateRange.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            dates: this.props.dateRanges,
-	            index: this.props.tableIndex,
+	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this))
 	        };
 	    }
@@ -24299,7 +24300,7 @@
 	        key: "onTableDisplayIndexUpdate",
 	        value: function onTableDisplayIndexUpdate() {
 	            this.setState({
-	                index: _storesPickerStore2["default"].getState().tableDisplayIndex
+	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
 	            });
 	        }
 	    }, {
@@ -24308,9 +24309,9 @@
 	            var _this = this;
 
 	            this.setState({
-	                index: this.state.index === 0 ? this.state.dates.length - 1 : --this.state.index
+	                tableDisplayIndex: this.state.tableDisplayIndex === 0 ? this.state.dates.length - 1 : --this.state.tableDisplayIndex
 	            }, function () {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(_this.state.index));
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(_this.state.tableDisplayIndex));
 	            });
 	        }
 	    }, {
@@ -24319,9 +24320,9 @@
 	            var _this2 = this;
 
 	            this.setState({
-	                index: this.state.index === this.state.dates.length - 1 ? 0 : ++this.state.index
+	                tableDisplayIndex: this.state.tableDisplayIndex === this.state.dates.length - 1 ? 0 : ++this.state.tableDisplayIndex
 	            }, function () {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(_this2.state.index));
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(_this2.state.tableDisplayIndex));
 	            });
 	        }
 	    }, {
@@ -24334,7 +24335,7 @@
 	                _react2["default"].createElement(
 	                    "p",
 	                    { styleName: "date-range" },
-	                    this.state.dates[this.state.index]
+	                    this.state.dates[this.state.tableDisplayIndex]
 	                ),
 	                _react2["default"].createElement("span", { styleName: "date-range-right date-range-ctrl", className: "icon-right", onClick: this.nextweek.bind(this) })
 	            );
@@ -24346,12 +24347,12 @@
 
 	DateRange.defaultProps = {
 	    dateRanges: [],
-	    tableIndex: 0
+	    tableDisplayIndex: 0
 	};
 
 	DateRange.propTypes = {
 	    dateRanges: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.string).isRequired,
-	    tableIndex: _react2["default"].PropTypes.number.isRequired
+	    tableDisplayIndex: _react2["default"].PropTypes.number.isRequired
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(DateRange, _dateRangeStyles2["default"], { allowMultiple: true });
@@ -24418,7 +24419,7 @@
 	        this.state = {
 	            tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
 	            tableBodyData: _storesPickerStore2["default"].getState().tableBodyData,
-	            tableIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
+	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
 	            timeDescriptions: _storesPickerStore2["default"].getState().timeDescriptions
 	        };
 	    }
@@ -24431,11 +24432,11 @@
 	                { styleName: "date-picker-table" },
 	                _react2["default"].createElement(_TableTableHead2["default"], {
 	                    tableHeadData: this.state.tableHeadData,
-	                    tableIndex: this.state.tableIndex
+	                    tableDisplayIndex: this.state.tableDisplayIndex
 	                }),
 	                _react2["default"].createElement(_TableTableBody2["default"], {
 	                    tableBodyData: this.state.tableBodyData,
-	                    tableIndex: this.state.tableIndex,
+	                    tableDisplayIndex: this.state.tableDisplayIndex,
 	                    timeDescriptions: this.state.timeDescriptions
 	                })
 	            );
@@ -24493,7 +24494,7 @@
 	        _get(Object.getPrototypeOf(TableHead.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.updateTableIndex.bind(this)),
-	            tableDisplayIndex: this.props.tableIndex,
+	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            tableHeadData: this.props.tableHeadData
 	        };
 	    }
@@ -24630,7 +24631,7 @@
 	        _get(Object.getPrototypeOf(TableBody.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            tableBodyData: this.props.tableBodyData,
-	            tableIndex: this.props.tableDisplayIndex,
+	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            timeDescriptions: this.props.timeDescriptions,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this))
 	        };
@@ -24644,9 +24645,8 @@
 	    }, {
 	        key: "onTableDisplayIndexUpdate",
 	        value: function onTableDisplayIndexUpdate() {
-	            console.log("update table index", _storesPickerStore2["default"].getState().tableDisplayIndex);
 	            this.setState({
-	                tableIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
+	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
 	            });
 	        }
 	    }, {
@@ -24655,7 +24655,7 @@
 	            var _this = this;
 
 	            var rows = [];
-	            var data = this.state.tableBodyData[this.state.tableIndex];
+	            var data = this.state.tableBodyData[this.state.tableDisplayIndex];
 	            data[0].forEach(function (_, i) {
 	                var tds = _this.createTds(i);
 	                tds.unshift(_this.createRowDescription(_.description, i));
@@ -24692,7 +24692,7 @@
 	        value: function createTds(i) {
 	            var _this2 = this;
 
-	            var data = this.state.tableBodyData[this.state.tableIndex];
+	            var data = this.state.tableBodyData[this.state.tableDisplayIndex];
 	            return data.map(function (details, j) {
 	                var tdContent = undefined;
 	                if (details[i].charge === 0) {
@@ -24750,6 +24750,9 @@
 
 	TableBody.toggleSelected = function (e) {
 	    var target = e.target || e.srcElement;
+	    if (target.tagName === "SPAN") {
+	        target = target.parentNode;
+	    }
 	    target.classList.toggle("timeslot-selected");
 	};
 
@@ -25138,6 +25141,164 @@
 
 /***/ },
 /* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _summaryStyles = __webpack_require__(249);
+
+	var _summaryStyles2 = _interopRequireDefault(_summaryStyles);
+
+	var Summary = (function (_React$Component) {
+	    _inherits(Summary, _React$Component);
+
+	    function Summary() {
+	        _classCallCheck(this, Summary);
+
+	        _get(Object.getPrototypeOf(Summary.prototype), "constructor", this).apply(this, arguments);
+	    }
+
+	    _createClass(Summary, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "div",
+	                { styleName: "picker-summary-container" },
+	                _react2["default"].createElement(
+	                    "div",
+	                    { styleName: "picker-summary" },
+	                    _react2["default"].createElement(
+	                        "div",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "span",
+	                            { styleName: "summary-title" },
+	                            "Delivery"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "span",
+	                            { styleName: "summary-price" },
+	                            "-"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "div",
+	                        null,
+	                        _react2["default"].createElement(
+	                            "span",
+	                            { styleName: "summary-title" },
+	                            "Total inc. delivery"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "span",
+	                            { styleName: "summary-price" },
+	                            "-"
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Summary;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(Summary, _summaryStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
+/* 249 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"picker-summary-container":"_2ov1icXwgaSbINDvctnl-W","picker-summary":"_16ev4A4zbVxa782BG6rEwq","summary-title":"_17Oslj9Asc7k4sY1nehkuW","summary-price":"_1X8ETpdII5jGksb51q-xXj"};
+
+/***/ },
+/* 250 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _pickerStyles = __webpack_require__(222);
+
+	var _pickerStyles2 = _interopRequireDefault(_pickerStyles);
+
+	var PickerClosed = (function (_React$Component) {
+	    _inherits(PickerClosed, _React$Component);
+
+	    function PickerClosed() {
+	        _classCallCheck(this, PickerClosed);
+
+	        _get(Object.getPrototypeOf(PickerClosed.prototype), "constructor", this).apply(this, arguments);
+	    }
+
+	    _createClass(PickerClosed, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "div",
+	                { styleName: "date-picker-closed" },
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "date-picker-closed-text" },
+	                    "Enter your delivery address and we'll show you when we can deliver"
+	                )
+	            );
+	        }
+	    }]);
+
+	    return PickerClosed;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(PickerClosed, _pickerStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
+/* 251 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -25159,13 +25320,13 @@
 	}
 
 /***/ },
-/* 249 */
+/* 252 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 250 */
+/* 253 */
 /***/ function(module, exports) {
 
 	'use strict';

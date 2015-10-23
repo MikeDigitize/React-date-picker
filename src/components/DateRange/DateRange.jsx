@@ -10,7 +10,7 @@ class DateRange extends React.Component {
         super(props);
         this.state = {
             dates : this.props.dateRanges,
-            index : this.props.tableIndex,
+            tableDisplayIndex : this.props.tableDisplayIndex,
             unsubscribe : DatePickerStore.subscribe(this.onTableDisplayIndexUpdate.bind(this))
         };
     }
@@ -21,23 +21,23 @@ class DateRange extends React.Component {
 
     onTableDisplayIndexUpdate() {
         this.setState({
-            index : DatePickerStore.getState().tableDisplayIndex
+            tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex
         });
     }
 
     prevweek() {
         this.setState({
-           index : this.state.index === 0 ? this.state.dates.length - 1 : --this.state.index
+           tableDisplayIndex : this.state.tableDisplayIndex === 0 ? this.state.dates.length - 1 : --this.state.tableDisplayIndex
         }, () => {
-            DatePickerStore.dispatch(updateTableIndex(this.state.index));
+            DatePickerStore.dispatch(updateTableIndex(this.state.tableDisplayIndex));
         });
     }
 
     nextweek() {
         this.setState({
-            index : this.state.index === this.state.dates.length - 1 ? 0 : ++this.state.index
+            tableDisplayIndex : this.state.tableDisplayIndex === this.state.dates.length - 1 ? 0 : ++this.state.tableDisplayIndex
         }, () => {
-            DatePickerStore.dispatch(updateTableIndex(this.state.index));
+            DatePickerStore.dispatch(updateTableIndex(this.state.tableDisplayIndex));
         });
     }
 
@@ -45,7 +45,7 @@ class DateRange extends React.Component {
         return(
             <div styleName="date-range-select">
                 <span styleName="date-range-left date-range-ctrl" className="icon-left" onClick={ this.prevweek.bind(this)}></span>
-                    <p styleName="date-range">{ this.state.dates[this.state.index] }</p>
+                    <p styleName="date-range">{ this.state.dates[this.state.tableDisplayIndex] }</p>
                 <span styleName="date-range-right date-range-ctrl" className="icon-right" onClick={ this.nextweek.bind(this)}></span>
             </div>
         );
@@ -55,12 +55,12 @@ class DateRange extends React.Component {
 
 DateRange.defaultProps = {
     dateRanges : [],
-    tableIndex : 0
+    tableDisplayIndex : 0
 };
 
 DateRange.propTypes = {
     dateRanges : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-    tableIndex : React.PropTypes.number.isRequired
+    tableDisplayIndex : React.PropTypes.number.isRequired
 };
 
 export default CSSModule(DateRange, styles, { allowMultiple : true });

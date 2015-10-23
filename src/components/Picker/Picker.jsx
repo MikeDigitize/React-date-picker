@@ -6,21 +6,22 @@ import { updateTableIndex } from "../../actions/picker-actions";
 
 import DateRange from "../DateRange/DateRange";
 import Table from "../Table/TableContainer";
+import Summary from "../Summary/Summary";
 
 class Picker extends React.Component {
 
     constructor() {
         super();
-        let tableIndex = DatePickerStore.getState().tableDisplayIndex;
+        let tableDisplayIndex = DatePickerStore.getState().tableDisplayIndex;
         let ranges = DatePickerStore.getState().dateRanges;
-        if(tableIndex >= ranges.length) {
-            tableIndex = ranges.length -1;
+        if(tableDisplayIndex >= ranges.length) {
+            tableDisplayIndex = ranges.length -1;
         }
-        DatePickerStore.dispatch(updateTableIndex(tableIndex));
+        DatePickerStore.dispatch(updateTableIndex(tableDisplayIndex));
         this.state = {
             dateRanges : ranges,
             tableHeadData : DatePickerStore.getState().tableHeadData,
-            tableIndex : tableIndex
+            tableDisplayIndex : tableDisplayIndex
         };
     }
 
@@ -29,9 +30,10 @@ class Picker extends React.Component {
             <section styleName="date-picker">
                 <DateRange
                     dateRanges={ this.state.dateRanges }
-                    tableIndex={ this.state.tableIndex }
+                    tableDisplayIndex={ this.state.tableDisplayIndex }
                 />
                 <Table />
+                <Summary />
             </section>
         );
     }

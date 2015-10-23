@@ -1,0 +1,15 @@
+.picker-summary-container {
+  font-size: 15px;
+  padding: 20px;
+  .picker-summary {
+    float: right;
+    width: 300px;
+    text-align: right;
+    .summary-title {
+      margin-right: 50px;
+    }
+    .summary-price {
+      font-weight: bold;
+    }
+  }
+}

@@ -12,7 +12,7 @@ class TableBody extends React.Component {
         super(props);
         this.state = {
             tableBodyData : this.props.tableBodyData,
-            tableIndex : this.props.tableDisplayIndex,
+            tableDisplayIndex : this.props.tableDisplayIndex,
             timeDescriptions : this.props.timeDescriptions,
             unsubscribe : DatePickerStore.subscribe(this.onTableDisplayIndexUpdate.bind(this))
         };
@@ -23,15 +23,14 @@ class TableBody extends React.Component {
     }
 
     onTableDisplayIndexUpdate() {
-        console.log("update table index", DatePickerStore.getState().tableDisplayIndex)
         this.setState({
-            tableIndex : DatePickerStore.getState().tableDisplayIndex
+            tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex
         });
     }
 
     createRows() {
         let rows = [];
-        let data = this.state.tableBodyData[this.state.tableIndex];
+        let data = this.state.tableBodyData[this.state.tableDisplayIndex];
         data[0].forEach((_, i) => {
             let tds = this.createTds(i);
             tds.unshift(this.createRowDescription(_.description, i));
@@ -53,7 +52,7 @@ class TableBody extends React.Component {
     }
 
     createTds(i) {
-        let data = this.state.tableBodyData[this.state.tableIndex];
+        let data = this.state.tableBodyData[this.state.tableDisplayIndex];
         return data.map((details, j) => {
             let tdContent;
             if(details[i].charge === 0){
@@ -93,6 +92,9 @@ TableBody.propTypes = {
 
 TableBody.toggleSelected = function(e) {
     let target = e.target || e.srcElement;
+    if(target.tagName === "SPAN") {
+        target = target.parentNode;
+    }
     target.classList.toggle("timeslot-selected");
 };
 
