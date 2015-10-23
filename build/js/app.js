@@ -20628,7 +20628,7 @@
 	    }, {
 	        key: "onNewData",
 	        value: function onNewData() {
-	            //console.log("store updated", DatePickerStore.getState());
+	            console.log("store updated", _storesPickerStore2["default"].getState());
 	        }
 	    }, {
 	        key: "render",
@@ -24739,6 +24739,9 @@
 	                }
 	            });
 	            selectedTimeslot = selectedTimeslot.shift();
+	            if (!target.classList.contains("timeslot-selected")) {
+	                selectedTimeslot = {};
+	            }
 	            this.setState({
 	                selectedTimeslot: selectedTimeslot
 	            });
@@ -25200,16 +25203,36 @@
 
 	var _summaryStyles2 = _interopRequireDefault(_summaryStyles);
 
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
 	var Summary = (function (_React$Component) {
 	    _inherits(Summary, _React$Component);
 
 	    function Summary() {
 	        _classCallCheck(this, Summary);
 
-	        _get(Object.getPrototypeOf(Summary.prototype), "constructor", this).apply(this, arguments);
+	        _get(Object.getPrototypeOf(Summary.prototype), "constructor", this).call(this);
+	        this.state = {
+	            basketTotal: 0,
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTotalUpdate.bind(this))
+	        };
 	    }
 
 	    _createClass(Summary, [{
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            this.state.unsubscribe();
+	        }
+	    }, {
+	        key: "onTotalUpdate",
+	        value: function onTotalUpdate() {
+	            this.setState({
+	                basketTotal: _storesPickerStore2["default"].getState().basketTotal
+	            });
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
@@ -25243,7 +25266,7 @@
 	                        _react2["default"].createElement(
 	                            "span",
 	                            { styleName: "summary-price" },
-	                            "-"
+	                            this.state.basketTotal
 	                        )
 	                    )
 	                )

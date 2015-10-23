@@ -83,6 +83,9 @@ class TableBody extends React.Component {
             }
         });
         selectedTimeslot = selectedTimeslot.shift();
+        if(!target.classList.contains("timeslot-selected")){
+            selectedTimeslot = {};
+        }
         this.setState({
             selectedTimeslot : selectedTimeslot
         });

@@ -1,9 +1,7 @@
 import React from "react";
-import CSSModule from "react-css-modules";
-import styles from "./summary-styles";
 import DatePickerStore from "../../stores/PickerStore";
 
-class Summary extends React.Component {
+export default class SummaryContainer extends React.Component {
 
     constructor(){
         super();
@@ -40,5 +38,3 @@ class Summary extends React.Component {
         );
     }
 }
-
-export default CSSModule(Summary, styles);
