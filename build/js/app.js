@@ -24618,11 +24618,50 @@
 
 	            var rows = [];
 	            var data = this.state.tableBodyData[this.state.tableIndex];
+	            var random = Math.floor(Math.random() * 100);
 	            data[0].forEach(function (_, i) {
+	                var tds = _this.createTds(i, _.description);
+	                if (_.description === "SameDay") {
+	                    tds.unshift(_react2["default"].createElement(
+	                        "td",
+	                        { key: random, styleName: "timeslot-desc" },
+	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Same day time slot", time: "4:30PM - 10PM" })
+	                    ));
+	                } else if (_.description === "Anytime") {
+	                    tds.unshift(_react2["default"].createElement(
+	                        "td",
+	                        { key: random, styleName: "timeslot-desc" },
+	                        _react2["default"].createElement(_DeliveryDescriptionsAnytime2["default"], null)
+	                    ));
+	                } else if (_.description === "Morning") {
+	                    tds.unshift(_react2["default"].createElement(
+	                        "td",
+	                        { key: random, styleName: "timeslot-desc" },
+	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Morning", time: "07:00 - 12:00" })
+	                    ));
+	                } else if (_.description === "Lunch") {
+	                    tds.unshift(_react2["default"].createElement(
+	                        "td",
+	                        { key: random, styleName: "timeslot-desc" },
+	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Lunch", time: "10:00 - 14:00" })
+	                    ));
+	                } else if (_.description === "Afternoon") {
+	                    tds.unshift(_react2["default"].createElement(
+	                        "td",
+	                        { key: random, styleName: "timeslot-desc" },
+	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Afternoon", time: "12:00 - 17:00" })
+	                    ));
+	                } else if (_.description === "Evening") {
+	                    tds.unshift(_react2["default"].createElement(
+	                        "td",
+	                        { key: random, styleName: "timeslot-desc" },
+	                        _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: "Evening", time: "18:00 - 22:00" })
+	                    ));
+	                }
 	                rows.push(_react2["default"].createElement(
 	                    "tr",
 	                    { key: i },
-	                    _this.createTds(i)
+	                    tds
 	                ));
 	            });
 	            return rows;
@@ -24632,15 +24671,14 @@
 	        value: function createTds(i) {
 	            var data = this.state.tableBodyData[this.state.tableIndex];
 	            return data.map(function (details, j) {
-	                console.log(details[i]);
 	                var charge = details[i].charge === 0 ? _react2["default"].createElement(
 	                    "p",
 	                    null,
-	                    "N/A"
+	                    "Free"
 	                ) : !details[i].charge ? _react2["default"].createElement(
 	                    "p",
 	                    null,
-	                    "Free"
+	                    "N/A"
 	                ) : _react2["default"].createElement(
 	                    "p",
 	                    null,

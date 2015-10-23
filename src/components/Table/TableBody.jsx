@@ -19,8 +19,28 @@ class TableBody extends React.Component {
     createRows() {
         let rows = [];
         let data = this.state.tableBodyData[this.state.tableIndex];
+        let random = Math.floor(Math.random() * 100);
         data[0].forEach((_, i) => {
-            rows.push(<tr key={i}>{ this.createTds(i) }</tr>)
+            let tds = this.createTds(i, _.description);
+            if(_.description === "SameDay"){
+                tds.unshift(<td key={random} styleName="timeslot-desc"><Desc desc="Same day time slot" time="4:30PM - 10PM"/></td>);
+            }
+            else if(_.description === "Anytime") {
+                tds.unshift(<td key={random} styleName="timeslot-desc"><Anytime /></td>);
+            }
+            else if(_.description === "Morning"){
+                tds.unshift(<td key={random} styleName="timeslot-desc"><Desc desc="Morning" time="07:00 - 12:00"/></td>);
+            }
+            else if(_.description === "Lunch"){
+                tds.unshift(<td key={random} styleName="timeslot-desc"><Desc desc="Lunch" time="10:00 - 14:00"/></td>);
+            }
+            else if(_.description === "Afternoon"){
+                tds.unshift(<td key={random} styleName="timeslot-desc"><Desc desc="Afternoon" time="12:00 - 17:00"/></td>);
+            }
+            else if(_.description === "Evening"){
+                tds.unshift(<td key={random} styleName="timeslot-desc"><Desc desc="Evening" time="18:00 - 22:00"/></td>);
+            }
+            rows.push(<tr key={i}>{ tds }</tr>)
         });
         return rows;
     }
@@ -28,8 +48,7 @@ class TableBody extends React.Component {
     createTds(i) {
         let data = this.state.tableBodyData[this.state.tableIndex];
         return data.map((details, j) => {
-            console.log(details[i]);
-            let charge = details[i].charge === 0 ? <p>N/A</p> : !details[i].charge ? <p>Free</p> : <p>&pound;{ details[i].charge }</p>;
+            let charge = details[i].charge === 0 ? <p>Free</p> : !details[i].charge ? <p>N/A</p> : <p>&pound;{ details[i].charge }</p>;
             return (<td key={j} styleName="timeslot">{ charge }</td>)
         });
     }

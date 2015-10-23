@@ -13,11 +13,11 @@ if(args.length !== 3) {
 }
 
 var loadCalendarConfig = new Promise(function(res, rej) {
-    fs.readFile("../data/" + args[0], function(e, data) { e ? console.log(e) : res(data); });
+    fs.readFile("../data/" + args[0] + ".json", function(e, data) { e ? console.log(e) : res(data); });
 });
 
 var loadDatesConfig = new Promise(function(res, rej) {
-    fs.readFile("../data/" + args[1], function(e, data) { e ? console.log(e) : res(data); });
+    fs.readFile("../data/" + args[1] + ".json", function(e, data) { e ? console.log(e) : res(data); });
 });
 
 var filename = args[2];
@@ -33,7 +33,7 @@ Promise.all([loadCalendarConfig, loadDatesConfig]).then(function(data) {
 
 function startParsingData(config, dayConfigs) {
 
-    var dates = utils.sortDates(config, dayConfigs);;
+    var dates = utils.sortDates(config, dayConfigs);
 
     pickerData.basketTotal = config.orderTotals.OverallTotalNumber;
     pickerData.state = config.calendarConfiguration.dataState;

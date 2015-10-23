@@ -315,15 +315,13 @@
                 },
                 {
                     "description": "Anytime",
-                    "hasTimeslot": true,
-                    "shortdate": "20151011",
-                    "charge": 0
+                    "hasTimeslot": false,
+                    "shortdate": "20151011"
                 },
                 {
                     "description": "Morning",
-                    "hasTimeslot": true,
-                    "shortdate": "20151011",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151011"
                 },
                 {
                     "description": "Lunch",
@@ -332,15 +330,13 @@
                 },
                 {
                     "description": "Afternoon",
-                    "hasTimeslot": true,
-                    "shortdate": "20151011",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151011"
                 },
                 {
                     "description": "Evening",
-                    "hasTimeslot": true,
-                    "shortdate": "20151011",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151011"
                 }
             ],
             [
@@ -655,65 +651,55 @@
             [
                 {
                     "description": "Anytime",
-                    "hasTimeslot": true,
-                    "shortdate": "20151021",
-                    "charge": 0
+                    "hasTimeslot": false,
+                    "shortdate": "20151021"
                 },
                 {
                     "description": "Morning",
-                    "hasTimeslot": true,
-                    "shortdate": "20151021",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151021"
                 },
                 {
                     "description": "Lunch",
-                    "hasTimeslot": true,
-                    "shortdate": "20151021",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151021"
                 },
                 {
                     "description": "Afternoon",
-                    "hasTimeslot": true,
-                    "shortdate": "20151021",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151021"
                 },
                 {
                     "description": "Evening",
-                    "hasTimeslot": true,
-                    "shortdate": "20151021",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151021"
                 }
             ],
             [
                 {
                     "description": "Anytime",
-                    "hasTimeslot": true,
-                    "shortdate": "20151022",
-                    "charge": 0
+                    "hasTimeslot": false,
+                    "shortdate": "20151022"
                 },
                 {
                     "description": "Morning",
-                    "hasTimeslot": true,
-                    "shortdate": "20151022",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151022"
                 },
                 {
                     "description": "Lunch",
-                    "hasTimeslot": true,
-                    "shortdate": "20151022",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151022"
                 },
                 {
                     "description": "Afternoon",
-                    "hasTimeslot": true,
-                    "shortdate": "20151022",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151022"
                 },
                 {
                     "description": "Evening",
-                    "hasTimeslot": true,
-                    "shortdate": "20151022",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151022"
                 }
             ]
         ],
@@ -721,65 +707,55 @@
             [
                 {
                     "description": "Anytime",
-                    "hasTimeslot": true,
-                    "shortdate": "20151023",
-                    "charge": 0
+                    "hasTimeslot": false,
+                    "shortdate": "20151023"
                 },
                 {
                     "description": "Morning",
-                    "hasTimeslot": true,
-                    "shortdate": "20151023",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151023"
                 },
                 {
                     "description": "Lunch",
-                    "hasTimeslot": true,
-                    "shortdate": "20151023",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151023"
                 },
                 {
                     "description": "Afternoon",
-                    "hasTimeslot": true,
-                    "shortdate": "20151023",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151023"
                 },
                 {
                     "description": "Evening",
-                    "hasTimeslot": true,
-                    "shortdate": "20151023",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151023"
                 }
             ],
             [
                 {
                     "description": "Anytime",
-                    "hasTimeslot": true,
-                    "shortdate": "20151024",
-                    "charge": 0
+                    "hasTimeslot": false,
+                    "shortdate": "20151024"
                 },
                 {
                     "description": "Morning",
-                    "hasTimeslot": true,
-                    "shortdate": "20151024",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151024"
                 },
                 {
                     "description": "Lunch",
-                    "hasTimeslot": true,
-                    "shortdate": "20151024",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151024"
                 },
                 {
                     "description": "Afternoon",
-                    "hasTimeslot": true,
-                    "shortdate": "20151024",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151024"
                 },
                 {
                     "description": "Evening",
-                    "hasTimeslot": true,
-                    "shortdate": "20151024",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151024"
                 }
             ],
             [
@@ -1171,79 +1147,67 @@
             [
                 {
                     "description": "Anytime",
-                    "hasTimeslot": true,
-                    "shortdate": "20151106",
-                    "charge": 0
+                    "hasTimeslot": false,
+                    "shortdate": "20151106"
                 },
                 {
                     "description": "Morning",
-                    "hasTimeslot": true,
-                    "shortdate": "20151106",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151106"
                 },
                 {
                     "description": "Lunch",
-                    "hasTimeslot": true,
-                    "shortdate": "20151106",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151106"
                 },
                 {
                     "description": "Afternoon",
-                    "hasTimeslot": true,
-                    "shortdate": "20151106",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151106"
                 },
                 {
                     "description": "Evening",
-                    "hasTimeslot": true,
-                    "shortdate": "20151106",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151106"
                 }
             ],
             [
                 {
                     "description": "Anytime",
-                    "hasTimeslot": true,
-                    "shortdate": "20151107",
-                    "charge": 0
+                    "hasTimeslot": false,
+                    "shortdate": "20151107"
                 },
                 {
                     "description": "Morning",
-                    "hasTimeslot": true,
-                    "shortdate": "20151107",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151107"
                 },
                 {
                     "description": "Lunch",
-                    "hasTimeslot": true,
-                    "shortdate": "20151107",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151107"
                 },
                 {
                     "description": "Afternoon",
-                    "hasTimeslot": true,
-                    "shortdate": "20151107",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151107"
                 },
                 {
                     "description": "Evening",
-                    "hasTimeslot": true,
-                    "shortdate": "20151107",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151107"
                 }
             ],
             [
                 {
                     "description": "Anytime",
-                    "hasTimeslot": true,
-                    "shortdate": "20151108",
-                    "charge": 0
+                    "hasTimeslot": false,
+                    "shortdate": "20151108"
                 },
                 {
                     "description": "Morning",
-                    "hasTimeslot": true,
-                    "shortdate": "20151108",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151108"
                 },
                 {
                     "description": "Lunch",
@@ -1252,47 +1216,40 @@
                 },
                 {
                     "description": "Afternoon",
-                    "hasTimeslot": true,
-                    "shortdate": "20151108",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151108"
                 },
                 {
                     "description": "Evening",
-                    "hasTimeslot": true,
-                    "shortdate": "20151108",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151108"
                 }
             ],
             [
                 {
                     "description": "Anytime",
-                    "hasTimeslot": true,
-                    "shortdate": "20151109",
-                    "charge": 0
+                    "hasTimeslot": false,
+                    "shortdate": "20151109"
                 },
                 {
                     "description": "Morning",
-                    "hasTimeslot": true,
-                    "shortdate": "20151109",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151109"
                 },
                 {
                     "description": "Lunch",
-                    "hasTimeslot": true,
-                    "shortdate": "20151109",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151109"
                 },
                 {
                     "description": "Afternoon",
-                    "hasTimeslot": true,
-                    "shortdate": "20151109",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151109"
                 },
                 {
                     "description": "Evening",
-                    "hasTimeslot": true,
-                    "shortdate": "20151109",
-                    "charge": 19.99
+                    "hasTimeslot": false,
+                    "shortdate": "20151109"
                 }
             ],
             [

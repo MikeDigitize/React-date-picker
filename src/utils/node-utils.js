@@ -20,7 +20,7 @@ function sortDates(config, dateConfig) {
     dates = fillInGaps(days);
     dates = padLastWeek(dates);
     dates = formatDates(dates);
-    dates = includeDayTypeCharges(charges);
+    dates = includeDayTypeCharges(charges, config.calendarConfiguration.availableDays);
     return dates;
 }
 
@@ -209,8 +209,7 @@ function numOfWeeksInConfig() {
     return dates.length % 7 === 0 ? dates.length / 7 : Math.floor(dates.length / 7) + 1;
 }
 
-function includeDayTypeCharges(charges) {
-    console.log(charges, dates);
+function includeDayTypeCharges(charges, config) {
     return dates.map(date => {
         return Object.assign({}, date, { dayTypeCharge : date.desc === "N/A" ? 0 : charges[date.desc].charge });
     });
