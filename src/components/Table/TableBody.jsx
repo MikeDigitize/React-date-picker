@@ -4,6 +4,7 @@ import styles from "./table-body-styles";
 import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
 import DatePickerStore from "../../stores/PickerStore";
+import { addToBasketTotal, subtractFromBasketTotal } from "../../actions/external-actions";
 import "../../utils/classList-polyfill";
 
 class TableBody extends React.Component {
@@ -85,8 +86,12 @@ class TableBody extends React.Component {
             }
         });
         selectedTimeslot = selectedTimeslot.shift();
+        DatePickerStore.dispatch(subtractFromBasketTotal(this.state.selectedTimeslot.charge || 0));
         if(!target.classList.contains("timeslot-selected")){
             selectedTimeslot = {};
+        }
+        else {
+            DatePickerStore.dispatch(addToBasketTotal(selectedTimeslot.charge));
         }
         this.setState({
             selectedTimeslot : selectedTimeslot

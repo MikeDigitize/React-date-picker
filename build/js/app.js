@@ -24631,6 +24631,8 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
+	var _actionsExternalActions = __webpack_require__(251);
+
 	__webpack_require__(246);
 
 	var TableBody = (function (_React$Component) {
@@ -24752,8 +24754,11 @@
 	                }
 	            });
 	            selectedTimeslot = selectedTimeslot.shift();
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(this.state.selectedTimeslot.charge || 0));
 	            if (!target.classList.contains("timeslot-selected")) {
 	                selectedTimeslot = {};
+	            } else {
+	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketTotal)(selectedTimeslot.charge));
 	            }
 	            this.setState({
 	                selectedTimeslot: selectedTimeslot
@@ -25398,15 +25403,27 @@
 	});
 	exports.availableDates = availableDates;
 	exports.basketTotal = basketTotal;
+	exports.addToBasketTotal = addToBasketTotal;
+	exports.subtractFromBasketTotal = subtractFromBasketTotal;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
+	var ADDTOTOTAL = "ADDTOTOTAL";
+	var SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
 	}
 
-	function basketTotal(data) {
-	    return { state: data, type: BASKETTOTALUPDATE };
+	function basketTotal(data, action) {
+	    return { state: data, type: action || BASKETTOTALUPDATE };
+	}
+
+	function addToBasketTotal(data) {
+	    return { state: data, type: ADDTOTOTAL };
+	}
+
+	function subtractFromBasketTotal(data) {
+	    return { state: data, type: SUBTRACTFROMTOTAL };
 	}
 
 /***/ },
