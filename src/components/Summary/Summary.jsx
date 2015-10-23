@@ -23,7 +23,7 @@ class Summary extends React.Component {
     onUpdate() {
         this.setState({
             basketTotal : DatePickerStore.getState().basketTotal,
-            discountTotal : DatePickerStore.getState().chosenTimeslot.charge || 0
+            discountTotal : DatePickerStore.getState().chosenTimeslotData.charge || 0
         });
     }
 

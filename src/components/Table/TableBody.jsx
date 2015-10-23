@@ -5,7 +5,7 @@ import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
 import DatePickerStore from "../../stores/PickerStore";
 import { addToBasketTotal, subtractFromBasketTotal } from "../../actions/external-actions";
-import { chosenTimeslot } from "../../actions/picker-actions";
+import { chosenTimeslotData } from "../../actions/picker-actions";
 import "../../utils/classList-polyfill";
 
 class TableBody extends React.Component {
@@ -97,7 +97,7 @@ class TableBody extends React.Component {
         this.setState({
             selectedTimeslot : selectedTimeslot
         }, () => {
-            DatePickerStore.dispatch(chosenTimeslot(this.state.selectedTimeslot));
+            DatePickerStore.dispatch(chosenTimeslotData(this.state.selectedTimeslot));
         });
 
         console.log("target!", selectedTimeslot);

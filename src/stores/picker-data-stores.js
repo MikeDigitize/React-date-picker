@@ -52,9 +52,9 @@ export function timeDescriptions(state = {}, action = {}) {
     }
 }
 
-export function chosenTimeslot(state = {}, action = {}) {
+export function chosenTimeslotData(state = {}, action = {}) {
     switch(action.type) {
-        case "NEWCHOSENTIMELOT" :
+        case "NEWCHOSENTIMELOTDATA" :
             return action.state;
         default :
             return state;

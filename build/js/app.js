@@ -20522,7 +20522,7 @@
 
 	var _Picker2 = _interopRequireDefault(_Picker);
 
-	var _PickerClosed = __webpack_require__(250);
+	var _PickerClosed = __webpack_require__(251);
 
 	var _PickerClosed2 = _interopRequireDefault(_PickerClosed);
 
@@ -20532,7 +20532,7 @@
 
 	var _actionsPickerActions = __webpack_require__(235);
 
-	var _actionsExternalActions = __webpack_require__(251);
+	var _actionsExternalActions = __webpack_require__(246);
 
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
@@ -20740,7 +20740,7 @@
 
 	var _TableTableContainer2 = _interopRequireDefault(_TableTableContainer);
 
-	var _SummarySummary = __webpack_require__(248);
+	var _SummarySummary = __webpack_require__(249);
 
 	var _SummarySummary2 = _interopRequireDefault(_SummarySummary);
 
@@ -20760,7 +20760,7 @@
 	        this.state = {
 	            dateRanges: ranges,
 	            tableDisplayIndex: tableDisplayIndex,
-	            discountTotal: _storesPickerStore2["default"].getState().chosenTimeslot.charge || 0,
+	            discountTotal: _storesPickerStore2["default"].getState().chosenTimeslotData.charge || 0,
 	            basketTotal: _storesPickerStore2["default"].getState().basketTotal
 	        };
 	    }
@@ -23494,7 +23494,7 @@
 	        tableHeadData: (0, _pickerDataStores.tableHeadData)(state.tableHeadData, action),
 	        tableBodyData: (0, _pickerDataStores.tableBodyData)(state.tableBodyData, action),
 	        timeDescriptions: (0, _pickerDataStores.timeDescriptions)(state.timeDescriptions, action),
-	        chosenTimeslot: (0, _pickerDataStores.chosenTimeslot)(state.chosenTimeslot, action)
+	        chosenTimeslotData: (0, _pickerDataStores.chosenTimeslotData)(state.chosenTimeslotData, action)
 	    };
 	}
 
@@ -24132,7 +24132,7 @@
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
 	exports.timeDescriptions = timeDescriptions;
-	exports.chosenTimeslot = chosenTimeslot;
+	exports.chosenTimeslotData = chosenTimeslotData;
 
 	function totalWeeks() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -24206,12 +24206,12 @@
 	    }
 	}
 
-	function chosenTimeslot() {
+	function chosenTimeslotData() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    switch (action.type) {
-	        case "NEWCHOSENTIMELOT":
+	        case "NEWCHOSENTIMELOTDATA":
 	            return action.state;
 	        default:
 	            return state;
@@ -24233,14 +24233,14 @@
 	exports.timeDescriptions = timeDescriptions;
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
-	exports.chosenTimeslot = chosenTimeslot;
+	exports.chosenTimeslotData = chosenTimeslotData;
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDATERANGES = "NEWDATERANGES";
 	var NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 	var NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 	var NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
-	var NEWCHOSENTIMELOT = "NEWCHOSENTIMELOT";
+	var NEWCHOSENTIMELOTDATA = "NEWCHOSENTIMELOTDATA";
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24266,8 +24266,8 @@
 	    return { state: data, type: NEWTABLEBODYDATA };
 	}
 
-	function chosenTimeslot(data) {
-	    return { state: data, type: NEWCHOSENTIMELOT };
+	function chosenTimeslotData(data) {
+	    return { state: data, type: NEWCHOSENTIMELOTDATA };
 	}
 
 /***/ },
@@ -24434,7 +24434,7 @@
 
 	var _TableTableBody2 = _interopRequireDefault(_TableTableBody);
 
-	var _tableStyles = __webpack_require__(247);
+	var _tableStyles = __webpack_require__(248);
 
 	var _tableStyles2 = _interopRequireDefault(_tableStyles);
 
@@ -24655,11 +24655,11 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsExternalActions = __webpack_require__(251);
+	var _actionsExternalActions = __webpack_require__(246);
 
 	var _actionsPickerActions = __webpack_require__(235);
 
-	__webpack_require__(246);
+	__webpack_require__(247);
 
 	var TableBody = (function (_React$Component) {
 	    _inherits(TableBody, _React$Component);
@@ -24791,7 +24791,7 @@
 	            this.setState({
 	                selectedTimeslot: selectedTimeslot
 	            }, function () {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.chosenTimeslot)(_this3.state.selectedTimeslot));
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.chosenTimeslotData)(_this3.state.selectedTimeslot));
 	            });
 
 	            console.log("target!", selectedTimeslot);
@@ -25022,6 +25022,40 @@
 /* 246 */
 /***/ function(module, exports) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.availableDates = availableDates;
+	exports.basketTotal = basketTotal;
+	exports.addToBasketTotal = addToBasketTotal;
+	exports.subtractFromBasketTotal = subtractFromBasketTotal;
+	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
+	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
+	var ADDTOTOTAL = "ADDTOTOTAL";
+	var SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
+
+	function availableDates(data) {
+	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
+	}
+
+	function basketTotal(data, action) {
+	    return { state: data, type: action || BASKETTOTALUPDATE };
+	}
+
+	function addToBasketTotal(data) {
+	    return { state: data, type: ADDTOTOTAL };
+	}
+
+	function subtractFromBasketTotal(data) {
+	    return { state: data, type: SUBTRACTFROMTOTAL };
+	}
+
+/***/ },
+/* 247 */
+/***/ function(module, exports) {
+
 	/*
 	    Classlist API for manipulating classes with DOM elements
 	    https://developer.mozilla.org/en/docs/Web/API/Element/classList
@@ -25230,14 +25264,14 @@
 	}
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-picker-table":"_2fFeFRwWZTf51bPpQfobX4"};
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25264,7 +25298,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _summaryStyles = __webpack_require__(249);
+	var _summaryStyles = __webpack_require__(250);
 
 	var _summaryStyles2 = _interopRequireDefault(_summaryStyles);
 
@@ -25298,7 +25332,7 @@
 	        value: function onUpdate() {
 	            this.setState({
 	                basketTotal: _storesPickerStore2["default"].getState().basketTotal,
-	                discountTotal: _storesPickerStore2["default"].getState().chosenTimeslot.charge || 0
+	                discountTotal: _storesPickerStore2["default"].getState().chosenTimeslotData.charge || 0
 	            });
 	        }
 	    }, {
@@ -25360,14 +25394,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"picker-summary-container":"_2ov1icXwgaSbINDvctnl-W","picker-summary":"_16ev4A4zbVxa782BG6rEwq","summary-title":"_17Oslj9Asc7k4sY1nehkuW","summary-price":"_1X8ETpdII5jGksb51q-xXj"};
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25427,40 +25461,6 @@
 
 	exports["default"] = (0, _reactCssModules2["default"])(PickerClosed, _pickerStyles2["default"]);
 	module.exports = exports["default"];
-
-/***/ },
-/* 251 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.availableDates = availableDates;
-	exports.basketTotal = basketTotal;
-	exports.addToBasketTotal = addToBasketTotal;
-	exports.subtractFromBasketTotal = subtractFromBasketTotal;
-	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
-	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
-	var ADDTOTOTAL = "ADDTOTOTAL";
-	var SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
-
-	function availableDates(data) {
-	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
-	}
-
-	function basketTotal(data, action) {
-	    return { state: data, type: action || BASKETTOTALUPDATE };
-	}
-
-	function addToBasketTotal(data) {
-	    return { state: data, type: ADDTOTOTAL };
-	}
-
-	function subtractFromBasketTotal(data) {
-	    return { state: data, type: SUBTRACTFROMTOTAL };
-	}
 
 /***/ },
 /* 252 */
