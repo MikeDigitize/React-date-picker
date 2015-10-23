@@ -24633,6 +24633,7 @@
 	            tableBodyData: this.props.tableBodyData,
 	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            timeDescriptions: this.props.timeDescriptions,
+	            selectedTimeslot: {},
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this))
 	        };
 	    }
@@ -24674,12 +24675,13 @@
 
 	            var data = this.state.tableBodyData[this.state.tableDisplayIndex];
 	            return data.map(function (details, j) {
-	                console.log(details[j]);
+	                var ref = i + "" + j;
 	                var tdContent = undefined;
 	                if (details[i].charge === 0) {
+	                    details[i].ref = ref;
 	                    tdContent = _react2["default"].createElement(
 	                        "p",
-	                        { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(_this2) },
+	                        { styleName: "delivery-selectable", "data-ref": ref, onClick: TableBody.toggleSelected.bind(_this2) },
 	                        "Free"
 	                    );
 	                } else if (!details[i].charge) {
@@ -24689,9 +24691,10 @@
 	                        "N/A"
 	                    );
 	                } else {
+	                    details[i].ref = ref;
 	                    tdContent = _react2["default"].createElement(
 	                        "p",
-	                        { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(_this2) },
+	                        { styleName: "delivery-selectable", "data-ref": ref, onClick: TableBody.toggleSelected.bind(_this2) },
 	                        "£",
 	                        details[i].charge
 	                    );
@@ -24706,7 +24709,7 @@
 	    }, {
 	        key: "createRowDescription",
 	        value: function createRowDescription(desc, i) {
-	            var random = Math.floor(Math.random() * 1000) + Math.floor(Math.random() * i + 1);
+	            var random = Math.floor(Math.random() * 1000) + Math.floor(Math.random() * 5000) + (i + 1);
 	            if (desc === "Anytime") {
 	                return _react2["default"].createElement(
 	                    "td",
@@ -24722,6 +24725,24 @@
 	                    _react2["default"].createElement(_DeliveryDescriptionsDesc2["default"], { desc: info, time: time })
 	                );
 	            }
+	        }
+	    }, {
+	        key: "findTimeslot",
+	        value: function findTimeslot(target) {
+	            var ref = target.getAttribute("data-ref");
+	            var selectedTimeslot = [];
+	            this.state.tableBodyData[this.state.tableDisplayIndex].forEach(function (data) {
+	                if (!selectedTimeslot.length) {
+	                    selectedTimeslot = data.filter(function (days) {
+	                        return days.ref === ref;
+	                    });
+	                }
+	            });
+	            selectedTimeslot = selectedTimeslot.shift();
+	            this.setState({
+	                selectedTimeslot: selectedTimeslot
+	            });
+	            console.log("target!", selectedTimeslot);
 	        }
 	    }, {
 	        key: "render",
@@ -24755,10 +24776,13 @@
 	        target = target.parentNode;
 	    }
 	    var currentTarget = document.querySelector(".timeslot-selected");
-	    if (currentTarget) {
+	    if (currentTarget && currentTarget !== target) {
 	        currentTarget.classList.toggle("timeslot-selected");
+	        target.classList.toggle("timeslot-selected");
+	    } else {
+	        target.classList.toggle("timeslot-selected");
 	    }
-	    target.classList.toggle("timeslot-selected");
+	    this.findTimeslot(target);
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(TableBody, _tableBodyStyles2["default"]);
