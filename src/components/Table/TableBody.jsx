@@ -13,8 +13,20 @@ class TableBody extends React.Component {
         this.state = {
             tableBodyData : this.props.tableBodyData,
             tableIndex : this.props.tableDisplayIndex,
-            timeDescriptions : this.props.timeDescriptions
+            timeDescriptions : this.props.timeDescriptions,
+            unsubscribe : DatePickerStore.subscribe(this.onTableDisplayIndexUpdate.bind(this))
         };
+    }
+
+    componentWillUnmount() {
+        this.state.unsubscribe();
+    }
+
+    onTableDisplayIndexUpdate() {
+        console.log("update table index", DatePickerStore.getState().tableDisplayIndex)
+        this.setState({
+            tableIndex : DatePickerStore.getState().tableDisplayIndex
+        });
     }
 
     createRows() {
@@ -22,14 +34,14 @@ class TableBody extends React.Component {
         let data = this.state.tableBodyData[this.state.tableIndex];
         data[0].forEach((_, i) => {
             let tds = this.createTds(i);
-            tds.unshift(this.createRowDescription(_.description));
+            tds.unshift(this.createRowDescription(_.description, i));
             rows.push(<tr key={i}>{ tds }</tr>)
         });
         return rows;
     }
 
-    createRowDescription(desc){
-        let random = Math.floor(Math.random() * 1000);
+    createRowDescription(desc, i){
+        let random = Math.floor(Math.random() * 1000) + Math.floor(Math.random() * i+1);
         if(desc === "Anytime"){
             return <td key={random} styleName="timeslot-desc"><Anytime /></td>;
         }
@@ -43,8 +55,17 @@ class TableBody extends React.Component {
     createTds(i) {
         let data = this.state.tableBodyData[this.state.tableIndex];
         return data.map((details, j) => {
-            let charge = details[i].charge === 0 ? <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>Free</p> : !details[i].charge ? <p>N/A</p> : <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;{ details[i].charge }</p>;
-            return (<td key={j} styleName="timeslot">{ charge }</td>)
+            let tdContent;
+            if(details[i].charge === 0){
+                tdContent = <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>Free</p>;
+            }
+            else if(!details[i].charge){
+                tdContent = <p styleName="delivery-non-selectable">N/A</p>;
+            }
+            else {
+                tdContent = <p styleName="delivery-selectable" onClick={TableBody.toggleSelected.bind(this)}>&pound;{ details[i].charge }</p>;
+            }
+            return (<td key={j} styleName="timeslot">{ tdContent }</td>)
         });
     }
 

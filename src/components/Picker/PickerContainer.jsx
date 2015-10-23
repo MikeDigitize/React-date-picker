@@ -99,7 +99,7 @@ export default class PickerContainer extends React.Component {
     }
 
     onNewData(){
-        console.log("store updated", DatePickerStore.getState());
+        //console.log("store updated", DatePickerStore.getState());
     }
 
     render() {

@@ -15,6 +15,7 @@
     padding-bottom: 15px;
     padding-right: 10px;
     border: 1px solid #e0e0e0;
+    .delivery-non-selectable { display: none }
     .delivery-selectable {
       text-align: center;
       cursor: pointer;

@@ -11,14 +11,15 @@ class App extends React.Component {
         this.state = {
             config : {}
         };
-        getData1().then(data => {
+        Promise.all([getData1(), getData2()]).then(data => {
             config = data;
         });
     }
 
     passNewConfig() {
+        let random = Math.floor(Math.random() * 2);
         this.setState({
-           config : config
+            config : config[random]
         });
     }
 

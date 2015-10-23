@@ -1,3 +1,6 @@
+body {
+  padding: 20px; }
+
 ._1_i9rYWlxWAu7qy-QKg5qW {
   color: #fff !important;
   background: #00b5e2 !important;
@@ -86,6 +89,8 @@
   padding-bottom: 15px;
   padding-right: 10px;
   border: 1px solid #e0e0e0; }
+  ._29vJ8JCK0woHtbMXWLpUK9 ._2nbCK7KDaiFms044UxcM1m ._2-_DwV3SrjiGf8gK8Qg_Vv {
+    display: none; }
   ._29vJ8JCK0woHtbMXWLpUK9 ._2nbCK7KDaiFms044UxcM1m ._1joTcdAy56WL7iY5YFerPM {
     text-align: center;
     cursor: pointer;
@@ -132,6 +137,7 @@
   border-collapse: collapse;
   border-spacing: 0;
   width: 100%; }
+body { padding: 20px; }
 .timeslot-selected {
   color: #fff !important;
   background: #00b5e2 !important;

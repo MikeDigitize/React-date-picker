@@ -82,7 +82,7 @@
 	        this.state = {
 	            config: {}
 	        };
-	        (0, _utilsGetConfig.getData1)().then(function (data) {
+	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)()]).then(function (data) {
 	            config = data;
 	        });
 	    }
@@ -90,8 +90,9 @@
 	    _createClass(App, [{
 	        key: "passNewConfig",
 	        value: function passNewConfig() {
+	            var random = Math.floor(Math.random() * 2);
 	            this.setState({
-	                config: config
+	                config: config[random]
 	            });
 	        }
 	    }, {
@@ -20623,7 +20624,7 @@
 	    }, {
 	        key: "onNewData",
 	        value: function onNewData() {
-	            console.log("store updated", _storesPickerStore2["default"].getState());
+	            //console.log("store updated", DatePickerStore.getState());
 	        }
 	    }, {
 	        key: "render",
@@ -24630,11 +24631,25 @@
 	        this.state = {
 	            tableBodyData: this.props.tableBodyData,
 	            tableIndex: this.props.tableDisplayIndex,
-	            timeDescriptions: this.props.timeDescriptions
+	            timeDescriptions: this.props.timeDescriptions,
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this))
 	        };
 	    }
 
 	    _createClass(TableBody, [{
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            this.state.unsubscribe();
+	        }
+	    }, {
+	        key: "onTableDisplayIndexUpdate",
+	        value: function onTableDisplayIndexUpdate() {
+	            console.log("update table index", _storesPickerStore2["default"].getState().tableDisplayIndex);
+	            this.setState({
+	                tableIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
+	            });
+	        }
+	    }, {
 	        key: "createRows",
 	        value: function createRows() {
 	            var _this = this;
@@ -24643,7 +24658,7 @@
 	            var data = this.state.tableBodyData[this.state.tableIndex];
 	            data[0].forEach(function (_, i) {
 	                var tds = _this.createTds(i);
-	                tds.unshift(_this.createRowDescription(_.description));
+	                tds.unshift(_this.createRowDescription(_.description, i));
 	                rows.push(_react2["default"].createElement(
 	                    "tr",
 	                    { key: i },
@@ -24654,8 +24669,8 @@
 	        }
 	    }, {
 	        key: "createRowDescription",
-	        value: function createRowDescription(desc) {
-	            var random = Math.floor(Math.random() * 1000);
+	        value: function createRowDescription(desc, i) {
+	            var random = Math.floor(Math.random() * 1000) + Math.floor(Math.random() * i + 1);
 	            if (desc === "Anytime") {
 	                return _react2["default"].createElement(
 	                    "td",
@@ -24679,24 +24694,31 @@
 
 	            var data = this.state.tableBodyData[this.state.tableIndex];
 	            return data.map(function (details, j) {
-	                var charge = details[i].charge === 0 ? _react2["default"].createElement(
-	                    "p",
-	                    { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(_this2) },
-	                    "Free"
-	                ) : !details[i].charge ? _react2["default"].createElement(
-	                    "p",
-	                    null,
-	                    "N/A"
-	                ) : _react2["default"].createElement(
-	                    "p",
-	                    { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(_this2) },
-	                    "£",
-	                    details[i].charge
-	                );
+	                var tdContent = undefined;
+	                if (details[i].charge === 0) {
+	                    tdContent = _react2["default"].createElement(
+	                        "p",
+	                        { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(_this2) },
+	                        "Free"
+	                    );
+	                } else if (!details[i].charge) {
+	                    tdContent = _react2["default"].createElement(
+	                        "p",
+	                        { styleName: "delivery-non-selectable" },
+	                        "N/A"
+	                    );
+	                } else {
+	                    tdContent = _react2["default"].createElement(
+	                        "p",
+	                        { styleName: "delivery-selectable", onClick: TableBody.toggleSelected.bind(_this2) },
+	                        "£",
+	                        details[i].charge
+	                    );
+	                }
 	                return _react2["default"].createElement(
 	                    "td",
 	                    { key: j, styleName: "timeslot" },
-	                    charge
+	                    tdContent
 	                );
 	            });
 	        }
@@ -24739,7 +24761,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"date-picker-tbody":"_29vJ8JCK0woHtbMXWLpUK9","timeslot-desc":"_2j2BD-de5vLVDb31Pa_GhM","timeslot":"_2nbCK7KDaiFms044UxcM1m","delivery-selectable":"_1joTcdAy56WL7iY5YFerPM","delivery-selected":"OjDALIjGZUOIa7p-dpptf"};
+	module.exports = {"date-picker-tbody":"_29vJ8JCK0woHtbMXWLpUK9","timeslot-desc":"_2j2BD-de5vLVDb31Pa_GhM","timeslot":"_2nbCK7KDaiFms044UxcM1m","delivery-non-selectable":"_2-_DwV3SrjiGf8gK8Qg_Vv","delivery-selectable":"_1joTcdAy56WL7iY5YFerPM","delivery-selected":"OjDALIjGZUOIa7p-dpptf"};
 
 /***/ },
 /* 243 */
