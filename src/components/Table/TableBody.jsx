@@ -20,18 +20,18 @@ class TableBody extends React.Component {
         let rows = [];
         let data = this.state.tableBodyData[this.state.tableIndex];
         data[0].forEach((_, i) => {
-            rows.push(<tr>{ this.createTds(i) }</tr>)
+            rows.push(<tr key={i}>{ this.createTds(i) }</tr>)
         });
         return rows;
     }
 
     createTds(i) {
-        var tds = [];
         let data = this.state.tableBodyData[this.state.tableIndex];
-        for(let j = 0; j < data.length; j++) {
-            tds.push(<td styleName="timeslot"><p>&pound;{data[j][i].charge}</p></td>)
-        }
-        return tds;
+        return data.map((details, j) => {
+            console.log(details[i]);
+            let charge = details[i].charge === 0 ? <p>N/A</p> : !details[i].charge ? <p>Free</p> : <p>&pound;{ details[i].charge }</p>;
+            return (<td key={j} styleName="timeslot">{ charge }</td>)
+        });
     }
 
     render() {

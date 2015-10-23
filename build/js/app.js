@@ -24621,7 +24621,7 @@
 	            data[0].forEach(function (_, i) {
 	                rows.push(_react2["default"].createElement(
 	                    "tr",
-	                    null,
+	                    { key: i },
 	                    _this.createTds(i)
 	                ));
 	            });
@@ -24630,21 +24630,29 @@
 	    }, {
 	        key: "createTds",
 	        value: function createTds(i) {
-	            var tds = [];
 	            var data = this.state.tableBodyData[this.state.tableIndex];
-	            for (var j = 0; j < data.length; j++) {
-	                tds.push(_react2["default"].createElement(
+	            return data.map(function (details, j) {
+	                console.log(details[i]);
+	                var charge = details[i].charge === 0 ? _react2["default"].createElement(
+	                    "p",
+	                    null,
+	                    "N/A"
+	                ) : !details[i].charge ? _react2["default"].createElement(
+	                    "p",
+	                    null,
+	                    "Free"
+	                ) : _react2["default"].createElement(
+	                    "p",
+	                    null,
+	                    "£",
+	                    details[i].charge
+	                );
+	                return _react2["default"].createElement(
 	                    "td",
-	                    { styleName: "timeslot" },
-	                    _react2["default"].createElement(
-	                        "p",
-	                        null,
-	                        "£",
-	                        data[j][i].charge
-	                    )
-	                ));
-	            }
-	            return tds;
+	                    { key: j, styleName: "timeslot" },
+	                    charge
+	                );
+	            });
 	        }
 	    }, {
 	        key: "render",
