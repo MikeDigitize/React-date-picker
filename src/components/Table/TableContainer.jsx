@@ -4,6 +4,7 @@ import TableHead from "../Table/TableHead";
 import TableBody from "../Table/TableBody";
 import styles from "./table-styles";
 import DatePickerStore from "../../stores/PickerStore";
+import { selectedTimeslotData } from "../../actions/picker-actions";
 
 class Table extends React.Component {
     constructor() {
@@ -13,7 +14,7 @@ class Table extends React.Component {
             tableBodyData : DatePickerStore.getState().tableBodyData,
             tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex,
             timeDescriptions : DatePickerStore.getState().timeDescriptions,
-            selectedTimeslot : {}
+            selectedTimeslotData : DatePickerStore.getState().selectedTimeslotData
         };
     }
 
@@ -28,7 +29,7 @@ class Table extends React.Component {
                     tableBodyData={ this.state.tableBodyData }
                     tableDisplayIndex={ this.state.tableDisplayIndex }
                     timeDescriptions={ this.state.timeDescriptions }
-                    selectedTimeslot={ this.state.selectedTimeslot }
+                    selectedTimeslotData={ this.state.selectedTimeslotData }
                 />
              </table>
         );

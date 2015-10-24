@@ -20635,7 +20635,7 @@
 	    }, {
 	        key: "onNewData",
 	        value: function onNewData() {
-	            console.log("store updated", _storesPickerStore2["default"].getState());
+	            //console.log("store updated", DatePickerStore.getState());
 	        }
 	    }, {
 	        key: "render",
@@ -20760,12 +20760,49 @@
 	        this.state = {
 	            dateRanges: ranges,
 	            tableDisplayIndex: tableDisplayIndex,
-	            discountTotal: _storesPickerStore2["default"].getState().chosenTimeslotData.charge || 0,
+	            discountTotal: _storesPickerStore2["default"].getState().selectedTimeslotData.charge || 0,
 	            basketTotal: _storesPickerStore2["default"].getState().basketTotal
 	        };
 	    }
 
 	    _createClass(Picker, [{
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            if (this.isTimeslotStillAvailable()) {
+	                console.log("still available!");
+	            } else {
+	                console.log("remove timeslot data!", this.isTimeslotStillAvailable());
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)({}));
+	            }
+	        }
+	    }, {
+	        key: "isTimeslotStillAvailable",
+	        value: function isTimeslotStillAvailable() {
+	            if (!Object.keys(_storesPickerStore2["default"].getState().selectedTimeslotData).length) {
+	                return false;
+	            }
+	            var matchingTimeslots = [];
+	            var current = {
+	                description: _storesPickerStore2["default"].getState().selectedTimeslotData.description,
+	                hasTimeslot: _storesPickerStore2["default"].getState().selectedTimeslotData.hasTimeslot,
+	                shortdate: _storesPickerStore2["default"].getState().selectedTimeslotData.shortdate
+	            };
+	            _storesPickerStore2["default"].getState().tableBodyData.forEach(function (data) {
+	                data.forEach(function (slots) {
+	                    if (!matchingTimeslots.length) {
+	                        matchingTimeslots = slots.filter(function (slot) {
+	                            return slot.description === current.description && slot.hasTimeslot === current.hasTimeslot && slot.shortdate === current.shortdate;
+	                        });
+	                    }
+	                });
+	            });
+	            if (matchingTimeslots.length) {
+	                return true;
+	            } else {
+	                return false;
+	            }
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
@@ -23494,7 +23531,8 @@
 	        tableHeadData: (0, _pickerDataStores.tableHeadData)(state.tableHeadData, action),
 	        tableBodyData: (0, _pickerDataStores.tableBodyData)(state.tableBodyData, action),
 	        timeDescriptions: (0, _pickerDataStores.timeDescriptions)(state.timeDescriptions, action),
-	        chosenTimeslotData: (0, _pickerDataStores.chosenTimeslotData)(state.chosenTimeslotData, action)
+	        selectedTimeslotData: (0, _pickerDataStores.selectedTimeslotData)(state.selectedTimeslotData, action),
+	        selectedTimeslot: (0, _pickerDataStores.selectedTimeslot)(state.selectedTimeslot, action)
 	    };
 	}
 
@@ -24132,7 +24170,8 @@
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
 	exports.timeDescriptions = timeDescriptions;
-	exports.chosenTimeslotData = chosenTimeslotData;
+	exports.selectedTimeslot = selectedTimeslot;
+	exports.selectedTimeslotData = selectedTimeslotData;
 
 	function totalWeeks() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -24206,12 +24245,24 @@
 	    }
 	}
 
-	function chosenTimeslotData() {
+	function selectedTimeslot() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? "" : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWCHOSENTIMESLOT":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function selectedTimeslotData() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    switch (action.type) {
-	        case "NEWCHOSENTIMELOTDATA":
+	        case "NEWCHOSENTIMESLOTDATA":
 	            return action.state;
 	        default:
 	            return state;
@@ -24233,14 +24284,16 @@
 	exports.timeDescriptions = timeDescriptions;
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
-	exports.chosenTimeslotData = chosenTimeslotData;
+	exports.selectedTimeslot = selectedTimeslot;
+	exports.selectedTimeslotData = selectedTimeslotData;
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDATERANGES = "NEWDATERANGES";
 	var NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 	var NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 	var NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
-	var NEWCHOSENTIMELOTDATA = "NEWCHOSENTIMELOTDATA";
+	var NEWCHOSENTIMELOT = "NEWCHOSENTIMELOT";
+	var NEWCHOSENTIMESLOTDATA = "NEWCHOSENTIMESLOTDATA";
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24266,8 +24319,12 @@
 	    return { state: data, type: NEWTABLEBODYDATA };
 	}
 
-	function chosenTimeslotData(data) {
-	    return { state: data, type: NEWCHOSENTIMELOTDATA };
+	function selectedTimeslot(data) {
+	    return { state: data, type: NEWCHOSENTIMELOT };
+	}
+
+	function selectedTimeslotData(data) {
+	    return { state: data, type: NEWCHOSENTIMESLOTDATA };
 	}
 
 /***/ },
@@ -24442,6 +24499,8 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
+	var _actionsPickerActions = __webpack_require__(235);
+
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
 
@@ -24454,7 +24513,7 @@
 	            tableBodyData: _storesPickerStore2["default"].getState().tableBodyData,
 	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
 	            timeDescriptions: _storesPickerStore2["default"].getState().timeDescriptions,
-	            selectedTimeslot: {}
+	            selectedTimeslotData: _storesPickerStore2["default"].getState().selectedTimeslotData
 	        };
 	    }
 
@@ -24472,7 +24531,7 @@
 	                    tableBodyData: this.state.tableBodyData,
 	                    tableDisplayIndex: this.state.tableDisplayIndex,
 	                    timeDescriptions: this.state.timeDescriptions,
-	                    selectedTimeslot: this.state.selectedTimeslot
+	                    selectedTimeslotData: this.state.selectedTimeslotData
 	                })
 	            );
 	        }
@@ -24672,7 +24731,7 @@
 	            tableBodyData: this.props.tableBodyData,
 	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            timeDescriptions: this.props.timeDescriptions,
-	            selectedTimeslot: this.props.selectedTimeslot,
+	            selectedTimeslotData: this.props.selectedTimeslotData,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this))
 	        };
 	    }
@@ -24773,28 +24832,28 @@
 	            var _this3 = this;
 
 	            var ref = target.getAttribute("data-ref");
-	            var selectedTimeslot = [];
+	            var selected = [];
 	            this.state.tableBodyData[this.state.tableDisplayIndex].forEach(function (data) {
-	                if (!selectedTimeslot.length) {
-	                    selectedTimeslot = data.filter(function (days) {
+	                if (!selected.length) {
+	                    selected = data.filter(function (days) {
 	                        return days.ref === ref;
 	                    });
 	                }
 	            });
-	            selectedTimeslot = selectedTimeslot.shift();
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(this.state.selectedTimeslot.charge || 0));
+	            selected = selected.shift();
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(this.state.selectedTimeslotData.charge || 0));
 	            if (!target.classList.contains("timeslot-selected")) {
-	                selectedTimeslot = {};
+	                selected = {};
 	            } else {
-	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketTotal)(selectedTimeslot.charge));
+	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketTotal)(selected.charge));
 	            }
 	            this.setState({
-	                selectedTimeslot: selectedTimeslot
+	                selectedTimeslotData: selected
 	            }, function () {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.chosenTimeslotData)(_this3.state.selectedTimeslot));
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)(_this3.state.selectedTimeslotData));
 	            });
 
-	            console.log("target!", selectedTimeslot);
+	            console.log("target!", selected);
 	        }
 	    }, {
 	        key: "render",
@@ -24814,14 +24873,14 @@
 	    tableDisplayIndex: 0,
 	    timeDescriptions: {},
 	    tableBodyData: [],
-	    selectedTimeslot: {}
+	    selectedTimeslotData: {}
 	};
 
 	TableBody.propTypes = {
 	    tableDisplayIndex: _react2["default"].PropTypes.number.isRequired,
 	    tableBodyData: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.array).isRequired,
 	    timeDescriptions: _react2["default"].PropTypes.object.isRequired,
-	    selectedTimeslot: _react2["default"].PropTypes.object.isRequired
+	    selectedTimeslotData: _react2["default"].PropTypes.object.isRequired
 	};
 
 	TableBody.toggleSelected = function (e) {
@@ -25332,7 +25391,7 @@
 	        value: function onUpdate() {
 	            this.setState({
 	                basketTotal: _storesPickerStore2["default"].getState().basketTotal,
-	                discountTotal: _storesPickerStore2["default"].getState().chosenTimeslotData.charge || 0
+	                discountTotal: _storesPickerStore2["default"].getState().selectedTimeslotData.charge || 0
 	            });
 	        }
 	    }, {

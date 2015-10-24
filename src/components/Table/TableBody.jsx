@@ -5,7 +5,7 @@ import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
 import DatePickerStore from "../../stores/PickerStore";
 import { addToBasketTotal, subtractFromBasketTotal } from "../../actions/external-actions";
-import { chosenTimeslotData } from "../../actions/picker-actions";
+import { selectedTimeslotData } from "../../actions/picker-actions";
 import "../../utils/classList-polyfill";
 
 class TableBody extends React.Component {
@@ -16,7 +16,7 @@ class TableBody extends React.Component {
             tableBodyData : this.props.tableBodyData,
             tableDisplayIndex : this.props.tableDisplayIndex,
             timeDescriptions : this.props.timeDescriptions,
-            selectedTimeslot : this.props.selectedTimeslot,
+            selectedTimeslotData : this.props.selectedTimeslotData,
             unsubscribe : DatePickerStore.subscribe(this.onTableDisplayIndexUpdate.bind(this))
         };
     }
@@ -78,29 +78,29 @@ class TableBody extends React.Component {
 
     findTimeslot(target) {
         let ref = target.getAttribute("data-ref");
-        let selectedTimeslot = [];
+        let selected = [];
         this.state.tableBodyData[this.state.tableDisplayIndex].forEach(data => {
-            if(!selectedTimeslot.length) {
-                selectedTimeslot = data.filter(days => {
+            if(!selected.length) {
+                selected = data.filter(days => {
                     return days.ref === ref;
                 });
             }
         });
-        selectedTimeslot = selectedTimeslot.shift();
-        DatePickerStore.dispatch(subtractFromBasketTotal(this.state.selectedTimeslot.charge || 0));
+        selected = selected.shift();
+        DatePickerStore.dispatch(subtractFromBasketTotal(this.state.selectedTimeslotData.charge || 0));
         if(!target.classList.contains("timeslot-selected")){
-            selectedTimeslot = {};
+            selected = {};
         }
         else {
-            DatePickerStore.dispatch(addToBasketTotal(selectedTimeslot.charge));
+            DatePickerStore.dispatch(addToBasketTotal(selected.charge));
         }
         this.setState({
-            selectedTimeslot : selectedTimeslot
+            selectedTimeslotData : selected
         }, () => {
-            DatePickerStore.dispatch(chosenTimeslotData(this.state.selectedTimeslot));
+            DatePickerStore.dispatch(selectedTimeslotData(this.state.selectedTimeslotData));
         });
 
-        console.log("target!", selectedTimeslot);
+        console.log("target!", selected);
     };
 
     render() {
@@ -117,14 +117,14 @@ TableBody.defaultProps = {
     tableDisplayIndex : 0,
     timeDescriptions : {},
     tableBodyData : [],
-    selectedTimeslot : {}
+    selectedTimeslotData : {}
 };
 
 TableBody.propTypes = {
     tableDisplayIndex : React.PropTypes.number.isRequired,
     tableBodyData : React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
     timeDescriptions : React.PropTypes.object.isRequired,
-    selectedTimeslot :  React.PropTypes.object.isRequired
+    selectedTimeslotData :  React.PropTypes.object.isRequired
 };
 
 TableBody.toggleSelected = function(e) {
