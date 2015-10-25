@@ -15,7 +15,7 @@ class Picker extends React.Component {
         let tableDisplayIndex = DatePickerStore.getState().tableDisplayIndex;
         let ranges = DatePickerStore.getState().dateRanges;
         if(tableDisplayIndex >= ranges.length) {
-            tableDisplayIndex = ranges.length -1;
+            tableDisplayIndex = 0;
         }
         DatePickerStore.dispatch(updateTableIndex(tableDisplayIndex));
 

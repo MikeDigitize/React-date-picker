@@ -36,9 +36,9 @@ class TableBody extends React.Component {
     createRows() {
         let rows = [];
         let data = this.state.tableBodyData[this.state.tableDisplayIndex];
-        data[0].forEach((_, i) => {
+        data[0].forEach((details, i) => {
             let tds = this.createTds(i);
-            tds.unshift(this.createRowDescription(_.description, i));
+            tds.unshift(this.createRowDescription(details.description, i));
             rows.push(<tr key={i}>{ tds }</tr>)
         });
         return rows;
@@ -46,19 +46,21 @@ class TableBody extends React.Component {
 
     createTds(i) {
         let data = this.state.tableBodyData[this.state.tableDisplayIndex];
+        let selectedRef = this.state.selectedTimeslotData.ref;
         return data.map((details, j) => {
             let ref = i + "" + j;
+            let className = selectedRef === ref ? "timeslot-selected" : "";
             let tdContent;
             if(details[i].charge === 0) {
                 details[i].ref = ref;
-                tdContent = <p styleName="delivery-selectable" data-ref={ref} onClick={TableBody.toggleSelected.bind(this)}>Free</p>;
+                tdContent = <p styleName="delivery-selectable" className={className} data-ref={ref} onClick={TableBody.toggleSelected.bind(this)}>Free</p>;
             }
             else if(!details[i].charge) {
                 tdContent = <p styleName="delivery-non-selectable">N/A</p>;
             }
             else {
                 details[i].ref = ref;
-                tdContent = <p styleName="delivery-selectable" data-ref={ref} onClick={TableBody.toggleSelected.bind(this)}>&pound;{ details[i].charge }</p>;
+                tdContent = <p styleName="delivery-selectable" className={className} data-ref={ref} onClick={TableBody.toggleSelected.bind(this)}>&pound;{ details[i].charge }</p>;
             }
             return (<td key={j} styleName="timeslot">{ tdContent }</td>)
         });

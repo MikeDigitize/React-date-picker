@@ -20754,7 +20754,7 @@
 	        var tableDisplayIndex = _storesPickerStore2["default"].getState().tableDisplayIndex;
 	        var ranges = _storesPickerStore2["default"].getState().dateRanges;
 	        if (tableDisplayIndex >= ranges.length) {
-	            tableDisplayIndex = ranges.length - 1;
+	            tableDisplayIndex = 0;
 	        }
 	        _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(tableDisplayIndex));
 
@@ -24765,9 +24765,9 @@
 
 	            var rows = [];
 	            var data = this.state.tableBodyData[this.state.tableDisplayIndex];
-	            data[0].forEach(function (_, i) {
+	            data[0].forEach(function (details, i) {
 	                var tds = _this.createTds(i);
-	                tds.unshift(_this.createRowDescription(_.description, i));
+	                tds.unshift(_this.createRowDescription(details.description, i));
 	                rows.push(_react2["default"].createElement(
 	                    "tr",
 	                    { key: i },
@@ -24782,14 +24782,16 @@
 	            var _this2 = this;
 
 	            var data = this.state.tableBodyData[this.state.tableDisplayIndex];
+	            var selectedRef = this.state.selectedTimeslotData.ref;
 	            return data.map(function (details, j) {
 	                var ref = i + "" + j;
+	                var className = selectedRef === ref ? "timeslot-selected" : "";
 	                var tdContent = undefined;
 	                if (details[i].charge === 0) {
 	                    details[i].ref = ref;
 	                    tdContent = _react2["default"].createElement(
 	                        "p",
-	                        { styleName: "delivery-selectable", "data-ref": ref, onClick: TableBody.toggleSelected.bind(_this2) },
+	                        { styleName: "delivery-selectable", className: className, "data-ref": ref, onClick: TableBody.toggleSelected.bind(_this2) },
 	                        "Free"
 	                    );
 	                } else if (!details[i].charge) {
@@ -24802,7 +24804,7 @@
 	                    details[i].ref = ref;
 	                    tdContent = _react2["default"].createElement(
 	                        "p",
-	                        { styleName: "delivery-selectable", "data-ref": ref, onClick: TableBody.toggleSelected.bind(_this2) },
+	                        { styleName: "delivery-selectable", className: className, "data-ref": ref, onClick: TableBody.toggleSelected.bind(_this2) },
 	                        "£",
 	                        details[i].charge
 	                    );
