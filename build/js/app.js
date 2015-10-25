@@ -20757,23 +20757,35 @@
 	            tableDisplayIndex = ranges.length - 1;
 	        }
 	        _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(tableDisplayIndex));
+
 	        this.state = {
 	            dateRanges: ranges,
 	            tableDisplayIndex: tableDisplayIndex,
-	            discountTotal: _storesPickerStore2["default"].getState().selectedTimeslotData.charge || 0,
-	            basketTotal: _storesPickerStore2["default"].getState().basketTotal
+	            deliveryTotal: _storesPickerStore2["default"].getState().selectedTimeslotData.charge || 0,
+	            basketTotal: _storesPickerStore2["default"].getState().basketTotal,
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
 
 	    _createClass(Picker, [{
 	        key: "componentWillMount",
 	        value: function componentWillMount() {
-	            if (this.isTimeslotStillAvailable()) {
-	                console.log("still available!");
-	            } else {
-	                console.log("remove timeslot data!", this.isTimeslotStillAvailable());
+	            if (!this.isTimeslotStillAvailable()) {
 	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)({}));
 	            }
+	            if (typeof this.state.unsubscribe === "function") {
+	                this.state.unsubscribe();
+	            }
+	        }
+	    }, {
+	        key: "onStoreUpdate",
+	        value: function onStoreUpdate() {
+	            this.setState({
+	                dateRanges: _storesPickerStore2["default"].getState().dateRanges,
+	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
+	                deliveryTotal: _storesPickerStore2["default"].getState().selectedTimeslotData.charge || 0,
+	                basketTotal: _storesPickerStore2["default"].getState().basketTotal
+	            });
 	        }
 	    }, {
 	        key: "isTimeslotStillAvailable",
@@ -20796,11 +20808,7 @@
 	                    }
 	                });
 	            });
-	            if (matchingTimeslots.length) {
-	                return true;
-	            } else {
-	                return false;
-	            }
+	            return matchingTimeslots.length;
 	        }
 	    }, {
 	        key: "render",
@@ -20815,7 +20823,7 @@
 	                _react2["default"].createElement(_TableTableContainer2["default"], null),
 	                _react2["default"].createElement(_SummarySummary2["default"], {
 	                    basketTotal: this.state.basketTotal,
-	                    discountTotal: this.state.discountTotal
+	                    deliveryTotal: this.state.deliveryTotal
 	                })
 	            );
 	        }
@@ -25374,7 +25382,7 @@
 	        _get(Object.getPrototypeOf(Summary.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            basketTotal: this.props.basketTotal,
-	            discountTotal: this.props.discountTotal,
+	            deliveryTotal: this.props.deliveryTotal,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onUpdate.bind(this))
 	        };
 	    }
@@ -25391,7 +25399,7 @@
 	        value: function onUpdate() {
 	            this.setState({
 	                basketTotal: _storesPickerStore2["default"].getState().basketTotal,
-	                discountTotal: _storesPickerStore2["default"].getState().selectedTimeslotData.charge || 0
+	                deliveryTotal: _storesPickerStore2["default"].getState().selectedTimeslotData.charge || 0
 	            });
 	        }
 	    }, {
@@ -25415,7 +25423,7 @@
 	                            "span",
 	                            { styleName: "summary-price" },
 	                            "£",
-	                            this.state.discountTotal
+	                            this.state.deliveryTotal
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
@@ -25442,11 +25450,13 @@
 	})(_react2["default"].Component);
 
 	Summary.defaultProps = {
-	    basketTotal: 0
+	    basketTotal: 0,
+	    deliveryTotal: 0
 	};
 
 	Summary.propTypes = {
-	    basketTotal: _react2["default"].PropTypes.number.isRequired
+	    basketTotal: _react2["default"].PropTypes.number.isRequired,
+	    deliveryTotal: _react2["default"].PropTypes.number.isRequired
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(Summary, _summaryStyles2["default"]);

@@ -9,7 +9,7 @@ class Summary extends React.Component {
         super(props);
         this.state = {
             basketTotal : this.props.basketTotal,
-            discountTotal : this.props.discountTotal,
+            deliveryTotal : this.props.deliveryTotal,
             unsubscribe : DatePickerStore.subscribe(this.onUpdate.bind(this))
         };
     }
@@ -23,7 +23,7 @@ class Summary extends React.Component {
     onUpdate() {
         this.setState({
             basketTotal : DatePickerStore.getState().basketTotal,
-            discountTotal : DatePickerStore.getState().selectedTimeslotData.charge || 0
+            deliveryTotal : DatePickerStore.getState().selectedTimeslotData.charge || 0
         });
     }
 
@@ -32,7 +32,7 @@ class Summary extends React.Component {
             <div styleName="picker-summary-container">
                 <div styleName="picker-summary">
                     <div>
-                        <span styleName="summary-title">Delivery</span><span styleName="summary-price">&pound;{ this.state.discountTotal }</span>
+                        <span styleName="summary-title">Delivery</span><span styleName="summary-price">&pound;{ this.state.deliveryTotal }</span>
                     </div>
                     <div>
                         <span styleName="summary-title">Total inc. delivery</span><span styleName="summary-price">&pound;{ this.state.basketTotal }</span>
@@ -44,11 +44,13 @@ class Summary extends React.Component {
 }
 
 Summary.defaultProps = {
-    basketTotal : 0
+    basketTotal : 0,
+    deliveryTotal : 0
 };
 
 Summary.propTypes = {
-    basketTotal : React.PropTypes.number.isRequired
+    basketTotal : React.PropTypes.number.isRequired,
+    deliveryTotal : React.PropTypes.number.isRequired
 };
 
 export default CSSModule(Summary, styles);

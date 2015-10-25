@@ -18,22 +18,32 @@ class Picker extends React.Component {
             tableDisplayIndex = ranges.length -1;
         }
         DatePickerStore.dispatch(updateTableIndex(tableDisplayIndex));
+
         this.state = {
             dateRanges : ranges,
             tableDisplayIndex : tableDisplayIndex,
-            discountTotal : DatePickerStore.getState().selectedTimeslotData.charge || 0,
-            basketTotal : DatePickerStore.getState().basketTotal
+            deliveryTotal : DatePickerStore.getState().selectedTimeslotData.charge || 0,
+            basketTotal : DatePickerStore.getState().basketTotal,
+            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
 
     componentWillMount() {
-        if(this.isTimeslotStillAvailable()) {
-            console.log("still available!");
-        }
-        else {
-            console.log("remove timeslot data!", this.isTimeslotStillAvailable());
+        if(!this.isTimeslotStillAvailable()) {
             DatePickerStore.dispatch(selectedTimeslotData({}));
         }
+        if(typeof this.state.unsubscribe === "function") {
+            this.state.unsubscribe();
+        }
+    }
+
+    onStoreUpdate() {
+        this.setState({
+            dateRanges : DatePickerStore.getState().dateRanges,
+            tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex,
+            deliveryTotal : DatePickerStore.getState().selectedTimeslotData.charge || 0,
+            basketTotal : DatePickerStore.getState().basketTotal
+        });
     }
 
     isTimeslotStillAvailable() {
@@ -55,12 +65,7 @@ class Picker extends React.Component {
                 }
             });
         });
-        if(matchingTimeslots.length) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return matchingTimeslots.length;
     }
 
     render() {
@@ -73,7 +78,7 @@ class Picker extends React.Component {
                 <Table />
                 <Summary
                     basketTotal={ this.state.basketTotal }
-                    discountTotal={ this.state.discountTotal }
+                    deliveryTotal={ this.state.deliveryTotal }
                 />
             </section>
         );
