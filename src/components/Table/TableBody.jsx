@@ -17,21 +17,49 @@ class TableBody extends React.Component {
             tableDisplayIndex : this.props.tableDisplayIndex,
             timeDescriptions : this.props.timeDescriptions,
             selectedTimeslotData : this.props.selectedTimeslotData,
-            unsubscribe : DatePickerStore.subscribe(this.onTableDisplayIndexUpdate.bind(this))
+            alwaysDisplay : TableBody.rowsToDisplay()
         };
     }
 
-    componentWillUnmount() {
-        if(typeof this.state.unsubscribe === "function") {
-            this.state.unsubscribe();
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            tableBodyData : nextProps.tableBodyData,
+            tableDisplayIndex : nextProps.tableDisplayIndex,
+            timeDescriptions : nextProps.timeDescriptions,
+            selectedTimeslotData : nextProps.selectedTimeslotData
+        });
+    }
+
+    static rowsToDisplay() {
+        let these = ["SameDay", "Anytime"];
+        return {
+            these,
+            add(row) {
+                if(these.indexOf(row) === -1) {
+                    these.push(row);
+                }
+            },
+            remove(){
+                these = ["SameDay", "Anytime"];
+            }
         }
     }
 
-    onTableDisplayIndexUpdate() {
-        this.setState({
-            tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex
-        });
-    }
+    static toggleSelected(e) {
+        let target = e.target || e.srcElement;
+        if(target.tagName === "SPAN") {
+            target = target.parentNode;
+        }
+        let currentTarget = document.querySelector(".timeslot-selected");
+        if(currentTarget && currentTarget !== target) {
+            currentTarget.classList.toggle("timeslot-selected");
+            target.classList.toggle("timeslot-selected");
+        }
+        else {
+            target.classList.toggle("timeslot-selected");
+        }
+        this.findTimeslot(target);
+    };
 
     createRows() {
         let rows = [];
@@ -39,7 +67,8 @@ class TableBody extends React.Component {
         data[0].forEach((details, i) => {
             let tds = this.createTds(i);
             tds.unshift(this.createRowDescription(details.description, i));
-            rows.push(<tr key={i}>{ tds }</tr>)
+            let className = this.state.alwaysDisplay.these.indexOf(details.description) === -1 ? "row-hide" : "";
+            rows.push(<tr key={i} className={className}>{ tds }</tr>)
         });
         return rows;
     }
@@ -47,20 +76,36 @@ class TableBody extends React.Component {
     createTds(i) {
         let data = this.state.tableBodyData[this.state.tableDisplayIndex];
         let selectedRef = this.state.selectedTimeslotData.ref;
+        let shortdate = this.state.selectedTimeslotData.shortdate;
         return data.map((details, j) => {
             let ref = i + "" + j;
-            let className = selectedRef === ref ? "timeslot-selected" : "";
+            let className = selectedRef === ref && details[j].shortdate === shortdate ? "timeslot-selected" : "";
+            if(className && details[j].shortdate === shortdate) {
+                this.state.alwaysDisplay.add(this.state.tableBodyData[this.state.tableDisplayIndex][0][i].description);
+            }
             let tdContent;
             if(details[i].charge === 0) {
                 details[i].ref = ref;
-                tdContent = <p styleName="delivery-selectable" className={className} data-ref={ref} onClick={TableBody.toggleSelected.bind(this)}>Free</p>;
+                tdContent = <p
+                    styleName="delivery-selectable"
+                    className={className}
+                    data-ref={ref}
+                    onClick={TableBody.toggleSelected.bind(this)}>
+                        Free
+                </p>;
             }
             else if(!details[i].charge) {
                 tdContent = <p styleName="delivery-non-selectable">N/A</p>;
             }
             else {
                 details[i].ref = ref;
-                tdContent = <p styleName="delivery-selectable" className={className} data-ref={ref} onClick={TableBody.toggleSelected.bind(this)}>&pound;{ details[i].charge }</p>;
+                tdContent = <p
+                    styleName="delivery-selectable"
+                    className={className}
+                    data-ref={ref}
+                    onClick={TableBody.toggleSelected.bind(this)}>
+                        &pound;{ details[i].charge }
+                </p>;
             }
             return (<td key={j} styleName="timeslot">{ tdContent }</td>)
         });
@@ -92,17 +137,12 @@ class TableBody extends React.Component {
         DatePickerStore.dispatch(subtractFromBasketTotal(this.state.selectedTimeslotData.charge || 0));
         if(!target.classList.contains("timeslot-selected")){
             selected = {};
+            this.state.alwaysDisplay.remove();
         }
         else {
             DatePickerStore.dispatch(addToBasketTotal(selected.charge));
         }
-        this.setState({
-            selectedTimeslotData : selected
-        }, () => {
-            DatePickerStore.dispatch(selectedTimeslotData(this.state.selectedTimeslotData));
-        });
-
-        console.log("target!", selected);
+        DatePickerStore.dispatch(selectedTimeslotData(selected));
     };
 
     render() {
@@ -113,7 +153,6 @@ class TableBody extends React.Component {
         );
     }
 }
-
 
 TableBody.defaultProps = {
     tableDisplayIndex : 0,
@@ -128,22 +167,5 @@ TableBody.propTypes = {
     timeDescriptions : React.PropTypes.object.isRequired,
     selectedTimeslotData :  React.PropTypes.object.isRequired
 };
-
-TableBody.toggleSelected = function(e) {
-    let target = e.target || e.srcElement;
-    if(target.tagName === "SPAN") {
-        target = target.parentNode;
-    }
-    let currentTarget = document.querySelector(".timeslot-selected");
-    if(currentTarget && currentTarget !== target) {
-        currentTarget.classList.toggle("timeslot-selected");
-        target.classList.toggle("timeslot-selected");
-    }
-    else {
-        target.classList.toggle("timeslot-selected");
-    }
-    this.findTimeslot(target);
-};
-
 
 export default CSSModule(TableBody, styles);

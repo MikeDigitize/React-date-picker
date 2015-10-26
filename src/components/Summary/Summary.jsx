@@ -10,7 +10,7 @@ class Summary extends React.Component {
         this.state = {
             basketTotal : this.props.basketTotal,
             deliveryTotal : this.props.deliveryTotal,
-            unsubscribe : DatePickerStore.subscribe(this.onUpdate.bind(this))
+            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
 
@@ -20,7 +20,7 @@ class Summary extends React.Component {
         }
     }
 
-    onUpdate() {
+    onStoreUpdate() {
         this.setState({
             basketTotal : DatePickerStore.getState().basketTotal,
             deliveryTotal : DatePickerStore.getState().selectedTimeslotData.charge || 0

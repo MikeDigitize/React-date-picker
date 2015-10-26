@@ -24521,11 +24521,30 @@
 	            tableBodyData: _storesPickerStore2["default"].getState().tableBodyData,
 	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
 	            timeDescriptions: _storesPickerStore2["default"].getState().timeDescriptions,
-	            selectedTimeslotData: _storesPickerStore2["default"].getState().selectedTimeslotData
+	            selectedTimeslotData: _storesPickerStore2["default"].getState().selectedTimeslotData,
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
 
 	    _createClass(Table, [{
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            if (typeof this.state.unsubscribe === "function") {
+	                this.state.unsubscribe();
+	            }
+	        }
+	    }, {
+	        key: "onStoreUpdate",
+	        value: function onStoreUpdate() {
+	            this.setState({
+	                tableHeadData: _storesPickerStore2["default"].getState().tableHeadData,
+	                tableBodyData: _storesPickerStore2["default"].getState().tableBodyData,
+	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
+	                timeDescriptions: _storesPickerStore2["default"].getState().timeDescriptions,
+	                selectedTimeslotData: _storesPickerStore2["default"].getState().selectedTimeslotData
+	            });
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
@@ -24595,7 +24614,7 @@
 
 	        _get(Object.getPrototypeOf(TableHead.prototype), "constructor", this).call(this, props);
 	        this.state = {
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.updateTableIndex.bind(this)),
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this)),
 	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            tableHeadData: this.props.tableHeadData
 	        };
@@ -24633,8 +24652,8 @@
 	            });
 	        }
 	    }, {
-	        key: "updateTableIndex",
-	        value: function updateTableIndex() {
+	        key: "onStoreUpdate",
+	        value: function onStoreUpdate() {
 	            this.setState({
 	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
 	            });
@@ -24740,22 +24759,18 @@
 	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            timeDescriptions: this.props.timeDescriptions,
 	            selectedTimeslotData: this.props.selectedTimeslotData,
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this))
+	            alwaysDisplay: TableBody.rowsToDisplay()
 	        };
 	    }
 
 	    _createClass(TableBody, [{
-	        key: "componentWillUnmount",
-	        value: function componentWillUnmount() {
-	            if (typeof this.state.unsubscribe === "function") {
-	                this.state.unsubscribe();
-	            }
-	        }
-	    }, {
-	        key: "onTableDisplayIndexUpdate",
-	        value: function onTableDisplayIndexUpdate() {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
 	            this.setState({
-	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
+	                tableBodyData: nextProps.tableBodyData,
+	                tableDisplayIndex: nextProps.tableDisplayIndex,
+	                timeDescriptions: nextProps.timeDescriptions,
+	                selectedTimeslotData: nextProps.selectedTimeslotData
 	            });
 	        }
 	    }, {
@@ -24768,9 +24783,10 @@
 	            data[0].forEach(function (details, i) {
 	                var tds = _this.createTds(i);
 	                tds.unshift(_this.createRowDescription(details.description, i));
+	                var className = _this.state.alwaysDisplay.these.indexOf(details.description) === -1 ? "row-hide" : "";
 	                rows.push(_react2["default"].createElement(
 	                    "tr",
-	                    { key: i },
+	                    { key: i, className: className },
 	                    tds
 	                ));
 	            });
@@ -24783,15 +24799,23 @@
 
 	            var data = this.state.tableBodyData[this.state.tableDisplayIndex];
 	            var selectedRef = this.state.selectedTimeslotData.ref;
+	            var shortdate = this.state.selectedTimeslotData.shortdate;
 	            return data.map(function (details, j) {
 	                var ref = i + "" + j;
-	                var className = selectedRef === ref ? "timeslot-selected" : "";
+	                var className = selectedRef === ref && details[j].shortdate === shortdate ? "timeslot-selected" : "";
+	                if (className && details[j].shortdate === shortdate) {
+	                    _this2.state.alwaysDisplay.add(_this2.state.tableBodyData[_this2.state.tableDisplayIndex][0][i].description);
+	                }
 	                var tdContent = undefined;
 	                if (details[i].charge === 0) {
 	                    details[i].ref = ref;
 	                    tdContent = _react2["default"].createElement(
 	                        "p",
-	                        { styleName: "delivery-selectable", className: className, "data-ref": ref, onClick: TableBody.toggleSelected.bind(_this2) },
+	                        {
+	                            styleName: "delivery-selectable",
+	                            className: className,
+	                            "data-ref": ref,
+	                            onClick: TableBody.toggleSelected.bind(_this2) },
 	                        "Free"
 	                    );
 	                } else if (!details[i].charge) {
@@ -24804,7 +24828,11 @@
 	                    details[i].ref = ref;
 	                    tdContent = _react2["default"].createElement(
 	                        "p",
-	                        { styleName: "delivery-selectable", className: className, "data-ref": ref, onClick: TableBody.toggleSelected.bind(_this2) },
+	                        {
+	                            styleName: "delivery-selectable",
+	                            className: className,
+	                            "data-ref": ref,
+	                            onClick: TableBody.toggleSelected.bind(_this2) },
 	                        "£",
 	                        details[i].charge
 	                    );
@@ -24839,8 +24867,6 @@
 	    }, {
 	        key: "findTimeslot",
 	        value: function findTimeslot(target) {
-	            var _this3 = this;
-
 	            var ref = target.getAttribute("data-ref");
 	            var selected = [];
 	            this.state.tableBodyData[this.state.tableDisplayIndex].forEach(function (data) {
@@ -24854,16 +24880,11 @@
 	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(this.state.selectedTimeslotData.charge || 0));
 	            if (!target.classList.contains("timeslot-selected")) {
 	                selected = {};
+	                this.state.alwaysDisplay.remove();
 	            } else {
 	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketTotal)(selected.charge));
 	            }
-	            this.setState({
-	                selectedTimeslotData: selected
-	            }, function () {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)(_this3.state.selectedTimeslotData));
-	            });
-
-	            console.log("target!", selected);
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)(selected));
 	        }
 	    }, {
 	        key: "render",
@@ -24873,6 +24894,38 @@
 	                { styleName: "date-picker-tbody" },
 	                this.createRows()
 	            );
+	        }
+	    }], [{
+	        key: "rowsToDisplay",
+	        value: function rowsToDisplay() {
+	            var these = ["SameDay", "Anytime"];
+	            return {
+	                these: these,
+	                add: function add(row) {
+	                    if (these.indexOf(row) === -1) {
+	                        these.push(row);
+	                    }
+	                },
+	                remove: function remove() {
+	                    these = ["SameDay", "Anytime"];
+	                }
+	            };
+	        }
+	    }, {
+	        key: "toggleSelected",
+	        value: function toggleSelected(e) {
+	            var target = e.target || e.srcElement;
+	            if (target.tagName === "SPAN") {
+	                target = target.parentNode;
+	            }
+	            var currentTarget = document.querySelector(".timeslot-selected");
+	            if (currentTarget && currentTarget !== target) {
+	                currentTarget.classList.toggle("timeslot-selected");
+	                target.classList.toggle("timeslot-selected");
+	            } else {
+	                target.classList.toggle("timeslot-selected");
+	            }
+	            this.findTimeslot(target);
 	        }
 	    }]);
 
@@ -24891,21 +24944,6 @@
 	    tableBodyData: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.array).isRequired,
 	    timeDescriptions: _react2["default"].PropTypes.object.isRequired,
 	    selectedTimeslotData: _react2["default"].PropTypes.object.isRequired
-	};
-
-	TableBody.toggleSelected = function (e) {
-	    var target = e.target || e.srcElement;
-	    if (target.tagName === "SPAN") {
-	        target = target.parentNode;
-	    }
-	    var currentTarget = document.querySelector(".timeslot-selected");
-	    if (currentTarget && currentTarget !== target) {
-	        currentTarget.classList.toggle("timeslot-selected");
-	        target.classList.toggle("timeslot-selected");
-	    } else {
-	        target.classList.toggle("timeslot-selected");
-	    }
-	    this.findTimeslot(target);
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(TableBody, _tableBodyStyles2["default"]);
@@ -25385,7 +25423,7 @@
 	        this.state = {
 	            basketTotal: this.props.basketTotal,
 	            deliveryTotal: this.props.deliveryTotal,
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onUpdate.bind(this))
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
 
@@ -25397,8 +25435,8 @@
 	            }
 	        }
 	    }, {
-	        key: "onUpdate",
-	        value: function onUpdate() {
+	        key: "onStoreUpdate",
+	        value: function onStoreUpdate() {
 	            this.setState({
 	                basketTotal: _storesPickerStore2["default"].getState().basketTotal,
 	                deliveryTotal: _storesPickerStore2["default"].getState().selectedTimeslotData.charge || 0

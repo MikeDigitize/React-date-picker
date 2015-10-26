@@ -14,8 +14,25 @@ class Table extends React.Component {
             tableBodyData : DatePickerStore.getState().tableBodyData,
             tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex,
             timeDescriptions : DatePickerStore.getState().timeDescriptions,
-            selectedTimeslotData : DatePickerStore.getState().selectedTimeslotData
+            selectedTimeslotData : DatePickerStore.getState().selectedTimeslotData,
+            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         };
+    }
+
+    componentWillUnmount() {
+        if(typeof this.state.unsubscribe === "function") {
+            this.state.unsubscribe();
+        }
+    }
+
+    onStoreUpdate() {
+        this.setState({
+            tableHeadData : DatePickerStore.getState().tableHeadData,
+            tableBodyData : DatePickerStore.getState().tableBodyData,
+            tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex,
+            timeDescriptions : DatePickerStore.getState().timeDescriptions,
+            selectedTimeslotData : DatePickerStore.getState().selectedTimeslotData
+        });
     }
 
     render() {
