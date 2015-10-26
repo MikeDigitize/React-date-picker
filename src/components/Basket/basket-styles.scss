@@ -1,0 +1,48 @@
+.basket {
+  width: 345px;
+  &:after {
+    content : "";
+    display: table;
+    clear: both;
+  }
+}
+.basket-title {
+  font-size: 22px;
+  font-weight: bold;
+}
+.basket-product {
+  padding: 20px;
+  border-bottom: 1px solid #ededed;
+  margin-bottom: 5px;
+  &:after {
+    content : "";
+    display: table;
+    clear: both;
+  }
+  .basket-details {
+    width: 50%;
+    float: left;
+    h3 {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    h4 {
+      font-size: 16px;
+    }
+    p {
+      font-size: 16px;
+    }
+    .increase, .decrease {
+      font-size: 27px;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+      float: left;
+      margin-right: 10px;
+      background: #ededed;
+      padding: 5px;
+      border-radius: 50%;
+      text-align: center;
+    }
+  }
+}

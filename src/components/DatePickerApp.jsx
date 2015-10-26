@@ -2,7 +2,10 @@ import React from "react";
 import PickerContainer from "./Picker/PickerContainer";
 import Total from "./PriceComponents/Total";
 import Discount from "./PriceComponents/Discount";
+//import Basket from "./Basket/Basket";
+import DatePickerStore from "../stores/PickerStore";
 import styles from "../styles/global";
+import { basketProducts } from "../actions/external-actions";
 import { getData1, getData2, getData3, getData4 } from "../utils/getConfig";
 
 let config;
@@ -11,7 +14,8 @@ class App extends React.Component {
     constructor(){
         super();
         this.state = {
-            config : {}
+            config : {},
+            basketProducts : []
         };
         Promise.all([getData1(), getData2(), getData3()]).then(data => {
             config = data;
@@ -34,8 +38,6 @@ class App extends React.Component {
                         New config!
                 </button>
                 <PickerContainer config={this.state.config} />
-                <Total />
-                <Discount />
             </div>
         );
 

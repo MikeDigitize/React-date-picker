@@ -29,3 +29,12 @@ export function selectedTimeslotData(state = {}, action = {}) {
             return state;
     }
 }
+
+export function basketProducts(state = [], action = {}) {
+    switch(action.type) {
+        case "BASKETPRODUCTS" :
+            return action.state;
+        default :
+            return state;
+    }
+}
