@@ -14,6 +14,7 @@ export function basketTotal(state = 0, action = {}) {
         case "ADDTOTOTAL" :
             return state + action.state;
         case "SUBTRACTFROMTOTAL" :
+            console.log("Subtract")
             return state - action.state;
         default :
             return state;

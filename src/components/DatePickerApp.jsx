@@ -1,5 +1,7 @@
 import React from "react";
 import PickerContainer from "./Picker/PickerContainer";
+import Total from "./PriceComponents/Total";
+import Discount from "./PriceComponents/Discount";
 import styles from "../styles/global";
 import { getData1, getData2, getData3, getData4 } from "../utils/getConfig";
 
@@ -11,13 +13,13 @@ class App extends React.Component {
         this.state = {
             config : {}
         };
-        Promise.all([getData1(), getData2(), getData3(), getData4()]).then(data => {
+        Promise.all([getData1(), getData2(), getData3()]).then(data => {
             config = data;
         });
     }
 
     passNewConfig() {
-        let random = Math.floor(Math.random() * 4);
+        let random = Math.floor(Math.random() * 3);
         this.setState({
             config : config[random]
         });
@@ -32,6 +34,8 @@ class App extends React.Component {
                         New config!
                 </button>
                 <PickerContainer config={this.state.config} />
+                <Total />
+                <Discount />
             </div>
         );
 

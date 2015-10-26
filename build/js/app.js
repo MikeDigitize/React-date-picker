@@ -64,6 +64,14 @@
 
 	var _PickerPickerContainer2 = _interopRequireDefault(_PickerPickerContainer);
 
+	var _PriceComponentsTotal = __webpack_require__(255);
+
+	var _PriceComponentsTotal2 = _interopRequireDefault(_PriceComponentsTotal);
+
+	var _PriceComponentsDiscount = __webpack_require__(257);
+
+	var _PriceComponentsDiscount2 = _interopRequireDefault(_PriceComponentsDiscount);
+
 	var _stylesGlobal = __webpack_require__(253);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
@@ -82,7 +90,7 @@
 	        this.state = {
 	            config: {}
 	        };
-	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)(), (0, _utilsGetConfig.getData3)(), (0, _utilsGetConfig.getData4)()]).then(function (data) {
+	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)(), (0, _utilsGetConfig.getData3)()]).then(function (data) {
 	            config = data;
 	        });
 	    }
@@ -90,7 +98,7 @@
 	    _createClass(App, [{
 	        key: "passNewConfig",
 	        value: function passNewConfig() {
-	            var random = Math.floor(Math.random() * 4);
+	            var random = Math.floor(Math.random() * 3);
 	            this.setState({
 	                config: config[random]
 	            });
@@ -108,7 +116,9 @@
 	                        onClick: this.passNewConfig.bind(this) },
 	                    "New config!"
 	                ),
-	                _react2["default"].createElement(_PickerPickerContainer2["default"], { config: this.state.config })
+	                _react2["default"].createElement(_PickerPickerContainer2["default"], { config: this.state.config }),
+	                _react2["default"].createElement(_PriceComponentsTotal2["default"], null),
+	                _react2["default"].createElement(_PriceComponentsDiscount2["default"], null)
 	            );
 	        }
 	    }]);
@@ -24161,6 +24171,7 @@
 	        case "ADDTOTOTAL":
 	            return state + action.state;
 	        case "SUBTRACTFROMTOTAL":
+	            console.log("Subtract");
 	            return state - action.state;
 	        default:
 	            return state;
@@ -25720,6 +25731,194 @@
 	        return response.json();
 	    });
 	}
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _priceStyles = __webpack_require__(256);
+
+	var _priceStyles2 = _interopRequireDefault(_priceStyles);
+
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
+	var Total = (function (_React$Component) {
+	    _inherits(Total, _React$Component);
+
+	    function Total() {
+	        _classCallCheck(this, Total);
+
+	        _get(Object.getPrototypeOf(Total.prototype), "constructor", this).call(this);
+	        this.state = {
+	            basketTotal: _storesPickerStore2["default"].getState().basketTotal,
+	            deliveryTotal: _storesPickerStore2["default"].getState().deliveryTotal,
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
+	        };
+	    }
+
+	    _createClass(Total, [{
+	        key: "onStoreUpdate",
+	        value: function onStoreUpdate() {
+	            this.setState({
+	                basketTotal: _storesPickerStore2["default"].getState().basketTotal,
+	                deliveryTotal: _storesPickerStore2["default"].getState().deliveryTotal
+	            });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "div",
+	                { styleName: "basket-total-holder" },
+	                _react2["default"].createElement(
+	                    "h3",
+	                    { styleName: "basket-total-title" },
+	                    "Basket Total"
+	                ),
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "basket-total" },
+	                    "£",
+	                    this.state.basketTotal
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Total;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(Total, _priceStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
+/* 256 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"basket-total":"_2EvZ4S1ZjKahbXW7pyPgD4","basket-total-title":"_1TcqySj-NlRWtAEMjVoZ1y","basket-total-holder":"_1XhcrMQx0wkRcV5BwzlS5G"};
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _priceStyles = __webpack_require__(256);
+
+	var _priceStyles2 = _interopRequireDefault(_priceStyles);
+
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
+	var _actionsExternalActions = __webpack_require__(236);
+
+	var Discount = (function (_React$Component) {
+	    _inherits(Discount, _React$Component);
+
+	    function Discount() {
+	        _classCallCheck(this, Discount);
+
+	        _get(Object.getPrototypeOf(Discount.prototype), "constructor", this).call(this);
+	        this.state = {
+	            hasBeenApplied: false
+	        };
+	        _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this));
+	    }
+
+	    _createClass(Discount, [{
+	        key: "checkTotalForDiscountEligibility",
+	        value: function checkTotalForDiscountEligibility() {
+	            var total = _storesPickerStore2["default"].getState().basketTotal;
+	            if (total >= 260) {
+	                if (!this.state.hasBeenApplied) {
+	                    var discount = Math.round(total / 100 * 10);
+	                    console.log(total, discount);
+	                    this.setState({
+	                        hasBeenApplied: true
+	                    });
+	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(discount));
+	                }
+	            } else {
+	                this.setState({
+	                    hasBeenApplied: false
+	                });
+	            }
+	        }
+	    }, {
+	        key: "onStoreUpdate",
+	        value: function onStoreUpdate() {
+	            this.checkTotalForDiscountEligibility();
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "div",
+	                { styleName: "basket-total-holder", className: "form-group" },
+	                _react2["default"].createElement(
+	                    "h3",
+	                    { styleName: "basket-total-title" },
+	                    "Spend more than £100 to get a discount of 10%"
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Discount;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(Discount, _priceStyles2["default"]);
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ]);
