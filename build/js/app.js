@@ -64,11 +64,11 @@
 
 	var _PickerPickerContainer2 = _interopRequireDefault(_PickerPickerContainer);
 
-	var _stylesGlobal = __webpack_require__(252);
+	var _stylesGlobal = __webpack_require__(253);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
 
-	var _utilsGetConfig = __webpack_require__(253);
+	var _utilsGetConfig = __webpack_require__(254);
 
 	var config = undefined;
 
@@ -82,7 +82,7 @@
 	        this.state = {
 	            config: {}
 	        };
-	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)()]).then(function (data) {
+	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)(), (0, _utilsGetConfig.getData3)(), (0, _utilsGetConfig.getData4)()]).then(function (data) {
 	            config = data;
 	        });
 	    }
@@ -90,7 +90,7 @@
 	    _createClass(App, [{
 	        key: "passNewConfig",
 	        value: function passNewConfig() {
-	            var random = Math.floor(Math.random() * 2);
+	            var random = Math.floor(Math.random() * 4);
 	            this.setState({
 	                config: config[random]
 	            });
@@ -104,7 +104,7 @@
 	                _react2["default"].createElement(
 	                    "button",
 	                    {
-	                        className: "btn btn-primary",
+	                        className: "btn btn-primary get-new-config-btn",
 	                        onClick: this.passNewConfig.bind(this) },
 	                    "New config!"
 	                ),
@@ -20526,6 +20526,10 @@
 
 	var _PickerClosed2 = _interopRequireDefault(_PickerClosed);
 
+	var _ThirdParty = __webpack_require__(252);
+
+	var _ThirdParty2 = _interopRequireDefault(_ThirdParty);
+
 	var _storesPickerStore = __webpack_require__(223);
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
@@ -20643,15 +20647,7 @@
 	            if (this.state.pickerState.closed) {
 	                return _react2["default"].createElement(_PickerClosed2["default"], null);
 	            } else if (this.state.pickerState.thirdparty) {
-	                return _react2["default"].createElement(
-	                    "div",
-	                    null,
-	                    _react2["default"].createElement(
-	                        "p",
-	                        null,
-	                        "thirdparty"
-	                    )
-	                );
+	                return _react2["default"].createElement(_ThirdParty2["default"], null);
 	            } else if (this.state.pickerState.noDatesAvailable) {
 	                return _react2["default"].createElement(
 	                    "div",
@@ -23514,7 +23510,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"timeslot-selected":"_1_i9rYWlxWAu7qy-QKg5qW","icon-tick2":"_6oEWH3PxmJ2ZdzkzXpBJz","row-hide":"_2I7qYObNmhrmBg9UhSFECN","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv","date-picker-closed":"_1RLvasQ2_ORGKHTkfRoisz","date-picker-closed-text":"_2yiu8PoIECOUO7nvxoJttb"};
+	module.exports = {"timeslot-selected":"_1_i9rYWlxWAu7qy-QKg5qW","icon-tick2":"_6oEWH3PxmJ2ZdzkzXpBJz","get-new-config-btn":"_2dluznHPo1qvE6adEtZUHs","row-hide":"_2I7qYObNmhrmBg9UhSFECN","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv","date-picker-closed":"_1RLvasQ2_ORGKHTkfRoisz","date-picker-closed-text":"_2yiu8PoIECOUO7nvxoJttb","third-party-message":"_24qYbaHvMWD2qM8M5bB1WC"};
 
 /***/ },
 /* 223 */
@@ -25452,7 +25448,8 @@
 	        _get(Object.getPrototypeOf(Summary.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            basketTotal: this.props.basketTotal,
-	            deliveryTotal: this.props.deliveryTotal
+	            deliveryTotal: this.props.deliveryTotal,
+	            showHideText: "Show more timeslots"
 	        };
 	    }
 
@@ -25465,6 +25462,30 @@
 	            });
 	        }
 	    }, {
+	        key: "toggleDisplay",
+	        value: function toggleDisplay(e) {
+	            e.preventDefault();
+	            var hidden = Array.from(document.querySelectorAll(".row-hide"));
+	            if (hidden.length) {
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.displayAllRows)(true));
+	                hidden.forEach(function (row) {
+	                    row.classList.toggle("row-hide");
+	                });
+	                this.setState({
+	                    showHideText: "Hide timeslots"
+	                });
+	            } else {
+	                var rowsToHide = Array.from(document.querySelectorAll("[data-should-be-hidden='true']"));
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.displayAllRows)(false));
+	                rowsToHide.forEach(function (row) {
+	                    row.classList.toggle("row-hide");
+	                });
+	                this.setState({
+	                    showHideText: "Show more timeslots"
+	                });
+	            }
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
@@ -25472,8 +25493,8 @@
 	                { styleName: "picker-summary-container" },
 	                _react2["default"].createElement(
 	                    "a",
-	                    { href: "#", styleName: "show-more-dates-link", onClick: Summary.toggleDisplay },
-	                    "Show more timeslots"
+	                    { href: "#", styleName: "show-more-dates-link", onClick: this.toggleDisplay.bind(this) },
+	                    this.state.showHideText
 	                ),
 	                _react2["default"].createElement(
 	                    "div",
@@ -25510,24 +25531,6 @@
 	                    )
 	                )
 	            );
-	        }
-	    }], [{
-	        key: "toggleDisplay",
-	        value: function toggleDisplay(e) {
-	            e.preventDefault();
-	            var hidden = Array.from(document.querySelectorAll(".row-hide"));
-	            if (hidden.length) {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.displayAllRows)(true));
-	                hidden.forEach(function (row) {
-	                    row.classList.toggle("row-hide");
-	                });
-	            } else {
-	                var rowsToHide = Array.from(document.querySelectorAll("[data-should-be-hidden='true']"));
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.displayAllRows)(false));
-	                rowsToHide.forEach(function (row) {
-	                    row.classList.toggle("row-hide");
-	                });
-	            }
 	        }
 	    }]);
 
@@ -25618,12 +25621,70 @@
 
 /***/ },
 /* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _pickerStyles = __webpack_require__(222);
+
+	var _pickerStyles2 = _interopRequireDefault(_pickerStyles);
+
+	var ThirdParty = (function (_React$Component) {
+	    _inherits(ThirdParty, _React$Component);
+
+	    function ThirdParty() {
+	        _classCallCheck(this, ThirdParty);
+
+	        _get(Object.getPrototypeOf(ThirdParty.prototype), "constructor", this).apply(this, arguments);
+	    }
+
+	    _createClass(ThirdParty, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "p",
+	                { styleName: "third-party-message" },
+	                "Sorry we can't give you a delivery date just yet, but a member of staff will call you shortly and organise one with you"
+	            );
+	        }
+	    }]);
+
+	    return ThirdParty;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(ThirdParty, _pickerStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
+/* 253 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25633,6 +25694,8 @@
 	});
 	exports.getData1 = getData1;
 	exports.getData2 = getData2;
+	exports.getData3 = getData3;
+	exports.getData4 = getData4;
 
 	function getData1() {
 	    return fetch('/data/picker-config1.json').then(function (response) {
@@ -25642,6 +25705,18 @@
 
 	function getData2() {
 	    return fetch('/data/picker-config2.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData3() {
+	    return fetch('/data/picker-config3.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData4() {
+	    return fetch('/data/picker-config4.json').then(function (response) {
 	        return response.json();
 	    });
 	}

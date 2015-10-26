@@ -1,0 +1,522 @@
+{
+    "basketTotal": 899,
+    "state": "ThirdParty",
+    "timeDescriptions": {
+        "SameDay": {
+            "desc": "Same day time slot",
+            "times": "4:30PM - 10PM"
+        },
+        "Morning": {
+            "desc": "Morning",
+            "times": "07:00 - 12:00"
+        },
+        "Lunch": {
+            "desc": "Lunch",
+            "times": "10:00 - 14:00"
+        },
+        "Afternoon": {
+            "desc": "Afternoon",
+            "times": "12:00 - 17:00"
+        },
+        "Evening": {
+            "desc": "Evening",
+            "times": "18:00 - 22:00"
+        }
+    },
+    "hasDeliveryDates": true,
+    "weeksInConfig": 2,
+    "dateRanges": [
+        "Aug30 - Sep5",
+        "Sep6 - Sep12"
+    ],
+    "tableHeadData": [
+        [
+            {
+                "desc": "Standard",
+                "day": "Sat",
+                "date": "30"
+            },
+            {
+                "desc": "Standard",
+                "day": "Sun",
+                "date": "31"
+            },
+            {
+                "desc": "N/A",
+                "day": "Mon",
+                "date": "1"
+            },
+            {
+                "desc": "N/A",
+                "day": "Tue",
+                "date": "2"
+            },
+            {
+                "desc": "N/A",
+                "day": "Wed",
+                "date": "3"
+            },
+            {
+                "desc": "GreenDay",
+                "day": "Thu",
+                "date": "4"
+            },
+            {
+                "desc": "Standard",
+                "day": "Fri",
+                "date": "5"
+            }
+        ],
+        [
+            {
+                "desc": "N/A",
+                "day": "Sat",
+                "date": "6"
+            },
+            {
+                "desc": "N/A",
+                "day": "Sun",
+                "date": "7"
+            },
+            {
+                "desc": "N/A",
+                "day": "Mon",
+                "date": "8"
+            },
+            {
+                "desc": "GreenDay",
+                "day": "Tue",
+                "date": "9"
+            },
+            {
+                "desc": "Standard",
+                "day": "Wed",
+                "date": "10"
+            },
+            {
+                "desc": "N/A",
+                "day": "Thu",
+                "date": "11"
+            },
+            {
+                "desc": "N/A",
+                "day": "Fri",
+                "date": "12"
+            }
+        ]
+    ],
+    "tableBodyData": [
+        [
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20140830",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20140830",
+                    "charge": 23.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20140830",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20140830",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20140830",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20140831",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20140831",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20140831",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20140831",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20140831",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": false,
+                    "shortdate": "20140901"
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": false,
+                    "shortdate": "20140901"
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20140901"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": false,
+                    "shortdate": "20140901"
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": false,
+                    "shortdate": "20140901"
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": false,
+                    "shortdate": "20140902"
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": false,
+                    "shortdate": "20140902"
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20140902"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": false,
+                    "shortdate": "20140902"
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": false,
+                    "shortdate": "20140902"
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": false,
+                    "shortdate": "20140903"
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": false,
+                    "shortdate": "20140903"
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20140903"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": false,
+                    "shortdate": "20140903"
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": false,
+                    "shortdate": "20140903"
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20140904",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20140904",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20140904",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20140904",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20140904",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20140905",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20140905",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20140905",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20140905",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20140905",
+                    "charge": 19.99
+                }
+            ]
+        ],
+        [
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": false,
+                    "shortdate": "20140906"
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": false,
+                    "shortdate": "20140906"
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20140906"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": false,
+                    "shortdate": "20140906"
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": false,
+                    "shortdate": "20140906"
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": false,
+                    "shortdate": "20140907"
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": false,
+                    "shortdate": "20140907"
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20140907"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": false,
+                    "shortdate": "20140907"
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": false,
+                    "shortdate": "20140907"
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": false,
+                    "shortdate": "20140908"
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": false,
+                    "shortdate": "20140908"
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20140908"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": false,
+                    "shortdate": "20140908"
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": false,
+                    "shortdate": "20140908"
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20140909",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20140909",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20140909",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20140909",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20140909",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": true,
+                    "shortdate": "20140910",
+                    "charge": 0
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": true,
+                    "shortdate": "20140910",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": true,
+                    "shortdate": "20140910",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": true,
+                    "shortdate": "20140910",
+                    "charge": 19.99
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": true,
+                    "shortdate": "20140910",
+                    "charge": 19.99
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": false,
+                    "shortdate": "20140911"
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": false,
+                    "shortdate": "20140911"
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20140911"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": false,
+                    "shortdate": "20140911"
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": false,
+                    "shortdate": "20140911"
+                }
+            ],
+            [
+                {
+                    "description": "Anytime",
+                    "hasTimeslot": false,
+                    "shortdate": "20140912"
+                },
+                {
+                    "description": "Morning",
+                    "hasTimeslot": false,
+                    "shortdate": "20140912"
+                },
+                {
+                    "description": "Lunch",
+                    "hasTimeslot": false,
+                    "shortdate": "20140912"
+                },
+                {
+                    "description": "Afternoon",
+                    "hasTimeslot": false,
+                    "shortdate": "20140912"
+                },
+                {
+                    "description": "Evening",
+                    "hasTimeslot": false,
+                    "shortdate": "20140912"
+                }
+            ]
+        ]
+    ]
+}

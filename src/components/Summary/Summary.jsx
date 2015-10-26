@@ -10,7 +10,8 @@ class Summary extends React.Component {
         super(props);
         this.state = {
             basketTotal : this.props.basketTotal,
-            deliveryTotal : this.props.deliveryTotal
+            deliveryTotal : this.props.deliveryTotal,
+            showHideText : "Show more timeslots"
         };
     }
 
@@ -21,13 +22,16 @@ class Summary extends React.Component {
         });
     }
 
-    static toggleDisplay(e){
+    toggleDisplay(e){
         e.preventDefault();
         let hidden = Array.from(document.querySelectorAll(".row-hide"));
         if(hidden.length) {
             DatePickerStore.dispatch(displayAllRows(true));
             hidden.forEach(row => {
                 row.classList.toggle("row-hide");
+            });
+            this.setState({
+                showHideText : "Hide timeslots"
             });
         }
         else {
@@ -36,13 +40,16 @@ class Summary extends React.Component {
             rowsToHide.forEach(row => {
                 row.classList.toggle("row-hide");
             });
+            this.setState({
+                showHideText : "Show more timeslots"
+            })
         }
     }
 
     render(){
         return(
             <div styleName="picker-summary-container">
-                <a href="#" styleName="show-more-dates-link" onClick={ Summary.toggleDisplay }>Show more timeslots</a>
+                <a href="#" styleName="show-more-dates-link" onClick={ this.toggleDisplay.bind(this) }>{ this.state.showHideText }</a>
                 <div styleName="picker-summary">
                     <div>
                         <span styleName="summary-title">Delivery</span><span styleName="summary-price">&pound;{ this.state.deliveryTotal }</span>

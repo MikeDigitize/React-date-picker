@@ -1,0 +1,73 @@
+{
+"calendarConfiguration": {
+  "chargeConfigurationCollection": {
+    "NextDay":{
+      "charge":0,
+      "text":"Next Day"
+    },
+    "Saturday":{
+      "charge":0,
+      "text":"Saturday"
+    },
+    "Sunday":{
+      "charge":0,
+      "text":"Sunday"
+    },
+    "Standard":{
+      "charge":0,
+      "text":""
+    },
+    "SameDay":{
+      "charge":29.99,
+      "text":"Same Day"
+    },
+    "GreenDay":{
+      "charge":0,
+      "text":"Eco"
+    }
+  },
+  "availableDays":{
+    "20140808":"NextDay",
+    "20140812":"Standard",
+    "20140815":"GreenDay",
+    "20140819":"Standard",
+    "20140822":"Standard",
+    "20140826":"Standard",
+    "20140829":"GreenDay",
+    "20140905":"Standard",
+    "20140909":"Standard"
+  },
+  "dataState":"Populated",
+  "descriptions" : {
+    "SameDay" : {
+      "desc" : "Same day time slot",
+      "times" : "4:30PM - 10PM"
+    },
+    "Morning" : {
+      "desc" : "Morning",
+      "times" : "07:00 - 12:00"
+    },
+    "Lunch" : {
+      "desc" : "Lunch",
+      "times" : "10:00 - 14:00"
+    },
+    "Afternoon" : {
+      "desc" : "Afternoon",
+      "times" : "12:00 - 17:00"
+    },
+    "Evening" : {
+      "desc" : "Evening",
+      "times" : "18:00 - 22:00"
+    }
+  }
+},
+  "orderTotals":{
+  "HandshakeId":null,
+  "BasketProductValueTotal":"&#163;899.00",
+  "BasketAndDeliveryTotal":"&#163;899.00",
+  "OverallTotal":"&#163;899.00",
+   "OverallTotalNumber":899,
+  "DatedDeliveryCharge":"0.00",
+  "TimeslotCharge":"0.00"
+  }
+}

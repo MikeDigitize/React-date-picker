@@ -13,6 +13,12 @@ body {
 ._6oEWH3PxmJ2ZdzkzXpBJz {
   color: #7fba23; }
 
+._2dluznHPo1qvE6adEtZUHs {
+  width: 200px;
+  padding: 15px 10px;
+  margin-bottom: 10px;
+  transition: background 1s ease; }
+
 ._2I7qYObNmhrmBg9UhSFECN {
   display: none; }
 
@@ -39,6 +45,12 @@ body {
     color: #fff;
     font-size: 16px;
     width: 180px; }
+
+._24qYbaHvMWD2qM8M5bB1WC {
+  font-size: 50px;
+  text-align: center;
+  line-height: 50px;
+  margin-top: 10px; }
 .OX0IQ95QuEmxlWQhyiRs6 {
   width: 280px;
   margin: auto;
@@ -191,5 +203,11 @@ body { padding: 20px; }
 }
 .icon-tick2 {
   color: #7fba23;
+}
+.get-new-config-btn {
+  width: 200px;
+  padding: 15px 10px;
+  margin-bottom: 10px;
+  transition: background 1s ease;
 }
 .row-hide { display: none }

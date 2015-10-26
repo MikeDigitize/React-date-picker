@@ -1,0 +1,461 @@
+{
+  "20140808": [{
+    "TimeSlotId": 104,
+    "ChargeIncVat": 0.0,
+    "Description": "07:00 - 19:00",
+    "WebDescription": "Anytime",
+    "StartHour": 7,
+    "EndHour": 19,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 7pm"
+  }, {
+    "TimeSlotId": 106,
+    "ChargeIncVat": 23.99,
+    "Description": "07:00 - 12:00",
+    "WebDescription": "Morning",
+    "StartHour": 7,
+    "EndHour": 12,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 12pm"
+  }, {
+    "TimeSlotId": 107,
+    "ChargeIncVat": 19.99,
+    "Description": "10:00 - 14:00",
+    "WebDescription": "Lunch",
+    "StartHour": 10,
+    "EndHour": 14,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "10am &#8211; 2pm"
+  }, {
+    "TimeSlotId": 108,
+    "ChargeIncVat": 19.99,
+    "Description": "12:00 - 17:00",
+    "WebDescription": "Afternoon",
+    "StartHour": 12,
+    "EndHour": 17,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "12pm &#8211; 5pm"
+  }, {
+    "TimeSlotId": 215,
+    "ChargeIncVat": 19.99,
+    "Description": "18:00 - 22:00",
+    "WebDescription": "Evening",
+    "StartHour": 18,
+    "EndHour": 22,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "6pm &#8211; 10pm"
+  }],
+  "20140812": [{
+    "TimeSlotId": 104,
+    "ChargeIncVat": 0.0,
+    "Description": "07:00 - 19:00",
+    "WebDescription": "Anytime",
+    "StartHour": 7,
+    "EndHour": 19,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 7pm"
+  }, {
+    "TimeSlotId": 106,
+    "ChargeIncVat": 19.99,
+    "Description": "07:00 - 12:00",
+    "WebDescription": "Morning",
+    "StartHour": 7,
+    "EndHour": 12,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 12pm"
+  },{
+    "TimeSlotId": 107,
+    "ChargeIncVat": 19.99,
+    "Description": "10:00 - 14:00",
+    "WebDescription": "Lunch",
+    "StartHour": 10,
+    "EndHour": 14,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "10am &#8211; 2pm"
+  }, {
+    "TimeSlotId": 108,
+    "ChargeIncVat": 19.99,
+    "Description": "12:00 - 17:00",
+    "WebDescription": "Afternoon",
+    "StartHour": 12,
+    "EndHour": 17,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "12pm &#8211; 5pm"
+  }, {
+    "TimeSlotId": 215,
+    "ChargeIncVat": 19.99,
+    "Description": "18:00 - 22:00",
+    "WebDescription": "Evening",
+    "StartHour": 18,
+    "EndHour": 22,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "6pm &#8211; 10pm"
+  }],
+  "20140815": [{
+    "TimeSlotId": 104,
+    "ChargeIncVat": 0.0,
+    "Description": "07:00 - 19:00",
+    "WebDescription": "Anytime",
+    "StartHour": 7,
+    "EndHour": 19,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 7pm"
+  }, {
+    "TimeSlotId": 106,
+    "ChargeIncVat": 19.99,
+    "Description": "07:00 - 12:00",
+    "WebDescription": "Morning",
+    "StartHour": 7,
+    "EndHour": 12,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 12pm"
+  },{
+    "TimeSlotId": 107,
+    "ChargeIncVat": 19.99,
+    "Description": "10:00 - 14:00",
+    "WebDescription": "Lunch",
+    "StartHour": 10,
+    "EndHour": 14,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "10am &#8211; 2pm"
+  }, {
+    "TimeSlotId": 108,
+    "ChargeIncVat": 19.99,
+    "Description": "12:00 - 17:00",
+    "WebDescription": "Afternoon",
+    "StartHour": 12,
+    "EndHour": 17,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "12pm &#8211; 5pm"
+  }, {
+    "TimeSlotId": 215,
+    "ChargeIncVat": 19.99,
+    "Description": "18:00 - 22:00",
+    "WebDescription": "Evening",
+    "StartHour": 18,
+    "EndHour": 22,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "6pm &#8211; 10pm"
+  }],
+  "20140819": [{
+    "TimeSlotId": 104,
+    "ChargeIncVat": 0.0,
+    "Description": "07:00 - 19:00",
+    "WebDescription": "Anytime",
+    "StartHour": 7,
+    "EndHour": 19,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 7pm"
+  }, {
+    "TimeSlotId": 106,
+    "ChargeIncVat": 19.99,
+    "Description": "07:00 - 12:00",
+    "WebDescription": "Morning",
+    "StartHour": 7,
+    "EndHour": 12,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 12pm"
+  }, {
+    "TimeSlotId": 107,
+    "ChargeIncVat": 33.99,
+    "Description": "10:00 - 14:00",
+    "WebDescription": "Lunch",
+    "StartHour": 10,
+    "EndHour": 14,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "10am &#8211; 2pm"
+  }, {
+    "TimeSlotId": 108,
+    "ChargeIncVat": 19.99,
+    "Description": "12:00 - 17:00",
+    "WebDescription": "Afternoon",
+    "StartHour": 12,
+    "EndHour": 17,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "12pm &#8211; 5pm"
+  }, {
+    "TimeSlotId": 215,
+    "ChargeIncVat": 19.99,
+    "Description": "18:00 - 22:00",
+    "WebDescription": "Evening",
+    "StartHour": 18,
+    "EndHour": 22,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "6pm &#8211; 10pm"
+  }],
+  "20140822": [{
+    "TimeSlotId": 104,
+    "ChargeIncVat": 0.0,
+    "Description": "07:00 - 19:00",
+    "WebDescription": "Anytime",
+    "StartHour": 7,
+    "EndHour": 19,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 7pm"
+  }, {
+    "TimeSlotId": 106,
+    "ChargeIncVat": 19.99,
+    "Description": "07:00 - 12:00",
+    "WebDescription": "Morning",
+    "StartHour": 7,
+    "EndHour": 12,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 12pm"
+  }, {
+    "TimeSlotId": 107,
+    "ChargeIncVat": 19.99,
+    "Description": "10:00 - 14:00",
+    "WebDescription": "Lunch",
+    "StartHour": 10,
+    "EndHour": 14,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "10am &#8211; 2pm"
+  }, {
+    "TimeSlotId": 108,
+    "ChargeIncVat": 19.99,
+    "Description": "12:00 - 17:00",
+    "WebDescription": "Afternoon",
+    "StartHour": 12,
+    "EndHour": 17,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "12pm &#8211; 5pm"
+  }, {
+    "TimeSlotId": 215,
+    "ChargeIncVat": 19.99,
+    "Description": "18:00 - 22:00",
+    "WebDescription": "Evening",
+    "StartHour": 18,
+    "EndHour": 22,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "6pm &#8211; 10pm"
+  }],
+  "20140826": [{
+    "TimeSlotId": 104,
+    "ChargeIncVat": 0.0,
+    "Description": "07:00 - 19:00",
+    "WebDescription": "Anytime",
+    "StartHour": 7,
+    "EndHour": 19,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 7pm"
+  }, {
+    "TimeSlotId": 106,
+    "ChargeIncVat": 19.99,
+    "Description": "07:00 - 12:00",
+    "WebDescription": "Morning",
+    "StartHour": 7,
+    "EndHour": 12,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 12pm"
+  }, {
+    "TimeSlotId": 107,
+    "ChargeIncVat": 19.99,
+    "Description": "10:00 - 14:00",
+    "WebDescription": "Lunch",
+    "StartHour": 10,
+    "EndHour": 14,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "10am &#8211; 2pm"
+  }, {
+    "TimeSlotId": 108,
+    "ChargeIncVat": 19.99,
+    "Description": "12:00 - 17:00",
+    "WebDescription": "Afternoon",
+    "StartHour": 12,
+    "EndHour": 17,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "12pm &#8211; 5pm"
+  }, {
+    "TimeSlotId": 215,
+    "ChargeIncVat": 19.99,
+    "Description": "18:00 - 22:00",
+    "WebDescription": "Evening",
+    "StartHour": 18,
+    "EndHour": 22,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "6pm &#8211; 10pm"
+  }],
+  "20140829": [{
+    "TimeSlotId": 104,
+    "ChargeIncVat": 0.0,
+    "Description": "07:00 - 19:00",
+    "WebDescription": "Anytime",
+    "StartHour": 7,
+    "EndHour": 19,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 7pm"
+  }, {
+    "TimeSlotId": 106,
+    "ChargeIncVat": 19.99,
+    "Description": "07:00 - 12:00",
+    "WebDescription": "Morning",
+    "StartHour": 7,
+    "EndHour": 12,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 12pm"
+  }, {
+    "TimeSlotId": 107,
+    "ChargeIncVat": 19.99,
+    "Description": "10:00 - 14:00",
+    "WebDescription": "Lunch",
+    "StartHour": 10,
+    "EndHour": 14,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "10am &#8211; 2pm"
+  }, {
+    "TimeSlotId": 108,
+    "ChargeIncVat": 19.99,
+    "Description": "12:00 - 17:00",
+    "WebDescription": "Afternoon",
+    "StartHour": 12,
+    "EndHour": 17,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "12pm &#8211; 5pm"
+  }, {
+    "TimeSlotId": 215,
+    "ChargeIncVat": 19.99,
+    "Description": "18:00 - 22:00",
+    "WebDescription": "Evening",
+    "StartHour": 18,
+    "EndHour": 22,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "6pm &#8211; 10pm"
+  }],
+  "20140905": [{
+    "TimeSlotId": 104,
+    "ChargeIncVat": 0.0,
+    "Description": "07:00 - 19:00",
+    "WebDescription": "Anytime",
+    "StartHour": 7,
+    "EndHour": 19,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 7pm"
+  }, {
+    "TimeSlotId": 106,
+    "ChargeIncVat": 19.99,
+    "Description": "07:00 - 12:00",
+    "WebDescription": "Morning",
+    "StartHour": 7,
+    "EndHour": 12,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 12pm"
+  }, {
+    "TimeSlotId": 107,
+    "ChargeIncVat": 19.99,
+    "Description": "10:00 - 14:00",
+    "WebDescription": "Lunch",
+    "StartHour": 10,
+    "EndHour": 14,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "10am &#8211; 2pm"
+  }, {
+    "TimeSlotId": 108,
+    "ChargeIncVat": 19.99,
+    "Description": "12:00 - 17:00",
+    "WebDescription": "Afternoon",
+    "StartHour": 12,
+    "EndHour": 17,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "12pm &#8211; 5pm"
+  }, {
+    "TimeSlotId": 215,
+    "ChargeIncVat": 19.99,
+    "Description": "18:00 - 22:00",
+    "WebDescription": "Evening",
+    "StartHour": 18,
+    "EndHour": 22,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "6pm &#8211; 10pm"
+  }],
+  "20140909": [{
+    "TimeSlotId": 104,
+    "ChargeIncVat": 0.0,
+    "Description": "07:00 - 19:00",
+    "WebDescription": "Anytime",
+    "StartHour": 7,
+    "EndHour": 19,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 7pm"
+  }, {
+    "TimeSlotId": 106,
+    "ChargeIncVat": 19.99,
+    "Description": "07:00 - 12:00",
+    "WebDescription": "Morning",
+    "StartHour": 7,
+    "EndHour": 12,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "7am &#8211; 12pm"
+  }, {
+    "TimeSlotId": 107,
+    "ChargeIncVat": 19.99,
+    "Description": "10:00 - 14:00",
+    "WebDescription": "Lunch",
+    "StartHour": 10,
+    "EndHour": 14,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "10am &#8211; 2pm"
+  }, {
+    "TimeSlotId": 108,
+    "ChargeIncVat": 19.99,
+    "Description": "12:00 - 17:00",
+    "WebDescription": "Afternoon",
+    "StartHour": 12,
+    "EndHour": 17,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "12pm &#8211; 5pm"
+  }, {
+    "TimeSlotId": 215,
+    "ChargeIncVat": 19.99,
+    "Description": "18:00 - 22:00",
+    "WebDescription": "Evening",
+    "StartHour": 18,
+    "EndHour": 22,
+    "StartMinute": 0,
+    "EndMinute": 0,
+    "WebTimeDesc": "6pm &#8211; 10pm"
+  }]
+}

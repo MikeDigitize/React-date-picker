@@ -1,6 +1,7 @@
 import React from "react";
 import Picker from "./Picker";
 import PickerClosed from "./PickerClosed";
+import ThirdParty from "./ThirdParty";
 import DatePickerStore from "../../stores/PickerStore";
 import { totalWeeks, dateRanges, tableHeadData, tableBodyData, timeDescriptions } from "../../actions/picker-actions";
 import { basketTotal, availableDates } from "../../actions/external-actions";
@@ -114,11 +115,7 @@ export default class PickerContainer extends React.Component {
             return (<PickerClosed />);
         }
         else if(this.state.pickerState.thirdparty) {
-            return (
-                <div>
-                    <p>thirdparty</p>
-                </div>
-            );
+            return (<ThirdParty />);
         }
         else if(this.state.pickerState.noDatesAvailable) {
             return (
