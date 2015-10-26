@@ -24802,8 +24802,8 @@
 	            });
 	        }
 	    }, {
-	        key: "informStore",
-	        value: function informStore(target) {
+	        key: "updateStoreWithSelectedTimeslot",
+	        value: function updateStoreWithSelectedTimeslot(target) {
 	            var ref = target.getAttribute("data-ref");
 	            var selected = [];
 	            this.state.tableBodyData[this.state.tableDisplayIndex].forEach(function (data) {
@@ -24814,8 +24814,6 @@
 	                }
 	            });
 	            selected = selected.shift();
-
-	            this.alwaysDisplay.remove();
 	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(this.state.selectedTimeslotData.charge || 0));
 	            if (!target.classList.contains("timeslot-selected")) {
 	                selected = {};
@@ -24835,10 +24833,14 @@
 	            data[0].forEach(function (details, i) {
 	                var tds = _this.createTds(i);
 	                tds.unshift(_this.createRowDescription(details.description, i));
-	                var className = _this.alwaysDisplay.these.indexOf(details.description) === -1 ? "row-hide" : "";
+	                var shouldRowBeHidden = _this.alwaysDisplay.these.indexOf(details.description) === -1;
+	                var className = shouldRowBeHidden ? "row-hide" : "";
 	                rows.push(_react2["default"].createElement(
 	                    "tr",
-	                    { key: i, className: className },
+	                    {
+	                        key: i,
+	                        "data-should-be-hidden": shouldRowBeHidden,
+	                        className: className },
 	                    tds
 	                ));
 	            });
@@ -24955,7 +24957,7 @@
 	            } else {
 	                target.classList.toggle("timeslot-selected");
 	            }
-	            this.informStore(target);
+	            this.updateStoreWithSelectedTimeslot(target);
 	        }
 	    }]);
 
@@ -25438,7 +25440,7 @@
 	                { styleName: "picker-summary-container" },
 	                _react2["default"].createElement(
 	                    "a",
-	                    { href: "#", styleName: "show-more-dates-link" },
+	                    { href: "#", styleName: "show-more-dates-link", onClick: Summary.toggleDisplay },
 	                    "Show more timeslots"
 	                ),
 	                _react2["default"].createElement(
@@ -25476,6 +25478,22 @@
 	                    )
 	                )
 	            );
+	        }
+	    }], [{
+	        key: "toggleDisplay",
+	        value: function toggleDisplay(e) {
+	            e.preventDefault();
+	            var hidden = Array.from(document.querySelectorAll(".row-hide"));
+	            if (hidden.length) {
+	                hidden.forEach(function (row) {
+	                    row.classList.toggle("row-hide");
+	                });
+	            } else {
+	                var rowsToHide = Array.from(document.querySelectorAll("[data-should-be-hidden='true']"));
+	                rowsToHide.forEach(function (row) {
+	                    row.classList.toggle("row-hide");
+	                });
+	            }
 	        }
 	    }]);
 

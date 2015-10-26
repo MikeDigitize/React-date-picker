@@ -20,10 +20,26 @@ class Summary extends React.Component {
         });
     }
 
+    static toggleDisplay(e){
+        e.preventDefault();
+        let hidden = Array.from(document.querySelectorAll(".row-hide"));
+        if(hidden.length) {
+            hidden.forEach(row => {
+                row.classList.toggle("row-hide");
+            });
+        }
+        else {
+            let rowsToHide = Array.from(document.querySelectorAll("[data-should-be-hidden='true']"));
+            rowsToHide.forEach(row => {
+                row.classList.toggle("row-hide");
+            });
+        }
+    }
+
     render(){
         return(
             <div styleName="picker-summary-container">
-                <a href="#" styleName="show-more-dates-link">Show more timeslots</a>
+                <a href="#" styleName="show-more-dates-link" onClick={ Summary.toggleDisplay }>Show more timeslots</a>
                 <div styleName="picker-summary">
                     <div>
                         <span styleName="summary-title">Delivery</span><span styleName="summary-price">&pound;{ this.state.deliveryTotal }</span>

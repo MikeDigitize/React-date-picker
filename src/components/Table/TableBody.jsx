@@ -57,10 +57,10 @@ class TableBody extends React.Component {
         else {
             target.classList.toggle("timeslot-selected");
         }
-        this.informStore(target);
+        this.updateStoreWithSelectedTimeslot(target);
     };
 
-    informStore(target) {
+    updateStoreWithSelectedTimeslot(target) {
         let ref = target.getAttribute("data-ref");
         let selected = [];
         this.state.tableBodyData[this.state.tableDisplayIndex].forEach(data => {
@@ -71,8 +71,6 @@ class TableBody extends React.Component {
             }
         });
         selected = selected.shift();
-
-        this.alwaysDisplay.remove();
         DatePickerStore.dispatch(subtractFromBasketTotal(this.state.selectedTimeslotData.charge || 0));
         if(!target.classList.contains("timeslot-selected")){
             selected = {};
@@ -90,8 +88,12 @@ class TableBody extends React.Component {
         data[0].forEach((details, i) => {
             let tds = this.createTds(i);
             tds.unshift(this.createRowDescription(details.description, i));
-            let className = this.alwaysDisplay.these.indexOf(details.description) === -1 ? "row-hide" : "";
-            rows.push(<tr key={i} className={className}>{ tds }</tr>)
+            let shouldRowBeHidden= this.alwaysDisplay.these.indexOf(details.description) === -1;
+            let className = shouldRowBeHidden? "row-hide" : "";
+            rows.push(<tr
+                key={i}
+                data-should-be-hidden={shouldRowBeHidden}
+                className={className}>{ tds }</tr>)
         });
         return rows;
     }
