@@ -2,6 +2,7 @@ import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./summary-styles";
 import DatePickerStore from "../../stores/PickerStore";
+import { displayAllRows } from "../../actions/picker-actions";
 
 class Summary extends React.Component {
 
@@ -24,12 +25,14 @@ class Summary extends React.Component {
         e.preventDefault();
         let hidden = Array.from(document.querySelectorAll(".row-hide"));
         if(hidden.length) {
+            DatePickerStore.dispatch(displayAllRows(true));
             hidden.forEach(row => {
                 row.classList.toggle("row-hide");
             });
         }
         else {
             let rowsToHide = Array.from(document.querySelectorAll("[data-should-be-hidden='true']"));
+            DatePickerStore.dispatch(displayAllRows(false));
             rowsToHide.forEach(row => {
                 row.classList.toggle("row-hide");
             });

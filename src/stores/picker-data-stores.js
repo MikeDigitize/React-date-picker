@@ -60,3 +60,12 @@ export function selectedTimeslot(state = "", action = {}) {
             return state;
     }
 }
+
+export function displayAllRows(state = false, action = {}) {
+    switch(action.type) {
+        case "DISPLAYALLROWS" :
+            return action.state;
+        default :
+            return state;
+    }
+}

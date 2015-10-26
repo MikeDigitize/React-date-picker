@@ -15,7 +15,8 @@ class TableBody extends React.Component {
             tableBodyData : this.props.tableBodyData,
             tableDisplayIndex : this.props.tableDisplayIndex,
             timeDescriptions : this.props.timeDescriptions,
-            selectedTimeslotData : this.props.selectedTimeslotData
+            selectedTimeslotData : this.props.selectedTimeslotData,
+            displayAllRows : this.props.displayAllRows
         };
         this.alwaysDisplay = TableBody.rowsToDisplay()
     }
@@ -25,7 +26,8 @@ class TableBody extends React.Component {
             tableBodyData : nextProps.tableBodyData,
             tableDisplayIndex : nextProps.tableDisplayIndex,
             timeDescriptions : nextProps.timeDescriptions,
-            selectedTimeslotData : nextProps.selectedTimeslotData
+            selectedTimeslotData : nextProps.selectedTimeslotData,
+            displayAllRows : nextProps.displayAllRows
         });
     }
 
@@ -38,7 +40,7 @@ class TableBody extends React.Component {
                     this.these.push(row);
                 }
             },
-            remove(){
+            reset(){
                 this.these = ["SameDay", "Anytime"];
             }
         }
@@ -82,14 +84,19 @@ class TableBody extends React.Component {
     };
 
     createRows() {
-        this.alwaysDisplay.remove();
-        let rows = [];
+        this.alwaysDisplay.reset();
         let data = this.state.tableBodyData[this.state.tableDisplayIndex];
+        if(this.state.displayAllRows) {
+            data[0].forEach(details => {
+                this.alwaysDisplay.add(details.description);
+            });
+        }
+        let rows = [];
         data[0].forEach((details, i) => {
             let tds = this.createTds(i);
             tds.unshift(this.createRowDescription(details.description, i));
             let shouldRowBeHidden= this.alwaysDisplay.these.indexOf(details.description) === -1;
-            let className = shouldRowBeHidden? "row-hide" : "";
+            let className = shouldRowBeHidden && !this.state.displayAllRows ? "row-hide" : "";
             rows.push(<tr
                 key={i}
                 data-should-be-hidden={shouldRowBeHidden}

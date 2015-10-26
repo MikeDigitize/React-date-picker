@@ -23546,7 +23546,8 @@
 	        tableBodyData: (0, _pickerDataStores.tableBodyData)(state.tableBodyData, action),
 	        timeDescriptions: (0, _pickerDataStores.timeDescriptions)(state.timeDescriptions, action),
 	        selectedTimeslotData: (0, _externalStores.selectedTimeslotData)(state.selectedTimeslotData, action),
-	        selectedTimeslot: (0, _pickerDataStores.selectedTimeslot)(state.selectedTimeslot, action)
+	        selectedTimeslot: (0, _pickerDataStores.selectedTimeslot)(state.selectedTimeslot, action),
+	        displayAllRows: (0, _pickerDataStores.displayAllRows)(state.displayAllRows, action)
 	    };
 	}
 
@@ -24198,6 +24199,7 @@
 	exports.tableBodyData = tableBodyData;
 	exports.timeDescriptions = timeDescriptions;
 	exports.selectedTimeslot = selectedTimeslot;
+	exports.displayAllRows = displayAllRows;
 
 	function totalWeeks() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -24283,6 +24285,18 @@
 	    }
 	}
 
+	function displayAllRows() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "DISPLAYALLROWS":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
 /***/ },
 /* 235 */
 /***/ function(module, exports) {
@@ -24299,6 +24313,7 @@
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
 	exports.selectedTimeslot = selectedTimeslot;
+	exports.displayAllRows = displayAllRows;
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDATERANGES = "NEWDATERANGES";
@@ -24306,6 +24321,7 @@
 	var NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 	var NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
 	var NEWCHOSENTIMELOT = "NEWCHOSENTIMELOT";
+	var DISPLAYALLROWS = "DISPLAYALLROWS";
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24333,6 +24349,10 @@
 
 	function selectedTimeslot(data) {
 	    return { state: data, type: NEWCHOSENTIMELOT };
+	}
+
+	function displayAllRows(data) {
+	    return { state: data, type: DISPLAYALLROWS };
 	}
 
 /***/ },
@@ -24552,6 +24572,7 @@
 	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
 	            timeDescriptions: _storesPickerStore2["default"].getState().timeDescriptions,
 	            selectedTimeslotData: _storesPickerStore2["default"].getState().selectedTimeslotData,
+	            displayAllRows: _storesPickerStore2["default"].getState().displayAllRows,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
@@ -24571,6 +24592,7 @@
 	                tableBodyData: _storesPickerStore2["default"].getState().tableBodyData,
 	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
 	                timeDescriptions: _storesPickerStore2["default"].getState().timeDescriptions,
+	                displayAllRows: _storesPickerStore2["default"].getState().displayAllRows,
 	                selectedTimeslotData: _storesPickerStore2["default"].getState().selectedTimeslotData
 	            });
 	        }
@@ -24588,7 +24610,8 @@
 	                    tableBodyData: this.state.tableBodyData,
 	                    tableDisplayIndex: this.state.tableDisplayIndex,
 	                    timeDescriptions: this.state.timeDescriptions,
-	                    selectedTimeslotData: this.state.selectedTimeslotData
+	                    selectedTimeslotData: this.state.selectedTimeslotData,
+	                    displayAllRows: this.state.displayAllRows
 	                })
 	            );
 	        }
@@ -24786,7 +24809,8 @@
 	            tableBodyData: this.props.tableBodyData,
 	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            timeDescriptions: this.props.timeDescriptions,
-	            selectedTimeslotData: this.props.selectedTimeslotData
+	            selectedTimeslotData: this.props.selectedTimeslotData,
+	            displayAllRows: this.props.displayAllRows
 	        };
 	        this.alwaysDisplay = TableBody.rowsToDisplay();
 	    }
@@ -24798,7 +24822,8 @@
 	                tableBodyData: nextProps.tableBodyData,
 	                tableDisplayIndex: nextProps.tableDisplayIndex,
 	                timeDescriptions: nextProps.timeDescriptions,
-	                selectedTimeslotData: nextProps.selectedTimeslotData
+	                selectedTimeslotData: nextProps.selectedTimeslotData,
+	                displayAllRows: nextProps.displayAllRows
 	            });
 	        }
 	    }, {
@@ -24827,14 +24852,19 @@
 	        value: function createRows() {
 	            var _this = this;
 
-	            this.alwaysDisplay.remove();
-	            var rows = [];
+	            this.alwaysDisplay.reset();
 	            var data = this.state.tableBodyData[this.state.tableDisplayIndex];
+	            if (this.state.displayAllRows) {
+	                data[0].forEach(function (details) {
+	                    _this.alwaysDisplay.add(details.description);
+	                });
+	            }
+	            var rows = [];
 	            data[0].forEach(function (details, i) {
 	                var tds = _this.createTds(i);
 	                tds.unshift(_this.createRowDescription(details.description, i));
 	                var shouldRowBeHidden = _this.alwaysDisplay.these.indexOf(details.description) === -1;
-	                var className = shouldRowBeHidden ? "row-hide" : "";
+	                var className = shouldRowBeHidden && !_this.state.displayAllRows ? "row-hide" : "";
 	                rows.push(_react2["default"].createElement(
 	                    "tr",
 	                    {
@@ -24938,7 +24968,7 @@
 	                        this.these.push(row);
 	                    }
 	                },
-	                remove: function remove() {
+	                reset: function reset() {
 	                    this.these = ["SameDay", "Anytime"];
 	                }
 	            };
@@ -25411,6 +25441,8 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
+	var _actionsPickerActions = __webpack_require__(235);
+
 	var Summary = (function (_React$Component) {
 	    _inherits(Summary, _React$Component);
 
@@ -25485,11 +25517,13 @@
 	            e.preventDefault();
 	            var hidden = Array.from(document.querySelectorAll(".row-hide"));
 	            if (hidden.length) {
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.displayAllRows)(true));
 	                hidden.forEach(function (row) {
 	                    row.classList.toggle("row-hide");
 	                });
 	            } else {
 	                var rowsToHide = Array.from(document.querySelectorAll("[data-should-be-hidden='true']"));
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.displayAllRows)(false));
 	                rowsToHide.forEach(function (row) {
 	                    row.classList.toggle("row-hide");
 	                });

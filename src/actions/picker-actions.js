@@ -5,6 +5,7 @@ const NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 const NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 const NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
 const NEWCHOSENTIMELOT= "NEWCHOSENTIMELOT";
+const DISPLAYALLROWS = "DISPLAYALLROWS";
 
 export function totalWeeks(data) {
     return { state : data, type: TOTALWEEKSUPDATE };
@@ -32,4 +33,8 @@ export function tableBodyData(data) {
 
 export function selectedTimeslot(data) {
     return { state : data, type : NEWCHOSENTIMELOT };
+}
+
+export function displayAllRows(data) {
+    return { state : data, type : DISPLAYALLROWS };
 }

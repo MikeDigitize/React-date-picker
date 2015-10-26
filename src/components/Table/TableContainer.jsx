@@ -15,6 +15,7 @@ class Table extends React.Component {
             tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex,
             timeDescriptions : DatePickerStore.getState().timeDescriptions,
             selectedTimeslotData : DatePickerStore.getState().selectedTimeslotData,
+            displayAllRows : DatePickerStore.getState().displayAllRows,
             unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
@@ -31,6 +32,7 @@ class Table extends React.Component {
             tableBodyData : DatePickerStore.getState().tableBodyData,
             tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex,
             timeDescriptions : DatePickerStore.getState().timeDescriptions,
+            displayAllRows : DatePickerStore.getState().displayAllRows,
             selectedTimeslotData : DatePickerStore.getState().selectedTimeslotData
         });
     }
@@ -47,6 +49,7 @@ class Table extends React.Component {
                     tableDisplayIndex={ this.state.tableDisplayIndex }
                     timeDescriptions={ this.state.timeDescriptions }
                     selectedTimeslotData={ this.state.selectedTimeslotData }
+                    displayAllRows={ this.state.displayAllRows }
                 />
              </table>
         );
