@@ -20532,7 +20532,7 @@
 
 	var _actionsPickerActions = __webpack_require__(235);
 
-	var _actionsExternalActions = __webpack_require__(246);
+	var _actionsExternalActions = __webpack_require__(236);
 
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
@@ -20732,13 +20732,13 @@
 
 	var _actionsPickerActions = __webpack_require__(235);
 
-	var _actionsExternalActions = __webpack_require__(246);
+	var _actionsExternalActions = __webpack_require__(236);
 
-	var _DateRangeDateRange = __webpack_require__(236);
+	var _DateRangeDateRange = __webpack_require__(237);
 
 	var _DateRangeDateRange2 = _interopRequireDefault(_DateRangeDateRange);
 
-	var _TableTableContainer = __webpack_require__(238);
+	var _TableTableContainer = __webpack_require__(239);
 
 	var _TableTableContainer2 = _interopRequireDefault(_TableTableContainer);
 
@@ -23514,7 +23514,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"timeslot-selected":"_1_i9rYWlxWAu7qy-QKg5qW","icon-tick2":"_6oEWH3PxmJ2ZdzkzXpBJz","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv","date-picker-closed":"_1RLvasQ2_ORGKHTkfRoisz","date-picker-closed-text":"_2yiu8PoIECOUO7nvxoJttb"};
+	module.exports = {"timeslot-selected":"_1_i9rYWlxWAu7qy-QKg5qW","icon-tick2":"_6oEWH3PxmJ2ZdzkzXpBJz","row-hide":"_2I7qYObNmhrmBg9UhSFECN","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv","date-picker-closed":"_1RLvasQ2_ORGKHTkfRoisz","date-picker-closed-text":"_2yiu8PoIECOUO7nvxoJttb"};
 
 /***/ },
 /* 223 */
@@ -23546,7 +23546,8 @@
 	        tableBodyData: (0, _pickerDataStores.tableBodyData)(state.tableBodyData, action),
 	        timeDescriptions: (0, _pickerDataStores.timeDescriptions)(state.timeDescriptions, action),
 	        selectedTimeslotData: (0, _externalStores.selectedTimeslotData)(state.selectedTimeslotData, action),
-	        selectedTimeslot: (0, _pickerDataStores.selectedTimeslot)(state.selectedTimeslot, action)
+	        selectedTimeslot: (0, _pickerDataStores.selectedTimeslot)(state.selectedTimeslot, action),
+	        rowsToDisplay: (0, _pickerDataStores.rowsToDisplay)(state.rowsToDisplay, action)
 	    };
 	}
 
@@ -24198,6 +24199,7 @@
 	exports.tableBodyData = tableBodyData;
 	exports.timeDescriptions = timeDescriptions;
 	exports.selectedTimeslot = selectedTimeslot;
+	exports.rowsToDisplay = rowsToDisplay;
 
 	function totalWeeks() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -24283,6 +24285,22 @@
 	    }
 	}
 
+	function rowsToDisplay() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? ["SameDay", "Anytime"] : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "ROWSTODISPLAYUPDATE":
+	            return action.state;
+	        case "ADDTOROWSTODISPLAY":
+	            return state.indexOf(action.state) === -1 ? state.concat(action.state) : state;
+	        case "RESETROWSTODISPLAY":
+	            return ["SameDay", "Anytime"];
+	        default:
+	            return state;
+	    }
+	}
+
 /***/ },
 /* 235 */
 /***/ function(module, exports) {
@@ -24299,6 +24317,9 @@
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
 	exports.selectedTimeslot = selectedTimeslot;
+	exports.rowsToDisplay = rowsToDisplay;
+	exports.addToRowsToDisplay = addToRowsToDisplay;
+	exports.resetRowsToDisplay = resetRowsToDisplay;
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDATERANGES = "NEWDATERANGES";
@@ -24306,6 +24327,9 @@
 	var NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 	var NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
 	var NEWCHOSENTIMELOT = "NEWCHOSENTIMELOT";
+	var ROWSTODISPLAYUPDATE = "ROWSTODISPLAYUPDATE";
+	var ADDTOROWSTODISPLAY = "ADDTOROWSTODISPLAY";
+	var RESETROWSTODISPLAY = "RESETROWSTODISPLAY";
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24335,8 +24359,60 @@
 	    return { state: data, type: NEWCHOSENTIMELOT };
 	}
 
+	function rowsToDisplay(data) {
+	    return { state: data, type: ROWSTODISPLAYUPDATE };
+	}
+
+	function addToRowsToDisplay(data) {
+	    return { state: data, type: ADDTOROWSTODISPLAY };
+	}
+
+	function resetRowsToDisplay(data) {
+	    return { state: data, type: RESETROWSTODISPLAY };
+	}
+
 /***/ },
 /* 236 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.availableDates = availableDates;
+	exports.basketTotal = basketTotal;
+	exports.addToBasketTotal = addToBasketTotal;
+	exports.subtractFromBasketTotal = subtractFromBasketTotal;
+	exports.selectedTimeslotData = selectedTimeslotData;
+	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
+	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
+	var ADDTOTOTAL = "ADDTOTOTAL";
+	var SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
+	var NEWCHOSENTIMESLOTDATA = "NEWCHOSENTIMESLOTDATA";
+
+	function availableDates(data) {
+	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
+	}
+
+	function basketTotal(data, action) {
+	    return { state: data, type: action || BASKETTOTALUPDATE };
+	}
+
+	function addToBasketTotal(data) {
+	    return { state: data, type: ADDTOTOTAL };
+	}
+
+	function subtractFromBasketTotal(data) {
+	    return { state: data, type: SUBTRACTFROMTOTAL };
+	}
+
+	function selectedTimeslotData(data) {
+	    return { state: data, type: NEWCHOSENTIMESLOTDATA };
+	}
+
+/***/ },
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24363,7 +24439,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _dateRangeStyles = __webpack_require__(237);
+	var _dateRangeStyles = __webpack_require__(238);
 
 	var _dateRangeStyles2 = _interopRequireDefault(_dateRangeStyles);
 
@@ -24447,14 +24523,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-range-select":"OX0IQ95QuEmxlWQhyiRs6","date-range":"_1yKpw1RLO3THHz9hnbX_Dt","date-range-ctrl":"znc2lrvqmWUjnbcbNbeIr","date-range-right":"_1AqK9xb6dHCKGPeJDRvBtw","date-range-left":"_8SLLaLIWkMBPftpcd_ldr"};
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24481,11 +24557,11 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _TableTableHead = __webpack_require__(239);
+	var _TableTableHead = __webpack_require__(240);
 
 	var _TableTableHead2 = _interopRequireDefault(_TableTableHead);
 
-	var _TableTableBody = __webpack_require__(241);
+	var _TableTableBody = __webpack_require__(242);
 
 	var _TableTableBody2 = _interopRequireDefault(_TableTableBody);
 
@@ -24497,7 +24573,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsExternalActions = __webpack_require__(246);
+	var _actionsExternalActions = __webpack_require__(236);
 
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
@@ -24561,7 +24637,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24588,7 +24664,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _tableHeadStyles = __webpack_require__(240);
+	var _tableHeadStyles = __webpack_require__(241);
 
 	var _tableHeadStyles2 = _interopRequireDefault(_tableHeadStyles);
 
@@ -24681,14 +24757,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-picker-thead":"I0Zsu_vOjbLH-qTh5jbMr"};
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24715,15 +24791,15 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _tableBodyStyles = __webpack_require__(242);
+	var _tableBodyStyles = __webpack_require__(243);
 
 	var _tableBodyStyles2 = _interopRequireDefault(_tableBodyStyles);
 
-	var _DeliveryDescriptionsDesc = __webpack_require__(243);
+	var _DeliveryDescriptionsDesc = __webpack_require__(244);
 
 	var _DeliveryDescriptionsDesc2 = _interopRequireDefault(_DeliveryDescriptionsDesc);
 
-	var _DeliveryDescriptionsAnytime = __webpack_require__(245);
+	var _DeliveryDescriptionsAnytime = __webpack_require__(246);
 
 	var _DeliveryDescriptionsAnytime2 = _interopRequireDefault(_DeliveryDescriptionsAnytime);
 
@@ -24731,7 +24807,9 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsExternalActions = __webpack_require__(246);
+	var _actionsPickerActions = __webpack_require__(235);
+
+	var _actionsExternalActions = __webpack_require__(236);
 
 	__webpack_require__(247);
 
@@ -24754,12 +24832,19 @@
 	    _createClass(TableBody, [{
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
+	            console.log("next props!");
 	            this.setState({
 	                tableBodyData: nextProps.tableBodyData,
 	                tableDisplayIndex: nextProps.tableDisplayIndex,
 	                timeDescriptions: nextProps.timeDescriptions,
 	                selectedTimeslotData: nextProps.selectedTimeslotData
 	            });
+	        }
+	    }, {
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            console.log("will update");
+	            //DatePickerStore.dispatch(rowsToDisplay(this.state.alwaysDisplay.these));
 	        }
 	    }, {
 	        key: "createRows",
@@ -24790,7 +24875,7 @@
 	            var shortdate = this.state.selectedTimeslotData.shortdate;
 	            return data.map(function (details, j) {
 	                var ref = i + "" + j;
-	                var className = selectedRef === ref && details[j].shortdate === shortdate ? "timeslot-selected" : "";
+	                var className = selectedRef === ref && details[j] && details[j].shortdate === shortdate ? "timeslot-selected" : "";
 	                if (className && details[j].shortdate === shortdate) {
 	                    _this2.state.alwaysDisplay.add(_this2.state.tableBodyData[_this2.state.tableDisplayIndex][0][i].description);
 	                }
@@ -24938,14 +25023,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-picker-tbody":"_29vJ8JCK0woHtbMXWLpUK9","timeslot-desc":"_2j2BD-de5vLVDb31Pa_GhM","timeslot":"_2nbCK7KDaiFms044UxcM1m","delivery-non-selectable":"_2-_DwV3SrjiGf8gK8Qg_Vv","delivery-selectable":"_1joTcdAy56WL7iY5YFerPM","delivery-selected":"OjDALIjGZUOIa7p-dpptf"};
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24972,7 +25057,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _descriptionStyles = __webpack_require__(244);
+	var _descriptionStyles = __webpack_require__(245);
 
 	var _descriptionStyles2 = _interopRequireDefault(_descriptionStyles);
 
@@ -25027,14 +25112,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"time-desc":"twEIetCF4STnzvQiPcYsl","time":"_3bdVbBScAd7I2p6YGPJEp","extra-info":"kGAWnSxKGyltFW8gS4zYX"};
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25061,7 +25146,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _descriptionStyles = __webpack_require__(244);
+	var _descriptionStyles = __webpack_require__(245);
 
 	var _descriptionStyles2 = _interopRequireDefault(_descriptionStyles);
 
@@ -25112,46 +25197,6 @@
 
 	exports["default"] = (0, _reactCssModules2["default"])(AnytimeDesc, _descriptionStyles2["default"]);
 	module.exports = exports["default"];
-
-/***/ },
-/* 246 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.availableDates = availableDates;
-	exports.basketTotal = basketTotal;
-	exports.addToBasketTotal = addToBasketTotal;
-	exports.subtractFromBasketTotal = subtractFromBasketTotal;
-	exports.selectedTimeslotData = selectedTimeslotData;
-	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
-	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
-	var ADDTOTOTAL = "ADDTOTOTAL";
-	var SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
-	var NEWCHOSENTIMESLOTDATA = "NEWCHOSENTIMESLOTDATA";
-
-	function availableDates(data) {
-	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
-	}
-
-	function basketTotal(data, action) {
-	    return { state: data, type: action || BASKETTOTALUPDATE };
-	}
-
-	function addToBasketTotal(data) {
-	    return { state: data, type: ADDTOTOTAL };
-	}
-
-	function subtractFromBasketTotal(data) {
-	    return { state: data, type: SUBTRACTFROMTOTAL };
-	}
-
-	function selectedTimeslotData(data) {
-	    return { state: data, type: NEWCHOSENTIMESLOTDATA };
-	}
 
 /***/ },
 /* 247 */

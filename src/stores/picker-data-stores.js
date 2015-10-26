@@ -60,3 +60,16 @@ export function selectedTimeslot(state = "", action = {}) {
             return state;
     }
 }
+
+export function rowsToDisplay(state = ["SameDay", "Anytime"], action = {}) {
+    switch(action.type) {
+        case "ROWSTODISPLAYUPDATE" :
+            return action.state;
+        case "ADDTOROWSTODISPLAY" :
+            return state.indexOf(action.state) === -1 ? state.concat(action.state) : state;
+        case "RESETROWSTODISPLAY" :
+            return ["SameDay", "Anytime"];
+        default :
+            return state;
+    }
+}

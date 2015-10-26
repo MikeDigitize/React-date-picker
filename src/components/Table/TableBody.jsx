@@ -4,6 +4,7 @@ import styles from "./table-body-styles";
 import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
 import DatePickerStore from "../../stores/PickerStore";
+import { rowsToDisplay } from "../../actions/picker-actions";
 import { addToBasketTotal, subtractFromBasketTotal, selectedTimeslotData } from "../../actions/external-actions";
 import "../../utils/classList-polyfill";
 
@@ -21,12 +22,18 @@ class TableBody extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log("next props!");
         this.setState({
             tableBodyData : nextProps.tableBodyData,
             tableDisplayIndex : nextProps.tableDisplayIndex,
             timeDescriptions : nextProps.timeDescriptions,
             selectedTimeslotData : nextProps.selectedTimeslotData
         });
+    }
+
+    componentWillMount() {
+        console.log("will update")
+        //DatePickerStore.dispatch(rowsToDisplay(this.state.alwaysDisplay.these));
     }
 
     static rowsToDisplay() {
@@ -78,7 +85,7 @@ class TableBody extends React.Component {
         let shortdate = this.state.selectedTimeslotData.shortdate;
         return data.map((details, j) => {
             let ref = i + "" + j;
-            let className = selectedRef === ref && details[j].shortdate === shortdate ? "timeslot-selected" : "";
+            let className = selectedRef === ref && details[j] && details[j].shortdate === shortdate ? "timeslot-selected" : "";
             if(className && details[j].shortdate === shortdate) {
                 this.state.alwaysDisplay.add(this.state.tableBodyData[this.state.tableDisplayIndex][0][i].description);
             }
