@@ -4,7 +4,6 @@ import styles from "./table-body-styles";
 import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
 import DatePickerStore from "../../stores/PickerStore";
-import { rowsToDisplay } from "../../actions/picker-actions";
 import { addToBasketTotal, subtractFromBasketTotal, selectedTimeslotData } from "../../actions/external-actions";
 import "../../utils/classList-polyfill";
 
@@ -16,13 +15,12 @@ class TableBody extends React.Component {
             tableBodyData : this.props.tableBodyData,
             tableDisplayIndex : this.props.tableDisplayIndex,
             timeDescriptions : this.props.timeDescriptions,
-            selectedTimeslotData : this.props.selectedTimeslotData,
-            alwaysDisplay : TableBody.rowsToDisplay()
+            selectedTimeslotData : this.props.selectedTimeslotData
         };
+        this.alwaysDisplay = TableBody.rowsToDisplay()
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("next props!");
         this.setState({
             tableBodyData : nextProps.tableBodyData,
             tableDisplayIndex : nextProps.tableDisplayIndex,
@@ -31,22 +29,17 @@ class TableBody extends React.Component {
         });
     }
 
-    componentWillMount() {
-        console.log("will update")
-        //DatePickerStore.dispatch(rowsToDisplay(this.state.alwaysDisplay.these));
-    }
-
     static rowsToDisplay() {
         let these = ["SameDay", "Anytime"];
         return {
             these,
             add(row) {
-                if(these.indexOf(row) === -1) {
-                    these.push(row);
+                if(this.these.indexOf(row) === -1) {
+                    this.these.push(row);
                 }
             },
             remove(){
-                these = ["SameDay", "Anytime"];
+                this.these = ["SameDay", "Anytime"];
             }
         }
     }
@@ -64,16 +57,40 @@ class TableBody extends React.Component {
         else {
             target.classList.toggle("timeslot-selected");
         }
-        this.findTimeslot(target);
+        this.informStore(target);
+    };
+
+    informStore(target) {
+        let ref = target.getAttribute("data-ref");
+        let selected = [];
+        this.state.tableBodyData[this.state.tableDisplayIndex].forEach(data => {
+            if(!selected.length) {
+                selected = data.filter(days => {
+                    return days.ref === ref;
+                });
+            }
+        });
+        selected = selected.shift();
+
+        this.alwaysDisplay.remove();
+        DatePickerStore.dispatch(subtractFromBasketTotal(this.state.selectedTimeslotData.charge || 0));
+        if(!target.classList.contains("timeslot-selected")){
+            selected = {};
+        }
+        else {
+            DatePickerStore.dispatch(addToBasketTotal(selected.charge));
+        }
+        DatePickerStore.dispatch(selectedTimeslotData(selected));
     };
 
     createRows() {
+        this.alwaysDisplay.remove();
         let rows = [];
         let data = this.state.tableBodyData[this.state.tableDisplayIndex];
         data[0].forEach((details, i) => {
             let tds = this.createTds(i);
             tds.unshift(this.createRowDescription(details.description, i));
-            let className = this.state.alwaysDisplay.these.indexOf(details.description) === -1 ? "row-hide" : "";
+            let className = this.alwaysDisplay.these.indexOf(details.description) === -1 ? "row-hide" : "";
             rows.push(<tr key={i} className={className}>{ tds }</tr>)
         });
         return rows;
@@ -87,7 +104,7 @@ class TableBody extends React.Component {
             let ref = i + "" + j;
             let className = selectedRef === ref && details[j] && details[j].shortdate === shortdate ? "timeslot-selected" : "";
             if(className && details[j].shortdate === shortdate) {
-                this.state.alwaysDisplay.add(this.state.tableBodyData[this.state.tableDisplayIndex][0][i].description);
+                this.alwaysDisplay.add(this.state.tableBodyData[this.state.tableDisplayIndex][0][i].description);
             }
             let tdContent;
             if(details[i].charge === 0) {
@@ -128,28 +145,6 @@ class TableBody extends React.Component {
             return <td key={random} styleName="timeslot-desc"><Desc desc={ info } time={ time }/></td>
         }
     }
-
-    findTimeslot(target) {
-        let ref = target.getAttribute("data-ref");
-        let selected = [];
-        this.state.tableBodyData[this.state.tableDisplayIndex].forEach(data => {
-            if(!selected.length) {
-                selected = data.filter(days => {
-                    return days.ref === ref;
-                });
-            }
-        });
-        selected = selected.shift();
-        DatePickerStore.dispatch(subtractFromBasketTotal(this.state.selectedTimeslotData.charge || 0));
-        if(!target.classList.contains("timeslot-selected")){
-            selected = {};
-            this.state.alwaysDisplay.remove();
-        }
-        else {
-            DatePickerStore.dispatch(addToBasketTotal(selected.charge));
-        }
-        DatePickerStore.dispatch(selectedTimeslotData(selected));
-    };
 
     render() {
         return(

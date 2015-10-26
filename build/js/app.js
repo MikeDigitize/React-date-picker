@@ -23546,8 +23546,7 @@
 	        tableBodyData: (0, _pickerDataStores.tableBodyData)(state.tableBodyData, action),
 	        timeDescriptions: (0, _pickerDataStores.timeDescriptions)(state.timeDescriptions, action),
 	        selectedTimeslotData: (0, _externalStores.selectedTimeslotData)(state.selectedTimeslotData, action),
-	        selectedTimeslot: (0, _pickerDataStores.selectedTimeslot)(state.selectedTimeslot, action),
-	        rowsToDisplay: (0, _pickerDataStores.rowsToDisplay)(state.rowsToDisplay, action)
+	        selectedTimeslot: (0, _pickerDataStores.selectedTimeslot)(state.selectedTimeslot, action)
 	    };
 	}
 
@@ -24199,7 +24198,6 @@
 	exports.tableBodyData = tableBodyData;
 	exports.timeDescriptions = timeDescriptions;
 	exports.selectedTimeslot = selectedTimeslot;
-	exports.rowsToDisplay = rowsToDisplay;
 
 	function totalWeeks() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -24285,22 +24283,6 @@
 	    }
 	}
 
-	function rowsToDisplay() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? ["SameDay", "Anytime"] : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "ROWSTODISPLAYUPDATE":
-	            return action.state;
-	        case "ADDTOROWSTODISPLAY":
-	            return state.indexOf(action.state) === -1 ? state.concat(action.state) : state;
-	        case "RESETROWSTODISPLAY":
-	            return ["SameDay", "Anytime"];
-	        default:
-	            return state;
-	    }
-	}
-
 /***/ },
 /* 235 */
 /***/ function(module, exports) {
@@ -24317,9 +24299,6 @@
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
 	exports.selectedTimeslot = selectedTimeslot;
-	exports.rowsToDisplay = rowsToDisplay;
-	exports.addToRowsToDisplay = addToRowsToDisplay;
-	exports.resetRowsToDisplay = resetRowsToDisplay;
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDATERANGES = "NEWDATERANGES";
@@ -24327,9 +24306,6 @@
 	var NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 	var NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
 	var NEWCHOSENTIMELOT = "NEWCHOSENTIMELOT";
-	var ROWSTODISPLAYUPDATE = "ROWSTODISPLAYUPDATE";
-	var ADDTOROWSTODISPLAY = "ADDTOROWSTODISPLAY";
-	var RESETROWSTODISPLAY = "RESETROWSTODISPLAY";
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24357,18 +24333,6 @@
 
 	function selectedTimeslot(data) {
 	    return { state: data, type: NEWCHOSENTIMELOT };
-	}
-
-	function rowsToDisplay(data) {
-	    return { state: data, type: ROWSTODISPLAYUPDATE };
-	}
-
-	function addToRowsToDisplay(data) {
-	    return { state: data, type: ADDTOROWSTODISPLAY };
-	}
-
-	function resetRowsToDisplay(data) {
-	    return { state: data, type: RESETROWSTODISPLAY };
 	}
 
 /***/ },
@@ -24807,8 +24771,6 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerActions = __webpack_require__(235);
-
 	var _actionsExternalActions = __webpack_require__(236);
 
 	__webpack_require__(247);
@@ -24824,15 +24786,14 @@
 	            tableBodyData: this.props.tableBodyData,
 	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            timeDescriptions: this.props.timeDescriptions,
-	            selectedTimeslotData: this.props.selectedTimeslotData,
-	            alwaysDisplay: TableBody.rowsToDisplay()
+	            selectedTimeslotData: this.props.selectedTimeslotData
 	        };
+	        this.alwaysDisplay = TableBody.rowsToDisplay();
 	    }
 
 	    _createClass(TableBody, [{
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
-	            console.log("next props!");
 	            this.setState({
 	                tableBodyData: nextProps.tableBodyData,
 	                tableDisplayIndex: nextProps.tableDisplayIndex,
@@ -24841,22 +24802,40 @@
 	            });
 	        }
 	    }, {
-	        key: "componentWillMount",
-	        value: function componentWillMount() {
-	            console.log("will update");
-	            //DatePickerStore.dispatch(rowsToDisplay(this.state.alwaysDisplay.these));
+	        key: "informStore",
+	        value: function informStore(target) {
+	            var ref = target.getAttribute("data-ref");
+	            var selected = [];
+	            this.state.tableBodyData[this.state.tableDisplayIndex].forEach(function (data) {
+	                if (!selected.length) {
+	                    selected = data.filter(function (days) {
+	                        return days.ref === ref;
+	                    });
+	                }
+	            });
+	            selected = selected.shift();
+
+	            this.alwaysDisplay.remove();
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(this.state.selectedTimeslotData.charge || 0));
+	            if (!target.classList.contains("timeslot-selected")) {
+	                selected = {};
+	            } else {
+	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketTotal)(selected.charge));
+	            }
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.selectedTimeslotData)(selected));
 	        }
 	    }, {
 	        key: "createRows",
 	        value: function createRows() {
 	            var _this = this;
 
+	            this.alwaysDisplay.remove();
 	            var rows = [];
 	            var data = this.state.tableBodyData[this.state.tableDisplayIndex];
 	            data[0].forEach(function (details, i) {
 	                var tds = _this.createTds(i);
 	                tds.unshift(_this.createRowDescription(details.description, i));
-	                var className = _this.state.alwaysDisplay.these.indexOf(details.description) === -1 ? "row-hide" : "";
+	                var className = _this.alwaysDisplay.these.indexOf(details.description) === -1 ? "row-hide" : "";
 	                rows.push(_react2["default"].createElement(
 	                    "tr",
 	                    { key: i, className: className },
@@ -24877,7 +24856,7 @@
 	                var ref = i + "" + j;
 	                var className = selectedRef === ref && details[j] && details[j].shortdate === shortdate ? "timeslot-selected" : "";
 	                if (className && details[j].shortdate === shortdate) {
-	                    _this2.state.alwaysDisplay.add(_this2.state.tableBodyData[_this2.state.tableDisplayIndex][0][i].description);
+	                    _this2.alwaysDisplay.add(_this2.state.tableBodyData[_this2.state.tableDisplayIndex][0][i].description);
 	                }
 	                var tdContent = undefined;
 	                if (details[i].charge === 0) {
@@ -24938,28 +24917,6 @@
 	            }
 	        }
 	    }, {
-	        key: "findTimeslot",
-	        value: function findTimeslot(target) {
-	            var ref = target.getAttribute("data-ref");
-	            var selected = [];
-	            this.state.tableBodyData[this.state.tableDisplayIndex].forEach(function (data) {
-	                if (!selected.length) {
-	                    selected = data.filter(function (days) {
-	                        return days.ref === ref;
-	                    });
-	                }
-	            });
-	            selected = selected.shift();
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(this.state.selectedTimeslotData.charge || 0));
-	            if (!target.classList.contains("timeslot-selected")) {
-	                selected = {};
-	                this.state.alwaysDisplay.remove();
-	            } else {
-	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketTotal)(selected.charge));
-	            }
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.selectedTimeslotData)(selected));
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
@@ -24975,12 +24932,12 @@
 	            return {
 	                these: these,
 	                add: function add(row) {
-	                    if (these.indexOf(row) === -1) {
-	                        these.push(row);
+	                    if (this.these.indexOf(row) === -1) {
+	                        this.these.push(row);
 	                    }
 	                },
 	                remove: function remove() {
-	                    these = ["SameDay", "Anytime"];
+	                    this.these = ["SameDay", "Anytime"];
 	                }
 	            };
 	        }
@@ -24998,7 +24955,7 @@
 	            } else {
 	                target.classList.toggle("timeslot-selected");
 	            }
-	            this.findTimeslot(target);
+	            this.informStore(target);
 	        }
 	    }]);
 

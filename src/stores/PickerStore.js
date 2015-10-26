@@ -1,6 +1,6 @@
 import { createStore } from "redux";
 import { basketTotal, availableDates, selectedTimeslotData } from "./external-stores";
-import { totalWeeks, tableDisplayIndex, dateRanges, tableHeadData, tableBodyData, timeDescriptions, selectedTimeslot, rowsToDisplay } from "./picker-data-stores";
+import { totalWeeks, tableDisplayIndex, dateRanges, tableHeadData, tableBodyData, timeDescriptions, selectedTimeslot } from "./picker-data-stores";
 
 function DatePicker(state = {}, action = {}) {
     return {
@@ -13,8 +13,7 @@ function DatePicker(state = {}, action = {}) {
         tableBodyData : tableBodyData(state.tableBodyData, action),
         timeDescriptions : timeDescriptions(state.timeDescriptions, action),
         selectedTimeslotData : selectedTimeslotData(state.selectedTimeslotData, action),
-        selectedTimeslot : selectedTimeslot(state.selectedTimeslot, action),
-        rowsToDisplay : rowsToDisplay(state.rowsToDisplay, action)
+        selectedTimeslot : selectedTimeslot(state.selectedTimeslot, action)
     }
 }
 

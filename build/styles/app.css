@@ -14,7 +14,7 @@ body {
   color: #7fba23; }
 
 ._2I7qYObNmhrmBg9UhSFECN {
-  display: none; }
+  border: 2px dashed red; }
 
 ._2jnqxNVZRf1nCWihSNkv3Z, ._1Qq05B5n_ZuASi021mf9Zv * {
   -webkit-user-select: none;
@@ -192,4 +192,4 @@ body { padding: 20px; }
 .icon-tick2 {
   color: #7fba23;
 }
-.row-hide { display: none }
+.row-hide { border: 2px dashed red }
