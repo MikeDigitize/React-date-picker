@@ -20732,6 +20732,8 @@
 
 	var _actionsPickerActions = __webpack_require__(235);
 
+	var _actionsExternalActions = __webpack_require__(246);
+
 	var _DateRangeDateRange = __webpack_require__(236);
 
 	var _DateRangeDateRange2 = _interopRequireDefault(_DateRangeDateRange);
@@ -20771,8 +20773,12 @@
 	        key: "componentWillMount",
 	        value: function componentWillMount() {
 	            if (!this.isTimeslotStillAvailable()) {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)({}));
+	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.selectedTimeslotData)({}));
 	            }
+	        }
+	    }, {
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
 	            if (typeof this.state.unsubscribe === "function") {
 	                this.state.unsubscribe();
 	            }
@@ -23539,7 +23545,7 @@
 	        tableHeadData: (0, _pickerDataStores.tableHeadData)(state.tableHeadData, action),
 	        tableBodyData: (0, _pickerDataStores.tableBodyData)(state.tableBodyData, action),
 	        timeDescriptions: (0, _pickerDataStores.timeDescriptions)(state.timeDescriptions, action),
-	        selectedTimeslotData: (0, _pickerDataStores.selectedTimeslotData)(state.selectedTimeslotData, action),
+	        selectedTimeslotData: (0, _externalStores.selectedTimeslotData)(state.selectedTimeslotData, action),
 	        selectedTimeslot: (0, _pickerDataStores.selectedTimeslot)(state.selectedTimeslot, action)
 	    };
 	}
@@ -24134,6 +24140,7 @@
 	});
 	exports.availableDates = availableDates;
 	exports.basketTotal = basketTotal;
+	exports.selectedTimeslotData = selectedTimeslotData;
 
 	function availableDates() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -24163,6 +24170,18 @@
 	    }
 	}
 
+	function selectedTimeslotData() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWCHOSENTIMESLOTDATA":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
 /***/ },
 /* 234 */
 /***/ function(module, exports) {
@@ -24179,7 +24198,6 @@
 	exports.tableBodyData = tableBodyData;
 	exports.timeDescriptions = timeDescriptions;
 	exports.selectedTimeslot = selectedTimeslot;
-	exports.selectedTimeslotData = selectedTimeslotData;
 
 	function totalWeeks() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -24265,18 +24283,6 @@
 	    }
 	}
 
-	function selectedTimeslotData() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWCHOSENTIMESLOTDATA":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
 /***/ },
 /* 235 */
 /***/ function(module, exports) {
@@ -24293,7 +24299,6 @@
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
 	exports.selectedTimeslot = selectedTimeslot;
-	exports.selectedTimeslotData = selectedTimeslotData;
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDATERANGES = "NEWDATERANGES";
@@ -24301,7 +24306,6 @@
 	var NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 	var NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
 	var NEWCHOSENTIMELOT = "NEWCHOSENTIMELOT";
-	var NEWCHOSENTIMESLOTDATA = "NEWCHOSENTIMESLOTDATA";
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24329,10 +24333,6 @@
 
 	function selectedTimeslot(data) {
 	    return { state: data, type: NEWCHOSENTIMELOT };
-	}
-
-	function selectedTimeslotData(data) {
-	    return { state: data, type: NEWCHOSENTIMESLOTDATA };
 	}
 
 /***/ },
@@ -24382,8 +24382,7 @@
 	        _get(Object.getPrototypeOf(DateRange.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            dates: this.props.dateRanges,
-	            tableDisplayIndex: this.props.tableDisplayIndex,
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onTableDisplayIndexUpdate.bind(this))
+	            tableDisplayIndex: this.props.tableDisplayIndex
 	        };
 	    }
 
@@ -24395,33 +24394,24 @@
 	            }
 	        }
 	    }, {
-	        key: "onTableDisplayIndexUpdate",
-	        value: function onTableDisplayIndexUpdate() {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
 	            this.setState({
-	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
+	                dates: nextProps.dateRanges,
+	                tableDisplayIndex: nextProps.tableDisplayIndex
 	            });
 	        }
 	    }, {
 	        key: "prevweek",
 	        value: function prevweek() {
-	            var _this = this;
-
-	            this.setState({
-	                tableDisplayIndex: this.state.tableDisplayIndex === 0 ? this.state.dates.length - 1 : --this.state.tableDisplayIndex
-	            }, function () {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(_this.state.tableDisplayIndex));
-	            });
+	            var prev = this.state.tableDisplayIndex === 0 ? this.state.dates.length - 1 : --this.state.tableDisplayIndex;
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(prev));
 	        }
 	    }, {
 	        key: "nextweek",
 	        value: function nextweek() {
-	            var _this2 = this;
-
-	            this.setState({
-	                tableDisplayIndex: this.state.tableDisplayIndex === this.state.dates.length - 1 ? 0 : ++this.state.tableDisplayIndex
-	            }, function () {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(_this2.state.tableDisplayIndex));
-	            });
+	            var next = this.state.tableDisplayIndex === this.state.dates.length - 1 ? 0 : ++this.state.tableDisplayIndex;
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(next));
 	        }
 	    }, {
 	        key: "render",
@@ -24507,7 +24497,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerActions = __webpack_require__(235);
+	var _actionsExternalActions = __webpack_require__(246);
 
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
@@ -24614,7 +24604,6 @@
 
 	        _get(Object.getPrototypeOf(TableHead.prototype), "constructor", this).call(this, props);
 	        this.state = {
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this)),
 	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            tableHeadData: this.props.tableHeadData
 	        };
@@ -24626,6 +24615,14 @@
 	            if (typeof this.state.unsubscribe === "function") {
 	                this.state.unsubscribe();
 	            }
+	        }
+	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.setState({
+	                tableDisplayIndex: nextProps.tableDisplayIndex,
+	                tableHeadData: nextProps.tableHeadData
+	            });
 	        }
 	    }, {
 	        key: "createTableHeadRow",
@@ -24649,13 +24646,6 @@
 	                    { key: i },
 	                    th[text]
 	                );
-	            });
-	        }
-	    }, {
-	        key: "onStoreUpdate",
-	        value: function onStoreUpdate() {
-	            this.setState({
-	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex
 	            });
 	        }
 	    }, {
@@ -24742,8 +24732,6 @@
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
 	var _actionsExternalActions = __webpack_require__(246);
-
-	var _actionsPickerActions = __webpack_require__(235);
 
 	__webpack_require__(247);
 
@@ -24884,7 +24872,7 @@
 	            } else {
 	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketTotal)(selected.charge));
 	            }
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)(selected));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.selectedTimeslotData)(selected));
 	        }
 	    }, {
 	        key: "render",
@@ -25138,10 +25126,12 @@
 	exports.basketTotal = basketTotal;
 	exports.addToBasketTotal = addToBasketTotal;
 	exports.subtractFromBasketTotal = subtractFromBasketTotal;
+	exports.selectedTimeslotData = selectedTimeslotData;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var ADDTOTOTAL = "ADDTOTOTAL";
 	var SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
+	var NEWCHOSENTIMESLOTDATA = "NEWCHOSENTIMESLOTDATA";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -25157,6 +25147,10 @@
 
 	function subtractFromBasketTotal(data) {
 	    return { state: data, type: SUBTRACTFROMTOTAL };
+	}
+
+	function selectedTimeslotData(data) {
+	    return { state: data, type: NEWCHOSENTIMESLOTDATA };
 	}
 
 /***/ },
@@ -25422,24 +25416,16 @@
 	        _get(Object.getPrototypeOf(Summary.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            basketTotal: this.props.basketTotal,
-	            deliveryTotal: this.props.deliveryTotal,
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
+	            deliveryTotal: this.props.deliveryTotal
 	        };
 	    }
 
 	    _createClass(Summary, [{
-	        key: "componentWillUnmount",
-	        value: function componentWillUnmount() {
-	            if (typeof this.state.unsubscribe === "function") {
-	                this.state.unsubscribe();
-	            }
-	        }
-	    }, {
-	        key: "onStoreUpdate",
-	        value: function onStoreUpdate() {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
 	            this.setState({
-	                basketTotal: _storesPickerStore2["default"].getState().basketTotal,
-	                deliveryTotal: _storesPickerStore2["default"].getState().selectedTimeslotData.charge || 0
+	                basketTotal: nextProps.basketTotal,
+	                deliveryTotal: nextProps.deliveryTotal
 	            });
 	        }
 	    }, {
@@ -25448,6 +25434,11 @@
 	            return _react2["default"].createElement(
 	                "div",
 	                { styleName: "picker-summary-container" },
+	                _react2["default"].createElement(
+	                    "a",
+	                    { href: "#", styleName: "show-more-dates-link" },
+	                    "Show more timeslots"
+	                ),
 	                _react2["default"].createElement(
 	                    "div",
 	                    { styleName: "picker-summary" },
@@ -25507,7 +25498,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"picker-summary-container":"_2ov1icXwgaSbINDvctnl-W","picker-summary":"_16ev4A4zbVxa782BG6rEwq","summary-title":"_17Oslj9Asc7k4sY1nehkuW","summary-price":"_1X8ETpdII5jGksb51q-xXj"};
+	module.exports = {"picker-summary-container":"_2ov1icXwgaSbINDvctnl-W","picker-summary":"_16ev4A4zbVxa782BG6rEwq","summary-title":"_17Oslj9Asc7k4sY1nehkuW","summary-price":"_1X8ETpdII5jGksb51q-xXj","show-more-dates-link":"_27iMzQC9XKlX3Ngl62uQXf"};
 
 /***/ },
 /* 251 */

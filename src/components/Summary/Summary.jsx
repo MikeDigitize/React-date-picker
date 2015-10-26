@@ -9,27 +9,21 @@ class Summary extends React.Component {
         super(props);
         this.state = {
             basketTotal : this.props.basketTotal,
-            deliveryTotal : this.props.deliveryTotal,
-            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
+            deliveryTotal : this.props.deliveryTotal
         };
     }
 
-    componentWillUnmount() {
-        if(typeof this.state.unsubscribe === "function") {
-            this.state.unsubscribe();
-        }
-    }
-
-    onStoreUpdate() {
+    componentWillReceiveProps(nextProps) {
         this.setState({
-            basketTotal : DatePickerStore.getState().basketTotal,
-            deliveryTotal : DatePickerStore.getState().selectedTimeslotData.charge || 0
+            basketTotal : nextProps.basketTotal,
+            deliveryTotal : nextProps.deliveryTotal
         });
     }
 
     render(){
         return(
             <div styleName="picker-summary-container">
+                <a href="#" styleName="show-more-dates-link">Show more timeslots</a>
                 <div styleName="picker-summary">
                     <div>
                         <span styleName="summary-title">Delivery</span><span styleName="summary-price">&pound;{ this.state.deliveryTotal }</span>

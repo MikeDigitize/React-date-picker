@@ -60,12 +60,3 @@ export function selectedTimeslot(state = "", action = {}) {
             return state;
     }
 }
-
-export function selectedTimeslotData(state = {}, action = {}) {
-    switch(action.type) {
-        case "NEWCHOSENTIMESLOTDATA" :
-            return action.state;
-        default :
-            return state;
-    }
-}

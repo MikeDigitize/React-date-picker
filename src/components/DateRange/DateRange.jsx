@@ -10,8 +10,7 @@ class DateRange extends React.Component {
         super(props);
         this.state = {
             dates : this.props.dateRanges,
-            tableDisplayIndex : this.props.tableDisplayIndex,
-            unsubscribe : DatePickerStore.subscribe(this.onTableDisplayIndexUpdate.bind(this))
+            tableDisplayIndex : this.props.tableDisplayIndex
         };
     }
 
@@ -21,26 +20,21 @@ class DateRange extends React.Component {
         }
     }
 
-    onTableDisplayIndexUpdate() {
+    componentWillReceiveProps(nextProps) {
         this.setState({
-            tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex
+            dates : nextProps.dateRanges,
+            tableDisplayIndex : nextProps.tableDisplayIndex
         });
     }
 
     prevweek() {
-        this.setState({
-           tableDisplayIndex : this.state.tableDisplayIndex === 0 ? this.state.dates.length - 1 : --this.state.tableDisplayIndex
-        }, () => {
-            DatePickerStore.dispatch(updateTableIndex(this.state.tableDisplayIndex));
-        });
+        let prev = this.state.tableDisplayIndex === 0 ? this.state.dates.length - 1 : --this.state.tableDisplayIndex;
+        DatePickerStore.dispatch(updateTableIndex(prev));
     }
 
     nextweek() {
-        this.setState({
-            tableDisplayIndex : this.state.tableDisplayIndex === this.state.dates.length - 1 ? 0 : ++this.state.tableDisplayIndex
-        }, () => {
-            DatePickerStore.dispatch(updateTableIndex(this.state.tableDisplayIndex));
-        });
+        let next = this.state.tableDisplayIndex === this.state.dates.length - 1 ? 0 : ++this.state.tableDisplayIndex;
+        DatePickerStore.dispatch(updateTableIndex(next));
     }
 
     render() {

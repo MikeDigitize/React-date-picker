@@ -4,7 +4,7 @@ import TableHead from "../Table/TableHead";
 import TableBody from "../Table/TableBody";
 import styles from "./table-styles";
 import DatePickerStore from "../../stores/PickerStore";
-import { selectedTimeslotData } from "../../actions/picker-actions";
+import { selectedTimeslotData } from "../../actions/external-actions";
 
 class Table extends React.Component {
     constructor() {

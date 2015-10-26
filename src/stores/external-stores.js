@@ -19,3 +19,12 @@ export function basketTotal(state = 0, action = {}) {
             return state;
     }
 }
+
+export function selectedTimeslotData(state = {}, action = {}) {
+    switch(action.type) {
+        case "NEWCHOSENTIMESLOTDATA" :
+            return action.state;
+        default :
+            return state;
+    }
+}
