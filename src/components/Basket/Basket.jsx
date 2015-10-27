@@ -10,7 +10,8 @@ class Basket extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            basketProducts : this.props.basketProducts
+            basketProducts : this.props.basketProducts,
+            loadNewDates : this.props.loadNewDates
         };
         DatePickerStore.dispatch(basketProducts(this.props.basketProducts));
         DatePickerStore.dispatch(basketTotal(this.props.basketProducts));
@@ -43,6 +44,7 @@ class Basket extends React.Component {
         });
         DatePickerStore.dispatch(basketProducts(products));
         DatePickerStore.dispatch(basketTotal(products));
+        this.state.loadNewDates();
     }
 
     decreaseProductCount(name){
@@ -62,6 +64,7 @@ class Basket extends React.Component {
         });
         DatePickerStore.dispatch(basketProducts(products));
         DatePickerStore.dispatch(basketTotal(products));
+        this.state.loadNewDates();
     }
 
     createBasketMarkup(){

@@ -12,7 +12,7 @@ export function availableDates(state = {}, action = {}) {
 export function basketTotal(state = 0, action = {}) {
     switch(action.type) {
         case "BASKETTOTALUPDATE" :
-            return action.state.map(p => p.quantity * p.cost || 0).reduce((a,b) => format(a+b));
+            return action.state.map(p => p.quantity * p.cost || 0).reduce((a,b) => format(a+b), 0);
         case "ADDTOTOTAL" :
             return format(state + action.state);
         case "SUBTRACTFROMTOTAL" :

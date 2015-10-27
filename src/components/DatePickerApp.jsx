@@ -23,7 +23,7 @@ class App extends React.Component {
         getBasketProducts().then(this.storeProductsInBasket.bind(this));
     }
 
-    passNewConfig() {
+    loadNewDates() {
         let random = 0;/*Math.floor(Math.random() * 3);*/
         this.setState({
             config : config[random]
@@ -39,13 +39,9 @@ class App extends React.Component {
     render() {
         return(
             <div>
-                <BasketContainer basketProducts={ this.state.basketProducts }/>
-                <button
-                    className="btn btn-primary get-new-config-btn"
-                    onClick={ this.passNewConfig.bind(this) }>
-                        New config!
-                </button>
+                <BasketContainer basketProducts={ this.state.basketProducts } loadNewDates={ this.loadNewDates.bind(this) }/>
                 <PickerContainer config={this.state.config} />
+                <Total />
             </div>
         );
 
