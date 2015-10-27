@@ -20647,7 +20647,6 @@
 	        key: "preparePickerData",
 	        value: function preparePickerData(config) {
 
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(config.basketTotal));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.totalWeeks)(config.weeksInConfig));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.dateRanges)(config.dateRanges));
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.tableHeadData)(config.tableHeadData));
@@ -24157,7 +24156,7 @@
 
 /***/ },
 /* 233 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
@@ -24168,6 +24167,8 @@
 	exports.basketTotal = basketTotal;
 	exports.selectedTimeslotData = selectedTimeslotData;
 	exports.basketProducts = basketProducts;
+
+	var _utilsCostFormatter = __webpack_require__(261);
 
 	function availableDates() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -24187,11 +24188,15 @@
 
 	    switch (action.type) {
 	        case "BASKETTOTALUPDATE":
-	            return action.state;
+	            return action.state.map(function (p) {
+	                return p.quantity * p.cost || 0;
+	            }).reduce(function (a, b) {
+	                return (0, _utilsCostFormatter.format)(a + b);
+	            });
 	        case "ADDTOTOTAL":
-	            return state + action.state;
+	            return (0, _utilsCostFormatter.format)(state + action.state);
 	        case "SUBTRACTFROMTOTAL":
-	            return state - action.state;
+	            return (0, _utilsCostFormatter.format)(state - action.state);
 	        default:
 	            return state;
 	    }
@@ -24214,17 +24219,8 @@
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    switch (action.type) {
-	        case "BASKETPRODUCTTOTAL":
-	            var result = action.state.map(function (product) {
-	                return product.quantity * product.cost || 0;
-	            });
-	            if (result.length) {
-	                return result.reduce(function (a, b) {
-	                    return Number((a + b).toFixed(2));
-	                });
-	            } else {
-	                return 0.00;
-	            }
+	        case "NEWBASKETPRODUCTS":
+	            return action.state;
 	        default:
 	            return state;
 	    }
@@ -24422,14 +24418,14 @@
 	var ADDTOTOTAL = "ADDTOTOTAL";
 	var SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
 	var NEWCHOSENTIMESLOTDATA = "NEWCHOSENTIMESLOTDATA";
-	var BASKETPRODUCTTOTAL = "BASKETPRODUCTTOTAL";
+	var NEWBASKETPRODUCTS = "NEWBASKETPRODUCTS";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
 	}
 
-	function basketTotal(data, action) {
-	    return { state: data, type: action || BASKETTOTALUPDATE };
+	function basketTotal(data) {
+	    return { state: data, type: BASKETTOTALUPDATE };
 	}
 
 	function addToBasketTotal(data) {
@@ -24445,7 +24441,7 @@
 	}
 
 	function basketProducts(data) {
-	    return { state: data, type: BASKETPRODUCTTOTAL };
+	    return { state: data, type: NEWBASKETPRODUCTS };
 	}
 
 /***/ },
@@ -26024,6 +26020,8 @@
 
 	var _actionsExternalActions = __webpack_require__(236);
 
+	var _utilsCostFormatter = __webpack_require__(261);
+
 	var Basket = (function (_React$Component) {
 	    _inherits(Basket, _React$Component);
 
@@ -26035,6 +26033,7 @@
 	            basketProducts: this.props.basketProducts
 	        };
 	        _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(this.props.basketProducts));
+	        _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(this.props.basketProducts));
 	        _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this));
 	    }
 
@@ -26048,6 +26047,7 @@
 	        value: function componentWillReceiveProps(nextProps) {
 	            this.setState({ basketProducts: nextProps.basketProducts });
 	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(nextProps.basketProducts));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(nextProps.basketProducts));
 	        }
 	    }, {
 	        key: "increaseProductCount",
@@ -26065,6 +26065,7 @@
 	                basketProducts: products
 	            });
 	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(products));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(products));
 	        }
 	    }, {
 	        key: "decreaseProductCount",
@@ -26084,6 +26085,7 @@
 	                basketProducts: products
 	            });
 	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(products));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(products));
 	        }
 	    }, {
 	        key: "createBasketMarkup",
@@ -26124,7 +26126,7 @@
 	                            "p",
 	                            null,
 	                            "Total: £",
-	                            Number((product.cost * product.quantity).toFixed(2))
+	                            (0, _utilsCostFormatter.format)(product.cost * product.quantity)
 	                        ),
 	                        _react2["default"].createElement(
 	                            "span",
@@ -26224,6 +26226,21 @@
 	    return fetch('/data/basket-products.json').then(function (response) {
 	        return response.json();
 	    });
+	}
+
+/***/ },
+/* 261 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.format = format;
+
+	function format(val) {
+	    return Number(val.toFixed(2));
 	}
 
 /***/ }

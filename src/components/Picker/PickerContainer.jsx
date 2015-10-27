@@ -87,7 +87,6 @@ export default class PickerContainer extends React.Component {
 
     preparePickerData(config) {
 
-        DatePickerStore.dispatch(basketTotal(config.basketTotal));
         DatePickerStore.dispatch(totalWeeks(config.weeksInConfig));
         DatePickerStore.dispatch(dateRanges(config.dateRanges));
         DatePickerStore.dispatch(tableHeadData(config.tableHeadData));

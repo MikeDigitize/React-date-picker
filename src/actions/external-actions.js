@@ -3,14 +3,14 @@ const BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 const ADDTOTOTAL = "ADDTOTOTAL";
 const SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
 const NEWCHOSENTIMESLOTDATA= "NEWCHOSENTIMESLOTDATA";
-const BASKETPRODUCTTOTAL = "BASKETPRODUCTTOTAL";
+const NEWBASKETPRODUCTS = "NEWBASKETPRODUCTS";
 
 export function availableDates(data) {
     return { state : data, type: NEWAVAILABLEDATESANDCHARGES };
 }
 
-export function basketTotal(data, action) {
-    return { state : data, type: action || BASKETTOTALUPDATE };
+export function basketTotal(data) {
+    return { state : data, type: BASKETTOTALUPDATE };
 }
 
 export function addToBasketTotal(data) {
@@ -26,5 +26,5 @@ export function selectedTimeslotData(data) {
 }
 
 export function basketProducts(data) {
-    return { state : data, type : BASKETPRODUCTTOTAL };
+    return { state : data, type : NEWBASKETPRODUCTS };
 }
