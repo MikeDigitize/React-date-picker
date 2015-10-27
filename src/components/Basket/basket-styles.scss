@@ -5,13 +5,22 @@
     display: table;
     clear: both;
   }
+  * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  hr {
+    margin: 10px auto;
+  }
 }
 .basket-title {
   font-size: 22px;
   font-weight: bold;
 }
 .basket-product {
-  padding: 20px;
+  padding: 10px;
   border-bottom: 1px solid #ededed;
   margin-bottom: 5px;
   &:after {

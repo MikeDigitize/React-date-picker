@@ -72,19 +72,21 @@
 
 	var _PriceComponentsDiscount2 = _interopRequireDefault(_PriceComponentsDiscount);
 
-	//import Basket from "./Basket/Basket";
+	var _BasketBasketContainer = __webpack_require__(256);
+
+	var _BasketBasketContainer2 = _interopRequireDefault(_BasketBasketContainer);
 
 	var _storesPickerStore = __webpack_require__(223);
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _stylesGlobal = __webpack_require__(256);
+	var _stylesGlobal = __webpack_require__(258);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
 
 	var _actionsExternalActions = __webpack_require__(236);
 
-	var _utilsGetConfig = __webpack_require__(257);
+	var _utilsGetConfig = __webpack_require__(259);
 
 	var config = undefined;
 
@@ -102,6 +104,7 @@
 	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)(), (0, _utilsGetConfig.getData3)()]).then(function (data) {
 	            config = data;
 	        });
+	        (0, _utilsGetConfig.getBasketProducts)().then(this.storeProductsInBasket.bind(this));
 	    }
 
 	    _createClass(App, [{
@@ -113,11 +116,19 @@
 	            });
 	        }
 	    }, {
+	        key: "storeProductsInBasket",
+	        value: function storeProductsInBasket(data) {
+	            this.setState({
+	                basketProducts: data.basketProducts
+	            });
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
 	                "div",
 	                null,
+	                _react2["default"].createElement(_BasketBasketContainer2["default"], { basketProducts: this.state.basketProducts }),
 	                _react2["default"].createElement(
 	                    "button",
 	                    {
@@ -20586,7 +20597,7 @@
 	        value: function componentWillReceiveProps(nextProps) {
 	            var _this = this;
 
-	            if (Object.keys(nextProps).length) {
+	            if (Object.keys(nextProps.config).length) {
 
 	                if (nextProps.config.state === "ThirdParty") {
 	                    this.setState({
@@ -25905,12 +25916,81 @@
 
 /***/ },
 /* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Basket = __webpack_require__(260);
+
+	var _Basket2 = _interopRequireDefault(_Basket);
+
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
+	var BasketContainer = (function (_React$Component) {
+	    _inherits(BasketContainer, _React$Component);
+
+	    function BasketContainer(props) {
+	        _classCallCheck(this, BasketContainer);
+
+	        _get(Object.getPrototypeOf(BasketContainer.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            basketProducts: this.props.basketProducts
+	        };
+	    }
+
+	    _createClass(BasketContainer, [{
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.setState({ basketProducts: nextProps.basketProducts });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(_Basket2["default"], { basketProducts: this.state.basketProducts });
+	        }
+	    }]);
+
+	    return BasketContainer;
+	})(_react2["default"].Component);
+
+	exports["default"] = BasketContainer;
+	module.exports = exports["default"];
+
+/***/ },
+/* 257 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"basket":"yzOjuFEH3Ooj613qRtfgo","basket-title":"_1we7oAM3hrIIJiOkeuK40s","basket-product":"_1w4qeO0-nIi3BlpwTVy1HI","basket-details":"_1MeLm69fkk81PB_pLHuHEc","increase":"_2Oq02zolMx78VmQsUOryrn","decrease":"_2Qkz7alTf-_TvWjx_MTBnR"};
+
+/***/ },
+/* 258 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 257 */
+/* 259 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25922,6 +26002,7 @@
 	exports.getData2 = getData2;
 	exports.getData3 = getData3;
 	exports.getData4 = getData4;
+	exports.getBasketProducts = getBasketProducts;
 
 	function getData1() {
 	    return fetch('/data/picker-config1.json').then(function (response) {
@@ -25946,6 +26027,184 @@
 	        return response.json();
 	    });
 	}
+
+	function getBasketProducts() {
+	    return fetch('/data/basket-products.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _basketStyles = __webpack_require__(257);
+
+	var _basketStyles2 = _interopRequireDefault(_basketStyles);
+
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
+	var Basket = (function (_React$Component) {
+	    _inherits(Basket, _React$Component);
+
+	    function Basket(props) {
+	        _classCallCheck(this, Basket);
+
+	        _get(Object.getPrototypeOf(Basket.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            basketProducts: this.props.basketProducts
+	        };
+	    }
+
+	    _createClass(Basket, [{
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.setState({ basketProducts: nextProps.basketProducts });
+	        }
+	    }, {
+	        key: "increaseProductCount",
+	        value: function increaseProductCount(name) {
+	            var index = undefined;
+	            this.state.basketProducts.forEach(function (product, i) {
+	                if (product.name === name) {
+	                    index = i;
+	                }
+	            });
+	            var product = this.state.basketProducts[index];
+	            product.quantity++;
+	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
+	            this.setState({
+	                basketProducts: products
+	            });
+	        }
+	    }, {
+	        key: "decreaseProductCount",
+	        value: function decreaseProductCount(name) {
+	            var index = undefined;
+	            this.state.basketProducts.forEach(function (product, i) {
+	                if (product.name === name) {
+	                    index = i;
+	                }
+	            });
+	            var product = this.state.basketProducts[index];
+	            if (product.quantity > 0) {
+	                product.quantity--;
+	            }
+	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
+	            this.setState({
+	                basketProducts: products
+	            });
+	        }
+	    }, {
+	        key: "createBasketMarkup",
+	        value: function createBasketMarkup() {
+	            var _this = this;
+
+	            return this.state.basketProducts.map(function (product, i) {
+	                var name = product.name;
+	                return _react2["default"].createElement(
+	                    "div",
+	                    { styleName: "basket-product", key: i },
+	                    _react2["default"].createElement(
+	                        "div",
+	                        { styleName: "basket-details" },
+	                        _react2["default"].createElement(
+	                            "h3",
+	                            null,
+	                            product.name
+	                        ),
+	                        _react2["default"].createElement(
+	                            "h4",
+	                            null,
+	                            product.brand
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            null,
+	                            "Quanity: ",
+	                            product.quantity
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            null,
+	                            "Price: £",
+	                            product.cost
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            null,
+	                            "Total: £",
+	                            product.cost * product.quantity
+	                        ),
+	                        _react2["default"].createElement(
+	                            "span",
+	                            { styleName: "increase", onClick: _this.increaseProductCount.bind(_this, name) },
+	                            "+"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "span",
+	                            { styleName: "decrease", onClick: _this.decreaseProductCount.bind(_this, name) },
+	                            "-"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "div",
+	                        { styleName: "basket-details" },
+	                        _react2["default"].createElement("img", { src: product.imageUrl, className: "img-responsive", alt: "" })
+	                    )
+	                );
+	            });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "div",
+	                { styleName: "basket" },
+	                _react2["default"].createElement(
+	                    "h2",
+	                    { styleName: "basket-title" },
+	                    "Your basket"
+	                ),
+	                _react2["default"].createElement("hr", null),
+	                this.createBasketMarkup()
+	            );
+	        }
+	    }]);
+
+	    return Basket;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(Basket, _basketStyles2["default"]);
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ]);

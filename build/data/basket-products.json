@@ -1,0 +1,15 @@
+{
+  "basketProducts" : [{
+    "name" : "Titan Washing Machine",
+    "brand" : "Bosch",
+    "quantity" : 1,
+    "imageUrl" : "http://content.ao.com/productimages/rvmedium/bosch_waq28470gb_wh_01_m_p.jpg",
+    "cost": 399.99
+  }, {
+    "name" : "Smart 4k Ultra HD",
+    "brand" : "LG",
+    "quantity" : 1,
+    "imageUrl" : "http://content.ao.com/productimages/rvmedium/lg_43uf770v_ledtv_11_m_p.jpg",
+    "cost" : 1599.99
+  }]
+}

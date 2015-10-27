@@ -25,3 +25,10 @@ export function getData4() {
             return response.json()
         });
 }
+
+export function getBasketProducts() {
+    return fetch('/data/basket-products.json')
+        .then(response => {
+            return response.json()
+        });
+}

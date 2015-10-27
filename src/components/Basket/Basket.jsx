@@ -13,25 +13,52 @@ class Basket extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        this.setState({ basketProducts : nextProps.basketProducts })
     }
 
-    increaseProductCount(){
-        console.log("increases", arguments);
+    increaseProductCount(name){
+        let index;
+        this.state.basketProducts.forEach((product,i) => {
+           if(product.name === name) {
+               index = i;
+           }
+        });
+        let product = this.state.basketProducts[index];
+        product.quantity++;
+        let products = [...this.state.basketProducts];
+        this.setState({
+            basketProducts : products
+        });
     }
 
-    decreaseProductCount(){
-        console.log("decreases", arguments);
+    decreaseProductCount(name){
+        let index;
+        this.state.basketProducts.forEach((product,i) => {
+            if(product.name === name) {
+                index = i;
+            }
+        });
+        let product = this.state.basketProducts[index];
+        if(product.quantity > 0) {
+            product.quantity--;
+        }
+        let products = [...this.state.basketProducts];
+        this.setState({
+            basketProducts : products
+        });
     }
 
-    render() {
-        let basketProducts = this.state.basketProducts.map(product => {
+    createBasketMarkup(){
+        return this.state.basketProducts.map((product, i) => {
             let name = product.name;
             return (
-                <div styleName="basket-product">
+                <div styleName="basket-product" key={i}>
                     <div styleName="basket-details">
                         <h3>{ product.name }</h3>
                         <h4>{ product.brand }</h4>
                         <p>Quanity: { product.quantity }</p>
+                        <p>Price: &pound;{ product.cost }</p>
+                        <p>Total: &pound;{ product.cost * product.quantity }</p>
                         <span styleName="increase" onClick={ this.increaseProductCount.bind(this, name)}>+</span>
                         <span styleName="decrease" onClick={ this.decreaseProductCount.bind(this, name)}>-</span>
                     </div>
@@ -41,11 +68,14 @@ class Basket extends React.Component {
                 </div>
             );
         });
+    }
+
+    render() {
         return(
             <div styleName="basket">
                 <h2 styleName="basket-title">Your basket</h2>
                 <hr />
-                { basketProducts }
+                { this.createBasketMarkup() }
             </div>
         );
     }

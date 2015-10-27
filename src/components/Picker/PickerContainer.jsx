@@ -30,7 +30,7 @@ export default class PickerContainer extends React.Component {
 
     componentWillReceiveProps(nextProps) {
 
-        if(Object.keys(nextProps).length) {
+        if(Object.keys(nextProps.config).length) {
 
             if(nextProps.config.state === "ThirdParty") {
                 this.setState({
