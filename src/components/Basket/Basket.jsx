@@ -19,8 +19,7 @@ class Basket extends React.Component {
     }
 
     onStoreUpdate() {
-        console.log(DatePickerStore.getState().basketProducts);
-
+        //console.log(DatePickerStore.getState().basketProducts);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -93,7 +92,6 @@ class Basket extends React.Component {
         return(
             <div styleName="basket">
                 <h2 styleName="basket-title">Your basket</h2>
-                <hr />
                 { this.createBasketMarkup() }
             </div>
         );

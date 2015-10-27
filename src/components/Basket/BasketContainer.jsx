@@ -6,7 +6,6 @@ export default class BasketContainer extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
             basketProducts : this.props.basketProducts,
             loadNewDates : this.props.loadNewDates

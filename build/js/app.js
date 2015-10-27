@@ -68,9 +68,9 @@
 
 	var _PriceComponentsTotal2 = _interopRequireDefault(_PriceComponentsTotal);
 
-	var _PriceComponentsDiscount = __webpack_require__(256);
+	var _PriceComponentsDiscountContainer = __webpack_require__(262);
 
-	var _PriceComponentsDiscount2 = _interopRequireDefault(_PriceComponentsDiscount);
+	var _PriceComponentsDiscountContainer2 = _interopRequireDefault(_PriceComponentsDiscountContainer);
 
 	var _BasketBasketContainer = __webpack_require__(257);
 
@@ -101,7 +101,7 @@
 	            config: {},
 	            basketProducts: []
 	        };
-	        Promise.all([(0, _utilsGetConfig.getData1)()]).then(function (data) {
+	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)(), (0, _utilsGetConfig.getData3)(), (0, _utilsGetConfig.getData4)()]).then(function (data) {
 	            config = data;
 	        });
 	        (0, _utilsGetConfig.getBasketProducts)().then(this.storeProductsInBasket.bind(this));
@@ -110,7 +110,7 @@
 	    _createClass(App, [{
 	        key: "loadNewDates",
 	        value: function loadNewDates() {
-	            var random = 0; /*Math.floor(Math.random() * 3);*/
+	            var random = Math.floor(Math.random() * 4);
 	            this.setState({
 	                config: config[random]
 	            });
@@ -130,7 +130,8 @@
 	                null,
 	                _react2["default"].createElement(_BasketBasketContainer2["default"], { basketProducts: this.state.basketProducts, loadNewDates: this.loadNewDates.bind(this) }),
 	                _react2["default"].createElement(_PickerPickerContainer2["default"], { config: this.state.config }),
-	                _react2["default"].createElement(_PriceComponentsTotal2["default"], null)
+	                _react2["default"].createElement(_PriceComponentsTotal2["default"], null),
+	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], { threshold: 100, percentage: 10, basketProducts: this.state.basketProducts })
 	            );
 	        }
 	    }]);
@@ -25829,7 +25830,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"basket-total":"_2EvZ4S1ZjKahbXW7pyPgD4","basket-total-title":"_1TcqySj-NlRWtAEMjVoZ1y","basket-total-holder":"_1XhcrMQx0wkRcV5BwzlS5G"};
+	module.exports = {"basket-total":"_2EvZ4S1ZjKahbXW7pyPgD4","basket-total-title":"_1TcqySj-NlRWtAEMjVoZ1y","basket-discount-title":"_3mISlqaew1N56vnjkY96OA","basket-total-holder":"_1XhcrMQx0wkRcV5BwzlS5G","status":"_2Of6OvLqO4l6308RlraF1R","active":"_9MgO-LYMJW4bua6aN-5iA","inactive":"FkIZXn6p9IBDvXs8JhqIg"};
 
 /***/ },
 /* 256 */
@@ -25863,59 +25864,46 @@
 
 	var _priceStyles2 = _interopRequireDefault(_priceStyles);
 
-	var _storesPickerStore = __webpack_require__(223);
-
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
-
-	var _actionsExternalActions = __webpack_require__(237);
-
 	var Discount = (function (_React$Component) {
 	    _inherits(Discount, _React$Component);
 
-	    function Discount() {
+	    function Discount(props) {
 	        _classCallCheck(this, Discount);
 
-	        _get(Object.getPrototypeOf(Discount.prototype), "constructor", this).call(this);
+	        _get(Object.getPrototypeOf(Discount.prototype), "constructor", this).call(this, props);
 	        this.state = {
-	            hasBeenApplied: false
+	            discountThreshold: this.props.threshold,
+	            discountPercentage: this.props.percentage,
+	            discountValue: this.props.threshold,
+	            isActive: this.props.isActive
 	        };
-	        _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this));
 	    }
 
 	    _createClass(Discount, [{
-	        key: "checkTotalForDiscountEligibility",
-	        value: function checkTotalForDiscountEligibility() {
-	            var total = _storesPickerStore2["default"].getState().basketTotal;
-	            if (total >= 260) {
-	                if (!this.state.hasBeenApplied) {
-	                    var discount = Math.round(total / 100 * 10);
-	                    console.log(total, discount);
-	                    this.setState({
-	                        hasBeenApplied: true
-	                    });
-	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(discount));
-	                }
-	            } else {
-	                this.setState({
-	                    hasBeenApplied: false
-	                });
-	            }
-	        }
-	    }, {
-	        key: "onStoreUpdate",
-	        value: function onStoreUpdate() {
-	            this.checkTotalForDiscountEligibility();
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
+	            var offer = this.state.discountPercentage ? this.state.discountPercentage + "%" : this.state.discountValue;
+	            var className = this.state.isActive ? "active" : "inactive";
 	            return _react2["default"].createElement(
 	                "div",
 	                { styleName: "basket-total-holder", className: "form-group" },
 	                _react2["default"].createElement(
-	                    "h3",
-	                    { styleName: "basket-total-title" },
-	                    "Spend more than £100 to get a discount of 10%"
+	                    "h4",
+	                    { styleName: "basket-discount-title" },
+	                    "Spend more than £",
+	                    this.state.discountThreshold,
+	                    " to get a discount of ",
+	                    offer
+	                ),
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "status" },
+	                    "Currently ",
+	                    _react2["default"].createElement(
+	                        "span",
+	                        { styleName: className },
+	                        className
+	                    )
 	                )
 	            );
 	        }
@@ -25966,7 +25954,6 @@
 	        _classCallCheck(this, BasketContainer);
 
 	        _get(Object.getPrototypeOf(BasketContainer.prototype), "constructor", this).call(this, props);
-	        console.log(props);
 	        this.state = {
 	            basketProducts: this.props.basketProducts,
 	            loadNewDates: this.props.loadNewDates
@@ -26062,7 +26049,7 @@
 	    _createClass(Basket, [{
 	        key: "onStoreUpdate",
 	        value: function onStoreUpdate() {
-	            console.log(_storesPickerStore2["default"].getState().basketProducts);
+	            //console.log(DatePickerStore.getState().basketProducts);
 	        }
 	    }, {
 	        key: "componentWillReceiveProps",
@@ -26182,7 +26169,6 @@
 	                    { styleName: "basket-title" },
 	                    "Your basket"
 	                ),
-	                _react2["default"].createElement("hr", null),
 	                this.createBasketMarkup()
 	            );
 	        }
@@ -26251,6 +26237,149 @@
 	        return response.json();
 	    });
 	}
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Discount = __webpack_require__(256);
+
+	var _Discount2 = _interopRequireDefault(_Discount);
+
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
+	var _actionsExternalActions = __webpack_require__(237);
+
+	var _utilsCostFormatter = __webpack_require__(234);
+
+	var DiscountContainer = (function (_React$Component) {
+	    _inherits(DiscountContainer, _React$Component);
+
+	    function DiscountContainer(props) {
+	        _classCallCheck(this, DiscountContainer);
+
+	        _get(Object.getPrototypeOf(DiscountContainer.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            threshold: this.props.threshold,
+	            percentage: this.props.percentage,
+	            value: this.props.value,
+	            basketProductsTotal: this.props.basketProducts.map(function (p) {
+	                return p.quantity * p.cost || 0;
+	            }).reduce(function (a, b) {
+	                return (0, _utilsCostFormatter.format)(a + b);
+	            }, 0),
+	            isActive: false
+	        };
+
+	        _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this));
+	    }
+
+	    _createClass(DiscountContainer, [{
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            this.checkTotalForDiscountEligibility();
+	        }
+	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.setState({
+	                basketProductsTotal: nextProps.basketProducts.map(function (p) {
+	                    return p.quantity * p.cost || 0;
+	                }).reduce(function (a, b) {
+	                    return (0, _utilsCostFormatter.format)(a + b);
+	                }, 0)
+	            });
+	        }
+	    }, {
+	        key: "onStoreUpdate",
+	        value: function onStoreUpdate() {
+	            this.setState({
+	                basketProductsTotal: _storesPickerStore2["default"].getState().basketProducts.map(function (p) {
+	                    return p.quantity * p.cost || 0;
+	                }).reduce(function (a, b) {
+	                    return (0, _utilsCostFormatter.format)(a + b);
+	                }, 0)
+	            });
+	        }
+	    }, {
+	        key: "checkTotalForDiscountEligibility",
+	        value: function checkTotalForDiscountEligibility() {
+	            if (this.state.percentage) {
+	                this.percentageDiscount();
+	            } else {
+	                this.valueDiscount();
+	            }
+	        }
+	    }, {
+	        key: "percentageDiscount",
+	        value: function percentageDiscount() {
+	            var total = this.state.basketProductsTotal;
+	            var threshold = this.state.threshold;
+	            console.log(total, threshold);
+	            var active = false;
+	            if (total >= threshold) {
+	                var discount = (0, _utilsCostFormatter.format)(total / 100 * this.state.percentage);
+	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(discount));
+	                active = true;
+	            }
+	            this.setState({
+	                isActive: active
+	            });
+	        }
+	    }, {
+	        key: "valueDiscount",
+	        value: function valueDiscount() {
+	            var total = this.state.basketProductsTotal;
+	            var threshold = this.state.threshold;
+	            var active = false;
+	            if (total >= threshold) {
+	                var discount = (0, _utilsCostFormatter.format)(total - this.state.value);
+	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(discount));
+	                active = true;
+	            }
+	            this.setState({
+	                isActive: active
+	            });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(_Discount2["default"], {
+	                threshold: this.state.threshold,
+	                percentage: this.state.percentage,
+	                value: this.state.value,
+	                isActive: false
+	            });
+	        }
+	    }]);
+
+	    return DiscountContainer;
+	})(_react2["default"].Component);
+
+	exports["default"] = DiscountContainer;
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ]);

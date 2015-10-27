@@ -1,5 +1,4 @@
 .basket {
-  width: 345px;
   &:after {
     content : "";
     display: table;
@@ -22,7 +21,11 @@
 .basket-product {
   padding: 10px;
   border-bottom: 1px solid #ededed;
+  border-left: 1px solid #ededed;
+  border-top: 1px solid #ededed;
   margin-bottom: 5px;
+  width: 345px;
+  float:left;
   &:after {
     content : "";
     display: table;
@@ -34,6 +37,7 @@
     h3 {
       font-size: 18px;
       font-weight: bold;
+      min-height: 40px;
     }
     h4 {
       font-size: 16px;
