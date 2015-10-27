@@ -17,14 +17,14 @@ class App extends React.Component {
             config : {},
             basketProducts : []
         };
-        Promise.all([getData1(), getData2(), getData3()]).then(data => {
+        Promise.all([getData1()]).then(data => {
             config = data;
         });
         getBasketProducts().then(this.storeProductsInBasket.bind(this));
     }
 
     passNewConfig() {
-        let random = Math.floor(Math.random() * 3);
+        let random = 0;/*Math.floor(Math.random() * 3);*/
         this.setState({
             config : config[random]
         });

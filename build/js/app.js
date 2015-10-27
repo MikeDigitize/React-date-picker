@@ -80,13 +80,13 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _stylesGlobal = __webpack_require__(258);
+	var _stylesGlobal = __webpack_require__(259);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
 
 	var _actionsExternalActions = __webpack_require__(236);
 
-	var _utilsGetConfig = __webpack_require__(259);
+	var _utilsGetConfig = __webpack_require__(260);
 
 	var config = undefined;
 
@@ -101,7 +101,7 @@
 	            config: {},
 	            basketProducts: []
 	        };
-	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)(), (0, _utilsGetConfig.getData3)()]).then(function (data) {
+	        Promise.all([(0, _utilsGetConfig.getData1)()]).then(function (data) {
 	            config = data;
 	        });
 	        (0, _utilsGetConfig.getBasketProducts)().then(this.storeProductsInBasket.bind(this));
@@ -110,7 +110,7 @@
 	    _createClass(App, [{
 	        key: "passNewConfig",
 	        value: function passNewConfig() {
-	            var random = Math.floor(Math.random() * 3);
+	            var random = 0; /*Math.floor(Math.random() * 3);*/
 	            this.setState({
 	                config: config[random]
 	            });
@@ -25938,7 +25938,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Basket = __webpack_require__(260);
+	var _Basket = __webpack_require__(257);
 
 	var _Basket2 = _interopRequireDefault(_Basket);
 
@@ -25978,64 +25978,6 @@
 
 /***/ },
 /* 257 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-	module.exports = {"basket":"yzOjuFEH3Ooj613qRtfgo","basket-title":"_1we7oAM3hrIIJiOkeuK40s","basket-product":"_1w4qeO0-nIi3BlpwTVy1HI","basket-details":"_1MeLm69fkk81PB_pLHuHEc","increase":"_2Oq02zolMx78VmQsUOryrn","decrease":"_2Qkz7alTf-_TvWjx_MTBnR"};
-
-/***/ },
-/* 258 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 259 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	exports.getData1 = getData1;
-	exports.getData2 = getData2;
-	exports.getData3 = getData3;
-	exports.getData4 = getData4;
-	exports.getBasketProducts = getBasketProducts;
-
-	function getData1() {
-	    return fetch('/data/picker-config1.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getData2() {
-	    return fetch('/data/picker-config2.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getData3() {
-	    return fetch('/data/picker-config3.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getData4() {
-	    return fetch('/data/picker-config4.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getBasketProducts() {
-	    return fetch('/data/basket-products.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-/***/ },
-/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26064,7 +26006,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _basketStyles = __webpack_require__(257);
+	var _basketStyles = __webpack_require__(258);
 
 	var _basketStyles2 = _interopRequireDefault(_basketStyles);
 
@@ -26205,6 +26147,64 @@
 
 	exports["default"] = (0, _reactCssModules2["default"])(Basket, _basketStyles2["default"]);
 	module.exports = exports["default"];
+
+/***/ },
+/* 258 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"basket":"yzOjuFEH3Ooj613qRtfgo","basket-title":"_1we7oAM3hrIIJiOkeuK40s","basket-product":"_1w4qeO0-nIi3BlpwTVy1HI","basket-details":"_1MeLm69fkk81PB_pLHuHEc","increase":"_2Oq02zolMx78VmQsUOryrn","decrease":"_2Qkz7alTf-_TvWjx_MTBnR"};
+
+/***/ },
+/* 259 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 260 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	exports.getData1 = getData1;
+	exports.getData2 = getData2;
+	exports.getData3 = getData3;
+	exports.getData4 = getData4;
+	exports.getBasketProducts = getBasketProducts;
+
+	function getData1() {
+	    return fetch('/data/picker-config1.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData2() {
+	    return fetch('/data/picker-config2.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData3() {
+	    return fetch('/data/picker-config3.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData4() {
+	    return fetch('/data/picker-config4.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getBasketProducts() {
+	    return fetch('/data/basket-products.json').then(function (response) {
+	        return response.json();
+	    });
+	}
 
 /***/ }
 /******/ ]);
