@@ -2,6 +2,7 @@ import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./basket-styles";
 import DatePickerStore from "../../stores/PickerStore";
+import { basketProducts } from "../../actions/external-actions";
 
 class Basket extends React.Component {
 
@@ -10,10 +11,17 @@ class Basket extends React.Component {
         this.state = {
             basketProducts : this.props.basketProducts
         };
+        DatePickerStore.dispatch(basketProducts(this.props.basketProducts));
+        DatePickerStore.subscribe(this.onStoreUpdate.bind(this));
+    }
+
+    onStoreUpdate() {
+        console.log(DatePickerStore.getState().basketProducts);
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ basketProducts : nextProps.basketProducts })
+        this.setState({ basketProducts : nextProps.basketProducts });
+        DatePickerStore.dispatch(basketProducts(nextProps.basketProducts));
     }
 
     increaseProductCount(name){
@@ -29,6 +37,7 @@ class Basket extends React.Component {
         this.setState({
             basketProducts : products
         });
+        DatePickerStore.dispatch(basketProducts(products));
     }
 
     decreaseProductCount(name){
@@ -46,6 +55,7 @@ class Basket extends React.Component {
         this.setState({
             basketProducts : products
         });
+        DatePickerStore.dispatch(basketProducts(products));
     }
 
     createBasketMarkup(){
@@ -58,7 +68,7 @@ class Basket extends React.Component {
                         <h4>{ product.brand }</h4>
                         <p>Quanity: { product.quantity }</p>
                         <p>Price: &pound;{ product.cost }</p>
-                        <p>Total: &pound;{ product.cost * product.quantity }</p>
+                        <p>Total: &pound;{ Number((product.cost * product.quantity).toFixed(2)) }</p>
                         <span styleName="increase" onClick={ this.increaseProductCount.bind(this, name)}>+</span>
                         <span styleName="decrease" onClick={ this.decreaseProductCount.bind(this, name)}>-</span>
                     </div>

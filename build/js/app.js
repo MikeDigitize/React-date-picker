@@ -24191,7 +24191,6 @@
 	        case "ADDTOTOTAL":
 	            return state + action.state;
 	        case "SUBTRACTFROMTOTAL":
-	            console.log("Subtract");
 	            return state - action.state;
 	        default:
 	            return state;
@@ -24215,8 +24214,17 @@
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    switch (action.type) {
-	        case "BASKETPRODUCTS":
-	            return action.state;
+	        case "BASKETPRODUCTTOTAL":
+	            var result = action.state.map(function (product) {
+	                return product.quantity * product.cost || 0;
+	            });
+	            if (result.length) {
+	                return result.reduce(function (a, b) {
+	                    return Number((a + b).toFixed(2));
+	                });
+	            } else {
+	                return 0.00;
+	            }
 	        default:
 	            return state;
 	    }
@@ -24414,7 +24422,7 @@
 	var ADDTOTOTAL = "ADDTOTOTAL";
 	var SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
 	var NEWCHOSENTIMESLOTDATA = "NEWCHOSENTIMESLOTDATA";
-	var BASKETPRODUCTS = "BASKETPRODUCTS";
+	var BASKETPRODUCTTOTAL = "BASKETPRODUCTTOTAL";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -24437,7 +24445,7 @@
 	}
 
 	function basketProducts(data) {
-	    return { state: data, type: BASKETPRODUCTS };
+	    return { state: data, type: BASKETPRODUCTTOTAL };
 	}
 
 /***/ },
@@ -26014,6 +26022,8 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
+	var _actionsExternalActions = __webpack_require__(236);
+
 	var Basket = (function (_React$Component) {
 	    _inherits(Basket, _React$Component);
 
@@ -26024,12 +26034,20 @@
 	        this.state = {
 	            basketProducts: this.props.basketProducts
 	        };
+	        _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(this.props.basketProducts));
+	        _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this));
 	    }
 
 	    _createClass(Basket, [{
+	        key: "onStoreUpdate",
+	        value: function onStoreUpdate() {
+	            console.log(_storesPickerStore2["default"].getState().basketProducts);
+	        }
+	    }, {
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
 	            this.setState({ basketProducts: nextProps.basketProducts });
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(nextProps.basketProducts));
 	        }
 	    }, {
 	        key: "increaseProductCount",
@@ -26046,6 +26064,7 @@
 	            this.setState({
 	                basketProducts: products
 	            });
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(products));
 	        }
 	    }, {
 	        key: "decreaseProductCount",
@@ -26064,6 +26083,7 @@
 	            this.setState({
 	                basketProducts: products
 	            });
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(products));
 	        }
 	    }, {
 	        key: "createBasketMarkup",
@@ -26104,7 +26124,7 @@
 	                            "p",
 	                            null,
 	                            "Total: £",
-	                            product.cost * product.quantity
+	                            Number((product.cost * product.quantity).toFixed(2))
 	                        ),
 	                        _react2["default"].createElement(
 	                            "span",

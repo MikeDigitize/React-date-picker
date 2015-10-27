@@ -31,8 +31,16 @@ export function selectedTimeslotData(state = {}, action = {}) {
 
 export function basketProducts(state = [], action = {}) {
     switch(action.type) {
-        case "BASKETPRODUCTS" :
-            return action.state;
+        case "BASKETPRODUCTTOTAL" :
+            let result = action.state.map(function(product){
+                return product.quantity * product.cost || 0;
+            });
+            if(result.length) {
+                return result.reduce((a,b)=> Number((a + b).toFixed(2)));
+            }
+            else {
+                return 0.00;
+            }
         default :
             return state;
     }
