@@ -5,7 +5,6 @@ import DiscountContainer from "./PriceComponents/DiscountContainer";
 import BasketContainer from "./Basket/BasketContainer";
 import DatePickerStore from "../stores/PickerStore";
 import styles from "../styles/global";
-import { basketProducts } from "../actions/external-actions";
 import { getData1, getData2, getData3, getData4, getBasketProducts } from "../utils/getConfig";
 
 let config;
@@ -39,10 +38,10 @@ class App extends React.Component {
     render() {
         return(
             <div>
-                <BasketContainer basketProducts={ this.state.basketProducts } loadNewDates={ this.loadNewDates.bind(this) }/>
-                <PickerContainer config={this.state.config} />
-                <Total />
-                <DiscountContainer threshold={100} percentage={10} basketProducts={ this.state.basketProducts } />
+                <BasketContainer
+                    basketProducts={ this.state.basketProducts }
+                    loadNewDates={ this.loadNewDates.bind(this) }
+                />
             </div>
         );
 
@@ -51,3 +50,15 @@ class App extends React.Component {
 }
 
 React.render(<App />, document.querySelector(".app-holder"));
+
+/*
+ <PickerContainer
+ config={this.state.config}
+ />
+ <Total />
+ <DiscountContainer
+ threshold={100}
+ percentage={10}
+ basketProducts={ this.state.basketProducts }
+ />
+ */

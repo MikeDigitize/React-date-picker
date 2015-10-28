@@ -68,11 +68,11 @@
 
 	var _PriceComponentsTotal2 = _interopRequireDefault(_PriceComponentsTotal);
 
-	var _PriceComponentsDiscountContainer = __webpack_require__(262);
+	var _PriceComponentsDiscountContainer = __webpack_require__(256);
 
 	var _PriceComponentsDiscountContainer2 = _interopRequireDefault(_PriceComponentsDiscountContainer);
 
-	var _BasketBasketContainer = __webpack_require__(257);
+	var _BasketBasketContainer = __webpack_require__(258);
 
 	var _BasketBasketContainer2 = _interopRequireDefault(_BasketBasketContainer);
 
@@ -80,13 +80,11 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _stylesGlobal = __webpack_require__(260);
+	var _stylesGlobal = __webpack_require__(261);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
 
-	var _actionsExternalActions = __webpack_require__(237);
-
-	var _utilsGetConfig = __webpack_require__(261);
+	var _utilsGetConfig = __webpack_require__(262);
 
 	var config = undefined;
 
@@ -128,10 +126,10 @@
 	            return _react2["default"].createElement(
 	                "div",
 	                null,
-	                _react2["default"].createElement(_BasketBasketContainer2["default"], { basketProducts: this.state.basketProducts, loadNewDates: this.loadNewDates.bind(this) }),
-	                _react2["default"].createElement(_PickerPickerContainer2["default"], { config: this.state.config }),
-	                _react2["default"].createElement(_PriceComponentsTotal2["default"], null),
-	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], { threshold: 100, percentage: 10, basketProducts: this.state.basketProducts })
+	                _react2["default"].createElement(_BasketBasketContainer2["default"], {
+	                    basketProducts: this.state.basketProducts,
+	                    loadNewDates: this.loadNewDates.bind(this)
+	                })
 	            );
 	        }
 	    }]);
@@ -140,6 +138,18 @@
 	})(_react2["default"].Component);
 
 	_react2["default"].render(_react2["default"].createElement(App, null), document.querySelector(".app-holder"));
+
+	/*
+	 <PickerContainer
+	 config={this.state.config}
+	 />
+	 <Total />
+	 <DiscountContainer
+	 threshold={100}
+	 percentage={10}
+	 basketProducts={ this.state.basketProducts }
+	 />
+	 */
 
 /***/ },
 /* 1 */
@@ -23556,7 +23566,7 @@
 
 	    return {
 	        availableDates: (0, _externalStores.availableDates)(state.availableDates, action),
-	        basketTotal: (0, _externalStores.basketTotal)(state.basketTotal, action),
+	        basketTotals: (0, _externalStores.basketTotal)(state.basketTotals, action),
 	        totalWeeks: (0, _pickerDataStores.totalWeeks)(state.totalWeeks, action),
 	        tableDisplayIndex: (0, _pickerDataStores.tableDisplayIndex)(state.tableDisplayIndex, action),
 	        dateRanges: (0, _pickerDataStores.dateRanges)(state.dateRanges, action),
@@ -23565,8 +23575,7 @@
 	        timeDescriptions: (0, _pickerDataStores.timeDescriptions)(state.timeDescriptions, action),
 	        selectedTimeslotData: (0, _externalStores.selectedTimeslotData)(state.selectedTimeslotData, action),
 	        selectedTimeslot: (0, _pickerDataStores.selectedTimeslot)(state.selectedTimeslot, action),
-	        displayAllRows: (0, _pickerDataStores.displayAllRows)(state.displayAllRows, action),
-	        basketProducts: (0, _externalStores.basketProducts)(state.basketProducts, action)
+	        displayAllRows: (0, _pickerDataStores.displayAllRows)(state.displayAllRows, action)
 	    };
 	}
 
@@ -24161,7 +24170,6 @@
 	exports.availableDates = availableDates;
 	exports.basketTotal = basketTotal;
 	exports.selectedTimeslotData = selectedTimeslotData;
-	exports.basketProducts = basketProducts;
 
 	var _utilsCostFormatter = __webpack_require__(234);
 
@@ -24178,20 +24186,56 @@
 	}
 
 	function basketTotal() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? { total: 0, totalIncDiscounts: 0, activeDiscounts: [], basketProducts: [] } : arguments[0];
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    switch (action.type) {
+	        // store products in basket - called every time basket is updated
+	        case "NEWBASKETPRODUCTS":
+	            var store = Object.assign({}, state, {
+	                basketProducts: action.state
+	            });
+	            return store;
+	        // updates after basket products are updated - no new state needed
 	        case "BASKETTOTALUPDATE":
-	            return action.state.map(function (p) {
-	                return p.quantity * p.cost || 0;
-	            }).reduce(function (a, b) {
-	                return (0, _utilsCostFormatter.format)(a + b);
-	            }, 0);
+	            return Object.assign({}, state, {
+	                total: (0, _utilsCostFormatter.format)(state.basketProducts.map(function (p) {
+	                    return p.quantity * p.cost || 0;
+	                }).reduce(function (a, b) {
+	                    return a + b;
+	                }, 0))
+	            });
+	        // when a discount becomes active - recalculate totalincdiscount after
+	        case "ADDBASKETDISCOUNTS":
+	            return Object.assign({}, state, {
+	                activeDiscounts: state.activeDiscounts.concat(action.state)
+	            });
+	        // when a discount becomes inactive - recalculate totalincdiscount after
+	        case "REMOVEBASKETDISCOUNT":
+	            return Object.assign({}, state, {
+	                activeDiscounts: state.activeDiscounts.filter(function (discount, i) {
+	                    return state.activeDiscounts.indexOf(action.state.name) !== i;
+	                })
+	            });
+	        // updates after basket products are updated AND when a discount is added / removed - no new state needed
+	        case "BASKETTOTALINCDISCOUNTSUPDATE":
+	            return Object.assign({}, state, {
+	                totalIncDiscounts: (0, _utilsCostFormatter.format)(state.total - state.activeDiscounts.map(function (d) {
+	                    return d.total || 0;
+	                }).reduce(function (a, b) {
+	                    return a + b;
+	                }, 0))
+	            });
+	        // anytime a delivery charge is selected and affects the total inc discounts
 	        case "ADDTOTOTAL":
-	            return (0, _utilsCostFormatter.format)(state + action.state);
+	            return Object.assign({}, state, {
+	                total: (0, _utilsCostFormatter.format)(state.totalIncDiscounts + action.state)
+	            });
+	        // anytime a delivery charge is selected and affects the total inc discounts
 	        case "SUBTRACTFROMTOTAL":
-	            return (0, _utilsCostFormatter.format)(state - action.state);
+	            return Object.assign({}, state, {
+	                total: (0, _utilsCostFormatter.format)(state.totalIncDiscounts - action.state)
+	            });
 	        default:
 	            return state;
 	    }
@@ -24203,18 +24247,6 @@
 
 	    switch (action.type) {
 	        case "NEWCHOSENTIMESLOTDATA":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
-	function basketProducts() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWBASKETPRODUCTS":
 	            return action.state;
 	        default:
 	            return state;
@@ -24418,32 +24450,26 @@
 	    value: true
 	});
 	exports.availableDates = availableDates;
-	exports.basketTotal = basketTotal;
-	exports.addToBasketTotal = addToBasketTotal;
-	exports.subtractFromBasketTotal = subtractFromBasketTotal;
 	exports.selectedTimeslotData = selectedTimeslotData;
 	exports.basketProducts = basketProducts;
+	exports.basketTotal = basketTotal;
+	exports.addToBasketDiscounts = addToBasketDiscounts;
+	exports.removeBasketDiscount = removeBasketDiscount;
+	exports.basketTotalIncDiscountsUpdate = basketTotalIncDiscountsUpdate;
+	exports.addToBasketTotal = addToBasketTotal;
+	exports.subtractFromBasketTotal = subtractFromBasketTotal;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var ADDTOTOTAL = "ADDTOTOTAL";
 	var SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
 	var NEWCHOSENTIMESLOTDATA = "NEWCHOSENTIMESLOTDATA";
 	var NEWBASKETPRODUCTS = "NEWBASKETPRODUCTS";
+	var ADDBASKETDISCOUNTS = "ADDBASKETDISCOUNTS";
+	var REMOVEBASKETDISCOUNT = "REMOVEBASKETDISCOUNT";
+	var BASKETTOTALINCDISCOUNTSUPDATE = "BASKETTOTALINCDISCOUNTSUPDATE";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
-	}
-
-	function basketTotal(data) {
-	    return { state: data, type: BASKETTOTALUPDATE };
-	}
-
-	function addToBasketTotal(data) {
-	    return { state: data, type: ADDTOTOTAL };
-	}
-
-	function subtractFromBasketTotal(data) {
-	    return { state: data, type: SUBTRACTFROMTOTAL };
 	}
 
 	function selectedTimeslotData(data) {
@@ -24452,6 +24478,30 @@
 
 	function basketProducts(data) {
 	    return { state: data, type: NEWBASKETPRODUCTS };
+	}
+
+	function basketTotal(data) {
+	    return { state: data, type: BASKETTOTALUPDATE };
+	}
+
+	function addToBasketDiscounts(data) {
+	    return { state: data, type: ADDBASKETDISCOUNTS };
+	}
+
+	function removeBasketDiscount(data) {
+	    return { state: data, type: REMOVEBASKETDISCOUNT };
+	}
+
+	function basketTotalIncDiscountsUpdate(data) {
+	    return { state: data, type: BASKETTOTALINCDISCOUNTSUPDATE };
+	}
+
+	function addToBasketTotal(data) {
+	    return { state: data, type: ADDTOTOTAL };
+	}
+
+	function subtractFromBasketTotal(data) {
+	    return { state: data, type: SUBTRACTFROMTOTAL };
 	}
 
 /***/ },
@@ -25856,413 +25906,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactCssModules = __webpack_require__(159);
-
-	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
-
-	var _priceStyles = __webpack_require__(255);
-
-	var _priceStyles2 = _interopRequireDefault(_priceStyles);
-
-	var Discount = (function (_React$Component) {
-	    _inherits(Discount, _React$Component);
-
-	    function Discount(props) {
-	        _classCallCheck(this, Discount);
-
-	        _get(Object.getPrototypeOf(Discount.prototype), "constructor", this).call(this, props);
-	        this.state = {
-	            discountThreshold: this.props.threshold,
-	            discountPercentage: this.props.percentage,
-	            discountValue: this.props.threshold,
-	            isActive: this.props.isActive
-	        };
-	    }
-
-	    _createClass(Discount, [{
-	        key: "render",
-	        value: function render() {
-	            var offer = this.state.discountPercentage ? this.state.discountPercentage + "%" : this.state.discountValue;
-	            var className = this.state.isActive ? "active" : "inactive";
-	            return _react2["default"].createElement(
-	                "div",
-	                { styleName: "basket-total-holder", className: "form-group" },
-	                _react2["default"].createElement(
-	                    "h4",
-	                    { styleName: "basket-discount-title" },
-	                    "Spend more than £",
-	                    this.state.discountThreshold,
-	                    " to get a discount of ",
-	                    offer
-	                ),
-	                _react2["default"].createElement(
-	                    "p",
-	                    { styleName: "status" },
-	                    "Currently ",
-	                    _react2["default"].createElement(
-	                        "span",
-	                        { styleName: className },
-	                        className
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return Discount;
-	})(_react2["default"].Component);
-
-	exports["default"] = (0, _reactCssModules2["default"])(Discount, _priceStyles2["default"]);
-	module.exports = exports["default"];
-
-/***/ },
-/* 257 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Basket = __webpack_require__(258);
-
-	var _Basket2 = _interopRequireDefault(_Basket);
-
-	var _storesPickerStore = __webpack_require__(223);
-
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
-
-	var BasketContainer = (function (_React$Component) {
-	    _inherits(BasketContainer, _React$Component);
-
-	    function BasketContainer(props) {
-	        _classCallCheck(this, BasketContainer);
-
-	        _get(Object.getPrototypeOf(BasketContainer.prototype), "constructor", this).call(this, props);
-	        this.state = {
-	            basketProducts: this.props.basketProducts,
-	            loadNewDates: this.props.loadNewDates
-	        };
-	    }
-
-	    _createClass(BasketContainer, [{
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(nextProps) {
-	            this.setState({ basketProducts: nextProps.basketProducts, loadNewDates: nextProps.loadNewDates });
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            return _react2["default"].createElement(_Basket2["default"], { basketProducts: this.state.basketProducts, loadNewDates: this.state.loadNewDates });
-	        }
-	    }]);
-
-	    return BasketContainer;
-	})(_react2["default"].Component);
-
-	exports["default"] = BasketContainer;
-
-	BasketContainer.faultProps = {
-	    basketProducts: [],
-	    loadNewDates: function loadNewDates() {}
-	};
-
-	BasketContainer.propTypes = {
-	    basketProducts: _react2["default"].PropTypes.array.isRequired,
-	    loadNewDates: _react2["default"].PropTypes.func.isRequired
-	};
-	module.exports = exports["default"];
-
-/***/ },
-/* 258 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactCssModules = __webpack_require__(159);
-
-	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
-
-	var _basketStyles = __webpack_require__(259);
-
-	var _basketStyles2 = _interopRequireDefault(_basketStyles);
-
-	var _storesPickerStore = __webpack_require__(223);
-
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
-
-	var _actionsExternalActions = __webpack_require__(237);
-
-	var _utilsCostFormatter = __webpack_require__(234);
-
-	var Basket = (function (_React$Component) {
-	    _inherits(Basket, _React$Component);
-
-	    function Basket(props) {
-	        _classCallCheck(this, Basket);
-
-	        _get(Object.getPrototypeOf(Basket.prototype), "constructor", this).call(this, props);
-	        this.state = {
-	            basketProducts: this.props.basketProducts,
-	            loadNewDates: this.props.loadNewDates
-	        };
-	        _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(this.props.basketProducts));
-	        _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(this.props.basketProducts));
-	        _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this));
-	    }
-
-	    _createClass(Basket, [{
-	        key: "onStoreUpdate",
-	        value: function onStoreUpdate() {
-	            //console.log(DatePickerStore.getState().basketProducts);
-	        }
-	    }, {
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(nextProps) {
-	            this.setState({ basketProducts: nextProps.basketProducts });
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(nextProps.basketProducts));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(nextProps.basketProducts));
-	        }
-	    }, {
-	        key: "increaseProductCount",
-	        value: function increaseProductCount(name) {
-	            var index = undefined;
-	            this.state.basketProducts.forEach(function (product, i) {
-	                if (product.name === name) {
-	                    index = i;
-	                }
-	            });
-	            var product = this.state.basketProducts[index];
-	            product.quantity++;
-	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
-	            this.setState({
-	                basketProducts: products
-	            });
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(products));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(products));
-	            this.state.loadNewDates();
-	        }
-	    }, {
-	        key: "decreaseProductCount",
-	        value: function decreaseProductCount(name) {
-	            var index = undefined;
-	            this.state.basketProducts.forEach(function (product, i) {
-	                if (product.name === name) {
-	                    index = i;
-	                }
-	            });
-	            var product = this.state.basketProducts[index];
-	            if (product.quantity > 0) {
-	                product.quantity--;
-	            }
-	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
-	            this.setState({
-	                basketProducts: products
-	            });
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(products));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(products));
-	            this.state.loadNewDates();
-	        }
-	    }, {
-	        key: "createBasketMarkup",
-	        value: function createBasketMarkup() {
-	            var _this = this;
-
-	            return this.state.basketProducts.map(function (product, i) {
-	                var name = product.name;
-	                return _react2["default"].createElement(
-	                    "div",
-	                    { styleName: "basket-product", key: i },
-	                    _react2["default"].createElement(
-	                        "div",
-	                        { styleName: "basket-details" },
-	                        _react2["default"].createElement(
-	                            "h3",
-	                            null,
-	                            product.name
-	                        ),
-	                        _react2["default"].createElement(
-	                            "h4",
-	                            null,
-	                            product.brand
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            null,
-	                            "Quanity: ",
-	                            product.quantity
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            null,
-	                            "Price: £",
-	                            product.cost
-	                        ),
-	                        _react2["default"].createElement(
-	                            "p",
-	                            null,
-	                            "Total: £",
-	                            (0, _utilsCostFormatter.format)(product.cost * product.quantity)
-	                        ),
-	                        _react2["default"].createElement(
-	                            "span",
-	                            { styleName: "increase", onClick: _this.increaseProductCount.bind(_this, name) },
-	                            "+"
-	                        ),
-	                        _react2["default"].createElement(
-	                            "span",
-	                            { styleName: "decrease", onClick: _this.decreaseProductCount.bind(_this, name) },
-	                            "-"
-	                        )
-	                    ),
-	                    _react2["default"].createElement(
-	                        "div",
-	                        { styleName: "basket-details" },
-	                        _react2["default"].createElement("img", { src: product.imageUrl, className: "img-responsive", alt: "" })
-	                    )
-	                );
-	            });
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            return _react2["default"].createElement(
-	                "div",
-	                { styleName: "basket" },
-	                _react2["default"].createElement(
-	                    "h2",
-	                    { styleName: "basket-title" },
-	                    "Your basket"
-	                ),
-	                this.createBasketMarkup()
-	            );
-	        }
-	    }]);
-
-	    return Basket;
-	})(_react2["default"].Component);
-
-	exports["default"] = (0, _reactCssModules2["default"])(Basket, _basketStyles2["default"]);
-	module.exports = exports["default"];
-
-/***/ },
-/* 259 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-	module.exports = {"basket":"yzOjuFEH3Ooj613qRtfgo","basket-title":"_1we7oAM3hrIIJiOkeuK40s","basket-product":"_1w4qeO0-nIi3BlpwTVy1HI","basket-details":"_1MeLm69fkk81PB_pLHuHEc","increase":"_2Oq02zolMx78VmQsUOryrn","decrease":"_2Qkz7alTf-_TvWjx_MTBnR"};
-
-/***/ },
-/* 260 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 261 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	exports.getData1 = getData1;
-	exports.getData2 = getData2;
-	exports.getData3 = getData3;
-	exports.getData4 = getData4;
-	exports.getBasketProducts = getBasketProducts;
-
-	function getData1() {
-	    return fetch('/data/picker-config1.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getData2() {
-	    return fetch('/data/picker-config2.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getData3() {
-	    return fetch('/data/picker-config3.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getData4() {
-	    return fetch('/data/picker-config4.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getBasketProducts() {
-	    return fetch('/data/basket-products.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-/***/ },
-/* 262 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Discount = __webpack_require__(256);
+	var _Discount = __webpack_require__(257);
 
 	var _Discount2 = _interopRequireDefault(_Discount);
 
@@ -26380,6 +26024,421 @@
 
 	exports["default"] = DiscountContainer;
 	module.exports = exports["default"];
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _priceStyles = __webpack_require__(255);
+
+	var _priceStyles2 = _interopRequireDefault(_priceStyles);
+
+	var Discount = (function (_React$Component) {
+	    _inherits(Discount, _React$Component);
+
+	    function Discount(props) {
+	        _classCallCheck(this, Discount);
+
+	        _get(Object.getPrototypeOf(Discount.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            discountThreshold: this.props.threshold,
+	            discountPercentage: this.props.percentage,
+	            discountValue: this.props.threshold,
+	            isActive: this.props.isActive
+	        };
+	    }
+
+	    _createClass(Discount, [{
+	        key: "render",
+	        value: function render() {
+	            var offer = this.state.discountPercentage ? this.state.discountPercentage + "%" : this.state.discountValue;
+	            var className = this.state.isActive ? "active" : "inactive";
+	            return _react2["default"].createElement(
+	                "div",
+	                { styleName: "basket-total-holder", className: "form-group" },
+	                _react2["default"].createElement(
+	                    "h4",
+	                    { styleName: "basket-discount-title" },
+	                    "Spend more than £",
+	                    this.state.discountThreshold,
+	                    " to get a discount of ",
+	                    offer
+	                ),
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "status" },
+	                    "Currently ",
+	                    _react2["default"].createElement(
+	                        "span",
+	                        { styleName: className },
+	                        className
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Discount;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(Discount, _priceStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Basket = __webpack_require__(259);
+
+	var _Basket2 = _interopRequireDefault(_Basket);
+
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
+	var _actionsExternalActions = __webpack_require__(237);
+
+	var BasketContainer = (function (_React$Component) {
+	    _inherits(BasketContainer, _React$Component);
+
+	    function BasketContainer(props) {
+	        _classCallCheck(this, BasketContainer);
+
+	        _get(Object.getPrototypeOf(BasketContainer.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            basketProducts: this.props.basketProducts,
+	            loadNewDates: this.props.loadNewDates,
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
+	        };
+	    }
+
+	    _createClass(BasketContainer, [{
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.setState({
+	                loadNewDates: nextProps.loadNewDates
+	            });
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(nextProps.basketProducts));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(null));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotalIncDiscountsUpdate)(null));
+	        }
+	    }, {
+	        key: "onStoreUpdate",
+	        value: function onStoreUpdate() {
+	            this.setState({
+	                basketProducts: _storesPickerStore2["default"].getState().basketTotals.basketProducts
+	            });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(_Basket2["default"], { basketProducts: this.state.basketProducts, loadNewDates: this.state.loadNewDates });
+	        }
+	    }]);
+
+	    return BasketContainer;
+	})(_react2["default"].Component);
+
+	exports["default"] = BasketContainer;
+
+	BasketContainer.faultProps = {
+	    basketProducts: [],
+	    loadNewDates: function loadNewDates() {}
+	};
+
+	BasketContainer.propTypes = {
+	    basketProducts: _react2["default"].PropTypes.array.isRequired,
+	    loadNewDates: _react2["default"].PropTypes.func.isRequired
+	};
+
+	/*
+
+	 */
+	module.exports = exports["default"];
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _basketStyles = __webpack_require__(260);
+
+	var _basketStyles2 = _interopRequireDefault(_basketStyles);
+
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
+	var _actionsExternalActions = __webpack_require__(237);
+
+	var _utilsCostFormatter = __webpack_require__(234);
+
+	var Basket = (function (_React$Component) {
+	    _inherits(Basket, _React$Component);
+
+	    function Basket(props) {
+	        _classCallCheck(this, Basket);
+
+	        _get(Object.getPrototypeOf(Basket.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            basketProducts: this.props.basketProducts,
+	            loadNewDates: this.props.loadNewDates
+	        };
+	    }
+
+	    _createClass(Basket, [{
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.setState({ basketProducts: nextProps.basketProducts });
+	        }
+	    }, {
+	        key: "increaseProductCount",
+	        value: function increaseProductCount(name) {
+	            var index = undefined;
+	            this.state.basketProducts.forEach(function (product, i) {
+	                if (product.name === name) {
+	                    index = i;
+	                }
+	            });
+	            var product = this.state.basketProducts[index];
+	            product.quantity++;
+	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
+	            //this.setState({
+	            //    basketProducts : products
+	            //});
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(products));
+	            //DatePickerStore.dispatch(basketTotal(products));
+	            //this.state.loadNewDates();
+	        }
+	    }, {
+	        key: "decreaseProductCount",
+	        value: function decreaseProductCount(name) {
+	            var index = undefined;
+	            this.state.basketProducts.forEach(function (product, i) {
+	                if (product.name === name) {
+	                    index = i;
+	                }
+	            });
+	            var product = this.state.basketProducts[index];
+	            if (product.quantity > 0) {
+	                product.quantity--;
+	            }
+	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
+	            this.setState({
+	                basketProducts: products
+	            });
+	            //DatePickerStore.dispatch(basketProducts(products));
+	            //DatePickerStore.dispatch(basketTotal(products));
+	            //this.state.loadNewDates();
+	        }
+	    }, {
+	        key: "createBasketMarkup",
+	        value: function createBasketMarkup() {
+	            var _this = this;
+
+	            return this.state.basketProducts.map(function (product, i) {
+	                var name = product.name;
+	                return _react2["default"].createElement(
+	                    "div",
+	                    { styleName: "basket-product", key: i },
+	                    _react2["default"].createElement(
+	                        "div",
+	                        { styleName: "basket-details" },
+	                        _react2["default"].createElement(
+	                            "h3",
+	                            null,
+	                            product.name
+	                        ),
+	                        _react2["default"].createElement(
+	                            "h4",
+	                            null,
+	                            product.brand
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            null,
+	                            "Quanity: ",
+	                            product.quantity
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            null,
+	                            "Price: £",
+	                            product.cost
+	                        ),
+	                        _react2["default"].createElement(
+	                            "p",
+	                            null,
+	                            "Total: £",
+	                            (0, _utilsCostFormatter.format)(product.cost * product.quantity)
+	                        ),
+	                        _react2["default"].createElement(
+	                            "span",
+	                            { styleName: "increase", onClick: _this.increaseProductCount.bind(_this, name) },
+	                            "+"
+	                        ),
+	                        _react2["default"].createElement(
+	                            "span",
+	                            { styleName: "decrease", onClick: _this.decreaseProductCount.bind(_this, name) },
+	                            "-"
+	                        )
+	                    ),
+	                    _react2["default"].createElement(
+	                        "div",
+	                        { styleName: "basket-details" },
+	                        _react2["default"].createElement("img", { src: product.imageUrl, className: "img-responsive", alt: "" })
+	                    )
+	                );
+	            });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "div",
+	                { styleName: "basket" },
+	                _react2["default"].createElement(
+	                    "h2",
+	                    { styleName: "basket-title" },
+	                    "Your basket"
+	                ),
+	                this.createBasketMarkup()
+	            );
+	        }
+	    }]);
+
+	    return Basket;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(Basket, _basketStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
+/* 260 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"basket":"yzOjuFEH3Ooj613qRtfgo","basket-title":"_1we7oAM3hrIIJiOkeuK40s","basket-product":"_1w4qeO0-nIi3BlpwTVy1HI","basket-details":"_1MeLm69fkk81PB_pLHuHEc","increase":"_2Oq02zolMx78VmQsUOryrn","decrease":"_2Qkz7alTf-_TvWjx_MTBnR"};
+
+/***/ },
+/* 261 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 262 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	exports.getData1 = getData1;
+	exports.getData2 = getData2;
+	exports.getData3 = getData3;
+	exports.getData4 = getData4;
+	exports.getBasketProducts = getBasketProducts;
+
+	function getData1() {
+	    return fetch('/data/picker-config1.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData2() {
+	    return fetch('/data/picker-config2.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData3() {
+	    return fetch('/data/picker-config3.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData4() {
+	    return fetch('/data/picker-config4.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getBasketProducts() {
+	    return fetch('/data/basket-products.json').then(function (response) {
+	        return response.json();
+	    });
+	}
 
 /***/ }
 /******/ ]);

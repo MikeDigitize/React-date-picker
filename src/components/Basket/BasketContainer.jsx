@@ -1,6 +1,7 @@
 import React from "react";
 import Basket from "./Basket";
 import DatePickerStore from "../../stores/PickerStore";
+import { basketProducts, basketTotal, basketTotalIncDiscountsUpdate } from "../../actions/external-actions";
 
 export default class BasketContainer extends React.Component {
 
@@ -8,16 +9,30 @@ export default class BasketContainer extends React.Component {
         super(props);
         this.state = {
             basketProducts : this.props.basketProducts,
-            loadNewDates : this.props.loadNewDates
+            loadNewDates : this.props.loadNewDates,
+            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ basketProducts : nextProps.basketProducts, loadNewDates : nextProps.loadNewDates });
+        this.setState({
+            loadNewDates : nextProps.loadNewDates
+        });
+        DatePickerStore.dispatch(basketProducts(nextProps.basketProducts));
+        DatePickerStore.dispatch(basketTotal(null));
+        DatePickerStore.dispatch(basketTotalIncDiscountsUpdate(null));
+    }
+
+    onStoreUpdate() {
+        this.setState({
+            basketProducts : DatePickerStore.getState().basketTotals.basketProducts
+        });
     }
 
     render() {
-        return(<Basket basketProducts={this.state.basketProducts} loadNewDates={ this.state.loadNewDates }/>);
+        return(
+            <Basket basketProducts={this.state.basketProducts} loadNewDates={ this.state.loadNewDates }/>
+        );
     }
 
 }
@@ -31,3 +46,7 @@ BasketContainer.propTypes = {
     basketProducts : React.PropTypes.array.isRequired,
     loadNewDates : React.PropTypes.func.isRequired
 };
+
+/*
+
+ */

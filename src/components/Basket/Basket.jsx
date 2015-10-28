@@ -2,7 +2,7 @@ import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./basket-styles";
 import DatePickerStore from "../../stores/PickerStore";
-import { basketTotal, basketProducts } from "../../actions/external-actions";
+import { basketProducts, basketTotal, basketTotalIncDiscountsUpdate } from "../../actions/external-actions";
 import { format } from "../../utils/cost-formatter";
 
 class Basket extends React.Component {
@@ -13,19 +13,10 @@ class Basket extends React.Component {
             basketProducts : this.props.basketProducts,
             loadNewDates : this.props.loadNewDates
         };
-        DatePickerStore.dispatch(basketProducts(this.props.basketProducts));
-        DatePickerStore.dispatch(basketTotal(this.props.basketProducts));
-        DatePickerStore.subscribe(this.onStoreUpdate.bind(this));
-    }
-
-    onStoreUpdate() {
-        //console.log(DatePickerStore.getState().basketProducts);
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({ basketProducts : nextProps.basketProducts });
-        DatePickerStore.dispatch(basketProducts(nextProps.basketProducts));
-        DatePickerStore.dispatch(basketTotal(nextProps.basketProducts));
     }
 
     increaseProductCount(name){
@@ -38,12 +29,10 @@ class Basket extends React.Component {
         let product = this.state.basketProducts[index];
         product.quantity++;
         let products = [...this.state.basketProducts];
-        this.setState({
-            basketProducts : products
-        });
         DatePickerStore.dispatch(basketProducts(products));
-        DatePickerStore.dispatch(basketTotal(products));
-        this.state.loadNewDates();
+        DatePickerStore.dispatch(basketTotal(null));
+        DatePickerStore.dispatch(basketTotalIncDiscountsUpdate(null));
+        //this.state.loadNewDates();
     }
 
     decreaseProductCount(name){
@@ -58,12 +47,10 @@ class Basket extends React.Component {
             product.quantity--;
         }
         let products = [...this.state.basketProducts];
-        this.setState({
-            basketProducts : products
-        });
         DatePickerStore.dispatch(basketProducts(products));
-        DatePickerStore.dispatch(basketTotal(products));
-        this.state.loadNewDates();
+        DatePickerStore.dispatch(basketTotal(null));
+        DatePickerStore.dispatch(basketTotalIncDiscountsUpdate(null));
+        //this.state.loadNewDates();
     }
 
     createBasketMarkup(){
