@@ -44,3 +44,24 @@ export function subtractFromBasketTotal(data) {
     return { state : data, type: SUBTRACTFROMTOTAL };
 }
 
+export function addToBasket(products) {
+    return function (dispatch) {
+        dispatch(basketProducts(products));
+        dispatch(basketTotal());
+        dispatch(basketTotalIncDiscountsUpdate());
+    }
+}
+
+export function addDiscount(discount) {
+    return function (dispatch) {
+        dispatch(addToBasketDiscounts(discount));
+        dispatch(basketTotalIncDiscountsUpdate());
+    }
+}
+
+export function removeDiscount(discount) {
+    return function (dispatch) {
+        dispatch(removeBasketDiscount(discount));
+        dispatch(basketTotalIncDiscountsUpdate());
+    }
+}

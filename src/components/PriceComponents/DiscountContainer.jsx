@@ -1,7 +1,7 @@
 import React from "react";
 import Discount from "./Discount";
 import DatePickerStore from "../../stores/PickerStore";
-import { subtractFromBasketTotal, addToBasketDiscounts, basketTotalIncDiscountsUpdate } from "../../actions/external-actions";
+import { addDiscount, removeDiscount } from "../../actions/external-actions";
 import { format } from "../../utils/cost-formatter";
 
 export default class DiscountContainer extends React.Component {
@@ -52,8 +52,10 @@ export default class DiscountContainer extends React.Component {
             isActive : active
         }, ()=> {
             if(active && !prevState.isActive) {
-                DatePickerStore.dispatch(addToBasketDiscounts(this.createDiscountStoreObject()));
-                DatePickerStore.dispatch(basketTotalIncDiscountsUpdate(null));
+                this.dispatchDiscountActive();
+            }
+            else if(!active && prevState.isActive) {
+                this.dispatchDiscountInactive();
             }
         });
 
@@ -71,10 +73,20 @@ export default class DiscountContainer extends React.Component {
             isActive : active
         }, ()=> {
             if(active && !prevState.isActive) {
-                DatePickerStore.dispatch(addToBasketDiscounts(this.createDiscountStoreObject()));
-                DatePickerStore.dispatch(basketTotalIncDiscountsUpdate(null));
+                this.dispatchDiscountActive();
+            }
+            else if(!active && prevState.isActive) {
+                this.dispatchDiscountInactive();
             }
         });
+    }
+
+    dispatchDiscountActive() {
+        DatePickerStore.dispatch(addDiscount(this.createDiscountStoreObject()));
+    }
+
+    dispatchDiscountInactive() {
+        DatePickerStore.dispatch(removeDiscount(this.createDiscountStoreObject()));
     }
 
     createDiscountStoreObject(){

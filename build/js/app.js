@@ -23562,7 +23562,13 @@
 	    value: true
 	});
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
 	var _redux = __webpack_require__(224);
+
+	var _reduxThunk = __webpack_require__(263);
+
+	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
 	var _externalStores = __webpack_require__(233);
 
@@ -23587,7 +23593,8 @@
 	    };
 	}
 
-	var DatePickerStore = (0, _redux.createStore)(DatePicker);
+	var store = (0, _redux.applyMiddleware)(_reduxThunk2["default"])(_redux.createStore);
+	var DatePickerStore = store(DatePicker);
 	exports["default"] = DatePickerStore;
 	module.exports = exports["default"];
 
@@ -24213,12 +24220,12 @@
 	                    return a + b;
 	                }, 0))
 	            });
-	        // when a discount becomes active - recalculate totalincdiscount after
+	        // when a discount becomes active - recalculate total inc discount after
 	        case "ADDBASKETDISCOUNTS":
-	            var inBasket = state.activeDiscounts.filter(function (discount) {
+	            var notInBasket = state.activeDiscounts.filter(function (discount) {
 	                return discount.name === action.state.name;
 	            });
-	            if (inBasket.length) {
+	            if (notInBasket.length) {
 	                return state;
 	            } else {
 	                return Object.assign({}, state, {
@@ -24227,11 +24234,18 @@
 	            }
 	        // when a discount becomes inactive - recalculate totalincdiscount after
 	        case "REMOVEBASKETDISCOUNT":
-	            return Object.assign({}, state, {
-	                activeDiscounts: state.activeDiscounts.filter(function (discount, i) {
-	                    return state.activeDiscounts.indexOf(action.state.name) !== i;
-	                })
+	            var inBasket = state.activeDiscounts.filter(function (discount) {
+	                return discount.name === action.state.name;
 	            });
+	            if (!inBasket.length) {
+	                return state;
+	            } else {
+	                return Object.assign({}, state, {
+	                    activeDiscounts: state.activeDiscounts.filter(function (discount) {
+	                        return discount.name !== action.state.name;
+	                    })
+	                });
+	            }
 	        // updates after basket products are updated AND when a discount is added / removed - no new state needed
 	        case "BASKETTOTALINCDISCOUNTSUPDATE":
 	            var discount = state.activeDiscounts.map(function (d) {
@@ -24482,6 +24496,9 @@
 	exports.basketTotalIncDiscountsUpdate = basketTotalIncDiscountsUpdate;
 	exports.addToBasketTotal = addToBasketTotal;
 	exports.subtractFromBasketTotal = subtractFromBasketTotal;
+	exports.addToBasket = addToBasket;
+	exports.addDiscount = addDiscount;
+	exports.removeDiscount = removeDiscount;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var ADDTOTOTAL = "ADDTOTOTAL";
@@ -24526,6 +24543,28 @@
 
 	function subtractFromBasketTotal(data) {
 	    return { state: data, type: SUBTRACTFROMTOTAL };
+	}
+
+	function addToBasket(products) {
+	    return function (dispatch) {
+	        dispatch(basketProducts(products));
+	        dispatch(basketTotal());
+	        dispatch(basketTotalIncDiscountsUpdate());
+	    };
+	}
+
+	function addDiscount(discount) {
+	    return function (dispatch) {
+	        dispatch(addToBasketDiscounts(discount));
+	        dispatch(basketTotalIncDiscountsUpdate());
+	    };
+	}
+
+	function removeDiscount(discount) {
+	    return function (dispatch) {
+	        dispatch(removeBasketDiscount(discount));
+	        dispatch(basketTotalIncDiscountsUpdate());
+	    };
 	}
 
 /***/ },
@@ -26024,8 +26063,9 @@
 	                isActive: active
 	            }, function () {
 	                if (active && !prevState.isActive) {
-	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketDiscounts)(_this2.createDiscountStoreObject()));
-	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotalIncDiscountsUpdate)(null));
+	                    _this2.dispatchDiscountActive();
+	                } else if (!active && prevState.isActive) {
+	                    _this2.dispatchDiscountInactive();
 	                }
 	            });
 	        }
@@ -26045,10 +26085,21 @@
 	                isActive: active
 	            }, function () {
 	                if (active && !prevState.isActive) {
-	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketDiscounts)(_this3.createDiscountStoreObject()));
-	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotalIncDiscountsUpdate)(null));
+	                    _this3.dispatchDiscountActive();
+	                } else if (!active && prevState.isActive) {
+	                    _this3.dispatchDiscountInactive();
 	                }
 	            });
+	        }
+	    }, {
+	        key: "dispatchDiscountActive",
+	        value: function dispatchDiscountActive() {
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addDiscount)(this.createDiscountStoreObject()));
+	        }
+	    }, {
+	        key: "dispatchDiscountInactive",
+	        value: function dispatchDiscountInactive() {
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.removeDiscount)(this.createDiscountStoreObject()));
 	        }
 	    }, {
 	        key: "createDiscountStoreObject",
@@ -26345,9 +26396,7 @@
 	            var product = this.state.basketProducts[index];
 	            product.quantity++;
 	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(products));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(null));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotalIncDiscountsUpdate)(null));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasket)(products));
 	            //this.state.loadNewDates();
 	        }
 	    }, {
@@ -26364,9 +26413,7 @@
 	                product.quantity--;
 	            }
 	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(products));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(null));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotalIncDiscountsUpdate)(null));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasket)(products));
 	            //this.state.loadNewDates();
 	        }
 	    }, {
@@ -26508,6 +26555,28 @@
 	        return response.json();
 	    });
 	}
+
+/***/ },
+/* 263 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports['default'] = thunkMiddleware;
+
+	function thunkMiddleware(_ref) {
+	  var dispatch = _ref.dispatch;
+	  var getState = _ref.getState;
+
+	  return function (next) {
+	    return function (action) {
+	      return typeof action === 'function' ? action(dispatch, getState) : next(action);
+	    };
+	  };
+	}
+
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

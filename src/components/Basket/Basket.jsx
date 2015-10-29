@@ -2,7 +2,7 @@ import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./basket-styles";
 import DatePickerStore from "../../stores/PickerStore";
-import { basketProducts, basketTotal, basketTotalIncDiscountsUpdate } from "../../actions/external-actions";
+import { addToBasket } from "../../actions/external-actions";
 import { format } from "../../utils/cost-formatter";
 
 class Basket extends React.Component {
@@ -29,9 +29,7 @@ class Basket extends React.Component {
         let product = this.state.basketProducts[index];
         product.quantity++;
         let products = [...this.state.basketProducts];
-        DatePickerStore.dispatch(basketProducts(products));
-        DatePickerStore.dispatch(basketTotal(null));
-        DatePickerStore.dispatch(basketTotalIncDiscountsUpdate(null));
+        DatePickerStore.dispatch(addToBasket(products));
         //this.state.loadNewDates();
     }
 
@@ -47,9 +45,7 @@ class Basket extends React.Component {
             product.quantity--;
         }
         let products = [...this.state.basketProducts];
-        DatePickerStore.dispatch(basketProducts(products));
-        DatePickerStore.dispatch(basketTotal(null));
-        DatePickerStore.dispatch(basketTotalIncDiscountsUpdate(null));
+        DatePickerStore.dispatch(addToBasket(products));
         //this.state.loadNewDates();
     }
 

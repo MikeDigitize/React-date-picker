@@ -22,10 +22,10 @@ export function basketTotal(state = { total: 0, totalIncDiscounts : 0, activeDis
             return Object.assign({}, state, {
                 total : format(state.basketProducts.map(p => p.quantity * p.cost || 0).reduce((a,b) => a+b, 0))
             });
-        // when a discount becomes active - recalculate totalincdiscount after
+        // when a discount becomes active - recalculate total inc discount after
         case "ADDBASKETDISCOUNTS" :
-            let inBasket = state.activeDiscounts.filter(discount => discount.name === action.state.name);
-            if(inBasket.length) {
+            let notInBasket = state.activeDiscounts.filter(discount => discount.name === action.state.name);
+            if(notInBasket.length) {
                 return state;
             }
             else {
@@ -35,9 +35,15 @@ export function basketTotal(state = { total: 0, totalIncDiscounts : 0, activeDis
             }
         // when a discount becomes inactive - recalculate totalincdiscount after
         case "REMOVEBASKETDISCOUNT" :
-            return Object.assign({}, state, {
-                activeDiscounts : state.activeDiscounts.filter((discount, i) => state.activeDiscounts.indexOf(action.state.name) !== i)
-            });
+            let inBasket = state.activeDiscounts.filter(discount => discount.name === action.state.name);
+            if(!inBasket.length) {
+                return state;
+            }
+            else {
+                return Object.assign({}, state, {
+                    activeDiscounts : state.activeDiscounts.filter(discount => discount.name !== action.state.name)
+                });
+            }
         // updates after basket products are updated AND when a discount is added / removed - no new state needed
         case "BASKETTOTALINCDISCOUNTSUPDATE" :
             let discount = state.activeDiscounts.map(d => {
