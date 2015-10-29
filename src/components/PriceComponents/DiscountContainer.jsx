@@ -8,15 +8,12 @@ export default class DiscountContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            name : this.props.name,
             threshold : this.props.threshold,
             percentage : this.props.percentage,
             value : this.props.value,
             basketTotal : DatePickerStore.getState().basketTotals.totalIncDiscounts,
-            isActive : false,
-            discount : {
-                name : this.props.name,
-                total : 0
-            }
+            isActive : false
         };
         DatePickerStore.subscribe(this.onStoreUpdate.bind(this));
     }
@@ -48,19 +45,14 @@ export default class DiscountContainer extends React.Component {
         let threshold = this.state.threshold;
         let prevState = this.state;
         let active = false;
-        let discount = 0;
-        console.log("total", total);
         if(total >= threshold) {
-            discount = total / 100 * this.state.percentage;
             active = true;
         }
-
         this.setState({
-            isActive : active,
-            discount : Object.assign({}, this.state.discount, { total : discount })
+            isActive : active
         }, ()=> {
             if(active && !prevState.isActive) {
-                DatePickerStore.dispatch(addToBasketDiscounts(this.state.discount));
+                DatePickerStore.dispatch(addToBasketDiscounts(this.createDiscountStoreObject()));
                 DatePickerStore.dispatch(basketTotalIncDiscountsUpdate(null));
             }
         });
@@ -70,14 +62,28 @@ export default class DiscountContainer extends React.Component {
     valueDiscount() {
         let total = this.state.basketTotal;
         let threshold = this.state.threshold;
+        let prevState = this.state;
         let active = false;
         if(total >= threshold) {
-            let discount = format(total - this.state.value);
             active = true;
         }
         this.setState({
             isActive : active
+        }, ()=> {
+            if(active && !prevState.isActive) {
+                DatePickerStore.dispatch(addToBasketDiscounts(this.createDiscountStoreObject()));
+                DatePickerStore.dispatch(basketTotalIncDiscountsUpdate(null));
+            }
         });
+    }
+
+    createDiscountStoreObject(){
+        return {
+            name : this.state.name,
+            threshold : this.state.threshold,
+            percentage : this.state.percentage,
+            value : this.state.value
+        }
     }
 
     render() {

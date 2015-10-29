@@ -24,7 +24,7 @@ export function basketTotal(state = { total: 0, totalIncDiscounts : 0, activeDis
             });
         // when a discount becomes active - recalculate totalincdiscount after
         case "ADDBASKETDISCOUNTS" :
-            let inBasket = state.activeDiscounts.filter(discount => discount.name === action.state.name && discount.total === action.state.total);
+            let inBasket = state.activeDiscounts.filter(discount => discount.name === action.state.name);
             if(inBasket.length) {
                 return state;
             }
@@ -40,8 +40,21 @@ export function basketTotal(state = { total: 0, totalIncDiscounts : 0, activeDis
             });
         // updates after basket products are updated AND when a discount is added / removed - no new state needed
         case "BASKETTOTALINCDISCOUNTSUPDATE" :
+            let discount = state.activeDiscounts.map(d => {
+                if(state.total > d.threshold) {
+                    if(d.percentage) {
+                        return state.total / 100 * d.percentage;
+                    }
+                    else {
+                        return d.value;
+                    }
+                }
+                else {
+                    return 0;
+                }
+            }).reduce((a,b) => a + b, 0);
             return Object.assign({}, state, {
-                totalIncDiscounts : format(state.total - state.activeDiscounts.map(d => d.total || 0).reduce((a,b) => a+b, 0))
+                totalIncDiscounts : format(state.total - discount)
             });
         // anytime a delivery charge is selected and affects the total inc discounts
         case "ADDTOTOTAL" :

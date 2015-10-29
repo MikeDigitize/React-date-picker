@@ -23,7 +23,7 @@ class Discount extends React.Component {
     }
 
     render(){
-        let offer = this.state.discountPercentage ? this.state.discountPercentage + "%" : this.state.discountValue;
+        let offer = this.state.discountPercentage ? <span>{this.state.discountPercentage}%</span> : <span>&pound;{this.state.discountValue}</span>;
         let className = this.state.isActive ? "active" : "inactive";
         return(
             <div styleName="basket-total-holder" className="form-group">

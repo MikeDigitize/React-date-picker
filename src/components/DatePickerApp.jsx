@@ -48,6 +48,11 @@ class App extends React.Component {
                     percentage={10}
                     name="10percentoff"
                 />
+                <DiscountContainer
+                    threshold={5000}
+                    value={50}
+                    name="50quidoff"
+                />
             </div>
         );
 

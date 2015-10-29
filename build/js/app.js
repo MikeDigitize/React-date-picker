@@ -135,6 +135,11 @@
 	                    threshold: 100,
 	                    percentage: 10,
 	                    name: "10percentoff"
+	                }),
+	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
+	                    threshold: 5000,
+	                    value: 50,
+	                    name: "50quidoff"
 	                })
 	            );
 	        }
@@ -24211,7 +24216,7 @@
 	        // when a discount becomes active - recalculate totalincdiscount after
 	        case "ADDBASKETDISCOUNTS":
 	            var inBasket = state.activeDiscounts.filter(function (discount) {
-	                return discount.name === action.state.name && discount.total === action.state.total;
+	                return discount.name === action.state.name;
 	            });
 	            if (inBasket.length) {
 	                return state;
@@ -24229,12 +24234,21 @@
 	            });
 	        // updates after basket products are updated AND when a discount is added / removed - no new state needed
 	        case "BASKETTOTALINCDISCOUNTSUPDATE":
+	            var discount = state.activeDiscounts.map(function (d) {
+	                if (state.total > d.threshold) {
+	                    if (d.percentage) {
+	                        return state.total / 100 * d.percentage;
+	                    } else {
+	                        return d.value;
+	                    }
+	                } else {
+	                    return 0;
+	                }
+	            }).reduce(function (a, b) {
+	                return a + b;
+	            }, 0);
 	            return Object.assign({}, state, {
-	                totalIncDiscounts: (0, _utilsCostFormatter.format)(state.total - state.activeDiscounts.map(function (d) {
-	                    return d.total || 0;
-	                }).reduce(function (a, b) {
-	                    return a + b;
-	                }, 0))
+	                totalIncDiscounts: (0, _utilsCostFormatter.format)(state.total - discount)
 	            });
 	        // anytime a delivery charge is selected and affects the total inc discounts
 	        case "ADDTOTOTAL":
@@ -25836,6 +25850,8 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
+	var _utilsCostFormatter = __webpack_require__(234);
+
 	var Total = (function (_React$Component) {
 	    _inherits(Total, _React$Component);
 
@@ -25845,6 +25861,8 @@
 	        _get(Object.getPrototypeOf(Total.prototype), "constructor", this).call(this);
 	        this.state = {
 	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts,
+	            totalExcDiscount: _storesPickerStore2["default"].getState().basketTotals.total,
+	            discountTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().basketTotals.total - _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts),
 	            deliveryTotal: _storesPickerStore2["default"].getState().deliveryTotal,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
@@ -25855,7 +25873,9 @@
 	        value: function onStoreUpdate() {
 	            this.setState({
 	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts,
-	                deliveryTotal: _storesPickerStore2["default"].getState().deliveryTotal
+	                totalExcDiscount: _storesPickerStore2["default"].getState().basketTotals.total,
+	                deliveryTotal: _storesPickerStore2["default"].getState().deliveryTotal,
+	                discountTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().basketTotals.total - _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts)
 	            });
 	        }
 	    }, {
@@ -25874,6 +25894,18 @@
 	                    { styleName: "basket-total" },
 	                    "£",
 	                    this.state.basketTotal
+	                ),
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "basket-discount" },
+	                    "Discount: £",
+	                    this.state.discountTotal
+	                ),
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "basket-discount" },
+	                    "Total exc discount: £",
+	                    this.state.totalExcDiscount
 	                )
 	            );
 	        }
@@ -25890,7 +25922,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"basket-total":"_2EvZ4S1ZjKahbXW7pyPgD4","basket-total-title":"_1TcqySj-NlRWtAEMjVoZ1y","basket-discount-title":"_3mISlqaew1N56vnjkY96OA","basket-total-holder":"_1XhcrMQx0wkRcV5BwzlS5G","status":"_2Of6OvLqO4l6308RlraF1R","active":"_9MgO-LYMJW4bua6aN-5iA","inactive":"FkIZXn6p9IBDvXs8JhqIg"};
+	module.exports = {"basket-total":"_2EvZ4S1ZjKahbXW7pyPgD4","basket-total-title":"_1TcqySj-NlRWtAEMjVoZ1y","basket-discount-title":"_3mISlqaew1N56vnjkY96OA","basket-discount":"_1MouFv4OCBXs4O-aPSHOFz","basket-total-holder":"_1XhcrMQx0wkRcV5BwzlS5G","status":"_2Of6OvLqO4l6308RlraF1R","active":"_9MgO-LYMJW4bua6aN-5iA","inactive":"FkIZXn6p9IBDvXs8JhqIg"};
 
 /***/ },
 /* 256 */
@@ -25936,15 +25968,12 @@
 
 	        _get(Object.getPrototypeOf(DiscountContainer.prototype), "constructor", this).call(this, props);
 	        this.state = {
+	            name: this.props.name,
 	            threshold: this.props.threshold,
 	            percentage: this.props.percentage,
 	            value: this.props.value,
 	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts,
-	            isActive: false,
-	            discount: {
-	                name: this.props.name,
-	                total: 0
-	            }
+	            isActive: false
 	        };
 	        _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this));
 	    }
@@ -25988,19 +26017,14 @@
 	            var threshold = this.state.threshold;
 	            var prevState = this.state;
 	            var active = false;
-	            var discount = 0;
-	            console.log("total", total);
 	            if (total >= threshold) {
-	                discount = total / 100 * this.state.percentage;
 	                active = true;
 	            }
-
 	            this.setState({
-	                isActive: active,
-	                discount: Object.assign({}, this.state.discount, { total: discount })
+	                isActive: active
 	            }, function () {
 	                if (active && !prevState.isActive) {
-	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketDiscounts)(_this2.state.discount));
+	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketDiscounts)(_this2.createDiscountStoreObject()));
 	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotalIncDiscountsUpdate)(null));
 	                }
 	            });
@@ -26008,16 +26032,33 @@
 	    }, {
 	        key: "valueDiscount",
 	        value: function valueDiscount() {
+	            var _this3 = this;
+
 	            var total = this.state.basketTotal;
 	            var threshold = this.state.threshold;
+	            var prevState = this.state;
 	            var active = false;
 	            if (total >= threshold) {
-	                var discount = (0, _utilsCostFormatter.format)(total - this.state.value);
 	                active = true;
 	            }
 	            this.setState({
 	                isActive: active
+	            }, function () {
+	                if (active && !prevState.isActive) {
+	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketDiscounts)(_this3.createDiscountStoreObject()));
+	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotalIncDiscountsUpdate)(null));
+	                }
 	            });
+	        }
+	    }, {
+	        key: "createDiscountStoreObject",
+	        value: function createDiscountStoreObject() {
+	            return {
+	                name: this.state.name,
+	                threshold: this.state.threshold,
+	                percentage: this.state.percentage,
+	                value: this.state.value
+	            };
 	        }
 	    }, {
 	        key: "render",
@@ -26097,7 +26138,17 @@
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            var offer = this.state.discountPercentage ? this.state.discountPercentage + "%" : this.state.discountValue;
+	            var offer = this.state.discountPercentage ? _react2["default"].createElement(
+	                "span",
+	                null,
+	                this.state.discountPercentage,
+	                "%"
+	            ) : _react2["default"].createElement(
+	                "span",
+	                null,
+	                "£",
+	                this.state.discountValue
+	            );
 	            var className = this.state.isActive ? "active" : "inactive";
 	            return _react2["default"].createElement(
 	                "div",
