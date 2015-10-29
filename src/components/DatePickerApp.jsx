@@ -42,6 +42,12 @@ class App extends React.Component {
                     basketProducts={ this.state.basketProducts }
                     loadNewDates={ this.loadNewDates.bind(this) }
                 />
+                <Total />
+                <DiscountContainer
+                    threshold={100}
+                    percentage={10}
+                    name="10percentoff"
+                />
             </div>
         );
 
@@ -56,9 +62,6 @@ React.render(<App />, document.querySelector(".app-holder"));
  config={this.state.config}
  />
  <Total />
- <DiscountContainer
- threshold={100}
- percentage={10}
- basketProducts={ this.state.basketProducts }
+
  />
  */

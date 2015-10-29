@@ -7,14 +7,14 @@ class Total extends React.Component {
     constructor(){
         super();
         this.state = {
-            basketTotal : DatePickerStore.getState().basketTotal,
+            basketTotal : DatePickerStore.getState().basketTotals.totalIncDiscounts,
             deliveryTotal : DatePickerStore.getState().deliveryTotal,
             unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         }
     }
     onStoreUpdate(){
         this.setState({
-            basketTotal : DatePickerStore.getState().basketTotal,
+            basketTotal : DatePickerStore.getState().basketTotals.totalIncDiscounts,
             deliveryTotal : DatePickerStore.getState().deliveryTotal
         });
     }

@@ -129,6 +129,12 @@
 	                _react2["default"].createElement(_BasketBasketContainer2["default"], {
 	                    basketProducts: this.state.basketProducts,
 	                    loadNewDates: this.loadNewDates.bind(this)
+	                }),
+	                _react2["default"].createElement(_PriceComponentsTotal2["default"], null),
+	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
+	                    threshold: 100,
+	                    percentage: 10,
+	                    name: "10percentoff"
 	                })
 	            );
 	        }
@@ -144,10 +150,7 @@
 	 config={this.state.config}
 	 />
 	 <Total />
-	 <DiscountContainer
-	 threshold={100}
-	 percentage={10}
-	 basketProducts={ this.state.basketProducts }
+
 	 />
 	 */
 
@@ -24207,9 +24210,16 @@
 	            });
 	        // when a discount becomes active - recalculate totalincdiscount after
 	        case "ADDBASKETDISCOUNTS":
-	            return Object.assign({}, state, {
-	                activeDiscounts: state.activeDiscounts.concat(action.state)
+	            var inBasket = state.activeDiscounts.filter(function (discount) {
+	                return discount.name === action.state.name && discount.total === action.state.total;
 	            });
+	            if (inBasket.length) {
+	                return state;
+	            } else {
+	                return Object.assign({}, state, {
+	                    activeDiscounts: state.activeDiscounts.concat(action.state)
+	                });
+	            }
 	        // when a discount becomes inactive - recalculate totalincdiscount after
 	        case "REMOVEBASKETDISCOUNT":
 	            return Object.assign({}, state, {
@@ -25834,7 +25844,7 @@
 
 	        _get(Object.getPrototypeOf(Total.prototype), "constructor", this).call(this);
 	        this.state = {
-	            basketTotal: _storesPickerStore2["default"].getState().basketTotal,
+	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts,
 	            deliveryTotal: _storesPickerStore2["default"].getState().deliveryTotal,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
@@ -25844,7 +25854,7 @@
 	        key: "onStoreUpdate",
 	        value: function onStoreUpdate() {
 	            this.setState({
-	                basketTotal: _storesPickerStore2["default"].getState().basketTotal,
+	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts,
 	                deliveryTotal: _storesPickerStore2["default"].getState().deliveryTotal
 	            });
 	        }
@@ -25929,16 +25939,19 @@
 	            threshold: this.props.threshold,
 	            percentage: this.props.percentage,
 	            value: this.props.value,
-	            basketProductsTotal: this.props.basketProducts.map(function (p) {
-	                return p.quantity * p.cost || 0;
-	            }).reduce(function (a, b) {
-	                return (0, _utilsCostFormatter.format)(a + b);
-	            }, 0),
-	            isActive: false
+	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts,
+	            isActive: false,
+	            discount: {
+	                name: this.props.name,
+	                total: 0
+	            }
 	        };
-
 	        _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this));
 	    }
+
+	    /*
+	    
+	     */
 
 	    _createClass(DiscountContainer, [{
 	        key: "componentWillMount",
@@ -25946,25 +25959,15 @@
 	            this.checkTotalForDiscountEligibility();
 	        }
 	    }, {
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(nextProps) {
-	            this.setState({
-	                basketProductsTotal: nextProps.basketProducts.map(function (p) {
-	                    return p.quantity * p.cost || 0;
-	                }).reduce(function (a, b) {
-	                    return (0, _utilsCostFormatter.format)(a + b);
-	                }, 0)
-	            });
-	        }
-	    }, {
 	        key: "onStoreUpdate",
 	        value: function onStoreUpdate() {
+	            var _this = this;
+
+	            console.log("store update!", _storesPickerStore2["default"].getState());
 	            this.setState({
-	                basketProductsTotal: _storesPickerStore2["default"].getState().basketProducts.map(function (p) {
-	                    return p.quantity * p.cost || 0;
-	                }).reduce(function (a, b) {
-	                    return (0, _utilsCostFormatter.format)(a + b);
-	                }, 0)
+	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.total
+	            }, function () {
+	                _this.checkTotalForDiscountEligibility();
 	            });
 	        }
 	    }, {
@@ -25979,28 +25982,37 @@
 	    }, {
 	        key: "percentageDiscount",
 	        value: function percentageDiscount() {
-	            var total = this.state.basketProductsTotal;
+	            var _this2 = this;
+
+	            var total = this.state.basketTotal;
 	            var threshold = this.state.threshold;
-	            console.log(total, threshold);
+	            var prevState = this.state;
 	            var active = false;
+	            var discount = 0;
+	            console.log("total", total);
 	            if (total >= threshold) {
-	                var discount = (0, _utilsCostFormatter.format)(total / 100 * this.state.percentage);
-	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(discount));
+	                discount = total / 100 * this.state.percentage;
 	                active = true;
 	            }
+
 	            this.setState({
-	                isActive: active
+	                isActive: active,
+	                discount: Object.assign({}, this.state.discount, { total: discount })
+	            }, function () {
+	                if (active && !prevState.isActive) {
+	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketDiscounts)(_this2.state.discount));
+	                    _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotalIncDiscountsUpdate)(null));
+	                }
 	            });
 	        }
 	    }, {
 	        key: "valueDiscount",
 	        value: function valueDiscount() {
-	            var total = this.state.basketProductsTotal;
+	            var total = this.state.basketTotal;
 	            var threshold = this.state.threshold;
 	            var active = false;
 	            if (total >= threshold) {
 	                var discount = (0, _utilsCostFormatter.format)(total - this.state.value);
-	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(discount));
 	                active = true;
 	            }
 	            this.setState({
@@ -26014,7 +26026,7 @@
 	                threshold: this.state.threshold,
 	                percentage: this.state.percentage,
 	                value: this.state.value,
-	                isActive: false
+	                isActive: this.state.isActive
 	            });
 	        }
 	    }]);
@@ -26067,12 +26079,22 @@
 	        this.state = {
 	            discountThreshold: this.props.threshold,
 	            discountPercentage: this.props.percentage,
-	            discountValue: this.props.threshold,
+	            discountValue: this.props.value,
 	            isActive: this.props.isActive
 	        };
 	    }
 
 	    _createClass(Discount, [{
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.setState({
+	                discountThreshold: nextProps.threshold,
+	                discountPercentage: nextProps.percentage,
+	                discountValue: nextProps.value,
+	                isActive: nextProps.isActive
+	            });
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            var offer = this.state.discountPercentage ? this.state.discountPercentage + "%" : this.state.discountValue;
@@ -26272,11 +26294,9 @@
 	            var product = this.state.basketProducts[index];
 	            product.quantity++;
 	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
-	            //this.setState({
-	            //    basketProducts : products
-	            //});
 	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(products));
-	            //DatePickerStore.dispatch(basketTotal(products));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(null));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotalIncDiscountsUpdate)(null));
 	            //this.state.loadNewDates();
 	        }
 	    }, {
@@ -26293,11 +26313,9 @@
 	                product.quantity--;
 	            }
 	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
-	            this.setState({
-	                basketProducts: products
-	            });
-	            //DatePickerStore.dispatch(basketProducts(products));
-	            //DatePickerStore.dispatch(basketTotal(products));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(products));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(null));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotalIncDiscountsUpdate)(null));
 	            //this.state.loadNewDates();
 	        }
 	    }, {

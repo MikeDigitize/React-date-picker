@@ -8,9 +8,18 @@ class Discount extends React.Component {
         this.state = {
             discountThreshold : this.props.threshold,
             discountPercentage : this.props.percentage,
-            discountValue : this.props.threshold,
+            discountValue : this.props.value,
             isActive : this.props.isActive
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            discountThreshold : nextProps.threshold,
+            discountPercentage : nextProps.percentage,
+            discountValue : nextProps.value,
+            isActive : nextProps.isActive
+        });
     }
 
     render(){

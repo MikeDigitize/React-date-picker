@@ -1,7 +1,7 @@
 import React from "react";
 import Discount from "./Discount";
 import DatePickerStore from "../../stores/PickerStore";
-import { subtractFromBasketTotal } from "../../actions/external-actions";
+import { subtractFromBasketTotal, addToBasketDiscounts, basketTotalIncDiscountsUpdate } from "../../actions/external-actions";
 import { format } from "../../utils/cost-formatter";
 
 export default class DiscountContainer extends React.Component {
@@ -11,10 +11,13 @@ export default class DiscountContainer extends React.Component {
             threshold : this.props.threshold,
             percentage : this.props.percentage,
             value : this.props.value,
-            basketProductsTotal : this.props.basketProducts.map(p => p.quantity * p.cost || 0).reduce((a,b) => format(a+b), 0),
-            isActive : false
+            basketTotal : DatePickerStore.getState().basketTotals.totalIncDiscounts,
+            isActive : false,
+            discount : {
+                name : this.props.name,
+                total : 0
+            }
         };
-
         DatePickerStore.subscribe(this.onStoreUpdate.bind(this));
     }
 
@@ -22,15 +25,12 @@ export default class DiscountContainer extends React.Component {
         this.checkTotalForDiscountEligibility();
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            basketProductsTotal : nextProps.basketProducts.map(p => p.quantity * p.cost || 0).reduce((a,b) => format(a+b), 0)
-        });
-    }
-
     onStoreUpdate() {
+        console.log("store update!", DatePickerStore.getState());
         this.setState({
-            basketProductsTotal : DatePickerStore.getState().basketProducts.map(p => p.quantity * p.cost || 0).reduce((a,b) => format(a+b), 0)
+            basketTotal : DatePickerStore.getState().basketTotals.total
+        }, ()=> {
+            this.checkTotalForDiscountEligibility();
         });
     }
 
@@ -44,27 +44,35 @@ export default class DiscountContainer extends React.Component {
     }
 
     percentageDiscount() {
-        let total = this.state.basketProductsTotal;
+        let total = this.state.basketTotal;
         let threshold = this.state.threshold;
-        console.log(total, threshold)
+        let prevState = this.state;
         let active = false;
+        let discount = 0;
+        console.log("total", total);
         if(total >= threshold) {
-            let discount = format(total / 100 * this.state.percentage);
-            DatePickerStore.dispatch(subtractFromBasketTotal(discount));
+            discount = total / 100 * this.state.percentage;
             active = true;
         }
+
         this.setState({
-            isActive : active
+            isActive : active,
+            discount : Object.assign({}, this.state.discount, { total : discount })
+        }, ()=> {
+            if(active && !prevState.isActive) {
+                DatePickerStore.dispatch(addToBasketDiscounts(this.state.discount));
+                DatePickerStore.dispatch(basketTotalIncDiscountsUpdate(null));
+            }
         });
+
     }
 
     valueDiscount() {
-        let total = this.state.basketProductsTotal;
+        let total = this.state.basketTotal;
         let threshold = this.state.threshold;
         let active = false;
         if(total >= threshold) {
             let discount = format(total - this.state.value);
-            DatePickerStore.dispatch(subtractFromBasketTotal(discount));
             active = true;
         }
         this.setState({
@@ -72,14 +80,18 @@ export default class DiscountContainer extends React.Component {
         });
     }
 
-    render(){
+    render() {
         return (
             <Discount
                 threshold={ this.state.threshold }
                 percentage={ this.state.percentage }
                 value={ this.state.value }
-                isActive={false}
+                isActive={this.state.isActive}
             />
         );
     }
 }
+
+/*
+
+ */

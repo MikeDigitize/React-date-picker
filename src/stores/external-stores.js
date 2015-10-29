@@ -24,9 +24,15 @@ export function basketTotal(state = { total: 0, totalIncDiscounts : 0, activeDis
             });
         // when a discount becomes active - recalculate totalincdiscount after
         case "ADDBASKETDISCOUNTS" :
-            return Object.assign({}, state, {
-                activeDiscounts : state.activeDiscounts.concat(action.state)
-            });
+            let inBasket = state.activeDiscounts.filter(discount => discount.name === action.state.name && discount.total === action.state.total);
+            if(inBasket.length) {
+                return state;
+            }
+            else {
+                return Object.assign({}, state, {
+                    activeDiscounts : state.activeDiscounts.concat(action.state)
+                });
+            }
         // when a discount becomes inactive - recalculate totalincdiscount after
         case "REMOVEBASKETDISCOUNT" :
             return Object.assign({}, state, {
