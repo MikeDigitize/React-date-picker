@@ -64,15 +64,15 @@
 
 	var _PickerPickerContainer2 = _interopRequireDefault(_PickerPickerContainer);
 
-	var _PriceComponentsTotal = __webpack_require__(254);
+	var _PriceComponentsTotal = __webpack_require__(255);
 
 	var _PriceComponentsTotal2 = _interopRequireDefault(_PriceComponentsTotal);
 
-	var _PriceComponentsDiscountContainer = __webpack_require__(256);
+	var _PriceComponentsDiscountContainer = __webpack_require__(257);
 
 	var _PriceComponentsDiscountContainer2 = _interopRequireDefault(_PriceComponentsDiscountContainer);
 
-	var _BasketBasketContainer = __webpack_require__(258);
+	var _BasketBasketContainer = __webpack_require__(259);
 
 	var _BasketBasketContainer2 = _interopRequireDefault(_BasketBasketContainer);
 
@@ -80,11 +80,11 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _stylesGlobal = __webpack_require__(261);
+	var _stylesGlobal = __webpack_require__(262);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
 
-	var _utilsGetConfig = __webpack_require__(262);
+	var _utilsGetConfig = __webpack_require__(263);
 
 	var config = undefined;
 
@@ -20563,11 +20563,11 @@
 
 	var _Picker2 = _interopRequireDefault(_Picker);
 
-	var _PickerClosed = __webpack_require__(252);
+	var _PickerClosed = __webpack_require__(253);
 
 	var _PickerClosed2 = _interopRequireDefault(_PickerClosed);
 
-	var _ThirdParty = __webpack_require__(253);
+	var _ThirdParty = __webpack_require__(254);
 
 	var _ThirdParty2 = _interopRequireDefault(_ThirdParty);
 
@@ -20575,9 +20575,9 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerActions = __webpack_require__(236);
+	var _actionsPickerActions = __webpack_require__(237);
 
-	var _actionsExternalActions = __webpack_require__(237);
+	var _actionsExternalActions = __webpack_require__(238);
 
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
@@ -20766,19 +20766,19 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerActions = __webpack_require__(236);
+	var _actionsPickerActions = __webpack_require__(237);
 
-	var _actionsExternalActions = __webpack_require__(237);
+	var _actionsExternalActions = __webpack_require__(238);
 
-	var _DateRangeDateRange = __webpack_require__(238);
+	var _DateRangeDateRange = __webpack_require__(239);
 
 	var _DateRangeDateRange2 = _interopRequireDefault(_DateRangeDateRange);
 
-	var _TableTableContainer = __webpack_require__(240);
+	var _TableTableContainer = __webpack_require__(241);
 
 	var _TableTableContainer2 = _interopRequireDefault(_TableTableContainer);
 
-	var _SummarySummary = __webpack_require__(250);
+	var _SummarySummary = __webpack_require__(251);
 
 	var _SummarySummary2 = _interopRequireDefault(_SummarySummary);
 
@@ -23566,13 +23566,13 @@
 
 	var _redux = __webpack_require__(224);
 
-	var _reduxThunk = __webpack_require__(263);
+	var _reduxThunk = __webpack_require__(233);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _externalStores = __webpack_require__(233);
+	var _externalStores = __webpack_require__(234);
 
-	var _pickerDataStores = __webpack_require__(235);
+	var _pickerDataStores = __webpack_require__(236);
 
 	function DatePicker() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -24175,6 +24175,28 @@
 
 /***/ },
 /* 233 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	exports['default'] = thunkMiddleware;
+
+	function thunkMiddleware(_ref) {
+	  var dispatch = _ref.dispatch;
+	  var getState = _ref.getState;
+
+	  return function (next) {
+	    return function (action) {
+	      return typeof action === 'function' ? action(dispatch, getState) : next(action);
+	    };
+	  };
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24186,7 +24208,7 @@
 	exports.basketTotal = basketTotal;
 	exports.selectedTimeslotData = selectedTimeslotData;
 
-	var _utilsCostFormatter = __webpack_require__(234);
+	var _utilsCostFormatter = __webpack_require__(235);
 
 	function availableDates() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -24232,24 +24254,20 @@
 	                    activeDiscounts: state.activeDiscounts.concat(action.state)
 	                });
 	            }
-	        // when a discount becomes inactive - recalculate totalincdiscount after
-	        case "REMOVEBASKETDISCOUNT":
-	            var inBasket = state.activeDiscounts.filter(function (discount) {
-	                return discount.name === action.state.name;
+	        case "ISDISCOUNTELIGIBLE":
+	            var total = state.total;
+	            var discounts = state.activeDiscounts.map(function (d) {
+	                var threshold = d.threshold;
+	                d.isActive = total >= threshold;
+	                return d;
 	            });
-	            if (!inBasket.length) {
-	                return state;
-	            } else {
-	                return Object.assign({}, state, {
-	                    activeDiscounts: state.activeDiscounts.filter(function (discount) {
-	                        return discount.name !== action.state.name;
-	                    })
-	                });
-	            }
+	            return Object.assign({}, state, {
+	                activeDiscounts: discounts
+	            });
 	        // updates after basket products are updated AND when a discount is added / removed - no new state needed
 	        case "BASKETTOTALINCDISCOUNTSUPDATE":
 	            var discount = state.activeDiscounts.map(function (d) {
-	                if (state.total > d.threshold) {
+	                if (d.isActive) {
 	                    if (d.percentage) {
 	                        return state.total / 100 * d.percentage;
 	                    } else {
@@ -24292,7 +24310,7 @@
 	}
 
 /***/ },
-/* 234 */
+/* 235 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -24307,7 +24325,7 @@
 	}
 
 /***/ },
-/* 235 */
+/* 236 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -24421,7 +24439,7 @@
 	}
 
 /***/ },
-/* 236 */
+/* 237 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -24479,7 +24497,7 @@
 	}
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -24492,13 +24510,12 @@
 	exports.basketProducts = basketProducts;
 	exports.basketTotal = basketTotal;
 	exports.addToBasketDiscounts = addToBasketDiscounts;
-	exports.removeBasketDiscount = removeBasketDiscount;
 	exports.basketTotalIncDiscountsUpdate = basketTotalIncDiscountsUpdate;
 	exports.addToBasketTotal = addToBasketTotal;
 	exports.subtractFromBasketTotal = subtractFromBasketTotal;
+	exports.isDiscountEligible = isDiscountEligible;
 	exports.addToBasket = addToBasket;
 	exports.addDiscount = addDiscount;
-	exports.removeDiscount = removeDiscount;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var ADDTOTOTAL = "ADDTOTOTAL";
@@ -24506,8 +24523,8 @@
 	var NEWCHOSENTIMESLOTDATA = "NEWCHOSENTIMESLOTDATA";
 	var NEWBASKETPRODUCTS = "NEWBASKETPRODUCTS";
 	var ADDBASKETDISCOUNTS = "ADDBASKETDISCOUNTS";
-	var REMOVEBASKETDISCOUNT = "REMOVEBASKETDISCOUNT";
 	var BASKETTOTALINCDISCOUNTSUPDATE = "BASKETTOTALINCDISCOUNTSUPDATE";
+	var ISDISCOUNTELIGIBLE = "ISDISCOUNTELIGIBLE";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -24529,10 +24546,6 @@
 	    return { state: data, type: ADDBASKETDISCOUNTS };
 	}
 
-	function removeBasketDiscount(data) {
-	    return { state: data, type: REMOVEBASKETDISCOUNT };
-	}
-
 	function basketTotalIncDiscountsUpdate(data) {
 	    return { state: data, type: BASKETTOTALINCDISCOUNTSUPDATE };
 	}
@@ -24545,10 +24558,15 @@
 	    return { state: data, type: SUBTRACTFROMTOTAL };
 	}
 
+	function isDiscountEligible(data) {
+	    return { state: data, type: ISDISCOUNTELIGIBLE };
+	}
+
 	function addToBasket(products) {
 	    return function (dispatch) {
 	        dispatch(basketProducts(products));
 	        dispatch(basketTotal());
+	        dispatch(isDiscountEligible());
 	        dispatch(basketTotalIncDiscountsUpdate());
 	    };
 	}
@@ -24556,19 +24574,13 @@
 	function addDiscount(discount) {
 	    return function (dispatch) {
 	        dispatch(addToBasketDiscounts(discount));
-	        dispatch(basketTotalIncDiscountsUpdate());
-	    };
-	}
-
-	function removeDiscount(discount) {
-	    return function (dispatch) {
-	        dispatch(removeBasketDiscount(discount));
+	        dispatch(isDiscountEligible());
 	        dispatch(basketTotalIncDiscountsUpdate());
 	    };
 	}
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24595,7 +24607,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _dateRangeStyles = __webpack_require__(239);
+	var _dateRangeStyles = __webpack_require__(240);
 
 	var _dateRangeStyles2 = _interopRequireDefault(_dateRangeStyles);
 
@@ -24603,7 +24615,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerActions = __webpack_require__(236);
+	var _actionsPickerActions = __webpack_require__(237);
 
 	var DateRange = (function (_React$Component) {
 	    _inherits(DateRange, _React$Component);
@@ -24679,14 +24691,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-range-select":"OX0IQ95QuEmxlWQhyiRs6","date-range":"_1yKpw1RLO3THHz9hnbX_Dt","date-range-ctrl":"znc2lrvqmWUjnbcbNbeIr","date-range-right":"_1AqK9xb6dHCKGPeJDRvBtw","date-range-left":"_8SLLaLIWkMBPftpcd_ldr"};
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24713,15 +24725,15 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _TableTableHead = __webpack_require__(241);
+	var _TableTableHead = __webpack_require__(242);
 
 	var _TableTableHead2 = _interopRequireDefault(_TableTableHead);
 
-	var _TableTableBody = __webpack_require__(243);
+	var _TableTableBody = __webpack_require__(244);
 
 	var _TableTableBody2 = _interopRequireDefault(_TableTableBody);
 
-	var _tableStyles = __webpack_require__(249);
+	var _tableStyles = __webpack_require__(250);
 
 	var _tableStyles2 = _interopRequireDefault(_tableStyles);
 
@@ -24729,7 +24741,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsExternalActions = __webpack_require__(237);
+	var _actionsExternalActions = __webpack_require__(238);
 
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
@@ -24796,7 +24808,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24823,7 +24835,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _tableHeadStyles = __webpack_require__(242);
+	var _tableHeadStyles = __webpack_require__(243);
 
 	var _tableHeadStyles2 = _interopRequireDefault(_tableHeadStyles);
 
@@ -24916,14 +24928,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-picker-thead":"I0Zsu_vOjbLH-qTh5jbMr"};
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24950,15 +24962,15 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _tableBodyStyles = __webpack_require__(244);
+	var _tableBodyStyles = __webpack_require__(245);
 
 	var _tableBodyStyles2 = _interopRequireDefault(_tableBodyStyles);
 
-	var _DeliveryDescriptionsDesc = __webpack_require__(245);
+	var _DeliveryDescriptionsDesc = __webpack_require__(246);
 
 	var _DeliveryDescriptionsDesc2 = _interopRequireDefault(_DeliveryDescriptionsDesc);
 
-	var _DeliveryDescriptionsAnytime = __webpack_require__(247);
+	var _DeliveryDescriptionsAnytime = __webpack_require__(248);
 
 	var _DeliveryDescriptionsAnytime2 = _interopRequireDefault(_DeliveryDescriptionsAnytime);
 
@@ -24966,9 +24978,9 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsExternalActions = __webpack_require__(237);
+	var _actionsExternalActions = __webpack_require__(238);
 
-	__webpack_require__(248);
+	__webpack_require__(249);
 
 	var TableBody = (function (_React$Component) {
 	    _inherits(TableBody, _React$Component);
@@ -25184,14 +25196,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-picker-tbody":"_29vJ8JCK0woHtbMXWLpUK9","timeslot-desc":"_2j2BD-de5vLVDb31Pa_GhM","timeslot":"_2nbCK7KDaiFms044UxcM1m","delivery-non-selectable":"_2-_DwV3SrjiGf8gK8Qg_Vv","delivery-selectable":"_1joTcdAy56WL7iY5YFerPM","delivery-selected":"OjDALIjGZUOIa7p-dpptf"};
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25218,7 +25230,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _descriptionStyles = __webpack_require__(246);
+	var _descriptionStyles = __webpack_require__(247);
 
 	var _descriptionStyles2 = _interopRequireDefault(_descriptionStyles);
 
@@ -25273,14 +25285,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"time-desc":"twEIetCF4STnzvQiPcYsl","time":"_3bdVbBScAd7I2p6YGPJEp","extra-info":"kGAWnSxKGyltFW8gS4zYX"};
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25307,7 +25319,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _descriptionStyles = __webpack_require__(246);
+	var _descriptionStyles = __webpack_require__(247);
 
 	var _descriptionStyles2 = _interopRequireDefault(_descriptionStyles);
 
@@ -25360,7 +25372,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports) {
 
 	/*
@@ -25571,14 +25583,14 @@
 	}
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"date-picker-table":"_2fFeFRwWZTf51bPpQfobX4"};
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25605,7 +25617,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _summaryStyles = __webpack_require__(251);
+	var _summaryStyles = __webpack_require__(252);
 
 	var _summaryStyles2 = _interopRequireDefault(_summaryStyles);
 
@@ -25613,7 +25625,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsPickerActions = __webpack_require__(236);
+	var _actionsPickerActions = __webpack_require__(237);
 
 	var Summary = (function (_React$Component) {
 	    _inherits(Summary, _React$Component);
@@ -25727,14 +25739,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"picker-summary-container":"_2ov1icXwgaSbINDvctnl-W","picker-summary":"_16ev4A4zbVxa782BG6rEwq","summary-title":"_17Oslj9Asc7k4sY1nehkuW","summary-price":"_1X8ETpdII5jGksb51q-xXj","show-more-dates-link":"_27iMzQC9XKlX3Ngl62uQXf"};
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25796,7 +25808,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25854,7 +25866,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25881,7 +25893,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _priceStyles = __webpack_require__(255);
+	var _priceStyles = __webpack_require__(256);
 
 	var _priceStyles2 = _interopRequireDefault(_priceStyles);
 
@@ -25889,7 +25901,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _utilsCostFormatter = __webpack_require__(234);
+	var _utilsCostFormatter = __webpack_require__(235);
 
 	var Total = (function (_React$Component) {
 	    _inherits(Total, _React$Component);
@@ -25957,14 +25969,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"basket-total":"_2EvZ4S1ZjKahbXW7pyPgD4","basket-total-title":"_1TcqySj-NlRWtAEMjVoZ1y","basket-discount-title":"_3mISlqaew1N56vnjkY96OA","basket-discount":"_1MouFv4OCBXs4O-aPSHOFz","basket-total-holder":"_1XhcrMQx0wkRcV5BwzlS5G","status":"_2Of6OvLqO4l6308RlraF1R","active":"_9MgO-LYMJW4bua6aN-5iA","inactive":"FkIZXn6p9IBDvXs8JhqIg"};
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25987,7 +25999,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Discount = __webpack_require__(257);
+	var _Discount = __webpack_require__(258);
 
 	var _Discount2 = _interopRequireDefault(_Discount);
 
@@ -25995,9 +26007,9 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsExternalActions = __webpack_require__(237);
+	var _actionsExternalActions = __webpack_require__(238);
 
-	var _utilsCostFormatter = __webpack_require__(234);
+	var _utilsCostFormatter = __webpack_require__(235);
 
 	var DiscountContainer = (function (_React$Component) {
 	    _inherits(DiscountContainer, _React$Component);
@@ -26011,95 +26023,25 @@
 	            threshold: this.props.threshold,
 	            percentage: this.props.percentage,
 	            value: this.props.value,
-	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts,
 	            isActive: false
 	        };
+	        _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addDiscount)(this.createDiscountStoreObject()));
 	        _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this));
 	    }
 
-	    /*
-	    
-	     */
-
 	    _createClass(DiscountContainer, [{
-	        key: "componentWillMount",
-	        value: function componentWillMount() {
-	            this.checkTotalForDiscountEligibility();
-	        }
-	    }, {
 	        key: "onStoreUpdate",
 	        value: function onStoreUpdate() {
 	            var _this = this;
 
-	            console.log("store update!", _storesPickerStore2["default"].getState());
+	            var isActive = _storesPickerStore2["default"].getState().basketTotals.activeDiscounts.filter(function (discount) {
+	                return _this.state.name === discount.name;
+	            }).reduce(function (d, e) {
+	                return e.isActive;
+	            }, false);
 	            this.setState({
-	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.total
-	            }, function () {
-	                _this.checkTotalForDiscountEligibility();
+	                isActive: isActive
 	            });
-	        }
-	    }, {
-	        key: "checkTotalForDiscountEligibility",
-	        value: function checkTotalForDiscountEligibility() {
-	            if (this.state.percentage) {
-	                this.percentageDiscount();
-	            } else {
-	                this.valueDiscount();
-	            }
-	        }
-	    }, {
-	        key: "percentageDiscount",
-	        value: function percentageDiscount() {
-	            var _this2 = this;
-
-	            var total = this.state.basketTotal;
-	            var threshold = this.state.threshold;
-	            var prevState = this.state;
-	            var active = false;
-	            if (total >= threshold) {
-	                active = true;
-	            }
-	            this.setState({
-	                isActive: active
-	            }, function () {
-	                if (active && !prevState.isActive) {
-	                    _this2.dispatchDiscountActive();
-	                } else if (!active && prevState.isActive) {
-	                    _this2.dispatchDiscountInactive();
-	                }
-	            });
-	        }
-	    }, {
-	        key: "valueDiscount",
-	        value: function valueDiscount() {
-	            var _this3 = this;
-
-	            var total = this.state.basketTotal;
-	            var threshold = this.state.threshold;
-	            var prevState = this.state;
-	            var active = false;
-	            if (total >= threshold) {
-	                active = true;
-	            }
-	            this.setState({
-	                isActive: active
-	            }, function () {
-	                if (active && !prevState.isActive) {
-	                    _this3.dispatchDiscountActive();
-	                } else if (!active && prevState.isActive) {
-	                    _this3.dispatchDiscountInactive();
-	                }
-	            });
-	        }
-	    }, {
-	        key: "dispatchDiscountActive",
-	        value: function dispatchDiscountActive() {
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addDiscount)(this.createDiscountStoreObject()));
-	        }
-	    }, {
-	        key: "dispatchDiscountInactive",
-	        value: function dispatchDiscountInactive() {
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.removeDiscount)(this.createDiscountStoreObject()));
 	        }
 	    }, {
 	        key: "createDiscountStoreObject",
@@ -26108,7 +26050,8 @@
 	                name: this.state.name,
 	                threshold: this.state.threshold,
 	                percentage: this.state.percentage,
-	                value: this.state.value
+	                value: this.state.value,
+	                isActive: false
 	            };
 	        }
 	    }, {
@@ -26130,7 +26073,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26157,7 +26100,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _priceStyles = __webpack_require__(255);
+	var _priceStyles = __webpack_require__(256);
 
 	var _priceStyles2 = _interopRequireDefault(_priceStyles);
 
@@ -26233,7 +26176,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26256,7 +26199,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Basket = __webpack_require__(259);
+	var _Basket = __webpack_require__(260);
 
 	var _Basket2 = _interopRequireDefault(_Basket);
 
@@ -26264,7 +26207,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsExternalActions = __webpack_require__(237);
+	var _actionsExternalActions = __webpack_require__(238);
 
 	var BasketContainer = (function (_React$Component) {
 	    _inherits(BasketContainer, _React$Component);
@@ -26286,9 +26229,7 @@
 	            this.setState({
 	                loadNewDates: nextProps.loadNewDates
 	            });
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketProducts)(nextProps.basketProducts));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotal)(null));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.basketTotalIncDiscountsUpdate)(null));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasket)(nextProps.basketProducts));
 	        }
 	    }, {
 	        key: "onStoreUpdate",
@@ -26325,7 +26266,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26354,7 +26295,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _basketStyles = __webpack_require__(260);
+	var _basketStyles = __webpack_require__(261);
 
 	var _basketStyles2 = _interopRequireDefault(_basketStyles);
 
@@ -26362,9 +26303,9 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _actionsExternalActions = __webpack_require__(237);
+	var _actionsExternalActions = __webpack_require__(238);
 
-	var _utilsCostFormatter = __webpack_require__(234);
+	var _utilsCostFormatter = __webpack_require__(235);
 
 	var Basket = (function (_React$Component) {
 	    _inherits(Basket, _React$Component);
@@ -26499,20 +26440,20 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"basket":"yzOjuFEH3Ooj613qRtfgo","basket-title":"_1we7oAM3hrIIJiOkeuK40s","basket-product":"_1w4qeO0-nIi3BlpwTVy1HI","basket-details":"_1MeLm69fkk81PB_pLHuHEc","increase":"_2Oq02zolMx78VmQsUOryrn","decrease":"_2Qkz7alTf-_TvWjx_MTBnR"};
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26555,28 +26496,6 @@
 	        return response.json();
 	    });
 	}
-
-/***/ },
-/* 263 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	exports.__esModule = true;
-	exports['default'] = thunkMiddleware;
-
-	function thunkMiddleware(_ref) {
-	  var dispatch = _ref.dispatch;
-	  var getState = _ref.getState;
-
-	  return function (next) {
-	    return function (action) {
-	      return typeof action === 'function' ? action(dispatch, getState) : next(action);
-	    };
-	  };
-	}
-
-	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

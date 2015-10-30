@@ -1,7 +1,7 @@
 import React from "react";
 import Basket from "./Basket";
 import DatePickerStore from "../../stores/PickerStore";
-import { basketProducts, basketTotal, basketTotalIncDiscountsUpdate } from "../../actions/external-actions";
+import { addToBasket } from "../../actions/external-actions";
 
 export default class BasketContainer extends React.Component {
 
@@ -18,9 +18,7 @@ export default class BasketContainer extends React.Component {
         this.setState({
             loadNewDates : nextProps.loadNewDates
         });
-        DatePickerStore.dispatch(basketProducts(nextProps.basketProducts));
-        DatePickerStore.dispatch(basketTotal(null));
-        DatePickerStore.dispatch(basketTotalIncDiscountsUpdate(null));
+        DatePickerStore.dispatch(addToBasket(nextProps.basketProducts));
     }
 
     onStoreUpdate() {
@@ -31,7 +29,7 @@ export default class BasketContainer extends React.Component {
 
     render() {
         return(
-            <Basket basketProducts={this.state.basketProducts} loadNewDates={ this.state.loadNewDates }/>
+            <Basket basketProducts={ this.state.basketProducts } loadNewDates={ this.state.loadNewDates }/>
         );
     }
 

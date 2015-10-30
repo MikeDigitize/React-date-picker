@@ -33,21 +33,20 @@ export function basketTotal(state = { total: 0, totalIncDiscounts : 0, activeDis
                     activeDiscounts : state.activeDiscounts.concat(action.state)
                 });
             }
-        // when a discount becomes inactive - recalculate totalincdiscount after
-        case "REMOVEBASKETDISCOUNT" :
-            let inBasket = state.activeDiscounts.filter(discount => discount.name === action.state.name);
-            if(!inBasket.length) {
-                return state;
-            }
-            else {
-                return Object.assign({}, state, {
-                    activeDiscounts : state.activeDiscounts.filter(discount => discount.name !== action.state.name)
-                });
-            }
+        case "ISDISCOUNTELIGIBLE" :
+            let total = state.total;
+            let discounts = state.activeDiscounts.map(d => {
+                let threshold = d.threshold;
+                d.isActive = total >= threshold;
+                return d;
+            });
+            return Object.assign({}, state, {
+                activeDiscounts : discounts
+            });
         // updates after basket products are updated AND when a discount is added / removed - no new state needed
         case "BASKETTOTALINCDISCOUNTSUPDATE" :
             let discount = state.activeDiscounts.map(d => {
-                if(state.total > d.threshold) {
+                if(d.isActive) {
                     if(d.percentage) {
                         return state.total / 100 * d.percentage;
                     }

@@ -5,8 +5,8 @@ const SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
 const NEWCHOSENTIMESLOTDATA= "NEWCHOSENTIMESLOTDATA";
 const NEWBASKETPRODUCTS = "NEWBASKETPRODUCTS";
 const ADDBASKETDISCOUNTS = "ADDBASKETDISCOUNTS";
-const REMOVEBASKETDISCOUNT = "REMOVEBASKETDISCOUNT";
 const BASKETTOTALINCDISCOUNTSUPDATE = "BASKETTOTALINCDISCOUNTSUPDATE";
+const ISDISCOUNTELIGIBLE = "ISDISCOUNTELIGIBLE";
 
 export function availableDates(data) {
     return { state : data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -28,10 +28,6 @@ export function addToBasketDiscounts(data) {
     return { state : data, type: ADDBASKETDISCOUNTS };
 }
 
-export function removeBasketDiscount(data) {
-    return { state : data, type: REMOVEBASKETDISCOUNT };
-}
-
 export function basketTotalIncDiscountsUpdate(data) {
     return { state : data, type: BASKETTOTALINCDISCOUNTSUPDATE };
 }
@@ -44,10 +40,15 @@ export function subtractFromBasketTotal(data) {
     return { state : data, type: SUBTRACTFROMTOTAL };
 }
 
+export function isDiscountEligible(data) {
+    return { state : data, type : ISDISCOUNTELIGIBLE }
+}
+
 export function addToBasket(products) {
     return function (dispatch) {
         dispatch(basketProducts(products));
         dispatch(basketTotal());
+        dispatch(isDiscountEligible());
         dispatch(basketTotalIncDiscountsUpdate());
     }
 }
@@ -55,13 +56,7 @@ export function addToBasket(products) {
 export function addDiscount(discount) {
     return function (dispatch) {
         dispatch(addToBasketDiscounts(discount));
-        dispatch(basketTotalIncDiscountsUpdate());
-    }
-}
-
-export function removeDiscount(discount) {
-    return function (dispatch) {
-        dispatch(removeBasketDiscount(discount));
+        dispatch(isDiscountEligible());
         dispatch(basketTotalIncDiscountsUpdate());
     }
 }
