@@ -4,7 +4,8 @@ import styles from "./table-body-styles";
 import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
 import DatePickerStore from "../../stores/PickerStore";
-import { addToBasketTotal, subtractFromBasketTotal, selectedTimeslotData } from "../../actions/external-actions";
+import { addToBasketTotal, subtractFromBasketTotal } from "../../actions/external-actions";
+import { selectedTimeslotData } from "../../actions/picker-actions";
 import "../../utils/classList-polyfill";
 
 class TableBody extends React.Component {

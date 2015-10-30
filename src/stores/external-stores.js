@@ -1,14 +1,5 @@
 import { format } from "../utils/cost-formatter";
 
-export function availableDates(state = {}, action = {}) {
-    switch(action.type) {
-        case "NEWAVAILABLEDATESANDCHARGES" :
-            return action.state;
-        default :
-            return state;
-    }
-}
-
 export function basketTotal(state = { total: 0, totalIncDiscounts : 0, activeDiscounts : [], basketProducts : [] }, action = {}) {
     switch(action.type) {
         // store products in basket - called every time basket is updated
@@ -84,15 +75,6 @@ export function basketTotal(state = { total: 0, totalIncDiscounts : 0, activeDis
             return Object.assign({}, state, {
                 basketProducts : state.basketProducts
             });
-        default :
-            return state;
-    }
-}
-
-export function selectedTimeslotData(state = {}, action = {}) {
-    switch(action.type) {
-        case "NEWCHOSENTIMESLOTDATA" :
-            return action.state;
         default :
             return state;
     }

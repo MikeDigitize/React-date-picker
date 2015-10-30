@@ -20580,8 +20580,6 @@
 
 	var _actionsPickerActions = __webpack_require__(237);
 
-	var _actionsExternalActions = __webpack_require__(238);
-
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
 
@@ -20753,8 +20751,6 @@
 
 	var _actionsPickerActions = __webpack_require__(237);
 
-	var _actionsExternalActions = __webpack_require__(238);
-
 	var _DateRangeDateRange = __webpack_require__(239);
 
 	var _DateRangeDateRange2 = _interopRequireDefault(_DateRangeDateRange);
@@ -20794,7 +20790,7 @@
 	        key: "componentWillMount",
 	        value: function componentWillMount() {
 	            if (!this.isTimeslotStillAvailable()) {
-	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.selectedTimeslotData)({}));
+	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)({}));
 	            }
 	        }
 	    }, {
@@ -23564,7 +23560,7 @@
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    return {
-	        availableDates: (0, _externalStores.availableDates)(state.availableDates, action),
+	        availableDates: (0, _pickerDataStores.availableDates)(state.availableDates, action),
 	        basketTotals: (0, _externalStores.basketTotal)(state.basketTotals, action),
 	        totalWeeks: (0, _pickerDataStores.totalWeeks)(state.totalWeeks, action),
 	        tableDisplayIndex: (0, _pickerDataStores.tableDisplayIndex)(state.tableDisplayIndex, action),
@@ -23572,7 +23568,7 @@
 	        tableHeadData: (0, _pickerDataStores.tableHeadData)(state.tableHeadData, action),
 	        tableBodyData: (0, _pickerDataStores.tableBodyData)(state.tableBodyData, action),
 	        timeDescriptions: (0, _pickerDataStores.timeDescriptions)(state.timeDescriptions, action),
-	        selectedTimeslotData: (0, _externalStores.selectedTimeslotData)(state.selectedTimeslotData, action),
+	        selectedTimeslotData: (0, _pickerDataStores.selectedTimeslotData)(state.selectedTimeslotData, action),
 	        selectedTimeslot: (0, _pickerDataStores.selectedTimeslot)(state.selectedTimeslot, action),
 	        displayAllRows: (0, _pickerDataStores.displayAllRows)(state.displayAllRows, action)
 	    };
@@ -24189,23 +24185,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.availableDates = availableDates;
 	exports.basketTotal = basketTotal;
-	exports.selectedTimeslotData = selectedTimeslotData;
 
 	var _utilsCostFormatter = __webpack_require__(235);
-
-	function availableDates() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWAVAILABLEDATESANDCHARGES":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
 
 	function basketTotal() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? { total: 0, totalIncDiscounts: 0, activeDiscounts: [], basketProducts: [] } : arguments[0];
@@ -24296,18 +24278,6 @@
 	    }
 	}
 
-	function selectedTimeslotData() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	    switch (action.type) {
-	        case "NEWCHOSENTIMESLOTDATA":
-	            return action.state;
-	        default:
-	            return state;
-	    }
-	}
-
 /***/ },
 /* 235 */
 /***/ function(module, exports) {
@@ -24340,6 +24310,8 @@
 	exports.timeDescriptions = timeDescriptions;
 	exports.selectedTimeslot = selectedTimeslot;
 	exports.displayAllRows = displayAllRows;
+	exports.availableDates = availableDates;
+	exports.selectedTimeslotData = selectedTimeslotData;
 
 	function totalWeeks() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -24437,6 +24409,30 @@
 	    }
 	}
 
+	function availableDates() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWAVAILABLEDATESANDCHARGES":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
+	function selectedTimeslotData() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    switch (action.type) {
+	        case "NEWCHOSENTIMESLOTDATA":
+	            return action.state;
+	        default:
+	            return state;
+	    }
+	}
+
 /***/ },
 /* 237 */
 /***/ function(module, exports) {
@@ -24446,6 +24442,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.availableDates = availableDates;
+	exports.selectedTimeslotData = selectedTimeslotData;
 	exports.totalWeeks = totalWeeks;
 	exports.updateTableIndex = updateTableIndex;
 	exports.dateRanges = dateRanges;
@@ -24454,6 +24452,8 @@
 	exports.tableBodyData = tableBodyData;
 	exports.selectedTimeslot = selectedTimeslot;
 	exports.displayAllRows = displayAllRows;
+	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
+	var NEWCHOSENTIMESLOTDATA = "NEWCHOSENTIMESLOTDATA";
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDATERANGES = "NEWDATERANGES";
@@ -24462,6 +24462,14 @@
 	var NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
 	var NEWCHOSENTIMELOT = "NEWCHOSENTIMELOT";
 	var DISPLAYALLROWS = "DISPLAYALLROWS";
+
+	function availableDates(data) {
+	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
+	}
+
+	function selectedTimeslotData(data) {
+	    return { state: data, type: NEWCHOSENTIMESLOTDATA };
+	}
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24504,31 +24512,19 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.availableDates = availableDates;
-	exports.selectedTimeslotData = selectedTimeslotData;
 	exports.addToBasketTotal = addToBasketTotal;
 	exports.subtractFromBasketTotal = subtractFromBasketTotal;
 	exports.addProductsToBasket = addProductsToBasket;
 	exports.addDiscount = addDiscount;
 	exports.updateProductCount = updateProductCount;
-	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var ADDTOTOTAL = "ADDTOTOTAL";
 	var SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
-	var NEWCHOSENTIMESLOTDATA = "NEWCHOSENTIMESLOTDATA";
 	var NEWBASKETPRODUCTS = "NEWBASKETPRODUCTS";
 	var ADDBASKETDISCOUNTS = "ADDBASKETDISCOUNTS";
 	var BASKETTOTALINCDISCOUNTSUPDATE = "BASKETTOTALINCDISCOUNTSUPDATE";
 	var ISDISCOUNTELIGIBLE = "ISDISCOUNTELIGIBLE";
 	var UPDATEPRODUCTCOUNT = "UPDATEPRODUCTCOUNT";
-
-	function availableDates(data) {
-	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
-	}
-
-	function selectedTimeslotData(data) {
-	    return { state: data, type: NEWCHOSENTIMESLOTDATA };
-	}
 
 	function basketProducts(data) {
 	    return { state: data, type: NEWBASKETPRODUCTS };
@@ -24749,8 +24745,6 @@
 	var _storesPickerStore = __webpack_require__(223);
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
-
-	var _actionsExternalActions = __webpack_require__(238);
 
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
@@ -24989,6 +24983,8 @@
 
 	var _actionsExternalActions = __webpack_require__(238);
 
+	var _actionsPickerActions = __webpack_require__(237);
+
 	__webpack_require__(249);
 
 	var TableBody = (function (_React$Component) {
@@ -25038,7 +25034,7 @@
 	            } else {
 	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketTotal)(selected.charge));
 	            }
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.selectedTimeslotData)(selected));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)(selected));
 	        }
 	    }, {
 	        key: "createRows",

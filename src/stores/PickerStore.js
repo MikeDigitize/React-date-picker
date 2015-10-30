@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { basketTotal, availableDates, selectedTimeslotData, basketTotals } from "./external-stores";
-import { totalWeeks, tableDisplayIndex, dateRanges, tableHeadData, tableBodyData, timeDescriptions, selectedTimeslot, displayAllRows } from "./picker-data-stores";
+import { basketTotal, basketTotals } from "./external-stores";
+import { totalWeeks, tableDisplayIndex, dateRanges, tableHeadData, tableBodyData, timeDescriptions, selectedTimeslot, displayAllRows, availableDates, selectedTimeslotData } from "./picker-data-stores";
 
 function DatePicker(state = {}, action = {}) {
     return {

@@ -2,8 +2,7 @@ import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./picker-styles";
 import DatePickerStore from "../../stores/PickerStore";
-import { updateTableIndex } from "../../actions/picker-actions";
-import { selectedTimeslotData } from "../../actions/external-actions";
+import { updateTableIndex, selectedTimeslotData } from "../../actions/picker-actions";
 
 import DateRange from "../DateRange/DateRange";
 import Table from "../Table/TableContainer";

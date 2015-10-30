@@ -69,3 +69,21 @@ export function displayAllRows(state = false, action = {}) {
             return state;
     }
 }
+
+export function availableDates(state = {}, action = {}) {
+    switch(action.type) {
+        case "NEWAVAILABLEDATESANDCHARGES" :
+            return action.state;
+        default :
+            return state;
+    }
+}
+
+export function selectedTimeslotData(state = {}, action = {}) {
+    switch(action.type) {
+        case "NEWCHOSENTIMESLOTDATA" :
+            return action.state;
+        default :
+            return state;
+    }
+}

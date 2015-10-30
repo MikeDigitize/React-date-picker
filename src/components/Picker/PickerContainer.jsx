@@ -3,8 +3,7 @@ import Picker from "./Picker";
 import PickerClosed from "./PickerClosed";
 import ThirdParty from "./ThirdParty";
 import DatePickerStore from "../../stores/PickerStore";
-import { totalWeeks, dateRanges, tableHeadData, tableBodyData, timeDescriptions } from "../../actions/picker-actions";
-import { availableDates } from "../../actions/external-actions";
+import { availableDates, totalWeeks, dateRanges, tableHeadData, tableBodyData, timeDescriptions } from "../../actions/picker-actions";
 
 export default class PickerContainer extends React.Component {
 
