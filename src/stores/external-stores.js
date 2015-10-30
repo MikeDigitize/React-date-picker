@@ -1,6 +1,6 @@
 import { format } from "../utils/cost-formatter";
 
-export function basketTotal(state = { total: 0, totalIncDiscounts : 0, activeDiscounts : [], basketProducts : [] }, action = {}) {
+export function basketTotals(state = { total: 0, totalIncDiscounts : 0, activeDiscounts : [], basketProducts : [] }, action = {}) {
     switch(action.type) {
         // store products in basket - called every time basket is updated
         case "NEWBASKETPRODUCTS" :

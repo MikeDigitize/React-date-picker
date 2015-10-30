@@ -1,12 +1,12 @@
 const NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
-const NEWCHOSENTIMESLOTDATA= "NEWCHOSENTIMESLOTDATA";
+const NEWSELECTEDTIMESLOT= "NEWSELECTEDTIMESLOT";
 const TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 const TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 const NEWDATERANGES = "NEWDATERANGES";
 const NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 const NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 const NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
-const NEWCHOSENTIMELOT= "NEWCHOSENTIMELOT";
+const NEWSELECTEDTIMESLOTDATA= "NEWSELECTEDTIMESLOTDATA";
 const DISPLAYALLROWS = "DISPLAYALLROWS";
 
 export function availableDates(data) {
@@ -14,7 +14,7 @@ export function availableDates(data) {
 }
 
 export function selectedTimeslotData(data) {
-    return { state : data, type : NEWCHOSENTIMESLOTDATA };
+    return { state : data, type : NEWSELECTEDTIMESLOTDATA };
 }
 
 export function totalWeeks(data) {
@@ -42,9 +42,15 @@ export function tableBodyData(data) {
 }
 
 export function selectedTimeslot(data) {
-    return { state : data, type : NEWCHOSENTIMELOT };
+    return { state : data, type : NEWSELECTEDTIMESLOT };
 }
 
 export function displayAllRows(data) {
     return { state : data, type : DISPLAYALLROWS };
 }
+
+//export function updateSelectedTimeslot(data) {
+//    return function(dispatch) {
+//        dispatch(subtractFromBasketTotal(data))
+//    }
+//}

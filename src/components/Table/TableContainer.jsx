@@ -9,12 +9,12 @@ class Table extends React.Component {
     constructor() {
         super();
         this.state = {
-            tableHeadData : DatePickerStore.getState().tableHeadData,
-            tableBodyData : DatePickerStore.getState().tableBodyData,
-            tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex,
-            timeDescriptions : DatePickerStore.getState().timeDescriptions,
-            selectedTimeslotData : DatePickerStore.getState().selectedTimeslotData,
-            displayAllRows : DatePickerStore.getState().displayAllRows,
+            tableHeadData : DatePickerStore.getState().tableData.tableHeadData,
+            tableBodyData : DatePickerStore.getState().tableData.tableBodyData,
+            tableDisplayIndex : DatePickerStore.getState().tableData.tableDisplayIndex,
+            timeDescriptions : DatePickerStore.getState().tableData.timeDescriptions,
+            selectedTimeslotData : DatePickerStore.getState().tableData.selectedTimeslotData,
+            displayAllRows : DatePickerStore.getState().tableData.displayAllRows,
             unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
@@ -27,12 +27,12 @@ class Table extends React.Component {
 
     onStoreUpdate() {
         this.setState({
-            tableHeadData : DatePickerStore.getState().tableHeadData,
-            tableBodyData : DatePickerStore.getState().tableBodyData,
-            tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex,
-            timeDescriptions : DatePickerStore.getState().timeDescriptions,
-            displayAllRows : DatePickerStore.getState().displayAllRows,
-            selectedTimeslotData : DatePickerStore.getState().selectedTimeslotData
+            tableHeadData : DatePickerStore.getState().tableData.tableHeadData,
+            tableBodyData : DatePickerStore.getState().tableData.tableBodyData,
+            tableDisplayIndex : DatePickerStore.getState().tableData.tableDisplayIndex,
+            timeDescriptions : DatePickerStore.getState().tableData.timeDescriptions,
+            selectedTimeslotData : DatePickerStore.getState().tableData.selectedTimeslotData,
+            displayAllRows : DatePickerStore.getState().tableData.displayAllRows,
         });
     }
 

@@ -12,8 +12,8 @@ class Picker extends React.Component {
 
     constructor() {
         super();
-        let tableDisplayIndex = DatePickerStore.getState().tableDisplayIndex;
-        let ranges = DatePickerStore.getState().dateRanges;
+        let tableDisplayIndex = DatePickerStore.getState().tableData.tableDisplayIndex;
+        let ranges = DatePickerStore.getState().tableData.dateRanges;
         if(tableDisplayIndex >= ranges.length) {
             tableDisplayIndex = 0;
         }
@@ -22,7 +22,7 @@ class Picker extends React.Component {
         this.state = {
             dateRanges : ranges,
             tableDisplayIndex : tableDisplayIndex,
-            deliveryTotal : DatePickerStore.getState().selectedTimeslotData.charge || 0,
+            deliveryTotal : DatePickerStore.getState().tableData.selectedTimeslotData.charge || 0,
             basketTotal : DatePickerStore.getState().basketTotals.total,
             unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         };
@@ -42,24 +42,24 @@ class Picker extends React.Component {
 
     onStoreUpdate() {
         this.setState({
-            dateRanges : DatePickerStore.getState().dateRanges,
-            tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex,
-            deliveryTotal : DatePickerStore.getState().selectedTimeslotData.charge || 0,
+            dateRanges : DatePickerStore.getState().tableData.dateRanges,
+            tableDisplayIndex : DatePickerStore.getState().tableData.tableDisplayIndex,
+            deliveryTotal : DatePickerStore.getState().tableData.selectedTimeslotData.charge || 0,
             basketTotal : DatePickerStore.getState().basketTotals.total
         });
     }
 
     isTimeslotStillAvailable() {
-        if(!Object.keys(DatePickerStore.getState().selectedTimeslotData).length){
+        if(!Object.keys(DatePickerStore.getState().tableData.selectedTimeslotData).length){
             return false;
         }
         let matchingTimeslots = [];
         let current = {
-            description : DatePickerStore.getState().selectedTimeslotData.description,
-            hasTimeslot : DatePickerStore.getState().selectedTimeslotData.hasTimeslot,
-            shortdate : DatePickerStore.getState().selectedTimeslotData.shortdate
+            description : DatePickerStore.getState().tableData.selectedTimeslotData.description,
+            hasTimeslot : DatePickerStore.getState().tableData.selectedTimeslotData.hasTimeslot,
+            shortdate : DatePickerStore.getState().tableData.selectedTimeslotData.shortdate
         };
-        DatePickerStore.getState().tableBodyData.forEach(data => {
+        DatePickerStore.getState().tableData.tableBodyData.forEach(data => {
             data.forEach(slots => {
                 if(!matchingTimeslots.length) {
                     matchingTimeslots = slots.filter(slot => {
