@@ -131,9 +131,22 @@
 	            return _react2["default"].createElement(
 	                "div",
 	                null,
-	                _react2["default"].createElement(_PickerPickerContainer2["default"], {
-	                    config: this.state.config
-	                })
+	                _react2["default"].createElement(_BasketBasketContainer2["default"], {
+	                    basketProducts: this.state.basketProducts,
+	                    loadNewDates: this.loadNewDates.bind(this)
+	                }),
+	                _react2["default"].createElement(_PriceComponentsTotal2["default"], null),
+	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
+	                    threshold: 100,
+	                    percentage: 10,
+	                    name: "10percentoff"
+	                }),
+	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
+	                    threshold: 5000,
+	                    value: 50,
+	                    name: "50quidoff"
+	                }),
+	                "/>"
 	            );
 	        }
 	    }]);
@@ -24191,7 +24204,7 @@
 	var _utilsCostFormatter = __webpack_require__(235);
 
 	function basketTotals() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? { total: 0, totalIncDiscounts: 0, activeDiscounts: [], basketProducts: [] } : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? { total: 0, overallTotal: 0, activeDiscounts: [], basketProducts: [], selectedTimeslot: {}, activeCharges: [] } : arguments[0];
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    switch (action.type) {
@@ -24249,17 +24262,53 @@
 	                return a + b;
 	            }, 0);
 	            return Object.assign({}, state, {
-	                totalIncDiscounts: (0, _utilsCostFormatter.format)(state.total - discount)
+	                overallTotal: (0, _utilsCostFormatter.format)(state.total - discount)
 	            });
+	        case "ADDCHARGE":
+	            var activeCharges = state.activeCharges.filter(function (charge) {
+	                return charge.name === action.state.name;
+	            });
+	            if (activeCharges.length) {
+	                return state;
+	            } else {
+	                return Object.assign({}, state, {
+	                    activeCharges: state.activeCharges.concat(action.state)
+	                });
+	            }
+	        case "REMOVECHARGE":
+	            var charges = state.activeCharges.filter(function (charge) {
+	                return charge.name !== action.state.name;
+	            });
+	            return Object.assign({}, state, {
+	                activeCharges: charges
+	            });
+	        case "BASKETTOTALINCCHARGESSUPDATE":
+	            return state;
+	        //let discount = state.activeDiscounts.map(d => {
+	        //    if(d.isActive) {
+	        //        if(d.percentage) {
+	        //            return state.total / 100 * d.percentage;
+	        //        }
+	        //        else {
+	        //            return d.value;
+	        //        }
+	        //    }
+	        //    else {
+	        //        return 0;
+	        //    }
+	        //}).reduce((a,b) => a + b, 0);
+	        //return Object.assign({}, state, {
+	        //    overallTotal : format(state.total - discount)
+	        //});
 	        // anytime a delivery charge is selected and affects the total inc discounts
 	        case "ADDTOTOTAL":
 	            return Object.assign({}, state, {
-	                total: (0, _utilsCostFormatter.format)(state.totalIncDiscounts + action.state)
+	                total: (0, _utilsCostFormatter.format)(state.overallTotal + action.state)
 	            });
 	        // anytime a delivery charge is selected and affects the total inc discounts
 	        case "SUBTRACTFROMTOTAL":
 	            return Object.assign({}, state, {
-	                total: (0, _utilsCostFormatter.format)(state.totalIncDiscounts - action.state)
+	                total: (0, _utilsCostFormatter.format)(state.overallTotal - action.state)
 	            });
 	        // update quantities of products in basket
 	        case "UPDATEPRODUCTCOUNT":
@@ -24530,19 +24579,19 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.addToBasketTotal = addToBasketTotal;
-	exports.subtractFromBasketTotal = subtractFromBasketTotal;
 	exports.addProductsToBasket = addProductsToBasket;
 	exports.addDiscount = addDiscount;
 	exports.updateProductCount = updateProductCount;
+	exports.addCharge = addCharge;
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
-	var ADDTOTOTAL = "ADDTOTOTAL";
-	var SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
 	var NEWBASKETPRODUCTS = "NEWBASKETPRODUCTS";
 	var ADDBASKETDISCOUNTS = "ADDBASKETDISCOUNTS";
 	var BASKETTOTALINCDISCOUNTSUPDATE = "BASKETTOTALINCDISCOUNTSUPDATE";
 	var ISDISCOUNTELIGIBLE = "ISDISCOUNTELIGIBLE";
 	var UPDATEPRODUCTCOUNT = "UPDATEPRODUCTCOUNT";
+	var ADDCHARGE = "ADDCHARGE";
+	var REMOVECHARGE = "REMOVECHARGE";
+	var BASKETTOTALINCCHARGESSUPDATE = "BASKETTOTALINCCHARGESSUPDATE";
 
 	function basketProducts(data) {
 	    return { state: data, type: NEWBASKETPRODUCTS };
@@ -24560,20 +24609,24 @@
 	    return { state: data, type: BASKETTOTALINCDISCOUNTSUPDATE };
 	}
 
-	function addToBasketTotal(data) {
-	    return { state: data, type: ADDTOTOTAL };
-	}
-
-	function subtractFromBasketTotal(data) {
-	    return { state: data, type: SUBTRACTFROMTOTAL };
-	}
-
 	function isDiscountEligible(data) {
 	    return { state: data, type: ISDISCOUNTELIGIBLE };
 	}
 
 	function productCount(data) {
 	    return { state: data, type: UPDATEPRODUCTCOUNT };
+	}
+
+	function addToBasketCharge(data) {
+	    return { state: data, type: ADDCHARGE };
+	}
+
+	function removeBasketCharge(data) {
+	    return { state: data, type: REMOVECHARGE };
+	}
+
+	function basketTotalIncChargesUpdate(data) {
+	    return { state: data, type: BASKETTOTALINCCHARGESSUPDATE };
 	}
 
 	function addProductsToBasket(products) {
@@ -24599,6 +24652,13 @@
 	        dispatch(basketTotal());
 	        dispatch(isDiscountEligible());
 	        dispatch(basketTotalIncDiscountsUpdate());
+	    };
+	}
+
+	function addCharge(charge) {
+	    return function (dispatch) {
+	        dispatch(removeBasketCharge(charge));
+	        dispatch();
 	    };
 	}
 
@@ -25934,9 +25994,9 @@
 
 	        _get(Object.getPrototypeOf(Total.prototype), "constructor", this).call(this);
 	        this.state = {
-	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts,
+	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
 	            totalExcDiscount: _storesPickerStore2["default"].getState().basketTotals.total,
-	            discountTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().basketTotals.total - _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts),
+	            discountTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().basketTotals.total - _storesPickerStore2["default"].getState().basketTotals.overallTotal),
 	            deliveryTotal: _storesPickerStore2["default"].getState().deliveryTotal,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
@@ -25946,10 +26006,10 @@
 	        key: "onStoreUpdate",
 	        value: function onStoreUpdate() {
 	            this.setState({
-	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts,
+	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
 	                totalExcDiscount: _storesPickerStore2["default"].getState().basketTotals.total,
 	                deliveryTotal: _storesPickerStore2["default"].getState().deliveryTotal,
-	                discountTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().basketTotals.total - _storesPickerStore2["default"].getState().basketTotals.totalIncDiscounts)
+	                discountTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().basketTotals.total - _storesPickerStore2["default"].getState().basketTotals.overallTotal)
 	            });
 	        }
 	    }, {

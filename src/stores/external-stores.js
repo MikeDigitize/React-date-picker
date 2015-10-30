@@ -1,6 +1,6 @@
 import { format } from "../utils/cost-formatter";
 
-export function basketTotals(state = { total: 0, totalIncDiscounts : 0, activeDiscounts : [], basketProducts : [] }, action = {}) {
+export function basketTotals(state = { total: 0, overallTotal : 0, activeDiscounts : [], basketProducts : [], selectedTimeslot : {}, activeCharges : [] }, action = {}) {
     switch(action.type) {
         // store products in basket - called every time basket is updated
         case "NEWBASKETPRODUCTS" :
@@ -51,17 +51,50 @@ export function basketTotals(state = { total: 0, totalIncDiscounts : 0, activeDi
                 }
             }).reduce((a,b) => a + b, 0);
             return Object.assign({}, state, {
-                totalIncDiscounts : format(state.total - discount)
+                overallTotal : format(state.total - discount)
             });
+        case "ADDCHARGE" :
+            let activeCharges = state.activeCharges.filter(charge => charge.name === action.state.name);
+            if(activeCharges.length) {
+                return state;
+            }
+            else {
+                return Object.assign({}, state, {
+                    activeCharges : state.activeCharges.concat(action.state)
+                });
+            }
+        case "REMOVECHARGE" :
+            let charges = state.activeCharges.filter(charge => charge.name !== action.state.name);
+            return Object.assign({}, state, {
+                activeCharges : charges
+            });
+        case "BASKETTOTALINCCHARGESSUPDATE" :
+            return state;
+            //let discount = state.activeDiscounts.map(d => {
+            //    if(d.isActive) {
+            //        if(d.percentage) {
+            //            return state.total / 100 * d.percentage;
+            //        }
+            //        else {
+            //            return d.value;
+            //        }
+            //    }
+            //    else {
+            //        return 0;
+            //    }
+            //}).reduce((a,b) => a + b, 0);
+            //return Object.assign({}, state, {
+            //    overallTotal : format(state.total - discount)
+            //});
         // anytime a delivery charge is selected and affects the total inc discounts
         case "ADDTOTOTAL" :
             return Object.assign({}, state, {
-                total : format(state.totalIncDiscounts + action.state)
+                total : format(state.overallTotal + action.state)
             });
         // anytime a delivery charge is selected and affects the total inc discounts
         case "SUBTRACTFROMTOTAL" :
             return Object.assign({}, state, {
-                total : format(state.totalIncDiscounts - action.state)
+                total : format(state.overallTotal - action.state)
             });
         // update quantities of products in basket
         case "UPDATEPRODUCTCOUNT" :

@@ -41,8 +41,21 @@ class App extends React.Component {
     render() {
         return(
             <div>
-                <PickerContainer
-                    config={this.state.config}
+                <BasketContainer
+                    basketProducts={ this.state.basketProducts }
+                    loadNewDates={ this.loadNewDates.bind(this) }
+                    />
+                <Total />
+                <DiscountContainer
+                    threshold={100}
+                    percentage={10}
+                    name="10percentoff"
+                    />
+                <DiscountContainer
+                    threshold={5000}
+                    value={50}
+                    name="50quidoff"
+                    />
                 />
             </div>
         );

@@ -1,11 +1,12 @@
 const BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
-const ADDTOTOTAL = "ADDTOTOTAL";
-const SUBTRACTFROMTOTAL = "SUBTRACTFROMTOTAL";
 const NEWBASKETPRODUCTS = "NEWBASKETPRODUCTS";
 const ADDBASKETDISCOUNTS = "ADDBASKETDISCOUNTS";
 const BASKETTOTALINCDISCOUNTSUPDATE = "BASKETTOTALINCDISCOUNTSUPDATE";
 const ISDISCOUNTELIGIBLE = "ISDISCOUNTELIGIBLE";
 const UPDATEPRODUCTCOUNT = "UPDATEPRODUCTCOUNT";
+const ADDCHARGE = "ADDCHARGE";
+const REMOVECHARGE = "REMOVECHARGE";
+const BASKETTOTALINCCHARGESSUPDATE = "BASKETTOTALINCCHARGESSUPDATE";
 
 function basketProducts(data) {
     return { state : data, type : NEWBASKETPRODUCTS };
@@ -23,20 +24,24 @@ function basketTotalIncDiscountsUpdate(data) {
     return { state : data, type: BASKETTOTALINCDISCOUNTSUPDATE };
 }
 
-export function addToBasketTotal(data) {
-    return { state : data, type: ADDTOTOTAL };
-}
-
-export function subtractFromBasketTotal(data) {
-    return { state : data, type: SUBTRACTFROMTOTAL };
-}
-
 function isDiscountEligible(data) {
     return { state : data, type : ISDISCOUNTELIGIBLE }
 }
 
 function productCount(data){
     return { state : data, type : UPDATEPRODUCTCOUNT}
+}
+
+function addToBasketCharge(data) {
+    return { state : data, type : ADDCHARGE }
+}
+
+function removeBasketCharge(data) {
+    return { state : data, type : REMOVECHARGE }
+}
+
+function basketTotalIncChargesUpdate(data) {
+    return { state : data, type : BASKETTOTALINCCHARGESSUPDATE }
 }
 
 export function addProductsToBasket(products) {
@@ -62,5 +67,12 @@ export function updateProductCount(name) {
         dispatch(basketTotal());
         dispatch(isDiscountEligible());
         dispatch(basketTotalIncDiscountsUpdate());
+    }
+}
+
+export function addCharge(charge) {
+    return function(dispatch) {
+        dispatch(removeBasketCharge(charge));
+        dispatch()
     }
 }

@@ -8,19 +8,19 @@ class Total extends React.Component {
     constructor(){
         super();
         this.state = {
-            basketTotal : DatePickerStore.getState().basketTotals.totalIncDiscounts,
+            basketTotal : DatePickerStore.getState().basketTotals.overallTotal,
             totalExcDiscount : DatePickerStore.getState().basketTotals.total,
-            discountTotal : format(DatePickerStore.getState().basketTotals.total - DatePickerStore.getState().basketTotals.totalIncDiscounts),
+            discountTotal : format(DatePickerStore.getState().basketTotals.total - DatePickerStore.getState().basketTotals.overallTotal),
             deliveryTotal : DatePickerStore.getState().deliveryTotal,
             unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
     onStoreUpdate(){
         this.setState({
-            basketTotal : DatePickerStore.getState().basketTotals.totalIncDiscounts,
+            basketTotal : DatePickerStore.getState().basketTotals.overallTotal,
             totalExcDiscount : DatePickerStore.getState().basketTotals.total,
             deliveryTotal : DatePickerStore.getState().deliveryTotal,
-            discountTotal : format(DatePickerStore.getState().basketTotals.total - DatePickerStore.getState().basketTotals.totalIncDiscounts)
+            discountTotal : format(DatePickerStore.getState().basketTotals.total - DatePickerStore.getState().basketTotals.overallTotal)
         });
     }
     render(){
