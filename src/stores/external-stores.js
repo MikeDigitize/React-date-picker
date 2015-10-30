@@ -33,6 +33,7 @@ export function basketTotal(state = { total: 0, totalIncDiscounts : 0, activeDis
                     activeDiscounts : state.activeDiscounts.concat(action.state)
                 });
             }
+        // check to see if any discounts on poge are valid via the the value at which they become active
         case "ISDISCOUNTELIGIBLE" :
             let total = state.total;
             let discounts = state.activeDiscounts.map(d => {
@@ -70,6 +71,18 @@ export function basketTotal(state = { total: 0, totalIncDiscounts : 0, activeDis
         case "SUBTRACTFROMTOTAL" :
             return Object.assign({}, state, {
                 total : format(state.totalIncDiscounts - action.state)
+            });
+        // update quantities of products in basket
+        case "UPDATEPRODUCTCOUNT" :
+            let product = state.basketProducts.filter(prod => prod.name === action.state.name).shift();
+            if(action.state.add) {
+                product.quantity++;
+            }
+            else {
+                product.quantity--;
+            }
+            return Object.assign({}, state, {
+                basketProducts : state.basketProducts
             });
         default :
             return state;

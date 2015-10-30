@@ -2,7 +2,7 @@ import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./basket-styles";
 import DatePickerStore from "../../stores/PickerStore";
-import { addToBasket } from "../../actions/external-actions";
+import { addToBasket, updateProductCount } from "../../actions/external-actions";
 import { format } from "../../utils/cost-formatter";
 
 class Basket extends React.Component {
@@ -11,42 +11,14 @@ class Basket extends React.Component {
         super(props);
         this.state = {
             basketProducts : this.props.basketProducts,
+            onProductIncrease : this.props.onProductIncrease,
+            onProductDecrease : this.props.onProductDecrease,
             loadNewDates : this.props.loadNewDates
         };
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({ basketProducts : nextProps.basketProducts });
-    }
-
-    increaseProductCount(name){
-        let index;
-        this.state.basketProducts.forEach((product,i) => {
-           if(product.name === name) {
-               index = i;
-           }
-        });
-        let product = this.state.basketProducts[index];
-        product.quantity++;
-        let products = [...this.state.basketProducts];
-        DatePickerStore.dispatch(addToBasket(products));
-        //this.state.loadNewDates();
-    }
-
-    decreaseProductCount(name){
-        let index;
-        this.state.basketProducts.forEach((product,i) => {
-            if(product.name === name) {
-                index = i;
-            }
-        });
-        let product = this.state.basketProducts[index];
-        if(product.quantity > 0) {
-            product.quantity--;
-        }
-        let products = [...this.state.basketProducts];
-        DatePickerStore.dispatch(addToBasket(products));
-        //this.state.loadNewDates();
     }
 
     createBasketMarkup(){
@@ -60,8 +32,8 @@ class Basket extends React.Component {
                         <p>Quanity: { product.quantity }</p>
                         <p>Price: &pound;{ product.cost }</p>
                         <p>Total: &pound;{ format(product.cost * product.quantity) }</p>
-                        <span styleName="increase" onClick={ this.increaseProductCount.bind(this, name)}>+</span>
-                        <span styleName="decrease" onClick={ this.decreaseProductCount.bind(this, name)}>-</span>
+                        <span styleName="increase" onClick={ this.state.onProductIncrease.bind(this, name)}>+</span>
+                        <span styleName="decrease" onClick={ this.state.onProductDecrease.bind(this, name)}>-</span>
                     </div>
                     <div styleName="basket-details">
                         <img src={ product.imageUrl } className="img-responsive" alt=""/>
@@ -81,5 +53,19 @@ class Basket extends React.Component {
     }
 
 }
+
+Basket.faultProps = {
+    basketProducts : [],
+    onProductIncrease : function(){},
+    onProductDecrease : function(){},
+    loadNewDates : function(){}
+};
+
+Basket.propTypes = {
+    basketProducts : React.PropTypes.array.isRequired,
+    onProductIncrease : React.PropTypes.func.isRequired,
+    onProductDecrease : React.PropTypes.func.isRequired,
+    loadNewDates : React.PropTypes.func.isRequired
+};
 
 export default CSSModule(Basket, styles);

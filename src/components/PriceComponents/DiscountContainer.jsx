@@ -12,10 +12,19 @@ export default class DiscountContainer extends React.Component {
             threshold : this.props.threshold,
             percentage : this.props.percentage,
             value : this.props.value,
-            isActive : false
+            isActive : false,
+            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         };
+    }
+
+    componentWillUnmount() {
+        if(typeof this.state.unsubscribe === "function") {
+            this.state.unsubscribe();
+        }
+    }
+
+    componentWillMount(){
         DatePickerStore.dispatch(addDiscount(this.createDiscountStoreObject()));
-        DatePickerStore.subscribe(this.onStoreUpdate.bind(this));
     }
 
     onStoreUpdate() {
@@ -25,7 +34,7 @@ export default class DiscountContainer extends React.Component {
         });
     }
 
-    createDiscountStoreObject(){
+    createDiscountStoreObject() {
         return {
             name : this.state.name,
             threshold : this.state.threshold,

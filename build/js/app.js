@@ -24254,6 +24254,7 @@
 	                    activeDiscounts: state.activeDiscounts.concat(action.state)
 	                });
 	            }
+	        // check to see if any discounts on poge are valid via the the value at which they become active
 	        case "ISDISCOUNTELIGIBLE":
 	            var total = state.total;
 	            var discounts = state.activeDiscounts.map(function (d) {
@@ -24291,6 +24292,19 @@
 	        case "SUBTRACTFROMTOTAL":
 	            return Object.assign({}, state, {
 	                total: (0, _utilsCostFormatter.format)(state.totalIncDiscounts - action.state)
+	            });
+	        // update quantities of products in basket
+	        case "UPDATEPRODUCTCOUNT":
+	            var product = state.basketProducts.filter(function (prod) {
+	                return prod.name === action.state.name;
+	            }).shift();
+	            if (action.state.add) {
+	                product.quantity++;
+	            } else {
+	                product.quantity--;
+	            }
+	            return Object.assign({}, state, {
+	                basketProducts: state.basketProducts
 	            });
 	        default:
 	            return state;
@@ -24507,15 +24521,11 @@
 	});
 	exports.availableDates = availableDates;
 	exports.selectedTimeslotData = selectedTimeslotData;
-	exports.basketProducts = basketProducts;
-	exports.basketTotal = basketTotal;
-	exports.addToBasketDiscounts = addToBasketDiscounts;
-	exports.basketTotalIncDiscountsUpdate = basketTotalIncDiscountsUpdate;
 	exports.addToBasketTotal = addToBasketTotal;
 	exports.subtractFromBasketTotal = subtractFromBasketTotal;
-	exports.isDiscountEligible = isDiscountEligible;
-	exports.addToBasket = addToBasket;
+	exports.addProductsToBasket = addProductsToBasket;
 	exports.addDiscount = addDiscount;
+	exports.updateProductCount = updateProductCount;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var ADDTOTOTAL = "ADDTOTOTAL";
@@ -24525,6 +24535,7 @@
 	var ADDBASKETDISCOUNTS = "ADDBASKETDISCOUNTS";
 	var BASKETTOTALINCDISCOUNTSUPDATE = "BASKETTOTALINCDISCOUNTSUPDATE";
 	var ISDISCOUNTELIGIBLE = "ISDISCOUNTELIGIBLE";
+	var UPDATEPRODUCTCOUNT = "UPDATEPRODUCTCOUNT";
 
 	function availableDates(data) {
 	    return { state: data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -24562,7 +24573,11 @@
 	    return { state: data, type: ISDISCOUNTELIGIBLE };
 	}
 
-	function addToBasket(products) {
+	function productCount(data) {
+	    return { state: data, type: UPDATEPRODUCTCOUNT };
+	}
+
+	function addProductsToBasket(products) {
 	    return function (dispatch) {
 	        dispatch(basketProducts(products));
 	        dispatch(basketTotal());
@@ -24574,6 +24589,15 @@
 	function addDiscount(discount) {
 	    return function (dispatch) {
 	        dispatch(addToBasketDiscounts(discount));
+	        dispatch(isDiscountEligible());
+	        dispatch(basketTotalIncDiscountsUpdate());
+	    };
+	}
+
+	function updateProductCount(name) {
+	    return function (dispatch) {
+	        dispatch(productCount(name));
+	        dispatch(basketTotal());
 	        dispatch(isDiscountEligible());
 	        dispatch(basketTotalIncDiscountsUpdate());
 	    };
@@ -26023,13 +26047,24 @@
 	            threshold: this.props.threshold,
 	            percentage: this.props.percentage,
 	            value: this.props.value,
-	            isActive: false
+	            isActive: false,
+	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
-	        _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addDiscount)(this.createDiscountStoreObject()));
-	        _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this));
 	    }
 
 	    _createClass(DiscountContainer, [{
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            if (typeof this.state.unsubscribe === "function") {
+	                this.state.unsubscribe();
+	            }
+	        }
+	    }, {
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addDiscount)(this.createDiscountStoreObject()));
+	        }
+	    }, {
 	        key: "onStoreUpdate",
 	        value: function onStoreUpdate() {
 	            var _this = this;
@@ -26229,7 +26264,14 @@
 	            this.setState({
 	                loadNewDates: nextProps.loadNewDates
 	            });
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasket)(nextProps.basketProducts));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addProductsToBasket)(nextProps.basketProducts));
+	        }
+	    }, {
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            if (typeof this.state.unsubscribe === "function") {
+	                this.state.unsubscribe();
+	            }
 	        }
 	    }, {
 	        key: "onStoreUpdate",
@@ -26240,8 +26282,26 @@
 	        }
 	    }, {
 	        key: "render",
+
+	        //this.state.loadNewDates();
 	        value: function render() {
-	            return _react2["default"].createElement(_Basket2["default"], { basketProducts: this.state.basketProducts, loadNewDates: this.state.loadNewDates });
+	            return _react2["default"].createElement(_Basket2["default"], {
+	                basketProducts: this.state.basketProducts,
+	                loadNewDates: this.state.loadNewDates,
+	                onProductIncrease: BasketContainer.onProductIncrease,
+	                onProductDecrease: BasketContainer.onProductDecrease
+	            });
+	        }
+	    }], [{
+	        key: "onProductIncrease",
+	        value: function onProductIncrease(name) {
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.updateProductCount)({ name: name, add: true }));
+	            //this.state.loadNewDates();
+	        }
+	    }, {
+	        key: "onProductDecrease",
+	        value: function onProductDecrease(name) {
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.updateProductCount)({ name: name, add: false }));
 	        }
 	    }]);
 
@@ -26259,10 +26319,6 @@
 	    basketProducts: _react2["default"].PropTypes.array.isRequired,
 	    loadNewDates: _react2["default"].PropTypes.func.isRequired
 	};
-
-	/*
-
-	 */
 	module.exports = exports["default"];
 
 /***/ },
@@ -26280,8 +26336,6 @@
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -26316,6 +26370,8 @@
 	        _get(Object.getPrototypeOf(Basket.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            basketProducts: this.props.basketProducts,
+	            onProductIncrease: this.props.onProductIncrease,
+	            onProductDecrease: this.props.onProductDecrease,
 	            loadNewDates: this.props.loadNewDates
 	        };
 	    }
@@ -26324,38 +26380,6 @@
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
 	            this.setState({ basketProducts: nextProps.basketProducts });
-	        }
-	    }, {
-	        key: "increaseProductCount",
-	        value: function increaseProductCount(name) {
-	            var index = undefined;
-	            this.state.basketProducts.forEach(function (product, i) {
-	                if (product.name === name) {
-	                    index = i;
-	                }
-	            });
-	            var product = this.state.basketProducts[index];
-	            product.quantity++;
-	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasket)(products));
-	            //this.state.loadNewDates();
-	        }
-	    }, {
-	        key: "decreaseProductCount",
-	        value: function decreaseProductCount(name) {
-	            var index = undefined;
-	            this.state.basketProducts.forEach(function (product, i) {
-	                if (product.name === name) {
-	                    index = i;
-	                }
-	            });
-	            var product = this.state.basketProducts[index];
-	            if (product.quantity > 0) {
-	                product.quantity--;
-	            }
-	            var products = [].concat(_toConsumableArray(this.state.basketProducts));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasket)(products));
-	            //this.state.loadNewDates();
 	        }
 	    }, {
 	        key: "createBasketMarkup",
@@ -26400,12 +26424,12 @@
 	                        ),
 	                        _react2["default"].createElement(
 	                            "span",
-	                            { styleName: "increase", onClick: _this.increaseProductCount.bind(_this, name) },
+	                            { styleName: "increase", onClick: _this.state.onProductIncrease.bind(_this, name) },
 	                            "+"
 	                        ),
 	                        _react2["default"].createElement(
 	                            "span",
-	                            { styleName: "decrease", onClick: _this.decreaseProductCount.bind(_this, name) },
+	                            { styleName: "decrease", onClick: _this.state.onProductDecrease.bind(_this, name) },
 	                            "-"
 	                        )
 	                    ),
@@ -26435,6 +26459,20 @@
 
 	    return Basket;
 	})(_react2["default"].Component);
+
+	Basket.faultProps = {
+	    basketProducts: [],
+	    onProductIncrease: function onProductIncrease() {},
+	    onProductDecrease: function onProductDecrease() {},
+	    loadNewDates: function loadNewDates() {}
+	};
+
+	Basket.propTypes = {
+	    basketProducts: _react2["default"].PropTypes.array.isRequired,
+	    onProductIncrease: _react2["default"].PropTypes.func.isRequired,
+	    onProductDecrease: _react2["default"].PropTypes.func.isRequired,
+	    loadNewDates: _react2["default"].PropTypes.func.isRequired
+	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(Basket, _basketStyles2["default"]);
 	module.exports = exports["default"];

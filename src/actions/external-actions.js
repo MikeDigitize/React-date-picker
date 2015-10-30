@@ -7,6 +7,7 @@ const NEWBASKETPRODUCTS = "NEWBASKETPRODUCTS";
 const ADDBASKETDISCOUNTS = "ADDBASKETDISCOUNTS";
 const BASKETTOTALINCDISCOUNTSUPDATE = "BASKETTOTALINCDISCOUNTSUPDATE";
 const ISDISCOUNTELIGIBLE = "ISDISCOUNTELIGIBLE";
+const UPDATEPRODUCTCOUNT = "UPDATEPRODUCTCOUNT";
 
 export function availableDates(data) {
     return { state : data, type: NEWAVAILABLEDATESANDCHARGES };
@@ -16,19 +17,19 @@ export function selectedTimeslotData(data) {
     return { state : data, type : NEWCHOSENTIMESLOTDATA };
 }
 
-export function basketProducts(data) {
+function basketProducts(data) {
     return { state : data, type : NEWBASKETPRODUCTS };
 }
 
-export function basketTotal(data) {
+function basketTotal(data) {
     return { state : data, type: BASKETTOTALUPDATE };
 }
 
-export function addToBasketDiscounts(data) {
+function addToBasketDiscounts(data) {
     return { state : data, type: ADDBASKETDISCOUNTS };
 }
 
-export function basketTotalIncDiscountsUpdate(data) {
+function basketTotalIncDiscountsUpdate(data) {
     return { state : data, type: BASKETTOTALINCDISCOUNTSUPDATE };
 }
 
@@ -40,11 +41,15 @@ export function subtractFromBasketTotal(data) {
     return { state : data, type: SUBTRACTFROMTOTAL };
 }
 
-export function isDiscountEligible(data) {
+function isDiscountEligible(data) {
     return { state : data, type : ISDISCOUNTELIGIBLE }
 }
 
-export function addToBasket(products) {
+function productCount(data){
+    return { state : data, type : UPDATEPRODUCTCOUNT}
+}
+
+export function addProductsToBasket(products) {
     return function (dispatch) {
         dispatch(basketProducts(products));
         dispatch(basketTotal());
@@ -56,6 +61,15 @@ export function addToBasket(products) {
 export function addDiscount(discount) {
     return function (dispatch) {
         dispatch(addToBasketDiscounts(discount));
+        dispatch(isDiscountEligible());
+        dispatch(basketTotalIncDiscountsUpdate());
+    }
+}
+
+export function updateProductCount(name) {
+    return function (dispatch) {
+        dispatch(productCount(name));
+        dispatch(basketTotal());
         dispatch(isDiscountEligible());
         dispatch(basketTotalIncDiscountsUpdate());
     }
