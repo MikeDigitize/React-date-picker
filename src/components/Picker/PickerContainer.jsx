@@ -8,10 +8,9 @@ import { availableDates } from "../../actions/external-actions";
 
 export default class PickerContainer extends React.Component {
 
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
-            unsubscribeFromStore : null,
             pickerState : {
                 "closed" : true,
                 "third-party" : false,
@@ -20,12 +19,6 @@ export default class PickerContainer extends React.Component {
                 "ready" : false
             }
         };
-    }
-
-    componentWillUnmount() {
-        if(typeof this.state.unsubscribe === "function") {
-            this.state.unsubscribe();
-        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -59,12 +52,7 @@ export default class PickerContainer extends React.Component {
 
             else {
 
-                if(this.state.unsubscribeFromStore){
-                    this.state.unsubscribeFromStore();
-                }
-
                 this.setState({
-                    unsubscribeFromStore : DatePickerStore.subscribe(this.onNewData.bind(this)),
                     pickerState : {
                         closed : false,
                         thirdparty : false,
@@ -77,7 +65,7 @@ export default class PickerContainer extends React.Component {
                 // simulate ajax call to keep loading screen visible
                 setTimeout(()=> {
                     this.preparePickerData(nextProps.config);
-                }, 1000);
+                }, 250);
 
             }
 
@@ -103,10 +91,6 @@ export default class PickerContainer extends React.Component {
             }
         });
 
-    }
-
-    onNewData(){
-        //console.log("store updated", DatePickerStore.getState());
     }
 
     render() {

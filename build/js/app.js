@@ -92,6 +92,8 @@
 	    _inherits(App, _React$Component);
 
 	    function App() {
+	        var _this = this;
+
 	        _classCallCheck(this, App);
 
 	        _get(Object.getPrototypeOf(App.prototype), "constructor", this).call(this);
@@ -99,16 +101,19 @@
 	            config: {},
 	            basketProducts: []
 	        };
-	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)(), (0, _utilsGetConfig.getData3)(), (0, _utilsGetConfig.getData4)()]).then(function (data) {
+	        Promise.all([(0, _utilsGetConfig.getData1)() /*, getData2(), getData3(), getData4()*/]).then(function (data) {
 	            config = data;
 	        });
 	        (0, _utilsGetConfig.getBasketProducts)().then(this.storeProductsInBasket.bind(this));
+	        setTimeout(function () {
+	            _this.loadNewDates();
+	        }, 250);
 	    }
 
 	    _createClass(App, [{
 	        key: "loadNewDates",
 	        value: function loadNewDates() {
-	            var random = Math.floor(Math.random() * 4);
+	            var random = 0 /*Math.floor(Math.random() * 4)*/;
 	            this.setState({
 	                config: config[random]
 	            });
@@ -126,20 +131,8 @@
 	            return _react2["default"].createElement(
 	                "div",
 	                null,
-	                _react2["default"].createElement(_BasketBasketContainer2["default"], {
-	                    basketProducts: this.state.basketProducts,
-	                    loadNewDates: this.loadNewDates.bind(this)
-	                }),
-	                _react2["default"].createElement(_PriceComponentsTotal2["default"], null),
-	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
-	                    threshold: 100,
-	                    percentage: 10,
-	                    name: "10percentoff"
-	                }),
-	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
-	                    threshold: 5000,
-	                    value: 50,
-	                    name: "50quidoff"
+	                _react2["default"].createElement(_PickerPickerContainer2["default"], {
+	                    config: this.state.config
 	                })
 	            );
 	        }
@@ -151,11 +144,21 @@
 	_react2["default"].render(_react2["default"].createElement(App, null), document.querySelector(".app-holder"));
 
 	/*
-	 <PickerContainer
-	 config={this.state.config}
+	 <BasketContainer
+	 basketProducts={ this.state.basketProducts }
+	 loadNewDates={ this.loadNewDates.bind(this) }
 	 />
 	 <Total />
-
+	 <DiscountContainer
+	 threshold={100}
+	 percentage={10}
+	 name="10percentoff"
+	 />
+	 <DiscountContainer
+	 threshold={5000}
+	 value={50}
+	 name="50quidoff"
+	 />
 	 />
 	 */
 
@@ -20582,12 +20585,11 @@
 	var PickerContainer = (function (_React$Component) {
 	    _inherits(PickerContainer, _React$Component);
 
-	    function PickerContainer(props) {
+	    function PickerContainer() {
 	        _classCallCheck(this, PickerContainer);
 
-	        _get(Object.getPrototypeOf(PickerContainer.prototype), "constructor", this).call(this, props);
+	        _get(Object.getPrototypeOf(PickerContainer.prototype), "constructor", this).call(this);
 	        this.state = {
-	            unsubscribeFromStore: null,
 	            pickerState: {
 	                "closed": true,
 	                "third-party": false,
@@ -20599,13 +20601,6 @@
 	    }
 
 	    _createClass(PickerContainer, [{
-	        key: "componentWillUnmount",
-	        value: function componentWillUnmount() {
-	            if (typeof this.state.unsubscribe === "function") {
-	                this.state.unsubscribe();
-	            }
-	        }
-	    }, {
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
 	            var _this = this;
@@ -20634,12 +20629,7 @@
 	                    });
 	                } else {
 
-	                    if (this.state.unsubscribeFromStore) {
-	                        this.state.unsubscribeFromStore();
-	                    }
-
 	                    this.setState({
-	                        unsubscribeFromStore: _storesPickerStore2["default"].subscribe(this.onNewData.bind(this)),
 	                        pickerState: {
 	                            closed: false,
 	                            thirdparty: false,
@@ -20652,7 +20642,7 @@
 	                    // simulate ajax call to keep loading screen visible
 	                    setTimeout(function () {
 	                        _this.preparePickerData(nextProps.config);
-	                    }, 1000);
+	                    }, 250);
 	                }
 	            }
 	        }
@@ -20675,11 +20665,6 @@
 	                    ready: true
 	                }
 	            });
-	        }
-	    }, {
-	        key: "onNewData",
-	        value: function onNewData() {
-	            //console.log("store updated", DatePickerStore.getState());
 	        }
 	    }, {
 	        key: "render",
@@ -20800,7 +20785,7 @@
 	            dateRanges: ranges,
 	            tableDisplayIndex: tableDisplayIndex,
 	            deliveryTotal: _storesPickerStore2["default"].getState().selectedTimeslotData.charge || 0,
-	            basketTotal: _storesPickerStore2["default"].getState().basketTotal,
+	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.total,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
@@ -20826,7 +20811,7 @@
 	                dateRanges: _storesPickerStore2["default"].getState().dateRanges,
 	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableDisplayIndex,
 	                deliveryTotal: _storesPickerStore2["default"].getState().selectedTimeslotData.charge || 0,
-	                basketTotal: _storesPickerStore2["default"].getState().basketTotal
+	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.total
 	            });
 	        }
 	    }, {
@@ -24429,7 +24414,7 @@
 	}
 
 	function selectedTimeslot() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? "" : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    switch (action.type) {

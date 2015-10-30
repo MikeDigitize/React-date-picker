@@ -24,7 +24,7 @@ class Picker extends React.Component {
             dateRanges : ranges,
             tableDisplayIndex : tableDisplayIndex,
             deliveryTotal : DatePickerStore.getState().selectedTimeslotData.charge || 0,
-            basketTotal : DatePickerStore.getState().basketTotal,
+            basketTotal : DatePickerStore.getState().basketTotals.total,
             unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
@@ -46,7 +46,7 @@ class Picker extends React.Component {
             dateRanges : DatePickerStore.getState().dateRanges,
             tableDisplayIndex : DatePickerStore.getState().tableDisplayIndex,
             deliveryTotal : DatePickerStore.getState().selectedTimeslotData.charge || 0,
-            basketTotal : DatePickerStore.getState().basketTotal
+            basketTotal : DatePickerStore.getState().basketTotals.total
         });
     }
 

@@ -52,7 +52,7 @@ export function timeDescriptions(state = {}, action = {}) {
     }
 }
 
-export function selectedTimeslot(state = "", action = {}) {
+export function selectedTimeslot(state = {}, action = {}) {
     switch(action.type) {
         case "NEWCHOSENTIMESLOT" :
             return action.state;

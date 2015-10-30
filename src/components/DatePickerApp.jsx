@@ -16,14 +16,17 @@ class App extends React.Component {
             config : {},
             basketProducts : []
         };
-        Promise.all([getData1(), getData2(), getData3(), getData4()]).then(data => {
+        Promise.all([getData1()/*, getData2(), getData3(), getData4()*/]).then(data => {
             config = data;
         });
         getBasketProducts().then(this.storeProductsInBasket.bind(this));
+        setTimeout(()=>{
+            this.loadNewDates();
+        }, 250)
     }
 
     loadNewDates() {
-        let random = Math.floor(Math.random() * 4);
+        let random = 0 /*Math.floor(Math.random() * 4)*/;
         this.setState({
             config : config[random]
         });
@@ -38,20 +41,8 @@ class App extends React.Component {
     render() {
         return(
             <div>
-                <BasketContainer
-                    basketProducts={ this.state.basketProducts }
-                    loadNewDates={ this.loadNewDates.bind(this) }
-                />
-                <Total />
-                <DiscountContainer
-                    threshold={100}
-                    percentage={10}
-                    name="10percentoff"
-                />
-                <DiscountContainer
-                    threshold={5000}
-                    value={50}
-                    name="50quidoff"
+                <PickerContainer
+                    config={this.state.config}
                 />
             </div>
         );
@@ -63,10 +54,20 @@ class App extends React.Component {
 React.render(<App />, document.querySelector(".app-holder"));
 
 /*
- <PickerContainer
- config={this.state.config}
+ <BasketContainer
+ basketProducts={ this.state.basketProducts }
+ loadNewDates={ this.loadNewDates.bind(this) }
  />
  <Total />
-
+ <DiscountContainer
+ threshold={100}
+ percentage={10}
+ name="10percentoff"
+ />
+ <DiscountContainer
+ threshold={5000}
+ value={50}
+ name="50quidoff"
+ />
  />
  */
