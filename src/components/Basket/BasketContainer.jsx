@@ -57,7 +57,7 @@ export default class BasketContainer extends React.Component {
 
 }
 
-BasketContainer.faultProps = {
+BasketContainer.defaultProps = {
     basketProducts : [],
     loadNewDates : function(){}
 };

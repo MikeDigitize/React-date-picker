@@ -54,7 +54,7 @@ class Basket extends React.Component {
 
 }
 
-Basket.faultProps = {
+Basket.defaultProps = {
     basketProducts : [],
     onProductIncrease : function(){},
     onProductDecrease : function(){},

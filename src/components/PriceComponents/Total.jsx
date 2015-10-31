@@ -2,27 +2,27 @@ import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./price-styles";
 import DatePickerStore from "../../stores/PickerStore";
-import { format } from "../../utils/cost-formatter";
 
 class Total extends React.Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
-            basketTotal : DatePickerStore.getState().basketTotals.overallTotal,
-            totalExcDiscount : DatePickerStore.getState().basketTotals.total,
-            discountTotal : format(DatePickerStore.getState().basketTotals.total - DatePickerStore.getState().basketTotals.overallTotal),
-            deliveryTotal : format(DatePickerStore.getState().tableData.selectedTimeslotData.charge || 0),
-            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
+            basketTotal : this.props.basketTotal,
+            totalExcDiscount : this.props.totalExcDiscount,
+            discountTotal : this.props.discountTotal,
+            deliveryTotal : this.props.deliveryTotal
         };
     }
-    onStoreUpdate() {
+
+    componentWillReceiveProps(nextProps) {
         this.setState({
-            basketTotal : DatePickerStore.getState().basketTotals.overallTotal,
-            totalExcDiscount : DatePickerStore.getState().basketTotals.total,
-            deliveryTotal : format(DatePickerStore.getState().tableData.selectedTimeslotData.charge || 0),
-            discountTotal : format(DatePickerStore.getState().basketTotals.total - DatePickerStore.getState().basketTotals.overallTotal)
+            basketTotal : nextProps.basketTotal,
+            totalExcDiscount : nextProps.totalExcDiscount,
+            discountTotal : nextProps.discountTotal,
+            deliveryTotal : nextProps.deliveryTotal
         });
     }
+
     render(){
         return(
             <div styleName="basket-total-holder">
@@ -35,5 +35,19 @@ class Total extends React.Component {
         );
     }
 }
+
+Total.defaultProps = {
+    basketTotal : 0,
+    totalExcDiscount : 0,
+    discountTotal : 0,
+    deliveryTotal : 0
+};
+
+Total.propTypes = {
+    basketTotal : React.PropTypes.number.isRequired,
+    totalExcDiscount : React.PropTypes.number.isRequired,
+    discountTotal : React.PropTypes.number.isRequired,
+    deliveryTotal : React.PropTypes.number.isRequired
+};
 
 export default CSSModule(Total, styles);

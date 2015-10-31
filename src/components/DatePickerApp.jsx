@@ -1,6 +1,6 @@
 import React from "react";
 import PickerContainer from "./Picker/PickerContainer";
-import Total from "./PriceComponents/Total";
+import TotalContainer from "./PriceComponents/TotalContainer";
 import DiscountContainer from "./PriceComponents/DiscountContainer";
 import BasketContainer from "./Basket/BasketContainer";
 import DatePickerStore from "../stores/PickerStore";
@@ -45,7 +45,7 @@ class App extends React.Component {
                     basketProducts={ this.state.basketProducts }
                     loadNewDates={ this.loadNewDates.bind(this) }
                 />
-                <Total />
+                <TotalContainer />
                 <DiscountContainer
                     threshold={100}
                     percentage={10}
