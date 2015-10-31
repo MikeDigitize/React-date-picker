@@ -20,9 +20,9 @@ class TableBody extends React.Component {
             displayAllRows : this.props.displayAllRows
         };
         this.alwaysDisplay = TableBody.rowsToDisplay();
-        DatePickerStore.subscribe(function(){
-            console.log(DatePickerStore.getState());
-        })
+        //DatePickerStore.subscribe(function(){
+        //    console.log(DatePickerStore.getState());
+        //})
     }
 
     componentWillReceiveProps(nextProps) {

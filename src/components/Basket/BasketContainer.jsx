@@ -35,12 +35,12 @@ export default class BasketContainer extends React.Component {
 
     static onProductIncrease(name) {
         DatePickerStore.dispatch(updateProductCount({ name : name, add : true }));
-        //this.state.loadNewDates();
+        this.state.loadNewDates();
     }
 
     static onProductDecrease(name){
         DatePickerStore.dispatch(updateProductCount({ name : name, add : false }));
-        //this.state.loadNewDates();
+        this.state.loadNewDates();
     }
 
 

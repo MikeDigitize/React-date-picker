@@ -2,7 +2,7 @@ import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./picker-styles";
 import DatePickerStore from "../../stores/PickerStore";
-import { updateTableIndex, selectedTimeslotData } from "../../actions/picker-actions";
+import { checkTimeslotExists, checkTableIndexExists } from "../../actions/picker-actions";
 
 import DateRange from "../DateRange/DateRange";
 import Table from "../Table/TableContainer";
@@ -12,27 +12,18 @@ class Picker extends React.Component {
 
     constructor() {
         super();
-        let tableDisplayIndex = DatePickerStore.getState().tableData.tableDisplayIndex;
-        let ranges = DatePickerStore.getState().tableData.dateRanges;
-        if(tableDisplayIndex >= ranges.length) {
-            tableDisplayIndex = 0;
-        }
-        DatePickerStore.dispatch(updateTableIndex(tableDisplayIndex));
-
+        DatePickerStore.dispatch(checkTableIndexExists(DatePickerStore.getState().tableData));
         this.state = {
-            dateRanges : ranges,
-            tableDisplayIndex : tableDisplayIndex,
+            dateRanges : DatePickerStore.getState().tableData.dateRanges,
+            tableDisplayIndex : DatePickerStore.getState().tableData.tableDisplayIndex,
             deliveryTotal : DatePickerStore.getState().tableData.selectedTimeslotData.charge || 0,
             basketTotal : DatePickerStore.getState().basketTotals.overallTotal,
             unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
 
-    componentWillMount() {
-        if(!this.isTimeslotStillAvailable()) {
-            // needs to be remove charge & selectedtimeslotdata
-            //DatePickerStore.dispatch(selectedTimeslotData({}));
-        }
+    static componentWillMount() {
+        DatePickerStore.dispatch(checkTimeslotExists(DatePickerStore.getState().tableData));
     }
 
     componentWillUnmount() {
@@ -48,28 +39,6 @@ class Picker extends React.Component {
             deliveryTotal : DatePickerStore.getState().tableData.selectedTimeslotData.charge || 0,
             basketTotal : DatePickerStore.getState().basketTotals.overallTotal
         });
-    }
-
-    isTimeslotStillAvailable() {
-        if(!Object.keys(DatePickerStore.getState().tableData.selectedTimeslotData).length){
-            return false;
-        }
-        let matchingTimeslots = [];
-        let current = {
-            description : DatePickerStore.getState().tableData.selectedTimeslotData.description,
-            hasTimeslot : DatePickerStore.getState().tableData.selectedTimeslotData.hasTimeslot,
-            shortdate : DatePickerStore.getState().tableData.selectedTimeslotData.shortdate
-        };
-        DatePickerStore.getState().tableData.tableBodyData.forEach(data => {
-            data.forEach(slots => {
-                if(!matchingTimeslots.length) {
-                    matchingTimeslots = slots.filter(slot => {
-                        return slot.description === current.description && slot.hasTimeslot === current.hasTimeslot && slot.shortdate === current.shortdate;
-                    });
-                }
-            });
-        });
-        return matchingTimeslots.length;
     }
 
     render() {

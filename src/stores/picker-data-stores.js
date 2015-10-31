@@ -1,4 +1,12 @@
-let initialState = { tableHeadData : [], tableBodyData : [], dateRanges : [], tableDisplayIndex : 0, totalWeeks : 0, selectedTimeslotData : {}, displayAllRows : false };
+let initialState = {
+    tableHeadData : [],
+    tableBodyData : [],
+    dateRanges : [],
+    tableDisplayIndex : 0,
+    totalWeeks : 0,
+    selectedTimeslotData : {},
+    displayAllRows : false
+};
 
 export function tableData(state = initialState, action = {}) {
     switch(action.type) {
@@ -23,22 +31,29 @@ export function tableData(state = initialState, action = {}) {
                 totalWeeks : action.state
             });
         case "NEWSELECTEDTIMESLOTDATA" :
-            let ref = action.state.target.getAttribute("data-ref");
-            let selected = [];
-            state.tableBodyData[state.tableDisplayIndex].forEach(data => {
-                if(!selected.length) {
-                    selected = data.filter(days => {
-                        return days.ref === ref;
-                    });
+            if(action.state.target) {
+                let ref = action.state.target.getAttribute("data-ref");
+                let selected = [];
+                state.tableBodyData[state.tableDisplayIndex].forEach(data => {
+                    if(!selected.length) {
+                        selected = data.filter(days => {
+                            return days.ref === ref;
+                        });
+                    }
+                });
+                selected = selected.shift();
+                if(!action.state.target.classList.contains("timeslot-selected")){
+                    selected = {};
                 }
-            });
-            selected = selected.shift();
-            if(!action.state.target.classList.contains("timeslot-selected")){
-                selected = {};
+                return Object.assign({}, state, {
+                    selectedTimeslotData : selected
+                });
             }
-            return Object.assign({}, state, {
-                selectedTimeslotData : selected
-            });
+            else {
+                return Object.assign({}, state, {
+                    selectedTimeslotData : action.state
+                });
+            }
         case "DISPLAYALLROWS" :
             return Object.assign({}, state, {
                 displayAllRows : action.state

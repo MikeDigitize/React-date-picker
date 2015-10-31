@@ -16,7 +16,7 @@ class App extends React.Component {
             config : {},
             basketProducts : []
         };
-        Promise.all([getData1()/*, getData2(), getData3(), getData4()*/]).then(data => {
+        Promise.all([getData1(), getData2(), getData3(), getData4()]).then(data => {
             config = data;
         });
         getBasketProducts().then(this.storeProductsInBasket.bind(this));
@@ -26,7 +26,7 @@ class App extends React.Component {
     }
 
     loadNewDates() {
-        let random = 0 /*Math.floor(Math.random() * 4)*/;
+        let random = Math.floor(Math.random() * 4);
         this.setState({
             config : config[random]
         });
@@ -55,7 +55,6 @@ class App extends React.Component {
                     threshold={5000}
                     value={50}
                     name="50quidoff"
-                />
                 />
                 <PickerContainer
                     config={this.state.config}

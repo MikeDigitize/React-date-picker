@@ -101,7 +101,7 @@
 	            config: {},
 	            basketProducts: []
 	        };
-	        Promise.all([(0, _utilsGetConfig.getData1)() /*, getData2(), getData3(), getData4()*/]).then(function (data) {
+	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)(), (0, _utilsGetConfig.getData3)(), (0, _utilsGetConfig.getData4)()]).then(function (data) {
 	            config = data;
 	        });
 	        (0, _utilsGetConfig.getBasketProducts)().then(this.storeProductsInBasket.bind(this));
@@ -113,7 +113,7 @@
 	    _createClass(App, [{
 	        key: "loadNewDates",
 	        value: function loadNewDates() {
-	            var random = 0 /*Math.floor(Math.random() * 4)*/;
+	            var random = Math.floor(Math.random() * 4);
 	            this.setState({
 	                config: config[random]
 	            });
@@ -146,7 +146,6 @@
 	                    value: 50,
 	                    name: "50quidoff"
 	                }),
-	                "/>",
 	                _react2["default"].createElement(_PickerPickerContainer2["default"], {
 	                    config: this.state.config
 	                })
@@ -20763,16 +20762,10 @@
 	        _classCallCheck(this, Picker);
 
 	        _get(Object.getPrototypeOf(Picker.prototype), "constructor", this).call(this);
-	        var tableDisplayIndex = _storesPickerStore2["default"].getState().tableData.tableDisplayIndex;
-	        var ranges = _storesPickerStore2["default"].getState().tableData.dateRanges;
-	        if (tableDisplayIndex >= ranges.length) {
-	            tableDisplayIndex = 0;
-	        }
-	        _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(tableDisplayIndex));
-
+	        _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.checkTableIndexExists)(_storesPickerStore2["default"].getState().tableData));
 	        this.state = {
-	            dateRanges: ranges,
-	            tableDisplayIndex: tableDisplayIndex,
+	            dateRanges: _storesPickerStore2["default"].getState().tableData.dateRanges,
+	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableData.tableDisplayIndex,
 	            deliveryTotal: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
 	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
@@ -20780,14 +20773,6 @@
 	    }
 
 	    _createClass(Picker, [{
-	        key: "componentWillMount",
-	        value: function componentWillMount() {
-	            if (!this.isTimeslotStillAvailable()) {
-	                // needs to be remove charge & selectedtimeslotdata
-	                //DatePickerStore.dispatch(selectedTimeslotData({}));
-	            }
-	        }
-	    }, {
 	        key: "componentWillUnmount",
 	        value: function componentWillUnmount() {
 	            if (typeof this.state.unsubscribe === "function") {
@@ -20805,29 +20790,6 @@
 	            });
 	        }
 	    }, {
-	        key: "isTimeslotStillAvailable",
-	        value: function isTimeslotStillAvailable() {
-	            if (!Object.keys(_storesPickerStore2["default"].getState().tableData.selectedTimeslotData).length) {
-	                return false;
-	            }
-	            var matchingTimeslots = [];
-	            var current = {
-	                description: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.description,
-	                hasTimeslot: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.hasTimeslot,
-	                shortdate: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.shortdate
-	            };
-	            _storesPickerStore2["default"].getState().tableData.tableBodyData.forEach(function (data) {
-	                data.forEach(function (slots) {
-	                    if (!matchingTimeslots.length) {
-	                        matchingTimeslots = slots.filter(function (slot) {
-	                            return slot.description === current.description && slot.hasTimeslot === current.hasTimeslot && slot.shortdate === current.shortdate;
-	                        });
-	                    }
-	                });
-	            });
-	            return matchingTimeslots.length;
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
@@ -20843,6 +20805,11 @@
 	                    deliveryTotal: this.state.deliveryTotal
 	                })
 	            );
+	        }
+	    }], [{
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.checkTimeslotExists)(_storesPickerStore2["default"].getState().tableData));
 	        }
 	    }]);
 
@@ -24312,7 +24279,15 @@
 	    value: true
 	});
 	exports.tableData = tableData;
-	var initialState = { tableHeadData: [], tableBodyData: [], dateRanges: [], tableDisplayIndex: 0, totalWeeks: 0, selectedTimeslotData: {}, displayAllRows: false };
+	var initialState = {
+	    tableHeadData: [],
+	    tableBodyData: [],
+	    dateRanges: [],
+	    tableDisplayIndex: 0,
+	    totalWeeks: 0,
+	    selectedTimeslotData: {},
+	    displayAllRows: false
+	};
 
 	function tableData() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
@@ -24340,22 +24315,34 @@
 	                totalWeeks: action.state
 	            });
 	        case "NEWSELECTEDTIMESLOTDATA":
-	            var ref = action.state.target.getAttribute("data-ref");
-	            var selected = [];
-	            state.tableBodyData[state.tableDisplayIndex].forEach(function (data) {
-	                if (!selected.length) {
-	                    selected = data.filter(function (days) {
-	                        return days.ref === ref;
+	            if (action.state.target) {
+	                var _ret = (function () {
+	                    var ref = action.state.target.getAttribute("data-ref");
+	                    var selected = [];
+	                    state.tableBodyData[state.tableDisplayIndex].forEach(function (data) {
+	                        if (!selected.length) {
+	                            selected = data.filter(function (days) {
+	                                return days.ref === ref;
+	                            });
+	                        }
 	                    });
-	                }
-	            });
-	            selected = selected.shift();
-	            if (!action.state.target.classList.contains("timeslot-selected")) {
-	                selected = {};
+	                    selected = selected.shift();
+	                    if (!action.state.target.classList.contains("timeslot-selected")) {
+	                        selected = {};
+	                    }
+	                    return {
+	                        v: Object.assign({}, state, {
+	                            selectedTimeslotData: selected
+	                        })
+	                    };
+	                })();
+
+	                if (typeof _ret === "object") return _ret.v;
+	            } else {
+	                return Object.assign({}, state, {
+	                    selectedTimeslotData: action.state
+	                });
 	            }
-	            return Object.assign({}, state, {
-	                selectedTimeslotData: selected
-	            });
 	        case "DISPLAYALLROWS":
 	            return Object.assign({}, state, {
 	                displayAllRows: action.state
@@ -24371,7 +24358,7 @@
 
 /***/ },
 /* 237 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
@@ -24382,6 +24369,11 @@
 	exports.selectedTimeslotData = selectedTimeslotData;
 	exports.displayAllRows = displayAllRows;
 	exports.loadPickerData = loadPickerData;
+	exports.checkTimeslotExists = checkTimeslotExists;
+	exports.checkTableIndexExists = checkTableIndexExists;
+
+	var _externalActions = __webpack_require__(248);
+
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var NEWDATERANGES = "NEWDATERANGES";
 	var NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
@@ -24430,6 +24422,46 @@
 	        dispatch(tableHeadData(config.tableHeadData));
 	        dispatch(tableBodyData(config.tableBodyData));
 	        dispatch(timeDescriptions(config.timeDescriptions));
+	    };
+	}
+
+	function checkTimeslotExists(tableData) {
+	    return function (dispatch) {
+	        function isTimeslotStillAvailable() {
+	            if (!Object.keys(tableData.selectedTimeslotData).length) {
+	                return false;
+	            }
+	            var matchingTimeslots = [];
+	            var current = {
+	                description: tableData.selectedTimeslotData.description,
+	                hasTimeslot: tableData.selectedTimeslotData.hasTimeslot,
+	                shortdate: tableData.selectedTimeslotData.shortdate
+	            };
+	            tableData.tableBodyData.forEach(function (data) {
+	                data.forEach(function (slots) {
+	                    if (!matchingTimeslots.length) {
+	                        matchingTimeslots = slots.filter(function (slot) {
+	                            return slot.description === current.description && slot.hasTimeslot === current.hasTimeslot && slot.shortdate === current.shortdate;
+	                        });
+	                    }
+	                });
+	            });
+	            return matchingTimeslots.length;
+	        }
+	        if (!isTimeslotStillAvailable()) {
+	            dispatch((0, _externalActions.removeCharge)({ name: "delivery-charge" }));
+	            dispatch(selectedTimeslotData({}));
+	        }
+	    };
+	}
+
+	function checkTableIndexExists(tableData) {
+	    return function (dispatch) {
+	        var tableDisplayIndex = tableData.tableDisplayIndex;
+	        var ranges = tableData.dateRanges;
+	        if (tableDisplayIndex >= ranges.length) {
+	            dispatch(updateTableIndex(0));
+	        }
 	    };
 	}
 
@@ -24851,9 +24883,9 @@
 	            displayAllRows: this.props.displayAllRows
 	        };
 	        this.alwaysDisplay = TableBody.rowsToDisplay();
-	        _storesPickerStore2["default"].subscribe(function () {
-	            console.log(_storesPickerStore2["default"].getState());
-	        });
+	        //DatePickerStore.subscribe(function(){
+	        //    console.log(DatePickerStore.getState());
+	        //})
 	    }
 
 	    _createClass(TableBody, [{
@@ -26210,8 +26242,6 @@
 	        }
 	    }, {
 	        key: "render",
-
-	        //this.state.loadNewDates();
 	        value: function render() {
 	            return _react2["default"].createElement(_Basket2["default"], {
 	                basketProducts: this.state.basketProducts,
@@ -26224,12 +26254,13 @@
 	        key: "onProductIncrease",
 	        value: function onProductIncrease(name) {
 	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.updateProductCount)({ name: name, add: true }));
-	            //this.state.loadNewDates();
+	            this.state.loadNewDates();
 	        }
 	    }, {
 	        key: "onProductDecrease",
 	        value: function onProductDecrease(name) {
 	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.updateProductCount)({ name: name, add: false }));
+	            this.state.loadNewDates();
 	        }
 	    }]);
 
