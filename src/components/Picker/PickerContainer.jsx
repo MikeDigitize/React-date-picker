@@ -3,7 +3,7 @@ import Picker from "./Picker";
 import PickerClosed from "./PickerClosed";
 import ThirdParty from "./ThirdParty";
 import DatePickerStore from "../../stores/PickerStore";
-import { availableDates, totalWeeks, dateRanges, tableHeadData, tableBodyData, timeDescriptions } from "../../actions/picker-actions";
+import { loadPickerData } from "../../actions/picker-actions";
 
 export default class PickerContainer extends React.Component {
 
@@ -74,11 +74,7 @@ export default class PickerContainer extends React.Component {
 
     preparePickerData(config) {
 
-        DatePickerStore.dispatch(totalWeeks(config.weeksInConfig));
-        DatePickerStore.dispatch(dateRanges(config.dateRanges));
-        DatePickerStore.dispatch(tableHeadData(config.tableHeadData));
-        DatePickerStore.dispatch(tableBodyData(config.tableBodyData));
-        DatePickerStore.dispatch(timeDescriptions(config.timeDescriptions));
+        DatePickerStore.dispatch(loadPickerData(config));
 
         this.setState({
             pickerState : {

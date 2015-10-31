@@ -21,7 +21,7 @@ class TableBody extends React.Component {
         };
         this.alwaysDisplay = TableBody.rowsToDisplay();
         DatePickerStore.subscribe(function(){
-            //console.log(DatePickerStore.getState());
+            console.log(DatePickerStore.getState());
         })
     }
 

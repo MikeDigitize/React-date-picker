@@ -1,9 +1,7 @@
-export function tableData(state = { availableDates : [], tableHeadData : [], tableBodyData : [], dateRanges : [], tableDisplayIndex : 0, totalWeeks : 0, selectedTimeslotData : {}, selectedTimeslot : {}, displayAllRows : false }, action = {}) {
+let initialState = { tableHeadData : [], tableBodyData : [], dateRanges : [], tableDisplayIndex : 0, totalWeeks : 0, selectedTimeslotData : {}, displayAllRows : false };
+
+export function tableData(state = initialState, action = {}) {
     switch(action.type) {
-        case "NEWAVAILABLEDATESANDCHARGES" :
-            return Object.assign({}, state, {
-                availableDates : action.state
-            });
         case "NEWTABLEHEADDATA" :
             return Object.assign({}, state, {
                 tableHeadData : action.state

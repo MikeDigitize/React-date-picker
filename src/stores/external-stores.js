@@ -1,6 +1,7 @@
 import { format } from "../utils/cost-formatter";
+let initialState = { total: 0, overallTotal : 0, activeDiscounts : [], basketProducts : [], activeCharges : [] };
 
-export function basketTotals(state = { total: 0, overallTotal : 0, activeDiscounts : [], basketProducts : [], selectedTimeslot : {}, activeCharges : [] }, action = {}) {
+export function basketTotals(state = initialState, action = {}) {
     switch(action.type) {
         // store products in basket - called every time basket is updated
         case "NEWBASKETPRODUCTS" :
@@ -61,6 +62,7 @@ export function basketTotals(state = { total: 0, overallTotal : 0, activeDiscoun
             return Object.assign({}, state, {
                 overallTotal : format(overallTotal)
             });
+        // adds an additional charge e.g. service, delivery into the basket which is factored into totals calculations
         case "ADDCHARGE" :
             let activeCharges = state.activeCharges.filter(charge => charge.name === action.state.name);
             if(activeCharges.length) {
@@ -71,20 +73,11 @@ export function basketTotals(state = { total: 0, overallTotal : 0, activeDiscoun
                     activeCharges : state.activeCharges.concat(action.state)
                 });
             }
+        // remove a charge
         case "REMOVECHARGE" :
             let charges = state.activeCharges.filter(charge => charge.name !== action.state.name);
             return Object.assign({}, state, {
                 activeCharges : charges
-            });
-        // anytime a delivery charge is selected and affects the total inc discounts
-        case "ADDTOTOTAL" :
-            return Object.assign({}, state, {
-                total : format(state.overallTotal + action.state)
-            });
-        // anytime a delivery charge is selected and affects the total inc discounts
-        case "SUBTRACTFROMTOTAL" :
-            return Object.assign({}, state, {
-                total : format(state.overallTotal - action.state)
             });
         // update quantities of products in basket
         case "UPDATEPRODUCTCOUNT" :
