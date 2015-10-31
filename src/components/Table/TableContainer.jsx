@@ -1,11 +1,9 @@
 import React from "react";
-import CSSModule from "react-css-modules";
 import TableHead from "../Table/TableHead";
 import TableBody from "../Table/TableBody";
-import styles from "./table-styles";
 import DatePickerStore from "../../stores/PickerStore";
 
-class Table extends React.Component {
+export default class Table extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -38,7 +36,7 @@ class Table extends React.Component {
 
     render() {
         return (
-            <table styleName="date-picker-table">
+            <table className="date-picker-table">
                 <TableHead
                     tableHeadData={ this.state.tableHeadData }
                     tableDisplayIndex={ this.state.tableDisplayIndex }
@@ -55,5 +53,3 @@ class Table extends React.Component {
     }
 
 }
-
-export default CSSModule(Table, styles);
