@@ -1,12 +1,11 @@
 const BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 const NEWBASKETPRODUCTS = "NEWBASKETPRODUCTS";
 const ADDBASKETDISCOUNTS = "ADDBASKETDISCOUNTS";
-const BASKETTOTALINCDISCOUNTSUPDATE = "BASKETTOTALINCDISCOUNTSUPDATE";
+const OVERALLBASKETTOTAL = "OVERALLBASKETTOTAL";
 const ISDISCOUNTELIGIBLE = "ISDISCOUNTELIGIBLE";
 const UPDATEPRODUCTCOUNT = "UPDATEPRODUCTCOUNT";
 const ADDCHARGE = "ADDCHARGE";
 const REMOVECHARGE = "REMOVECHARGE";
-const BASKETTOTALINCCHARGESSUPDATE = "BASKETTOTALINCCHARGESSUPDATE";
 
 function basketProducts(data) {
     return { state : data, type : NEWBASKETPRODUCTS };
@@ -20,8 +19,8 @@ function addToBasketDiscounts(data) {
     return { state : data, type: ADDBASKETDISCOUNTS };
 }
 
-function basketTotalIncDiscountsUpdate(data) {
-    return { state : data, type: BASKETTOTALINCDISCOUNTSUPDATE };
+function overallBasketTotal(data) {
+    return { state : data, type: OVERALLBASKETTOTAL };
 }
 
 function isDiscountEligible(data) {
@@ -40,16 +39,12 @@ function removeBasketCharge(data) {
     return { state : data, type : REMOVECHARGE }
 }
 
-function basketTotalIncChargesUpdate(data) {
-    return { state : data, type : BASKETTOTALINCCHARGESSUPDATE }
-}
-
 export function addProductsToBasket(products) {
     return function (dispatch) {
         dispatch(basketProducts(products));
         dispatch(basketTotal());
         dispatch(isDiscountEligible());
-        dispatch(basketTotalIncDiscountsUpdate());
+        dispatch(overallBasketTotal());
     }
 }
 
@@ -57,7 +52,7 @@ export function addDiscount(discount) {
     return function (dispatch) {
         dispatch(addToBasketDiscounts(discount));
         dispatch(isDiscountEligible());
-        dispatch(basketTotalIncDiscountsUpdate());
+        dispatch(overallBasketTotal());
     }
 }
 
@@ -66,13 +61,35 @@ export function updateProductCount(name) {
         dispatch(productCount(name));
         dispatch(basketTotal());
         dispatch(isDiscountEligible());
-        dispatch(basketTotalIncDiscountsUpdate());
+        dispatch(overallBasketTotal());
     }
 }
 
 export function addCharge(charge) {
     return function(dispatch) {
         dispatch(removeBasketCharge(charge));
-        dispatch()
+        dispatch(addToBasketCharge(charge));
+        dispatch(basketTotal());
+        dispatch(overallBasketTotal())
+    }
+}
+
+export function removeCharge(charge) {
+    return function(dispatch) {
+        dispatch(removeBasketCharge(charge));
+        dispatch(basketTotal());
+        dispatch(overallBasketTotal())
+    }
+}
+
+export function deliveryCharge(data) {
+    return function(dispatch) {
+        if(data.isActive) {
+            dispatch(addCharge({ name : "delivery-charge", value : data.charge }));
+        }
+        else {
+            dispatch(removeCharge({ name : "delivery-charge" }));
+        }
+        dispatch(overallBasketTotal())
     }
 }

@@ -1,93 +1,3 @@
-//export function totalWeeks(state = 0, action = {}) {
-//    switch(action.type) {
-//        case "TOTALWEEKSUPDATE" :
-//            return action.state;
-//        default :
-//            return state;
-//    }
-//}
-
-//export function tableDisplayIndex(state = 0, action = {}) {
-//    switch(action.type) {
-//        case "TABLEDISPLAYINDEX" :
-//            return action.state;
-//        default :
-//            return state;
-//    }
-//}
-
-//export function dateRanges(state = [], action = {}) {
-//    switch(action.type) {
-//        case "NEWDATERANGES" :
-//            return action.state;
-//        default :
-//            return state;
-//    }
-//}
-
-//export function tableHeadData(state = [], action = {}) {
-//    switch(action.type) {
-//        case "NEWTABLEHEADDATA" :
-//            return action.state;
-//        default :
-//            return state;
-//    }
-//}
-
-//export function tableBodyData(state = [], action = {}) {
-//    switch(action.type) {
-//        case "NEWTABLEBODYDATA" :
-//            return action.state;
-//        default :
-//            return state;
-//    }
-//}
-
-//export function timeDescriptions(state = {}, action = {}) {
-//    switch(action.type) {
-//        case "NEWTIMEDESCRIPTIONS" :
-//            return action.state;
-//        default :
-//            return state;
-//    }
-//}
-
-//export function selectedTimeslot(state = {}, action = {}) {
-//    switch(action.type) {
-//        case "NEWCHOSENTIMESLOT" :
-//            return action.state;
-//        default :
-//            return state;
-//    }
-//}
-
-//export function displayAllRows(state = false, action = {}) {
-//    switch(action.type) {
-//        case "DISPLAYALLROWS" :
-//            return action.state;
-//        default :
-//            return state;
-//    }
-//}
-
-//export function availableDates(state = {}, action = {}) {
-//    switch(action.type) {
-//        case "NEWAVAILABLEDATESANDCHARGES" :
-//            return action.state;
-//        default :
-//            return state;
-//    }
-//}
-
-//export function selectedTimeslotData(state = {}, action = {}) {
-//    switch(action.type) {
-//        case "NEWCHOSENTIMESLOTDATA" :
-//            return action.state;
-//        default :
-//            return state;
-//    }
-//}
-
 export function tableData(state = { availableDates : [], tableHeadData : [], tableBodyData : [], dateRanges : [], tableDisplayIndex : 0, totalWeeks : 0, selectedTimeslotData : {}, selectedTimeslot : {}, displayAllRows : false }, action = {}) {
     switch(action.type) {
         case "NEWAVAILABLEDATESANDCHARGES" :
@@ -115,12 +25,21 @@ export function tableData(state = { availableDates : [], tableHeadData : [], tab
                 totalWeeks : action.state
             });
         case "NEWSELECTEDTIMESLOTDATA" :
-            return Object.assign({}, state, {
-                selectedTimeslotData : action.state
+            let ref = action.state.target.getAttribute("data-ref");
+            let selected = [];
+            state.tableBodyData[state.tableDisplayIndex].forEach(data => {
+                if(!selected.length) {
+                    selected = data.filter(days => {
+                        return days.ref === ref;
+                    });
+                }
             });
-        case "NEWSELECTEDTIMESLOT" :
+            selected = selected.shift();
+            if(!action.state.target.classList.contains("timeslot-selected")){
+                selected = {};
+            }
             return Object.assign({}, state, {
-                selectedTimeslot : action.state
+                selectedTimeslotData : selected
             });
         case "DISPLAYALLROWS" :
             return Object.assign({}, state, {

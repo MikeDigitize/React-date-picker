@@ -146,7 +146,10 @@
 	                    value: 50,
 	                    name: "50quidoff"
 	                }),
-	                "/>"
+	                "/>",
+	                _react2["default"].createElement(_PickerPickerContainer2["default"], {
+	                    config: this.state.config
+	                })
 	            );
 	        }
 	    }]);
@@ -155,25 +158,6 @@
 	})(_react2["default"].Component);
 
 	_react2["default"].render(_react2["default"].createElement(App, null), document.querySelector(".app-holder"));
-
-	/*
-	 <BasketContainer
-	 basketProducts={ this.state.basketProducts }
-	 loadNewDates={ this.loadNewDates.bind(this) }
-	 />
-	 <Total />
-	 <DiscountContainer
-	 threshold={100}
-	 percentage={10}
-	 name="10percentoff"
-	 />
-	 <DiscountContainer
-	 threshold={5000}
-	 value={50}
-	 name="50quidoff"
-	 />
-	 />
-	 */
 
 /***/ },
 /* 1 */
@@ -20794,7 +20778,7 @@
 	            dateRanges: ranges,
 	            tableDisplayIndex: tableDisplayIndex,
 	            deliveryTotal: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
-	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.total,
+	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
@@ -20803,7 +20787,8 @@
 	        key: "componentWillMount",
 	        value: function componentWillMount() {
 	            if (!this.isTimeslotStillAvailable()) {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)({}));
+	                // needs to be remove charge & selectedtimeslotdata
+	                //DatePickerStore.dispatch(selectedTimeslotData({}));
 	            }
 	        }
 	    }, {
@@ -20820,7 +20805,7 @@
 	                dateRanges: _storesPickerStore2["default"].getState().tableData.dateRanges,
 	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableData.tableDisplayIndex,
 	                deliveryTotal: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
-	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.total
+	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal
 	            });
 	        }
 	    }, {
@@ -23568,28 +23553,18 @@
 
 	var _pickerDataStores = __webpack_require__(236);
 
-	function DatePicker() {
+	function Checkout() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    return {
-	        //availableDates : availableDates(state.availableDates, action),
 	        basketTotals: (0, _externalStores.basketTotals)(state.basketTotals, action),
-	        //totalWeeks : totalWeeks(state.totalWeeks, action),
-	        //tableDisplayIndex : tableDisplayIndex(state.tableDisplayIndex, action),
-	        //dateRanges : dateRanges(state.dateRanges, action),
-	        //tableHeadData : tableHeadData(state.tableHeadData, action),
-	        //tableBodyData : tableBodyData(state.tableBodyData, action),
-	        //timeDescriptions : timeDescriptions(state.timeDescriptions, action),
-	        //selectedTimeslotData : selectedTimeslotData(state.selectedTimeslotData, action),
-	        //selectedTimeslot : selectedTimeslot(state.selectedTimeslot, action),
-	        //displayAllRows : displayAllRows(state.displayAllRows, action),
 	        tableData: (0, _pickerDataStores.tableData)(state.tableData, action)
 	    };
 	}
 
 	var store = (0, _redux.applyMiddleware)(_reduxThunk2["default"])(_redux.createStore);
-	var DatePickerStore = store(DatePicker);
+	var DatePickerStore = store(Checkout);
 	exports["default"] = DatePickerStore;
 	module.exports = exports["default"];
 
@@ -24216,12 +24191,18 @@
 	            return store;
 	        // updates after basket products are updated - no new state needed
 	        case "BASKETTOTALUPDATE":
+	            var productTotal = state.basketProducts.map(function (p) {
+	                return p.quantity * p.cost || 0;
+	            }).reduce(function (a, b) {
+	                return a + b;
+	            }, 0);
+	            var chargesTotal = state.activeCharges.map(function (d) {
+	                return d.value;
+	            }).reduce(function (a, b) {
+	                return a + b;
+	            }, 0);
 	            return Object.assign({}, state, {
-	                total: (0, _utilsCostFormatter.format)(state.basketProducts.map(function (p) {
-	                    return p.quantity * p.cost || 0;
-	                }).reduce(function (a, b) {
-	                    return a + b;
-	                }, 0))
+	                total: (0, _utilsCostFormatter.format)(productTotal + chargesTotal)
 	            });
 	        // when a discount becomes active - recalculate total inc discount after
 	        case "ADDBASKETDISCOUNTS":
@@ -24247,7 +24228,7 @@
 	                activeDiscounts: discounts
 	            });
 	        // updates after basket products are updated AND when a discount is added / removed - no new state needed
-	        case "BASKETTOTALINCDISCOUNTSUPDATE":
+	        case "OVERALLBASKETTOTAL":
 	            var discount = state.activeDiscounts.map(function (d) {
 	                if (d.isActive) {
 	                    if (d.percentage) {
@@ -24261,8 +24242,14 @@
 	            }).reduce(function (a, b) {
 	                return a + b;
 	            }, 0);
+	            var charge = state.activeCharges.map(function (d) {
+	                return d.value;
+	            }).reduce(function (a, b) {
+	                return a + b;
+	            }, 0);
+	            var overallTotal = state.total - discount;
 	            return Object.assign({}, state, {
-	                overallTotal: (0, _utilsCostFormatter.format)(state.total - discount)
+	                overallTotal: (0, _utilsCostFormatter.format)(overallTotal)
 	            });
 	        case "ADDCHARGE":
 	            var activeCharges = state.activeCharges.filter(function (charge) {
@@ -24282,24 +24269,6 @@
 	            return Object.assign({}, state, {
 	                activeCharges: charges
 	            });
-	        case "BASKETTOTALINCCHARGESSUPDATE":
-	            return state;
-	        //let discount = state.activeDiscounts.map(d => {
-	        //    if(d.isActive) {
-	        //        if(d.percentage) {
-	        //            return state.total / 100 * d.percentage;
-	        //        }
-	        //        else {
-	        //            return d.value;
-	        //        }
-	        //    }
-	        //    else {
-	        //        return 0;
-	        //    }
-	        //}).reduce((a,b) => a + b, 0);
-	        //return Object.assign({}, state, {
-	        //    overallTotal : format(state.total - discount)
-	        //});
 	        // anytime a delivery charge is selected and affects the total inc discounts
 	        case "ADDTOTOTAL":
 	            return Object.assign({}, state, {
@@ -24347,96 +24316,6 @@
 /* 236 */
 /***/ function(module, exports) {
 
-	//export function totalWeeks(state = 0, action = {}) {
-	//    switch(action.type) {
-	//        case "TOTALWEEKSUPDATE" :
-	//            return action.state;
-	//        default :
-	//            return state;
-	//    }
-	//}
-
-	//export function tableDisplayIndex(state = 0, action = {}) {
-	//    switch(action.type) {
-	//        case "TABLEDISPLAYINDEX" :
-	//            return action.state;
-	//        default :
-	//            return state;
-	//    }
-	//}
-
-	//export function dateRanges(state = [], action = {}) {
-	//    switch(action.type) {
-	//        case "NEWDATERANGES" :
-	//            return action.state;
-	//        default :
-	//            return state;
-	//    }
-	//}
-
-	//export function tableHeadData(state = [], action = {}) {
-	//    switch(action.type) {
-	//        case "NEWTABLEHEADDATA" :
-	//            return action.state;
-	//        default :
-	//            return state;
-	//    }
-	//}
-
-	//export function tableBodyData(state = [], action = {}) {
-	//    switch(action.type) {
-	//        case "NEWTABLEBODYDATA" :
-	//            return action.state;
-	//        default :
-	//            return state;
-	//    }
-	//}
-
-	//export function timeDescriptions(state = {}, action = {}) {
-	//    switch(action.type) {
-	//        case "NEWTIMEDESCRIPTIONS" :
-	//            return action.state;
-	//        default :
-	//            return state;
-	//    }
-	//}
-
-	//export function selectedTimeslot(state = {}, action = {}) {
-	//    switch(action.type) {
-	//        case "NEWCHOSENTIMESLOT" :
-	//            return action.state;
-	//        default :
-	//            return state;
-	//    }
-	//}
-
-	//export function displayAllRows(state = false, action = {}) {
-	//    switch(action.type) {
-	//        case "DISPLAYALLROWS" :
-	//            return action.state;
-	//        default :
-	//            return state;
-	//    }
-	//}
-
-	//export function availableDates(state = {}, action = {}) {
-	//    switch(action.type) {
-	//        case "NEWAVAILABLEDATESANDCHARGES" :
-	//            return action.state;
-	//        default :
-	//            return state;
-	//    }
-	//}
-
-	//export function selectedTimeslotData(state = {}, action = {}) {
-	//    switch(action.type) {
-	//        case "NEWCHOSENTIMESLOTDATA" :
-	//            return action.state;
-	//        default :
-	//            return state;
-	//    }
-	//}
-
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -24474,12 +24353,21 @@
 	                totalWeeks: action.state
 	            });
 	        case "NEWSELECTEDTIMESLOTDATA":
-	            return Object.assign({}, state, {
-	                selectedTimeslotData: action.state
+	            var ref = action.state.target.getAttribute("data-ref");
+	            var selected = [];
+	            state.tableBodyData[state.tableDisplayIndex].forEach(function (data) {
+	                if (!selected.length) {
+	                    selected = data.filter(function (days) {
+	                        return days.ref === ref;
+	                    });
+	                }
 	            });
-	        case "NEWSELECTEDTIMESLOT":
+	            selected = selected.shift();
+	            if (!action.state.target.classList.contains("timeslot-selected")) {
+	                selected = {};
+	            }
 	            return Object.assign({}, state, {
-	                selectedTimeslot: action.state
+	                selectedTimeslotData: selected
 	            });
 	        case "DISPLAYALLROWS":
 	            return Object.assign({}, state, {
@@ -24511,10 +24399,8 @@
 	exports.timeDescriptions = timeDescriptions;
 	exports.tableHeadData = tableHeadData;
 	exports.tableBodyData = tableBodyData;
-	exports.selectedTimeslot = selectedTimeslot;
 	exports.displayAllRows = displayAllRows;
 	var NEWAVAILABLEDATESANDCHARGES = "NEWAVAILABLEDATESANDCHARGES";
-	var NEWSELECTEDTIMESLOT = "NEWSELECTEDTIMESLOT";
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWDATERANGES = "NEWDATERANGES";
@@ -24556,19 +24442,9 @@
 	    return { state: data, type: NEWTABLEBODYDATA };
 	}
 
-	function selectedTimeslot(data) {
-	    return { state: data, type: NEWSELECTEDTIMESLOT };
-	}
-
 	function displayAllRows(data) {
 	    return { state: data, type: DISPLAYALLROWS };
 	}
-
-	//export function updateSelectedTimeslot(data) {
-	//    return function(dispatch) {
-	//        dispatch(subtractFromBasketTotal(data))
-	//    }
-	//}
 
 /***/ },
 /* 238 */
@@ -24583,15 +24459,16 @@
 	exports.addDiscount = addDiscount;
 	exports.updateProductCount = updateProductCount;
 	exports.addCharge = addCharge;
+	exports.removeCharge = removeCharge;
+	exports.deliveryCharge = deliveryCharge;
 	var BASKETTOTALUPDATE = "BASKETTOTALUPDATE";
 	var NEWBASKETPRODUCTS = "NEWBASKETPRODUCTS";
 	var ADDBASKETDISCOUNTS = "ADDBASKETDISCOUNTS";
-	var BASKETTOTALINCDISCOUNTSUPDATE = "BASKETTOTALINCDISCOUNTSUPDATE";
+	var OVERALLBASKETTOTAL = "OVERALLBASKETTOTAL";
 	var ISDISCOUNTELIGIBLE = "ISDISCOUNTELIGIBLE";
 	var UPDATEPRODUCTCOUNT = "UPDATEPRODUCTCOUNT";
 	var ADDCHARGE = "ADDCHARGE";
 	var REMOVECHARGE = "REMOVECHARGE";
-	var BASKETTOTALINCCHARGESSUPDATE = "BASKETTOTALINCCHARGESSUPDATE";
 
 	function basketProducts(data) {
 	    return { state: data, type: NEWBASKETPRODUCTS };
@@ -24605,8 +24482,8 @@
 	    return { state: data, type: ADDBASKETDISCOUNTS };
 	}
 
-	function basketTotalIncDiscountsUpdate(data) {
-	    return { state: data, type: BASKETTOTALINCDISCOUNTSUPDATE };
+	function overallBasketTotal(data) {
+	    return { state: data, type: OVERALLBASKETTOTAL };
 	}
 
 	function isDiscountEligible(data) {
@@ -24625,16 +24502,12 @@
 	    return { state: data, type: REMOVECHARGE };
 	}
 
-	function basketTotalIncChargesUpdate(data) {
-	    return { state: data, type: BASKETTOTALINCCHARGESSUPDATE };
-	}
-
 	function addProductsToBasket(products) {
 	    return function (dispatch) {
 	        dispatch(basketProducts(products));
 	        dispatch(basketTotal());
 	        dispatch(isDiscountEligible());
-	        dispatch(basketTotalIncDiscountsUpdate());
+	        dispatch(overallBasketTotal());
 	    };
 	}
 
@@ -24642,7 +24515,7 @@
 	    return function (dispatch) {
 	        dispatch(addToBasketDiscounts(discount));
 	        dispatch(isDiscountEligible());
-	        dispatch(basketTotalIncDiscountsUpdate());
+	        dispatch(overallBasketTotal());
 	    };
 	}
 
@@ -24651,14 +24524,35 @@
 	        dispatch(productCount(name));
 	        dispatch(basketTotal());
 	        dispatch(isDiscountEligible());
-	        dispatch(basketTotalIncDiscountsUpdate());
+	        dispatch(overallBasketTotal());
 	    };
 	}
 
 	function addCharge(charge) {
 	    return function (dispatch) {
 	        dispatch(removeBasketCharge(charge));
-	        dispatch();
+	        dispatch(addToBasketCharge(charge));
+	        dispatch(basketTotal());
+	        dispatch(overallBasketTotal());
+	    };
+	}
+
+	function removeCharge(charge) {
+	    return function (dispatch) {
+	        dispatch(removeBasketCharge(charge));
+	        dispatch(basketTotal());
+	        dispatch(overallBasketTotal());
+	    };
+	}
+
+	function deliveryCharge(data) {
+	    return function (dispatch) {
+	        if (data.isActive) {
+	            dispatch(addCharge({ name: "delivery-charge", value: data.charge }));
+	        } else {
+	            dispatch(removeCharge({ name: "delivery-charge" }));
+	        }
+	        dispatch(overallBasketTotal());
 	    };
 	}
 
@@ -25080,6 +24974,9 @@
 	            displayAllRows: this.props.displayAllRows
 	        };
 	        this.alwaysDisplay = TableBody.rowsToDisplay();
+	        _storesPickerStore2["default"].subscribe(function () {
+	            //console.log(DatePickerStore.getState());
+	        });
 	    }
 
 	    _createClass(TableBody, [{
@@ -25092,27 +24989,6 @@
 	                selectedTimeslotData: nextProps.selectedTimeslotData,
 	                displayAllRows: nextProps.displayAllRows
 	            });
-	        }
-	    }, {
-	        key: "updateStoreWithSelectedTimeslot",
-	        value: function updateStoreWithSelectedTimeslot(target) {
-	            var ref = target.getAttribute("data-ref");
-	            var selected = [];
-	            this.state.tableBodyData[this.state.tableDisplayIndex].forEach(function (data) {
-	                if (!selected.length) {
-	                    selected = data.filter(function (days) {
-	                        return days.ref === ref;
-	                    });
-	                }
-	            });
-	            selected = selected.shift();
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.subtractFromBasketTotal)(this.state.selectedTimeslotData.charge || 0));
-	            if (!target.classList.contains("timeslot-selected")) {
-	                selected = {};
-	            } else {
-	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addToBasketTotal)(selected.charge));
-	            }
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)(selected));
 	        }
 	    }, {
 	        key: "createRows",
@@ -25250,11 +25126,11 @@
 	            var currentTarget = document.querySelector(".timeslot-selected");
 	            if (currentTarget && currentTarget !== target) {
 	                currentTarget.classList.toggle("timeslot-selected");
-	                target.classList.toggle("timeslot-selected");
-	            } else {
-	                target.classList.toggle("timeslot-selected");
 	            }
-	            this.updateStoreWithSelectedTimeslot(target);
+	            target.classList.toggle("timeslot-selected");
+	            var isActive = !!document.querySelector(".timeslot-selected");
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)({ target: target }));
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.deliveryCharge)({ isActive: isActive, charge: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge }));
 	        }
 	    }]);
 
@@ -25997,7 +25873,7 @@
 	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
 	            totalExcDiscount: _storesPickerStore2["default"].getState().basketTotals.total,
 	            discountTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().basketTotals.total - _storesPickerStore2["default"].getState().basketTotals.overallTotal),
-	            deliveryTotal: _storesPickerStore2["default"].getState().deliveryTotal,
+	            deliveryTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0),
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
@@ -26008,7 +25884,7 @@
 	            this.setState({
 	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
 	                totalExcDiscount: _storesPickerStore2["default"].getState().basketTotals.total,
-	                deliveryTotal: _storesPickerStore2["default"].getState().deliveryTotal,
+	                deliveryTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0),
 	                discountTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().basketTotals.total - _storesPickerStore2["default"].getState().basketTotals.overallTotal)
 	            });
 	        }
@@ -26034,6 +25910,12 @@
 	                    { styleName: "basket-discount" },
 	                    "Discount: £",
 	                    this.state.discountTotal
+	                ),
+	                _react2["default"].createElement(
+	                    "p",
+	                    { styleName: "basket-discount" },
+	                    "Delivery: £",
+	                    this.state.deliveryTotal
 	                ),
 	                _react2["default"].createElement(
 	                    "p",

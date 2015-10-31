@@ -4,7 +4,7 @@ import styles from "./table-body-styles";
 import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
 import DatePickerStore from "../../stores/PickerStore";
-import { addToBasketTotal, subtractFromBasketTotal } from "../../actions/external-actions";
+import { deliveryCharge } from "../../actions/external-actions";
 import { selectedTimeslotData } from "../../actions/picker-actions";
 import "../../utils/classList-polyfill";
 
@@ -19,7 +19,10 @@ class TableBody extends React.Component {
             selectedTimeslotData : this.props.selectedTimeslotData,
             displayAllRows : this.props.displayAllRows
         };
-        this.alwaysDisplay = TableBody.rowsToDisplay()
+        this.alwaysDisplay = TableBody.rowsToDisplay();
+        DatePickerStore.subscribe(function(){
+            //console.log(DatePickerStore.getState());
+        })
     }
 
     componentWillReceiveProps(nextProps) {
@@ -41,7 +44,7 @@ class TableBody extends React.Component {
                     this.these.push(row);
                 }
             },
-            reset(){
+            reset() {
                 this.these = ["SameDay", "Anytime"];
             }
         }
@@ -55,33 +58,11 @@ class TableBody extends React.Component {
         let currentTarget = document.querySelector(".timeslot-selected");
         if(currentTarget && currentTarget !== target) {
             currentTarget.classList.toggle("timeslot-selected");
-            target.classList.toggle("timeslot-selected");
         }
-        else {
-            target.classList.toggle("timeslot-selected");
-        }
-        this.updateStoreWithSelectedTimeslot(target);
-    };
-
-    updateStoreWithSelectedTimeslot(target) {
-        let ref = target.getAttribute("data-ref");
-        let selected = [];
-        this.state.tableBodyData[this.state.tableDisplayIndex].forEach(data => {
-            if(!selected.length) {
-                selected = data.filter(days => {
-                    return days.ref === ref;
-                });
-            }
-        });
-        selected = selected.shift();
-        DatePickerStore.dispatch(subtractFromBasketTotal(this.state.selectedTimeslotData.charge || 0));
-        if(!target.classList.contains("timeslot-selected")){
-            selected = {};
-        }
-        else {
-            DatePickerStore.dispatch(addToBasketTotal(selected.charge));
-        }
-        DatePickerStore.dispatch(selectedTimeslotData(selected));
+        target.classList.toggle("timeslot-selected");
+        let isActive = !!document.querySelector(".timeslot-selected");
+        DatePickerStore.dispatch(selectedTimeslotData({ target }));
+        DatePickerStore.dispatch(deliveryCharge({ isActive, charge : DatePickerStore.getState().tableData.selectedTimeslotData.charge }))
     };
 
     createRows() {

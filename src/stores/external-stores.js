@@ -10,8 +10,12 @@ export function basketTotals(state = { total: 0, overallTotal : 0, activeDiscoun
             return store;
         // updates after basket products are updated - no new state needed
         case "BASKETTOTALUPDATE" :
+            let productTotal = state.basketProducts.map(p => p.quantity * p.cost || 0).reduce((a,b) => a+b, 0);
+            let chargesTotal = state.activeCharges.map(d => {
+                return d.value;
+            }).reduce((a,b) => a + b, 0);
             return Object.assign({}, state, {
-                total : format(state.basketProducts.map(p => p.quantity * p.cost || 0).reduce((a,b) => a+b, 0))
+                total : format(productTotal + chargesTotal)
             });
         // when a discount becomes active - recalculate total inc discount after
         case "ADDBASKETDISCOUNTS" :
@@ -36,7 +40,7 @@ export function basketTotals(state = { total: 0, overallTotal : 0, activeDiscoun
                 activeDiscounts : discounts
             });
         // updates after basket products are updated AND when a discount is added / removed - no new state needed
-        case "BASKETTOTALINCDISCOUNTSUPDATE" :
+        case "OVERALLBASKETTOTAL" :
             let discount = state.activeDiscounts.map(d => {
                 if(d.isActive) {
                     if(d.percentage) {
@@ -50,8 +54,12 @@ export function basketTotals(state = { total: 0, overallTotal : 0, activeDiscoun
                     return 0;
                 }
             }).reduce((a,b) => a + b, 0);
+            let charge = state.activeCharges.map(d => {
+                return d.value;
+            }).reduce((a,b) => a + b, 0);
+            let overallTotal = state.total - discount;
             return Object.assign({}, state, {
-                overallTotal : format(state.total - discount)
+                overallTotal : format(overallTotal)
             });
         case "ADDCHARGE" :
             let activeCharges = state.activeCharges.filter(charge => charge.name === action.state.name);
@@ -68,24 +76,6 @@ export function basketTotals(state = { total: 0, overallTotal : 0, activeDiscoun
             return Object.assign({}, state, {
                 activeCharges : charges
             });
-        case "BASKETTOTALINCCHARGESSUPDATE" :
-            return state;
-            //let discount = state.activeDiscounts.map(d => {
-            //    if(d.isActive) {
-            //        if(d.percentage) {
-            //            return state.total / 100 * d.percentage;
-            //        }
-            //        else {
-            //            return d.value;
-            //        }
-            //    }
-            //    else {
-            //        return 0;
-            //    }
-            //}).reduce((a,b) => a + b, 0);
-            //return Object.assign({}, state, {
-            //    overallTotal : format(state.total - discount)
-            //});
         // anytime a delivery charge is selected and affects the total inc discounts
         case "ADDTOTOTAL" :
             return Object.assign({}, state, {

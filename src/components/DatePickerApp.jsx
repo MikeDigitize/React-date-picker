@@ -44,18 +44,21 @@ class App extends React.Component {
                 <BasketContainer
                     basketProducts={ this.state.basketProducts }
                     loadNewDates={ this.loadNewDates.bind(this) }
-                    />
+                />
                 <Total />
                 <DiscountContainer
                     threshold={100}
                     percentage={10}
                     name="10percentoff"
-                    />
+                />
                 <DiscountContainer
                     threshold={5000}
                     value={50}
                     name="50quidoff"
-                    />
+                />
+                />
+                <PickerContainer
+                    config={this.state.config}
                 />
             </div>
         );
@@ -65,22 +68,3 @@ class App extends React.Component {
 }
 
 React.render(<App />, document.querySelector(".app-holder"));
-
-/*
- <BasketContainer
- basketProducts={ this.state.basketProducts }
- loadNewDates={ this.loadNewDates.bind(this) }
- />
- <Total />
- <DiscountContainer
- threshold={100}
- percentage={10}
- name="10percentoff"
- />
- <DiscountContainer
- threshold={5000}
- value={50}
- name="50quidoff"
- />
- />
- */
