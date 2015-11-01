@@ -20,9 +20,6 @@ class TableBody extends React.Component {
             displayAllRows : this.props.displayAllRows
         };
         this.alwaysDisplay = TableBody.rowsToDisplay();
-        //CheckoutStore.subscribe(function(){
-        //    console.log(CheckoutStore.getState());
-        //})
     }
 
     componentWillReceiveProps(nextProps) {
