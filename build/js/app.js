@@ -20570,10 +20570,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Picker = __webpack_require__(158);
-
-	var _Picker2 = _interopRequireDefault(_Picker);
-
 	var _PickerClosed = __webpack_require__(252);
 
 	var _PickerClosed2 = _interopRequireDefault(_PickerClosed);
@@ -20759,120 +20755,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 158 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactCssModules = __webpack_require__(159);
-
-	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
-
-	var _pickerStyles = __webpack_require__(222);
-
-	var _pickerStyles2 = _interopRequireDefault(_pickerStyles);
-
-	var _storesCheckoutStore = __webpack_require__(223);
-
-	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
-
-	var _actionsTableDataActions = __webpack_require__(237);
-
-	var _DateRangeDateRange = __webpack_require__(239);
-
-	var _DateRangeDateRange2 = _interopRequireDefault(_DateRangeDateRange);
-
-	var _TableTableContainer = __webpack_require__(241);
-
-	var _TableTableContainer2 = _interopRequireDefault(_TableTableContainer);
-
-	var _SummarySummary = __webpack_require__(250);
-
-	var _SummarySummary2 = _interopRequireDefault(_SummarySummary);
-
-	var Picker = (function (_React$Component) {
-	    _inherits(Picker, _React$Component);
-
-	    function Picker() {
-	        _classCallCheck(this, Picker);
-
-	        _get(Object.getPrototypeOf(Picker.prototype), "constructor", this).call(this);
-	        _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.checkTableIndexExists)(_storesCheckoutStore2["default"].getState().tableData));
-	        this.state = {
-	            dateRanges: _storesCheckoutStore2["default"].getState().tableData.dateRanges,
-	            tableDisplayIndex: _storesCheckoutStore2["default"].getState().tableData.tableDisplayIndex,
-	            deliveryTotal: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
-	            basketTotal: _storesCheckoutStore2["default"].getState().basketTotals.overallTotal,
-	            unsubscribe: _storesCheckoutStore2["default"].subscribe(this.onStoreUpdate.bind(this))
-	        };
-	    }
-
-	    _createClass(Picker, [{
-	        key: "componentWillUnmount",
-	        value: function componentWillUnmount() {
-	            if (typeof this.state.unsubscribe === "function") {
-	                this.state.unsubscribe();
-	            }
-	        }
-	    }, {
-	        key: "onStoreUpdate",
-	        value: function onStoreUpdate() {
-	            this.setState({
-	                dateRanges: _storesCheckoutStore2["default"].getState().tableData.dateRanges,
-	                tableDisplayIndex: _storesCheckoutStore2["default"].getState().tableData.tableDisplayIndex,
-	                deliveryTotal: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
-	                basketTotal: _storesCheckoutStore2["default"].getState().basketTotals.overallTotal
-	            });
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            return _react2["default"].createElement(
-	                "section",
-	                { styleName: "date-picker" },
-	                _react2["default"].createElement(_DateRangeDateRange2["default"], {
-	                    dateRanges: this.state.dateRanges,
-	                    tableDisplayIndex: this.state.tableDisplayIndex
-	                }),
-	                _react2["default"].createElement(_TableTableContainer2["default"], null),
-	                _react2["default"].createElement(_SummarySummary2["default"], {
-	                    basketTotal: this.state.basketTotal,
-	                    deliveryTotal: this.state.deliveryTotal
-	                })
-	            );
-	        }
-	    }], [{
-	        key: "componentWillMount",
-	        value: function componentWillMount() {
-	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.checkTimeslotExists)(_storesCheckoutStore2["default"].getState().tableData));
-	        }
-	    }]);
-
-	    return Picker;
-	})(_react2["default"].Component);
-
-	exports["default"] = (0, _reactCssModules2["default"])(Picker, _pickerStyles2["default"]);
-	module.exports = exports["default"];
-
-/***/ },
+/* 158 */,
 /* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -25070,9 +24953,6 @@
 	            displayAllRows: this.props.displayAllRows
 	        };
 	        this.alwaysDisplay = TableBody.rowsToDisplay();
-	        //CheckoutStore.subscribe(function(){
-	        //    console.log(CheckoutStore.getState());
-	        //})
 	    }
 
 	    _createClass(TableBody, [{

@@ -1,5 +1,4 @@
 import React from "react";
-import Picker from "./Picker";
 import Closed from "./PickerClosed";
 import ThirdParty from "./PickerThirdParty";
 import Loading from "./PickerLoading";
@@ -128,13 +127,13 @@ export default class PickerContainer extends React.Component {
                     <DateRange
                         dateRanges={ this.state.dateRanges }
                         tableDisplayIndex={ this.state.tableDisplayIndex }
-                        />
+                    />
                     <TableContainer />
                     <Summary
                         basketTotal={ this.state.basketTotal }
                         deliveryTotal={ this.state.deliveryTotal }
                         showHideText={ this.state.showHideText }
-                        />
+                    />
                 </section>
             );
         }
