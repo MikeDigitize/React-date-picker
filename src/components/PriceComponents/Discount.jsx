@@ -34,4 +34,18 @@ class Discount extends React.Component {
     }
 }
 
+Discount.defaultProps = {
+    discountThreshold : 0,
+    discountPercentage : 0,
+    discountValue : 0,
+    isActive : false
+};
+
+Discount.propTypes = {
+    discountThreshold : React.PropTypes.number.isRequired,
+    discountPercentage : React.PropTypes.number,
+    discountValue : React.PropTypes.number,
+    isActive : React.PropTypes.bool.isRequired,
+};
+
 export default CSSModule(Discount, styles);

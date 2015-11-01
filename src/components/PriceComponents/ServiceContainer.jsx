@@ -28,7 +28,7 @@ export default class ServiceContainer extends React.Component {
 
     createChargeStoreObject() {
         return {
-            name : this.state.name,
+            name : this.state.desc,
             value : this.state.value
         }
     }
@@ -50,7 +50,7 @@ export default class ServiceContainer extends React.Component {
 ServiceContainer.defaultProps = {
     desc : "",
     value : 0,
-    toggleService : function(){},
+    toggleService : function(){}
 };
 
 ServiceContainer.propTypes = {

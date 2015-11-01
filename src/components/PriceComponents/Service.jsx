@@ -35,4 +35,18 @@ class Service extends React.Component {
     }
 }
 
+Service.defaultProps = {
+    desc : "",
+    value : 0,
+    toggle : function(){},
+    isActive : false
+};
+
+Service.propTypes = {
+    desc : React.PropTypes.string.isRequired,
+    value : React.PropTypes.number.isRequired,
+    toggle : React.PropTypes.func.isRequired,
+    isActive : React.PropTypes.bool.isRequired
+};
+
 export default CSSModule(Service, styles, { allowMultiple : true });

@@ -50,6 +50,10 @@ class App extends React.Component {
                     description="Buy a care pack for your item(s)"
                     value={25}
                 />
+                <ServiceContainer
+                    description="Remove your old appliances"
+                    value={112}
+                    />
                 <DiscountContainer
                     threshold={100}
                     percentage={10}

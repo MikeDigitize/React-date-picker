@@ -55,3 +55,17 @@ export default class DiscountContainer extends React.Component {
         );
     }
 }
+
+DiscountContainer.defaultProps = {
+    name : "",
+    threshold : 0,
+    percentage : 0,
+    value : 0
+};
+
+DiscountContainer.propTypes = {
+    name : React.PropTypes.string.isRequired,
+    threshold : React.PropTypes.number.isRequired,
+    percentage : React.PropTypes.number,
+    value : React.PropTypes.number,
+};

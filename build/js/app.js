@@ -143,6 +143,10 @@
 	                    description: "Buy a care pack for your item(s)",
 	                    value: 25
 	                }),
+	                _react2["default"].createElement(_PriceComponentsServiceContainer2["default"], {
+	                    description: "Remove your old appliances",
+	                    value: 112
+	                }),
 	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
 	                    threshold: 100,
 	                    percentage: 10,
@@ -26324,6 +26328,20 @@
 	})(_react2["default"].Component);
 
 	exports["default"] = DiscountContainer;
+
+	DiscountContainer.defaultProps = {
+	    name: "",
+	    threshold: 0,
+	    percentage: 0,
+	    value: 0
+	};
+
+	DiscountContainer.propTypes = {
+	    name: _react2["default"].PropTypes.string.isRequired,
+	    threshold: _react2["default"].PropTypes.number.isRequired,
+	    percentage: _react2["default"].PropTypes.number,
+	    value: _react2["default"].PropTypes.number
+	};
 	module.exports = exports["default"];
 
 /***/ },
@@ -26425,6 +26443,20 @@
 
 	    return Discount;
 	})(_react2["default"].Component);
+
+	Discount.defaultProps = {
+	    discountThreshold: 0,
+	    discountPercentage: 0,
+	    discountValue: 0,
+	    isActive: false
+	};
+
+	Discount.propTypes = {
+	    discountThreshold: _react2["default"].PropTypes.number.isRequired,
+	    discountPercentage: _react2["default"].PropTypes.number,
+	    discountValue: _react2["default"].PropTypes.number,
+	    isActive: _react2["default"].PropTypes.bool.isRequired
+	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(Discount, _priceComponentStyles2["default"]);
 	module.exports = exports["default"];
@@ -26818,7 +26850,7 @@
 	        key: "createChargeStoreObject",
 	        value: function createChargeStoreObject() {
 	            return {
-	                name: this.state.name,
+	                name: this.state.desc,
 	                value: this.state.value
 	            };
 	        }
@@ -26939,6 +26971,20 @@
 
 	    return Service;
 	})(_react2["default"].Component);
+
+	Service.defaultProps = {
+	    desc: "",
+	    value: 0,
+	    toggle: function toggle() {},
+	    isActive: false
+	};
+
+	Service.propTypes = {
+	    desc: _react2["default"].PropTypes.string.isRequired,
+	    value: _react2["default"].PropTypes.number.isRequired,
+	    toggle: _react2["default"].PropTypes.func.isRequired,
+	    isActive: _react2["default"].PropTypes.bool.isRequired
+	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(Service, _priceComponentStyles2["default"], { allowMultiple: true });
 	module.exports = exports["default"];
