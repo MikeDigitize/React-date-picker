@@ -153,6 +153,11 @@
 	                    name: "10percentoff"
 	                }),
 	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
+	                    threshold: 10000,
+	                    percentage: 50,
+	                    name: "50percentoff"
+	                }),
+	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
 	                    threshold: 5000,
 	                    value: 50,
 	                    name: "50quidoff"
@@ -24544,6 +24549,7 @@
 	        dispatch(removeBasketCharge(charge));
 	        dispatch(addToBasketCharge(charge));
 	        dispatch(basketTotal());
+	        dispatch(isDiscountEligible());
 	        dispatch(overallBasketTotal());
 	    };
 	}
@@ -24552,6 +24558,7 @@
 	    return function (dispatch) {
 	        dispatch(removeBasketCharge(charge));
 	        dispatch(basketTotal());
+	        dispatch(isDiscountEligible());
 	        dispatch(overallBasketTotal());
 	    };
 	}

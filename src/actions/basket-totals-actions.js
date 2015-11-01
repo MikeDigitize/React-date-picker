@@ -70,6 +70,7 @@ export function addCharge(charge) {
         dispatch(removeBasketCharge(charge));
         dispatch(addToBasketCharge(charge));
         dispatch(basketTotal());
+        dispatch(isDiscountEligible());
         dispatch(overallBasketTotal())
     }
 }
@@ -78,6 +79,7 @@ export function removeCharge(charge) {
     return function(dispatch) {
         dispatch(removeBasketCharge(charge));
         dispatch(basketTotal());
+        dispatch(isDiscountEligible());
         dispatch(overallBasketTotal())
     }
 }
