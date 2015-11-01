@@ -2,6 +2,8 @@ import React from "react";
 import TableHead from "../Table/TableHead";
 import TableBody from "../Table/TableBody";
 import CheckoutStore from "../../stores/CheckoutStore";
+import { deliveryCharge } from "../../actions/basket-totals-actions";
+import { selectedTimeslotData } from "../../actions/table-data-actions";
 
 export default class Table extends React.Component {
     constructor() {
@@ -13,6 +15,7 @@ export default class Table extends React.Component {
             timeDescriptions : CheckoutStore.getState().tableData.timeDescriptions,
             selectedTimeslotData : CheckoutStore.getState().tableData.selectedTimeslotData,
             displayAllRows : CheckoutStore.getState().tableData.displayAllRows,
+            toggleSelected : Table.toggleSelected,
             unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
@@ -22,6 +25,21 @@ export default class Table extends React.Component {
             this.state.unsubscribe();
         }
     }
+
+    static toggleSelected(e) {
+        let target = e.target || e.srcElement;
+        if(target.tagName === "SPAN") {
+            target = target.parentNode;
+        }
+        let currentTarget = document.querySelector(".timeslot-selected");
+        if(currentTarget && currentTarget !== target) {
+            currentTarget.classList.toggle("timeslot-selected");
+        }
+        target.classList.toggle("timeslot-selected");
+        let isActive = !!document.querySelector(".timeslot-selected");
+        CheckoutStore.dispatch(selectedTimeslotData({ target }));
+        CheckoutStore.dispatch(deliveryCharge({ isActive, charge : CheckoutStore.getState().tableData.selectedTimeslotData.charge }))
+    };
 
     onStoreUpdate() {
         this.setState({
@@ -47,6 +65,7 @@ export default class Table extends React.Component {
                     timeDescriptions={ this.state.timeDescriptions }
                     selectedTimeslotData={ this.state.selectedTimeslotData }
                     displayAllRows={ this.state.displayAllRows }
+                    toggleSelected={ this.state.toggleSelected }
                 />
              </table>
         );

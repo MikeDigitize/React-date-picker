@@ -20625,6 +20625,9 @@
 	            deliveryTotal: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
 	            basketTotal: _storesCheckoutStore2["default"].getState().basketTotals.overallTotal,
 	            showHideText: _storesCheckoutStore2["default"].getState().tableData.showHideText,
+	            showPrevWeek: this.showPrevWeek.bind(this),
+	            showNextWeek: this.showNextWeek.bind(this),
+	            toggleShowMoreDates: PickerContainer.toggleDisplay,
 	            unsubscribe: _storesCheckoutStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
@@ -20641,7 +20644,7 @@
 	        value: function componentWillReceiveProps(nextProps) {
 	            var _this = this;
 
-	            if (Object.keys(nextProps.config).length) {
+	            if (nextProps.config.state) {
 	                if (nextProps.config.state === "ThirdParty") {
 	                    this.setState({
 	                        pickerState: {
@@ -20709,6 +20712,18 @@
 	            });
 	        }
 	    }, {
+	        key: "showPrevWeek",
+	        value: function showPrevWeek() {
+	            var prev = this.state.tableDisplayIndex === 0 ? this.state.dateRanges.length - 1 : --this.state.tableDisplayIndex;
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.updateTableIndex)(prev));
+	        }
+	    }, {
+	        key: "showNextWeek",
+	        value: function showNextWeek() {
+	            var next = this.state.tableDisplayIndex === this.state.dateRanges.length - 1 ? 0 : ++this.state.tableDisplayIndex;
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.updateTableIndex)(next));
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            if (this.state.pickerState.closed) {
@@ -20725,18 +20740,27 @@
 	                    { className: "date-picker" },
 	                    _react2["default"].createElement(_DateRangeDateRange2["default"], {
 	                        dateRanges: this.state.dateRanges,
-	                        tableDisplayIndex: this.state.tableDisplayIndex
+	                        tableDisplayIndex: this.state.tableDisplayIndex,
+	                        showPrevWeek: this.state.showPrevWeek,
+	                        showNextWeek: this.state.showNextWeek
 	                    }),
 	                    _react2["default"].createElement(_TableTableContainer2["default"], null),
 	                    _react2["default"].createElement(_SummarySummary2["default"], {
 	                        basketTotal: this.state.basketTotal,
 	                        deliveryTotal: this.state.deliveryTotal,
-	                        showHideText: this.state.showHideText
+	                        showHideText: this.state.showHideText,
+	                        toggleShowMoreDates: this.state.toggleShowMoreDates
 	                    })
 	                );
 	            } else {
 	                return false;
 	            }
+	        }
+	    }], [{
+	        key: "toggleDisplay",
+	        value: function toggleDisplay(e) {
+	            e.preventDefault();
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.toggleShowHideMoreDates)());
 	        }
 	    }]);
 
@@ -24575,12 +24599,6 @@
 
 	var _dateRangeStyles2 = _interopRequireDefault(_dateRangeStyles);
 
-	var _storesCheckoutStore = __webpack_require__(223);
-
-	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
-
-	var _actionsTableDataActions = __webpack_require__(237);
-
 	var DateRange = (function (_React$Component) {
 	    _inherits(DateRange, _React$Component);
 
@@ -24590,7 +24608,9 @@
 	        _get(Object.getPrototypeOf(DateRange.prototype), "constructor", this).call(this, props);
 	        this.state = {
 	            dates: this.props.dateRanges,
-	            tableDisplayIndex: this.props.tableDisplayIndex
+	            tableDisplayIndex: this.props.tableDisplayIndex,
+	            showPrevWeek: this.props.showPrevWeek,
+	            showNextWeek: this.props.showNextWeek
 	        };
 	    }
 
@@ -24610,30 +24630,18 @@
 	            });
 	        }
 	    }, {
-	        key: "prevweek",
-	        value: function prevweek() {
-	            var prev = this.state.tableDisplayIndex === 0 ? this.state.dates.length - 1 : --this.state.tableDisplayIndex;
-	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.updateTableIndex)(prev));
-	        }
-	    }, {
-	        key: "nextweek",
-	        value: function nextweek() {
-	            var next = this.state.tableDisplayIndex === this.state.dates.length - 1 ? 0 : ++this.state.tableDisplayIndex;
-	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.updateTableIndex)(next));
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
 	                "div",
 	                { styleName: "date-range-select" },
-	                _react2["default"].createElement("span", { styleName: "date-range-left date-range-ctrl", className: "icon-left", onClick: this.prevweek.bind(this) }),
+	                _react2["default"].createElement("span", { styleName: "date-range-left date-range-ctrl", className: "icon-left", onClick: this.state.showPrevWeek }),
 	                _react2["default"].createElement(
 	                    "p",
 	                    { styleName: "date-range" },
 	                    this.state.dates[this.state.tableDisplayIndex]
 	                ),
-	                _react2["default"].createElement("span", { styleName: "date-range-right date-range-ctrl", className: "icon-right", onClick: this.nextweek.bind(this) })
+	                _react2["default"].createElement("span", { styleName: "date-range-right date-range-ctrl", className: "icon-right", onClick: this.state.showNextWeek })
 	            );
 	        }
 	    }]);
@@ -24643,12 +24651,16 @@
 
 	DateRange.defaultProps = {
 	    dateRanges: [],
-	    tableDisplayIndex: 0
+	    tableDisplayIndex: 0,
+	    showPrevWeek: function showPrevWeek() {},
+	    showNextWeek: function showNextWeek() {}
 	};
 
 	DateRange.propTypes = {
 	    dateRanges: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.string).isRequired,
-	    tableDisplayIndex: _react2["default"].PropTypes.number.isRequired
+	    tableDisplayIndex: _react2["default"].PropTypes.number.isRequired,
+	    showPrevWeek: _react2["default"].PropTypes.func.isRequired,
+	    showNextWeek: _react2["default"].PropTypes.func.isRequired
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(DateRange, _dateRangeStyles2["default"], { allowMultiple: true });
@@ -24697,6 +24709,10 @@
 
 	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
+	var _actionsBasketTotalsActions = __webpack_require__(238);
+
+	var _actionsTableDataActions = __webpack_require__(237);
+
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
 
@@ -24711,6 +24727,7 @@
 	            timeDescriptions: _storesCheckoutStore2["default"].getState().tableData.timeDescriptions,
 	            selectedTimeslotData: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData,
 	            displayAllRows: _storesCheckoutStore2["default"].getState().tableData.displayAllRows,
+	            toggleSelected: Table.toggleSelected,
 	            unsubscribe: _storesCheckoutStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
@@ -24749,9 +24766,26 @@
 	                    tableDisplayIndex: this.state.tableDisplayIndex,
 	                    timeDescriptions: this.state.timeDescriptions,
 	                    selectedTimeslotData: this.state.selectedTimeslotData,
-	                    displayAllRows: this.state.displayAllRows
+	                    displayAllRows: this.state.displayAllRows,
+	                    toggleSelected: this.state.toggleSelected
 	                })
 	            );
+	        }
+	    }], [{
+	        key: "toggleSelected",
+	        value: function toggleSelected(e) {
+	            var target = e.target || e.srcElement;
+	            if (target.tagName === "SPAN") {
+	                target = target.parentNode;
+	            }
+	            var currentTarget = document.querySelector(".timeslot-selected");
+	            if (currentTarget && currentTarget !== target) {
+	                currentTarget.classList.toggle("timeslot-selected");
+	            }
+	            target.classList.toggle("timeslot-selected");
+	            var isActive = !!document.querySelector(".timeslot-selected");
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.selectedTimeslotData)({ target: target }));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsBasketTotalsActions.deliveryCharge)({ isActive: isActive, charge: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge }));
 	        }
 	    }]);
 
@@ -24792,10 +24826,6 @@
 	var _tableHeadStyles = __webpack_require__(243);
 
 	var _tableHeadStyles2 = _interopRequireDefault(_tableHeadStyles);
-
-	var _storesCheckoutStore = __webpack_require__(223);
-
-	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
 	var TableHead = (function (_React$Component) {
 	    _inherits(TableHead, _React$Component);
@@ -24928,14 +24958,6 @@
 
 	var _DeliveryDescriptionsAnytime2 = _interopRequireDefault(_DeliveryDescriptionsAnytime);
 
-	var _storesCheckoutStore = __webpack_require__(223);
-
-	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
-
-	var _actionsBasketTotalsActions = __webpack_require__(238);
-
-	var _actionsTableDataActions = __webpack_require__(237);
-
 	__webpack_require__(249);
 
 	var TableBody = (function (_React$Component) {
@@ -24950,7 +24972,8 @@
 	            tableDisplayIndex: this.props.tableDisplayIndex,
 	            timeDescriptions: this.props.timeDescriptions,
 	            selectedTimeslotData: this.props.selectedTimeslotData,
-	            displayAllRows: this.props.displayAllRows
+	            displayAllRows: this.props.displayAllRows,
+	            toggleSelected: this.props.toggleSelected
 	        };
 	        this.alwaysDisplay = TableBody.rowsToDisplay();
 	    }
@@ -25018,7 +25041,7 @@
 	                            styleName: "delivery-selectable",
 	                            className: className,
 	                            "data-ref": ref,
-	                            onClick: TableBody.toggleSelected.bind(_this2) },
+	                            onClick: _this2.state.toggleSelected },
 	                        "Free"
 	                    );
 	                } else if (!details[i].charge) {
@@ -25035,7 +25058,7 @@
 	                            styleName: "delivery-selectable",
 	                            className: className,
 	                            "data-ref": ref,
-	                            onClick: TableBody.toggleSelected.bind(_this2) },
+	                            onClick: _this2.state.toggleSelected },
 	                        "£",
 	                        details[i].charge
 	                    );
@@ -25092,22 +25115,6 @@
 	                }
 	            };
 	        }
-	    }, {
-	        key: "toggleSelected",
-	        value: function toggleSelected(e) {
-	            var target = e.target || e.srcElement;
-	            if (target.tagName === "SPAN") {
-	                target = target.parentNode;
-	            }
-	            var currentTarget = document.querySelector(".timeslot-selected");
-	            if (currentTarget && currentTarget !== target) {
-	                currentTarget.classList.toggle("timeslot-selected");
-	            }
-	            target.classList.toggle("timeslot-selected");
-	            var isActive = !!document.querySelector(".timeslot-selected");
-	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.selectedTimeslotData)({ target: target }));
-	            _storesCheckoutStore2["default"].dispatch((0, _actionsBasketTotalsActions.deliveryCharge)({ isActive: isActive, charge: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge }));
-	        }
 	    }]);
 
 	    return TableBody;
@@ -25117,14 +25124,16 @@
 	    tableDisplayIndex: 0,
 	    timeDescriptions: {},
 	    tableBodyData: [],
-	    selectedTimeslotData: {}
+	    selectedTimeslotData: {},
+	    toggleSelected: function toggleSelected() {}
 	};
 
 	TableBody.propTypes = {
 	    tableDisplayIndex: _react2["default"].PropTypes.number.isRequired,
 	    tableBodyData: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.array).isRequired,
 	    timeDescriptions: _react2["default"].PropTypes.object.isRequired,
-	    selectedTimeslotData: _react2["default"].PropTypes.object.isRequired
+	    selectedTimeslotData: _react2["default"].PropTypes.object.isRequired,
+	    toggleSelected: _react2["default"].PropTypes.func.isRequired
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(TableBody, _tableBodyStyles2["default"]);
@@ -25549,12 +25558,6 @@
 
 	var _summaryStyles2 = _interopRequireDefault(_summaryStyles);
 
-	var _storesCheckoutStore = __webpack_require__(223);
-
-	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
-
-	var _actionsTableDataActions = __webpack_require__(237);
-
 	var Summary = (function (_React$Component) {
 	    _inherits(Summary, _React$Component);
 
@@ -25565,7 +25568,8 @@
 	        this.state = {
 	            basketTotal: this.props.basketTotal,
 	            deliveryTotal: this.props.deliveryTotal,
-	            showHideText: this.props.showHideText
+	            showHideText: this.props.showHideText,
+	            toggleShowMoreDates: this.props.toggleShowMoreDates
 	        };
 	    }
 
@@ -25586,7 +25590,7 @@
 	                { styleName: "picker-summary-container" },
 	                _react2["default"].createElement(
 	                    "a",
-	                    { href: "#", styleName: "show-more-dates-link", onClick: Summary.toggleDisplay.bind(this) },
+	                    { href: "#", styleName: "show-more-dates-link", onClick: this.state.toggleShowMoreDates },
 	                    this.state.showHideText
 	                ),
 	                _react2["default"].createElement(
@@ -25625,12 +25629,6 @@
 	                )
 	            );
 	        }
-	    }], [{
-	        key: "toggleDisplay",
-	        value: function toggleDisplay(e) {
-	            e.preventDefault();
-	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.toggleShowHideMoreDates)());
-	        }
 	    }]);
 
 	    return Summary;
@@ -25639,13 +25637,15 @@
 	Summary.defaultProps = {
 	    basketTotal: 0,
 	    deliveryTotal: 0,
-	    showHideText: "Show more timeslots"
+	    showHideText: "Show more timeslots",
+	    toggleShowMoreDates: function toggleShowMoreDates() {}
 	};
 
 	Summary.propTypes = {
 	    basketTotal: _react2["default"].PropTypes.number.isRequired,
 	    deliveryTotal: _react2["default"].PropTypes.number.isRequired,
-	    showHideText: _react2["default"].PropTypes.string.isRequired
+	    showHideText: _react2["default"].PropTypes.string.isRequired,
+	    toggleShowMoreDates: _react2["default"].PropTypes.func.isRequired
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(Summary, _summaryStyles2["default"]);
@@ -26385,6 +26385,8 @@
 	        this.state = {
 	            basketProducts: this.props.basketProducts,
 	            loadNewDates: this.props.loadNewDates,
+	            onProductIncrease: this.onProductIncrease,
+	            onProductDecrease: this.onProductDecrease,
 	            unsubscribe: _storesCheckoutStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
@@ -26412,16 +26414,6 @@
 	            });
 	        }
 	    }, {
-	        key: "render",
-	        value: function render() {
-	            return _react2["default"].createElement(_Basket2["default"], {
-	                basketProducts: this.state.basketProducts,
-	                loadNewDates: this.state.loadNewDates,
-	                onProductIncrease: BasketContainer.onProductIncrease,
-	                onProductDecrease: BasketContainer.onProductDecrease
-	            });
-	        }
-	    }], [{
 	        key: "onProductIncrease",
 	        value: function onProductIncrease(name) {
 	            _storesCheckoutStore2["default"].dispatch((0, _actionsBasketTotalsActions.updateProductCount)({ name: name, add: true }));
@@ -26432,6 +26424,16 @@
 	        value: function onProductDecrease(name) {
 	            _storesCheckoutStore2["default"].dispatch((0, _actionsBasketTotalsActions.updateProductCount)({ name: name, add: false }));
 	            this.state.loadNewDates();
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(_Basket2["default"], {
+	                basketProducts: this.state.basketProducts,
+	                loadNewDates: this.state.loadNewDates,
+	                onProductIncrease: this.state.onProductIncrease,
+	                onProductDecrease: this.state.onProductDecrease
+	            });
 	        }
 	    }]);
 
@@ -26483,12 +26485,6 @@
 
 	var _basketStyles2 = _interopRequireDefault(_basketStyles);
 
-	var _storesCheckoutStore = __webpack_require__(223);
-
-	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
-
-	var _actionsBasketTotalsActions = __webpack_require__(238);
-
 	var _utilsCostFormatter = __webpack_require__(235);
 
 	var Basket = (function (_React$Component) {
@@ -26517,7 +26513,6 @@
 	            var _this = this;
 
 	            return this.state.basketProducts.map(function (product, i) {
-	                var name = product.name;
 	                return _react2["default"].createElement(
 	                    "div",
 	                    { styleName: "basket-product", key: i },
@@ -26554,12 +26549,12 @@
 	                        ),
 	                        _react2["default"].createElement(
 	                            "span",
-	                            { styleName: "increase", onClick: _this.state.onProductIncrease.bind(_this, name) },
+	                            { styleName: "increase", onClick: _this.state.onProductIncrease.bind(_this, product.name) },
 	                            "+"
 	                        ),
 	                        _react2["default"].createElement(
 	                            "span",
-	                            { styleName: "decrease", onClick: _this.state.onProductDecrease.bind(_this, name) },
+	                            { styleName: "decrease", onClick: _this.state.onProductDecrease.bind(_this, product.name) },
 	                            "-"
 	                        )
 	                    ),

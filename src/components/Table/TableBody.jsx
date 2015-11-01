@@ -3,9 +3,6 @@ import CSSModule from "react-css-modules";
 import styles from "./table-body-styles";
 import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
-import CheckoutStore from "../../stores/CheckoutStore";
-import { deliveryCharge } from "../../actions/basket-totals-actions";
-import { selectedTimeslotData } from "../../actions/table-data-actions";
 import "../../utils/classList-polyfill";
 
 class TableBody extends React.Component {
@@ -17,7 +14,8 @@ class TableBody extends React.Component {
             tableDisplayIndex : this.props.tableDisplayIndex,
             timeDescriptions : this.props.timeDescriptions,
             selectedTimeslotData : this.props.selectedTimeslotData,
-            displayAllRows : this.props.displayAllRows
+            displayAllRows : this.props.displayAllRows,
+            toggleSelected : this.props.toggleSelected
         };
         this.alwaysDisplay = TableBody.rowsToDisplay();
     }
@@ -46,21 +44,6 @@ class TableBody extends React.Component {
             }
         }
     }
-
-    static toggleSelected(e) {
-        let target = e.target || e.srcElement;
-        if(target.tagName === "SPAN") {
-            target = target.parentNode;
-        }
-        let currentTarget = document.querySelector(".timeslot-selected");
-        if(currentTarget && currentTarget !== target) {
-            currentTarget.classList.toggle("timeslot-selected");
-        }
-        target.classList.toggle("timeslot-selected");
-        let isActive = !!document.querySelector(".timeslot-selected");
-        CheckoutStore.dispatch(selectedTimeslotData({ target }));
-        CheckoutStore.dispatch(deliveryCharge({ isActive, charge : CheckoutStore.getState().tableData.selectedTimeslotData.charge }))
-    };
 
     createRows() {
         this.alwaysDisplay.reset();
@@ -99,9 +82,9 @@ class TableBody extends React.Component {
                 details[i].ref = ref;
                 tdContent = <p
                     styleName="delivery-selectable"
-                    className={className}
-                    data-ref={ref}
-                    onClick={TableBody.toggleSelected.bind(this)}>
+                    className={ className }
+                    data-ref={ ref }
+                    onClick={ this.state.toggleSelected }>
                         Free
                 </p>;
             }
@@ -112,9 +95,9 @@ class TableBody extends React.Component {
                 details[i].ref = ref;
                 tdContent = <p
                     styleName="delivery-selectable"
-                    className={className}
-                    data-ref={ref}
-                    onClick={TableBody.toggleSelected.bind(this)}>
+                    className={ className }
+                    data-ref={ ref }
+                    onClick={ this.state.toggleSelected }>
                         &pound;{ details[i].charge }
                 </p>;
             }
@@ -147,14 +130,16 @@ TableBody.defaultProps = {
     tableDisplayIndex : 0,
     timeDescriptions : {},
     tableBodyData : [],
-    selectedTimeslotData : {}
+    selectedTimeslotData : {},
+    toggleSelected : function(){}
 };
 
 TableBody.propTypes = {
     tableDisplayIndex : React.PropTypes.number.isRequired,
     tableBodyData : React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
     timeDescriptions : React.PropTypes.object.isRequired,
-    selectedTimeslotData :  React.PropTypes.object.isRequired
+    selectedTimeslotData :  React.PropTypes.object.isRequired,
+    toggleSelected : React.PropTypes.func.isRequired
 };
 
 export default CSSModule(TableBody, styles);

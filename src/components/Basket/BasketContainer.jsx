@@ -10,6 +10,8 @@ export default class BasketContainer extends React.Component {
         this.state = {
             basketProducts : this.props.basketProducts,
             loadNewDates : this.props.loadNewDates,
+            onProductIncrease : this.onProductIncrease,
+            onProductDecrease : this.onProductDecrease,
             unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
@@ -33,12 +35,12 @@ export default class BasketContainer extends React.Component {
         });
     }
 
-    static onProductIncrease(name) {
+    onProductIncrease(name) {
         CheckoutStore.dispatch(updateProductCount({ name : name, add : true }));
         this.state.loadNewDates();
     }
 
-    static onProductDecrease(name){
+    onProductDecrease(name){
         CheckoutStore.dispatch(updateProductCount({ name : name, add : false }));
         this.state.loadNewDates();
     }
@@ -49,8 +51,8 @@ export default class BasketContainer extends React.Component {
             <Basket
                 basketProducts={ this.state.basketProducts }
                 loadNewDates={ this.state.loadNewDates }
-                onProductIncrease = { BasketContainer.onProductIncrease }
-                onProductDecrease = { BasketContainer.onProductDecrease }
+                onProductIncrease = { this.state.onProductIncrease }
+                onProductDecrease = { this.state.onProductDecrease }
             />
         );
     }

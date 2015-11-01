@@ -1,17 +1,16 @@
 import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./summary-styles";
-import CheckoutStore from "../../stores/CheckoutStore";
-import { toggleShowHideMoreDates } from "../../actions/table-data-actions";
 
 class Summary extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             basketTotal : this.props.basketTotal,
             deliveryTotal : this.props.deliveryTotal,
-            showHideText : this.props.showHideText
+            showHideText : this.props.showHideText,
+            toggleShowMoreDates : this.props.toggleShowMoreDates
         };
     }
 
@@ -23,15 +22,10 @@ class Summary extends React.Component {
         });
     }
 
-    static toggleDisplay(e){
-        e.preventDefault();
-        CheckoutStore.dispatch(toggleShowHideMoreDates())
-    }
-
     render(){
         return(
             <div styleName="picker-summary-container">
-                <a href="#" styleName="show-more-dates-link" onClick={ Summary.toggleDisplay.bind(this) }>{ this.state.showHideText }</a>
+                <a href="#" styleName="show-more-dates-link" onClick={ this.state.toggleShowMoreDates }>{ this.state.showHideText }</a>
                 <div styleName="picker-summary">
                     <div>
                         <span styleName="summary-title">Delivery</span><span styleName="summary-price">&pound;{ this.state.deliveryTotal }</span>
@@ -48,13 +42,15 @@ class Summary extends React.Component {
 Summary.defaultProps = {
     basketTotal : 0,
     deliveryTotal : 0,
-    showHideText : "Show more timeslots"
+    showHideText : "Show more timeslots",
+    toggleShowMoreDates : function(){}
 };
 
 Summary.propTypes = {
     basketTotal : React.PropTypes.number.isRequired,
     deliveryTotal : React.PropTypes.number.isRequired,
-    showHideText : React.PropTypes.string.isRequired
+    showHideText : React.PropTypes.string.isRequired,
+    toggleShowMoreDates : React.PropTypes.func.isRequired
 };
 
 export default CSSModule(Summary, styles);
