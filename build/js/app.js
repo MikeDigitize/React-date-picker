@@ -64,15 +64,15 @@
 
 	var _PickerPickerContainer2 = _interopRequireDefault(_PickerPickerContainer);
 
-	var _PriceComponentsTotalContainer = __webpack_require__(255);
+	var _PriceComponentsTotalContainer = __webpack_require__(256);
 
 	var _PriceComponentsTotalContainer2 = _interopRequireDefault(_PriceComponentsTotalContainer);
 
-	var _PriceComponentsDiscountContainer = __webpack_require__(258);
+	var _PriceComponentsDiscountContainer = __webpack_require__(259);
 
 	var _PriceComponentsDiscountContainer2 = _interopRequireDefault(_PriceComponentsDiscountContainer);
 
-	var _BasketBasketContainer = __webpack_require__(260);
+	var _BasketBasketContainer = __webpack_require__(261);
 
 	var _BasketBasketContainer2 = _interopRequireDefault(_BasketBasketContainer);
 
@@ -80,11 +80,11 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _stylesGlobal = __webpack_require__(263);
+	var _stylesGlobal = __webpack_require__(264);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
 
-	var _utilsGetConfig = __webpack_require__(264);
+	var _utilsGetConfig = __webpack_require__(265);
 
 	var config = undefined;
 
@@ -135,7 +135,6 @@
 	                    basketProducts: this.state.basketProducts,
 	                    loadNewDates: this.loadNewDates.bind(this)
 	                }),
-	                _react2["default"].createElement(_PriceComponentsTotalContainer2["default"], null),
 	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
 	                    threshold: 100,
 	                    percentage: 10,
@@ -146,6 +145,7 @@
 	                    value: 50,
 	                    name: "50quidoff"
 	                }),
+	                _react2["default"].createElement(_PriceComponentsTotalContainer2["default"], null),
 	                _react2["default"].createElement(_PickerPickerContainer2["default"], {
 	                    config: this.state.config
 	                })
@@ -20562,13 +20562,21 @@
 
 	var _Picker2 = _interopRequireDefault(_Picker);
 
-	var _PickerClosed = __webpack_require__(253);
+	var _PickerClosed = __webpack_require__(252);
 
 	var _PickerClosed2 = _interopRequireDefault(_PickerClosed);
 
-	var _ThirdParty = __webpack_require__(254);
+	var _PickerThirdParty = __webpack_require__(253);
 
-	var _ThirdParty2 = _interopRequireDefault(_ThirdParty);
+	var _PickerThirdParty2 = _interopRequireDefault(_PickerThirdParty);
+
+	var _PickerLoading = __webpack_require__(254);
+
+	var _PickerLoading2 = _interopRequireDefault(_PickerLoading);
+
+	var _PickerNoDates = __webpack_require__(255);
+
+	var _PickerNoDates2 = _interopRequireDefault(_PickerNoDates);
 
 	var _storesPickerStore = __webpack_require__(223);
 
@@ -20584,7 +20592,7 @@
 
 	var _TableTableContainer2 = _interopRequireDefault(_TableTableContainer);
 
-	var _SummarySummary = __webpack_require__(251);
+	var _SummarySummary = __webpack_require__(250);
 
 	var _SummarySummary2 = _interopRequireDefault(_SummarySummary);
 
@@ -20608,6 +20616,7 @@
 	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableData.tableDisplayIndex,
 	            deliveryTotal: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
 	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
+	            showHideText: _storesPickerStore2["default"].getState().tableData.showHideText,
 	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
@@ -20625,7 +20634,6 @@
 	            var _this = this;
 
 	            if (Object.keys(nextProps.config).length) {
-
 	                if (nextProps.config.state === "ThirdParty") {
 	                    this.setState({
 	                        pickerState: {
@@ -20647,7 +20655,6 @@
 	                        }
 	                    });
 	                } else {
-
 	                    this.setState({
 	                        pickerState: {
 	                            closed: false,
@@ -20670,6 +20677,7 @@
 	        value: function preparePickerData(config) {
 
 	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.loadPickerData)(config));
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.checkTimeslotExists)(_storesPickerStore2["default"].getState().tableData));
 
 	            this.setState({
 	                pickerState: {
@@ -20688,7 +20696,8 @@
 	                dateRanges: _storesPickerStore2["default"].getState().tableData.dateRanges,
 	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableData.tableDisplayIndex,
 	                deliveryTotal: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
-	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal
+	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
+	                showHideText: _storesPickerStore2["default"].getState().tableData.showHideText
 	            });
 	        }
 	    }, {
@@ -20697,27 +20706,11 @@
 	            if (this.state.pickerState.closed) {
 	                return _react2["default"].createElement(_PickerClosed2["default"], null);
 	            } else if (this.state.pickerState.thirdparty) {
-	                return _react2["default"].createElement(_ThirdParty2["default"], null);
+	                return _react2["default"].createElement(_PickerThirdParty2["default"], null);
 	            } else if (this.state.pickerState.noDatesAvailable) {
-	                return _react2["default"].createElement(
-	                    "div",
-	                    null,
-	                    _react2["default"].createElement(
-	                        "p",
-	                        null,
-	                        "noDatesAvailable"
-	                    )
-	                );
+	                return _react2["default"].createElement(_PickerNoDates2["default"], null);
 	            } else if (this.state.pickerState.loading) {
-	                return _react2["default"].createElement(
-	                    "div",
-	                    null,
-	                    _react2["default"].createElement(
-	                        "p",
-	                        null,
-	                        "loading"
-	                    )
-	                );
+	                return _react2["default"].createElement(_PickerLoading2["default"], null);
 	            } else if (this.state.pickerState.ready) {
 	                return _react2["default"].createElement(
 	                    "section",
@@ -20729,17 +20722,13 @@
 	                    _react2["default"].createElement(_TableTableContainer2["default"], null),
 	                    _react2["default"].createElement(_SummarySummary2["default"], {
 	                        basketTotal: this.state.basketTotal,
-	                        deliveryTotal: this.state.deliveryTotal
+	                        deliveryTotal: this.state.deliveryTotal,
+	                        showHideText: this.state.showHideText
 	                    })
 	                );
 	            } else {
 	                return false;
 	            }
-	        }
-	    }], [{
-	        key: "componentWillMount",
-	        value: function componentWillMount() {
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.checkTimeslotExists)(_storesPickerStore2["default"].getState().tableData));
 	        }
 	    }]);
 
@@ -20803,7 +20792,7 @@
 
 	var _TableTableContainer2 = _interopRequireDefault(_TableTableContainer);
 
-	var _SummarySummary = __webpack_require__(251);
+	var _SummarySummary = __webpack_require__(250);
 
 	var _SummarySummary2 = _interopRequireDefault(_SummarySummary);
 
@@ -23544,7 +23533,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"timeslot-selected":"_1_i9rYWlxWAu7qy-QKg5qW","icon-tick2":"_6oEWH3PxmJ2ZdzkzXpBJz","get-new-config-btn":"_2dluznHPo1qvE6adEtZUHs","row-hide":"_2I7qYObNmhrmBg9UhSFECN","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv","date-picker-table":"TCVbwVBJCBj2EA5I-pXCc","date-picker-closed":"_1RLvasQ2_ORGKHTkfRoisz","date-picker-closed-text":"_2yiu8PoIECOUO7nvxoJttb","third-party-message":"_24qYbaHvMWD2qM8M5bB1WC"};
+	module.exports = {"timeslot-selected":"_1_i9rYWlxWAu7qy-QKg5qW","icon-tick2":"_6oEWH3PxmJ2ZdzkzXpBJz","get-new-config-btn":"_2dluznHPo1qvE6adEtZUHs","row-hide":"_2I7qYObNmhrmBg9UhSFECN","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv","date-picker-table":"TCVbwVBJCBj2EA5I-pXCc","date-picker-closed":"_1RLvasQ2_ORGKHTkfRoisz","date-picker-closed-text":"_2yiu8PoIECOUO7nvxoJttb","third-party-message":"_24qYbaHvMWD2qM8M5bB1WC","loading-message":"_1qw07Xl1Y4sTzH79_TBIkb","no-dates-message":"_2cRV1t9cyRqxCHBneFpaLZ"};
 
 /***/ },
 /* 223 */
@@ -24338,7 +24327,8 @@
 	    tableDisplayIndex: 0,
 	    totalWeeks: 0,
 	    selectedTimeslotData: {},
-	    displayAllRows: false
+	    displayAllRows: false,
+	    showHideText: "Show more timeslots"
 	};
 
 	function tableData() {
@@ -24403,6 +24393,10 @@
 	            return Object.assign({}, state, {
 	                timeDescriptions: action.state
 	            });
+	        case "SHOWHIDETEXT":
+	            return Object.assign({}, state, {
+	                showHideText: action.state
+	            });
 	        default:
 	            return state;
 	    }
@@ -24420,9 +24414,11 @@
 	exports.updateTableIndex = updateTableIndex;
 	exports.selectedTimeslotData = selectedTimeslotData;
 	exports.displayAllRows = displayAllRows;
+	exports.updateShowHideText = updateShowHideText;
 	exports.loadPickerData = loadPickerData;
 	exports.checkTimeslotExists = checkTimeslotExists;
 	exports.checkTableIndexExists = checkTableIndexExists;
+	exports.toggleShowHideMoreDates = toggleShowHideMoreDates;
 
 	var _externalActions = __webpack_require__(238);
 
@@ -24434,6 +24430,7 @@
 	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 	var NEWSELECTEDTIMESLOTDATA = "NEWSELECTEDTIMESLOTDATA";
 	var DISPLAYALLROWS = "DISPLAYALLROWS";
+	var SHOWHIDETEXT = "SHOWHIDETEXT";
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24465,6 +24462,10 @@
 
 	function displayAllRows(data) {
 	    return { state: data, type: DISPLAYALLROWS };
+	}
+
+	function updateShowHideText(data) {
+	    return { state: data, type: SHOWHIDETEXT };
 	}
 
 	function loadPickerData(config) {
@@ -24513,6 +24514,26 @@
 	        var ranges = tableData.dateRanges;
 	        if (tableDisplayIndex >= ranges.length) {
 	            dispatch(updateTableIndex(0));
+	        }
+	    };
+	}
+
+	function toggleShowHideMoreDates() {
+	    return function (dispatch) {
+	        var hidden = Array.from(document.querySelectorAll(".row-hide"));
+	        if (hidden.length) {
+	            hidden.forEach(function (row) {
+	                row.classList.toggle("row-hide");
+	            });
+	            dispatch(displayAllRows(true));
+	            dispatch(updateShowHideText("Hide timeslots"));
+	        } else {
+	            var rowsToHide = Array.from(document.querySelectorAll("[data-should-be-hidden='true']"));
+	            rowsToHide.forEach(function (row) {
+	                row.classList.toggle("row-hide");
+	            });
+	            dispatch(updateShowHideText("Show more timeslots"));
+	            dispatch(displayAllRows(false));
 	        }
 	    };
 	}
@@ -25605,8 +25626,7 @@
 	}
 
 /***/ },
-/* 250 */,
-/* 251 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25633,7 +25653,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _summaryStyles = __webpack_require__(252);
+	var _summaryStyles = __webpack_require__(251);
 
 	var _summaryStyles2 = _interopRequireDefault(_summaryStyles);
 
@@ -25653,7 +25673,7 @@
 	        this.state = {
 	            basketTotal: this.props.basketTotal,
 	            deliveryTotal: this.props.deliveryTotal,
-	            showHideText: "Show more timeslots"
+	            showHideText: this.props.showHideText
 	        };
 	    }
 
@@ -25662,32 +25682,9 @@
 	        value: function componentWillReceiveProps(nextProps) {
 	            this.setState({
 	                basketTotal: nextProps.basketTotal,
-	                deliveryTotal: nextProps.deliveryTotal
+	                deliveryTotal: nextProps.deliveryTotal,
+	                showHideText: nextProps.showHideText
 	            });
-	        }
-	    }, {
-	        key: "toggleDisplay",
-	        value: function toggleDisplay(e) {
-	            e.preventDefault();
-	            var hidden = Array.from(document.querySelectorAll(".row-hide"));
-	            if (hidden.length) {
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.displayAllRows)(true));
-	                hidden.forEach(function (row) {
-	                    row.classList.toggle("row-hide");
-	                });
-	                this.setState({
-	                    showHideText: "Hide timeslots"
-	                });
-	            } else {
-	                var rowsToHide = Array.from(document.querySelectorAll("[data-should-be-hidden='true']"));
-	                _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.displayAllRows)(false));
-	                rowsToHide.forEach(function (row) {
-	                    row.classList.toggle("row-hide");
-	                });
-	                this.setState({
-	                    showHideText: "Show more timeslots"
-	                });
-	            }
 	        }
 	    }, {
 	        key: "render",
@@ -25697,7 +25694,7 @@
 	                { styleName: "picker-summary-container" },
 	                _react2["default"].createElement(
 	                    "a",
-	                    { href: "#", styleName: "show-more-dates-link", onClick: this.toggleDisplay.bind(this) },
+	                    { href: "#", styleName: "show-more-dates-link", onClick: Summary.toggleDisplay.bind(this) },
 	                    this.state.showHideText
 	                ),
 	                _react2["default"].createElement(
@@ -25736,6 +25733,12 @@
 	                )
 	            );
 	        }
+	    }], [{
+	        key: "toggleDisplay",
+	        value: function toggleDisplay(e) {
+	            e.preventDefault();
+	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.toggleShowHideMoreDates)());
+	        }
 	    }]);
 
 	    return Summary;
@@ -25743,26 +25746,28 @@
 
 	Summary.defaultProps = {
 	    basketTotal: 0,
-	    deliveryTotal: 0
+	    deliveryTotal: 0,
+	    showHideText: "Show more timeslots"
 	};
 
 	Summary.propTypes = {
 	    basketTotal: _react2["default"].PropTypes.number.isRequired,
-	    deliveryTotal: _react2["default"].PropTypes.number.isRequired
+	    deliveryTotal: _react2["default"].PropTypes.number.isRequired,
+	    showHideText: _react2["default"].PropTypes.string.isRequired
 	};
 
 	exports["default"] = (0, _reactCssModules2["default"])(Summary, _summaryStyles2["default"]);
 	module.exports = exports["default"];
 
 /***/ },
-/* 252 */
+/* 251 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"picker-summary-container":"_2ov1icXwgaSbINDvctnl-W","picker-summary":"_16ev4A4zbVxa782BG6rEwq","summary-title":"_17Oslj9Asc7k4sY1nehkuW","summary-price":"_1X8ETpdII5jGksb51q-xXj","show-more-dates-link":"_27iMzQC9XKlX3Ngl62uQXf"};
 
 /***/ },
-/* 253 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25793,16 +25798,16 @@
 
 	var _pickerStyles2 = _interopRequireDefault(_pickerStyles);
 
-	var PickerClosed = (function (_React$Component) {
-	    _inherits(PickerClosed, _React$Component);
+	var Closed = (function (_React$Component) {
+	    _inherits(Closed, _React$Component);
 
-	    function PickerClosed() {
-	        _classCallCheck(this, PickerClosed);
+	    function Closed() {
+	        _classCallCheck(this, Closed);
 
-	        _get(Object.getPrototypeOf(PickerClosed.prototype), "constructor", this).apply(this, arguments);
+	        _get(Object.getPrototypeOf(Closed.prototype), "constructor", this).apply(this, arguments);
 	    }
 
-	    _createClass(PickerClosed, [{
+	    _createClass(Closed, [{
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
@@ -25817,14 +25822,14 @@
 	        }
 	    }]);
 
-	    return PickerClosed;
+	    return Closed;
 	})(_react2["default"].Component);
 
-	exports["default"] = (0, _reactCssModules2["default"])(PickerClosed, _pickerStyles2["default"]);
+	exports["default"] = (0, _reactCssModules2["default"])(Closed, _pickerStyles2["default"]);
 	module.exports = exports["default"];
 
 /***/ },
-/* 254 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25882,7 +25887,123 @@
 	module.exports = exports["default"];
 
 /***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _pickerStyles = __webpack_require__(222);
+
+	var _pickerStyles2 = _interopRequireDefault(_pickerStyles);
+
+	var Loading = (function (_React$Component) {
+	    _inherits(Loading, _React$Component);
+
+	    function Loading() {
+	        _classCallCheck(this, Loading);
+
+	        _get(Object.getPrototypeOf(Loading.prototype), "constructor", this).apply(this, arguments);
+	    }
+
+	    _createClass(Loading, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "p",
+	                { styleName: "loading-message" },
+	                "LOADING..."
+	            );
+	        }
+	    }]);
+
+	    return Loading;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(Loading, _pickerStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
 /* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _pickerStyles = __webpack_require__(222);
+
+	var _pickerStyles2 = _interopRequireDefault(_pickerStyles);
+
+	var NoDates = (function (_React$Component) {
+	    _inherits(NoDates, _React$Component);
+
+	    function NoDates() {
+	        _classCallCheck(this, NoDates);
+
+	        _get(Object.getPrototypeOf(NoDates.prototype), "constructor", this).apply(this, arguments);
+	    }
+
+	    _createClass(NoDates, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "p",
+	                { styleName: "no-dates-message" },
+	                "Sorry, no dates are available for your address."
+	            );
+	        }
+	    }]);
+
+	    return NoDates;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(NoDates, _pickerStyles2["default"]);
+	module.exports = exports["default"];
+
+/***/ },
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25909,7 +26030,7 @@
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
 
-	var _Total = __webpack_require__(256);
+	var _Total = __webpack_require__(257);
 
 	var _Total2 = _interopRequireDefault(_Total);
 
@@ -25967,7 +26088,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25994,7 +26115,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _priceStyles = __webpack_require__(257);
+	var _priceStyles = __webpack_require__(258);
 
 	var _priceStyles2 = _interopRequireDefault(_priceStyles);
 
@@ -26087,14 +26208,14 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"basket-total":"_2EvZ4S1ZjKahbXW7pyPgD4","basket-total-title":"_1TcqySj-NlRWtAEMjVoZ1y","basket-discount-title":"_3mISlqaew1N56vnjkY96OA","basket-discount":"_1MouFv4OCBXs4O-aPSHOFz","basket-total-holder":"_1XhcrMQx0wkRcV5BwzlS5G","status":"_2Of6OvLqO4l6308RlraF1R","active":"_9MgO-LYMJW4bua6aN-5iA","inactive":"FkIZXn6p9IBDvXs8JhqIg"};
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26117,7 +26238,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Discount = __webpack_require__(259);
+	var _Discount = __webpack_require__(260);
 
 	var _Discount2 = _interopRequireDefault(_Discount);
 
@@ -26202,7 +26323,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26229,7 +26350,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _priceStyles = __webpack_require__(257);
+	var _priceStyles = __webpack_require__(258);
 
 	var _priceStyles2 = _interopRequireDefault(_priceStyles);
 
@@ -26305,7 +26426,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26328,7 +26449,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Basket = __webpack_require__(261);
+	var _Basket = __webpack_require__(262);
 
 	var _Basket2 = _interopRequireDefault(_Basket);
 
@@ -26415,7 +26536,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26442,7 +26563,7 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _basketStyles = __webpack_require__(262);
+	var _basketStyles = __webpack_require__(263);
 
 	var _basketStyles2 = _interopRequireDefault(_basketStyles);
 
@@ -26571,20 +26692,20 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"basket":"yzOjuFEH3Ooj613qRtfgo","basket-title":"_1we7oAM3hrIIJiOkeuK40s","basket-product":"_1w4qeO0-nIi3BlpwTVy1HI","basket-details":"_1MeLm69fkk81PB_pLHuHEc","increase":"_2Oq02zolMx78VmQsUOryrn","decrease":"_2Qkz7alTf-_TvWjx_MTBnR"};
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports) {
 
 	'use strict';

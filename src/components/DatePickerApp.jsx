@@ -45,7 +45,6 @@ class App extends React.Component {
                     basketProducts={ this.state.basketProducts }
                     loadNewDates={ this.loadNewDates.bind(this) }
                 />
-                <TotalContainer />
                 <DiscountContainer
                     threshold={100}
                     percentage={10}
@@ -56,6 +55,7 @@ class App extends React.Component {
                     value={50}
                     name="50quidoff"
                 />
+                <TotalContainer />
                 <PickerContainer
                     config={this.state.config}
                 />

@@ -5,7 +5,8 @@ let initialState = {
     tableDisplayIndex : 0,
     totalWeeks : 0,
     selectedTimeslotData : {},
-    displayAllRows : false
+    displayAllRows : false,
+    showHideText : "Show more timeslots"
 };
 
 export function tableData(state = initialState, action = {}) {
@@ -61,6 +62,10 @@ export function tableData(state = initialState, action = {}) {
         case "NEWTIMEDESCRIPTIONS" :
             return Object.assign({}, state, {
                 timeDescriptions : action.state
+            });
+        case "SHOWHIDETEXT" :
+            return Object.assign({}, state, {
+                showHideText : action.state
             });
         default :
             return state;

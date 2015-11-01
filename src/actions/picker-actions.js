@@ -8,6 +8,7 @@ const NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
 const TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
 const NEWSELECTEDTIMESLOTDATA= "NEWSELECTEDTIMESLOTDATA";
 const DISPLAYALLROWS = "DISPLAYALLROWS";
+const SHOWHIDETEXT = "SHOWHIDETEXT";
 
 function totalWeeks(data) {
     return { state : data, type: TOTALWEEKSUPDATE };
@@ -39,6 +40,10 @@ export function selectedTimeslotData(data) {
 
 export function displayAllRows(data) {
     return { state : data, type : DISPLAYALLROWS };
+}
+
+export function updateShowHideText(data) {
+    return { state : data, type : SHOWHIDETEXT };
 }
 
 export function loadPickerData(config) {
@@ -87,6 +92,27 @@ export function checkTableIndexExists(tableData) {
         let ranges = tableData.dateRanges;
         if(tableDisplayIndex >= ranges.length) {
             dispatch(updateTableIndex(0));
+        }
+    }
+}
+
+export function toggleShowHideMoreDates() {
+    return function(dispatch) {
+        let hidden = Array.from(document.querySelectorAll(".row-hide"));
+        if(hidden.length) {
+            hidden.forEach(row => {
+                row.classList.toggle("row-hide");
+            });
+            dispatch(displayAllRows(true));
+            dispatch(updateShowHideText("Hide timeslots"));
+        }
+        else {
+            let rowsToHide = Array.from(document.querySelectorAll("[data-should-be-hidden='true']"));
+            rowsToHide.forEach(row => {
+                row.classList.toggle("row-hide");
+            });
+            dispatch(updateShowHideText("Show more timeslots"));
+            dispatch(displayAllRows(false));
         }
     }
 }
