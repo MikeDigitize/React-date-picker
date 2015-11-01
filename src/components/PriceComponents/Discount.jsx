@@ -1,6 +1,6 @@
 import React from "react";
 import CSSModule from "react-css-modules";
-import styles from "./price-styles";
+import styles from "./price-component-styles";
 
 class Discount extends React.Component {
     constructor(props){

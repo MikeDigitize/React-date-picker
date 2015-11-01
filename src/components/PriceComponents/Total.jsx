@@ -1,7 +1,6 @@
 import React from "react";
 import CSSModule from "react-css-modules";
-import styles from "./price-styles";
-import DatePickerStore from "../../stores/PickerStore";
+import styles from "./price-component-styles";
 
 class Total extends React.Component {
     constructor(props){

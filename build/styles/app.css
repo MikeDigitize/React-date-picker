@@ -26,7 +26,7 @@ body {
   margin-bottom: 10px;
   transition: background 1s ease; }
 
-._2I7qYObNmhrmBg9UhSFECN {
+._2I7qYObNmhrmBg9UhSFECN, ._1G-h0SSBuwLffkz7XRz6MZ {
   display: none; }
 
 ._2jnqxNVZRf1nCWihSNkv3Z {
@@ -196,30 +196,37 @@ body {
     float: left;
     width: 210px;
     height: 25px; }
-._2EvZ4S1ZjKahbXW7pyPgD4 {
+._3bjqqr619Jrs2YW0kvyZDs {
   font-size: 22px; }
 
-._1TcqySj-NlRWtAEMjVoZ1y {
+._1vu4uV9Ra444our4jBuzZL {
   font-size: 30px; }
 
-._3mISlqaew1N56vnjkY96OA {
+.WuSbGS_AcinzhpOylk1BE {
   font-size: 18px; }
 
-._1MouFv4OCBXs4O-aPSHOFz {
+.LC_8DLkt8F4uJafxloko4 {
   font-size: 15px; }
 
-._1XhcrMQx0wkRcV5BwzlS5G {
+._1nfrNLTD5q60XFCdVuPlAS {
   padding: 10px 15px;
   border-bottom: 1px solid #ededed; }
 
-._2Of6OvLqO4l6308RlraF1R {
+._2btBwMrPUPPCrhtQag_ZsI {
   font-size: 15px; }
 
-._9MgO-LYMJW4bua6aN-5iA {
+._1yCzH5kvSzLKh8oKIw9cz3 {
+  font-size: 16px;
+  font-weight: bold; }
+
+.goFbtRtiQSFINTSR2AboR {
+  font-size: 15px; }
+
+._18g1OPSQh0-KWtkxB299ly {
   font-size: 15px;
   color: greenyellow; }
 
-.FkIZXn6p9IBDvXs8JhqIg {
+._23LlYoBU54HZNolYLNkCKj {
   font-size: 15px;
   color: red; }
 .yzOjuFEH3Ooj613qRtfgo:after {
@@ -301,7 +308,7 @@ body { padding: 20px; }
   margin-bottom: 10px;
   transition: background 1s ease;
 }
-.row-hide { display: none }
+.row-hide, .service-hide { display: none }
 .unselectable {
   -webkit-user-select: none;
   -moz-user-select: none;

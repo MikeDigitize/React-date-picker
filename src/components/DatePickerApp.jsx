@@ -3,6 +3,7 @@ import PickerContainer from "./Picker/PickerContainer";
 import TotalContainer from "./PriceComponents/TotalContainer";
 import DiscountContainer from "./PriceComponents/DiscountContainer";
 import BasketContainer from "./Basket/BasketContainer";
+import ServiceContainer from "./PriceComponents/ServiceContainer";
 import DatePickerStore from "../stores/PickerStore";
 import styles from "../styles/global";
 import { getData1, getData2, getData3, getData4, getBasketProducts } from "../utils/getConfig";
@@ -44,6 +45,10 @@ class App extends React.Component {
                 <BasketContainer
                     basketProducts={ this.state.basketProducts }
                     loadNewDates={ this.loadNewDates.bind(this) }
+                />
+                <ServiceContainer
+                    description="Buy a care pack for your item(s)"
+                    value={25}
                 />
                 <DiscountContainer
                     threshold={100}

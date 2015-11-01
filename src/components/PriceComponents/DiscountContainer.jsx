@@ -17,14 +17,14 @@ export default class DiscountContainer extends React.Component {
         };
     }
 
+    componentWillMount(){
+        DatePickerStore.dispatch(addDiscount(this.createDiscountStoreObject()));
+    }
+
     componentWillUnmount() {
         if(typeof this.state.unsubscribe === "function") {
             this.state.unsubscribe();
         }
-    }
-
-    componentWillMount(){
-        DatePickerStore.dispatch(addDiscount(this.createDiscountStoreObject()));
     }
 
     onStoreUpdate() {

@@ -76,6 +76,10 @@
 
 	var _BasketBasketContainer2 = _interopRequireDefault(_BasketBasketContainer);
 
+	var _PriceComponentsServiceContainer = __webpack_require__(266);
+
+	var _PriceComponentsServiceContainer2 = _interopRequireDefault(_PriceComponentsServiceContainer);
+
 	var _storesPickerStore = __webpack_require__(223);
 
 	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
@@ -134,6 +138,10 @@
 	                _react2["default"].createElement(_BasketBasketContainer2["default"], {
 	                    basketProducts: this.state.basketProducts,
 	                    loadNewDates: this.loadNewDates.bind(this)
+	                }),
+	                _react2["default"].createElement(_PriceComponentsServiceContainer2["default"], {
+	                    description: "Buy a care pack for your item(s)",
+	                    value: 25
 	                }),
 	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
 	                    threshold: 100,
@@ -23533,7 +23541,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"timeslot-selected":"_1_i9rYWlxWAu7qy-QKg5qW","icon-tick2":"_6oEWH3PxmJ2ZdzkzXpBJz","get-new-config-btn":"_2dluznHPo1qvE6adEtZUHs","row-hide":"_2I7qYObNmhrmBg9UhSFECN","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv","date-picker-table":"TCVbwVBJCBj2EA5I-pXCc","date-picker-closed":"_1RLvasQ2_ORGKHTkfRoisz","date-picker-closed-text":"_2yiu8PoIECOUO7nvxoJttb","third-party-message":"_24qYbaHvMWD2qM8M5bB1WC","loading-message":"_1qw07Xl1Y4sTzH79_TBIkb","no-dates-message":"_2cRV1t9cyRqxCHBneFpaLZ"};
+	module.exports = {"timeslot-selected":"_1_i9rYWlxWAu7qy-QKg5qW","icon-tick2":"_6oEWH3PxmJ2ZdzkzXpBJz","get-new-config-btn":"_2dluznHPo1qvE6adEtZUHs","row-hide":"_2I7qYObNmhrmBg9UhSFECN","service-hide":"_1G-h0SSBuwLffkz7XRz6MZ","unselectable":"_2jnqxNVZRf1nCWihSNkv3Z","date-picker":"_1Qq05B5n_ZuASi021mf9Zv","date-picker-table":"TCVbwVBJCBj2EA5I-pXCc","date-picker-closed":"_1RLvasQ2_ORGKHTkfRoisz","date-picker-closed-text":"_2yiu8PoIECOUO7nvxoJttb","third-party-message":"_24qYbaHvMWD2qM8M5bB1WC","loading-message":"_1qw07Xl1Y4sTzH79_TBIkb","no-dates-message":"_2cRV1t9cyRqxCHBneFpaLZ"};
 
 /***/ },
 /* 223 */
@@ -26115,13 +26123,9 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _priceStyles = __webpack_require__(258);
+	var _priceComponentStyles = __webpack_require__(258);
 
-	var _priceStyles2 = _interopRequireDefault(_priceStyles);
-
-	var _storesPickerStore = __webpack_require__(223);
-
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _priceComponentStyles2 = _interopRequireDefault(_priceComponentStyles);
 
 	var Total = (function (_React$Component) {
 	    _inherits(Total, _React$Component);
@@ -26204,7 +26208,7 @@
 	    deliveryTotal: _react2["default"].PropTypes.number.isRequired
 	};
 
-	exports["default"] = (0, _reactCssModules2["default"])(Total, _priceStyles2["default"]);
+	exports["default"] = (0, _reactCssModules2["default"])(Total, _priceComponentStyles2["default"]);
 	module.exports = exports["default"];
 
 /***/ },
@@ -26212,7 +26216,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"basket-total":"_2EvZ4S1ZjKahbXW7pyPgD4","basket-total-title":"_1TcqySj-NlRWtAEMjVoZ1y","basket-discount-title":"_3mISlqaew1N56vnjkY96OA","basket-discount":"_1MouFv4OCBXs4O-aPSHOFz","basket-total-holder":"_1XhcrMQx0wkRcV5BwzlS5G","status":"_2Of6OvLqO4l6308RlraF1R","active":"_9MgO-LYMJW4bua6aN-5iA","inactive":"FkIZXn6p9IBDvXs8JhqIg"};
+	module.exports = {"basket-total":"_3bjqqr619Jrs2YW0kvyZDs","basket-total-title":"_1vu4uV9Ra444our4jBuzZL","basket-discount-title":"WuSbGS_AcinzhpOylk1BE","basket-discount":"LC_8DLkt8F4uJafxloko4","basket-total-holder":"_1nfrNLTD5q60XFCdVuPlAS","service-text":"_2btBwMrPUPPCrhtQag_ZsI","service-value":"_1yCzH5kvSzLKh8oKIw9cz3","status":"goFbtRtiQSFINTSR2AboR","active":"_18g1OPSQh0-KWtkxB299ly","inactive":"_23LlYoBU54HZNolYLNkCKj"};
 
 /***/ },
 /* 259 */
@@ -26268,16 +26272,16 @@
 	    }
 
 	    _createClass(DiscountContainer, [{
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addDiscount)(this.createDiscountStoreObject()));
+	        }
+	    }, {
 	        key: "componentWillUnmount",
 	        value: function componentWillUnmount() {
 	            if (typeof this.state.unsubscribe === "function") {
 	                this.state.unsubscribe();
 	            }
-	        }
-	    }, {
-	        key: "componentWillMount",
-	        value: function componentWillMount() {
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addDiscount)(this.createDiscountStoreObject()));
 	        }
 	    }, {
 	        key: "onStoreUpdate",
@@ -26350,9 +26354,9 @@
 
 	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-	var _priceStyles = __webpack_require__(258);
+	var _priceComponentStyles = __webpack_require__(258);
 
-	var _priceStyles2 = _interopRequireDefault(_priceStyles);
+	var _priceComponentStyles2 = _interopRequireDefault(_priceComponentStyles);
 
 	var Discount = (function (_React$Component) {
 	    _inherits(Discount, _React$Component);
@@ -26422,7 +26426,7 @@
 	    return Discount;
 	})(_react2["default"].Component);
 
-	exports["default"] = (0, _reactCssModules2["default"])(Discount, _priceStyles2["default"]);
+	exports["default"] = (0, _reactCssModules2["default"])(Discount, _priceComponentStyles2["default"]);
 	module.exports = exports["default"];
 
 /***/ },
@@ -26748,6 +26752,196 @@
 	        return response.json();
 	    });
 	}
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Service = __webpack_require__(267);
+
+	var _Service2 = _interopRequireDefault(_Service);
+
+	var _storesPickerStore = __webpack_require__(223);
+
+	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+
+	var _actionsExternalActions = __webpack_require__(238);
+
+	var ServiceContainer = (function (_React$Component) {
+	    _inherits(ServiceContainer, _React$Component);
+
+	    function ServiceContainer(props) {
+	        _classCallCheck(this, ServiceContainer);
+
+	        _get(Object.getPrototypeOf(ServiceContainer.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            desc: this.props.description,
+	            value: this.props.value,
+	            toggleService: this.toggleService.bind(this),
+	            isActive: false
+	        };
+	    }
+
+	    _createClass(ServiceContainer, [{
+	        key: "toggleService",
+	        value: function toggleService() {
+	            if (this.state.isActive) {
+	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.removeCharge)(this.createChargeStoreObject()));
+	            } else {
+	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addCharge)(this.createChargeStoreObject()));
+	            }
+	            this.setState({
+	                isActive: !this.state.isActive
+	            });
+	        }
+	    }, {
+	        key: "createChargeStoreObject",
+	        value: function createChargeStoreObject() {
+	            return {
+	                name: this.state.name,
+	                value: this.state.value
+	            };
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2["default"].createElement(
+	                "div",
+	                { className: "form-group" },
+	                _react2["default"].createElement(_Service2["default"], {
+	                    value: this.state.value,
+	                    desc: this.state.desc,
+	                    toggle: this.state.toggleService,
+	                    isActive: this.state.isActive
+	                })
+	            );
+	        }
+	    }]);
+
+	    return ServiceContainer;
+	})(_react2["default"].Component);
+
+	exports["default"] = ServiceContainer;
+
+	ServiceContainer.defaultProps = {
+	    desc: "",
+	    value: 0,
+	    toggleService: function toggleService() {}
+	};
+
+	ServiceContainer.propTypes = {
+	    desc: _react2["default"].PropTypes.string.isRequired,
+	    value: _react2["default"].PropTypes.number.isRequired,
+	    toggleService: _react2["default"].PropTypes.func.isRequired
+	};
+	module.exports = exports["default"];
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactCssModules = __webpack_require__(159);
+
+	var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
+
+	var _priceComponentStyles = __webpack_require__(258);
+
+	var _priceComponentStyles2 = _interopRequireDefault(_priceComponentStyles);
+
+	var Service = (function (_React$Component) {
+	    _inherits(Service, _React$Component);
+
+	    function Service(props) {
+	        _classCallCheck(this, Service);
+
+	        _get(Object.getPrototypeOf(Service.prototype), "constructor", this).call(this, props);
+	        this.state = {
+	            desc: this.props.desc,
+	            value: this.props.value,
+	            toggle: this.props.toggle,
+	            isActive: this.props.isActive
+	        };
+	    }
+
+	    _createClass(Service, [{
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.setState({
+	                desc: nextProps.desc,
+	                value: nextProps.value,
+	                toggle: nextProps.toggle,
+	                isActive: nextProps.isActive
+	            });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var className = !this.state.isActive ? "service-hide" : "";
+	            return _react2["default"].createElement(
+	                "div",
+	                { className: "checkbox", styleName: "basket-total-holder" },
+	                _react2["default"].createElement(
+	                    "label",
+	                    { styleName: "service-text" },
+	                    _react2["default"].createElement("input", { type: "checkbox", onChange: this.state.toggle }),
+	                    this.state.desc,
+	                    " ",
+	                    _react2["default"].createElement(
+	                        "span",
+	                        { styleName: "service-text service-value", className: className },
+	                        "£",
+	                        this.state.value
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Service;
+	})(_react2["default"].Component);
+
+	exports["default"] = (0, _reactCssModules2["default"])(Service, _priceComponentStyles2["default"], { allowMultiple: true });
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ]);
