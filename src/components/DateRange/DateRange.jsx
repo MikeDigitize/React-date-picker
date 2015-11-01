@@ -1,8 +1,8 @@
 import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./date-range-styles";
-import DatePickerStore from "../../stores/PickerStore";
-import { updateTableIndex } from "../../actions/picker-actions";
+import CheckoutStore from "../../stores/CheckoutStore";
+import { updateTableIndex } from "../../actions/table-data-actions";
 
 class DateRange extends React.Component {
 
@@ -29,12 +29,12 @@ class DateRange extends React.Component {
 
     prevweek() {
         let prev = this.state.tableDisplayIndex === 0 ? this.state.dates.length - 1 : --this.state.tableDisplayIndex;
-        DatePickerStore.dispatch(updateTableIndex(prev));
+        CheckoutStore.dispatch(updateTableIndex(prev));
     }
 
     nextweek() {
         let next = this.state.tableDisplayIndex === this.state.dates.length - 1 ? 0 : ++this.state.tableDisplayIndex;
-        DatePickerStore.dispatch(updateTableIndex(next));
+        CheckoutStore.dispatch(updateTableIndex(next));
     }
 
     render() {

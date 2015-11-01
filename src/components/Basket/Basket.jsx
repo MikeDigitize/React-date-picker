@@ -1,8 +1,8 @@
 import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./basket-styles";
-import DatePickerStore from "../../stores/PickerStore";
-import { addToBasket, updateProductCount } from "../../actions/external-actions";
+import CheckoutStore from "../../stores/CheckoutStore";
+import { addToBasket, updateProductCount } from "../../actions/basket-totals-actions";
 import { format } from "../../utils/cost-formatter";
 
 class Basket extends React.Component {

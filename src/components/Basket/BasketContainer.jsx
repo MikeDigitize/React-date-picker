@@ -1,7 +1,7 @@
 import React from "react";
 import Basket from "./Basket";
-import DatePickerStore from "../../stores/PickerStore";
-import { addProductsToBasket, updateProductCount } from "../../actions/external-actions";
+import CheckoutStore from "../../stores/CheckoutStore";
+import { addProductsToBasket, updateProductCount } from "../../actions/basket-totals-actions";
 
 export default class BasketContainer extends React.Component {
 
@@ -10,7 +10,7 @@ export default class BasketContainer extends React.Component {
         this.state = {
             basketProducts : this.props.basketProducts,
             loadNewDates : this.props.loadNewDates,
-            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
+            unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
 
@@ -18,7 +18,7 @@ export default class BasketContainer extends React.Component {
         this.setState({
             loadNewDates : nextProps.loadNewDates
         });
-        DatePickerStore.dispatch(addProductsToBasket(nextProps.basketProducts));
+        CheckoutStore.dispatch(addProductsToBasket(nextProps.basketProducts));
     }
 
     componentWillUnmount() {
@@ -29,17 +29,17 @@ export default class BasketContainer extends React.Component {
 
     onStoreUpdate() {
         this.setState({
-            basketProducts : DatePickerStore.getState().basketTotals.basketProducts
+            basketProducts : CheckoutStore.getState().basketTotals.basketProducts
         });
     }
 
     static onProductIncrease(name) {
-        DatePickerStore.dispatch(updateProductCount({ name : name, add : true }));
+        CheckoutStore.dispatch(updateProductCount({ name : name, add : true }));
         this.state.loadNewDates();
     }
 
     static onProductDecrease(name){
-        DatePickerStore.dispatch(updateProductCount({ name : name, add : false }));
+        CheckoutStore.dispatch(updateProductCount({ name : name, add : false }));
         this.state.loadNewDates();
     }
 

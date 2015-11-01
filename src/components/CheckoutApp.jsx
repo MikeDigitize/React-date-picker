@@ -4,7 +4,7 @@ import TotalContainer from "./PriceComponents/TotalContainer";
 import DiscountContainer from "./PriceComponents/DiscountContainer";
 import BasketContainer from "./Basket/BasketContainer";
 import ServiceContainer from "./PriceComponents/ServiceContainer";
-import DatePickerStore from "../stores/PickerStore";
+import CheckoutStore from "../stores/CheckoutStore";
 import styles from "../styles/global";
 import { getData1, getData2, getData3, getData4, getBasketProducts } from "../utils/getConfig";
 

@@ -76,19 +76,19 @@
 
 	var _BasketBasketContainer2 = _interopRequireDefault(_BasketBasketContainer);
 
-	var _PriceComponentsServiceContainer = __webpack_require__(266);
+	var _PriceComponentsServiceContainer = __webpack_require__(264);
 
 	var _PriceComponentsServiceContainer2 = _interopRequireDefault(_PriceComponentsServiceContainer);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
-	var _stylesGlobal = __webpack_require__(264);
+	var _stylesGlobal = __webpack_require__(266);
 
 	var _stylesGlobal2 = _interopRequireDefault(_stylesGlobal);
 
-	var _utilsGetConfig = __webpack_require__(265);
+	var _utilsGetConfig = __webpack_require__(267);
 
 	var config = undefined;
 
@@ -20590,11 +20590,11 @@
 
 	var _PickerNoDates2 = _interopRequireDefault(_PickerNoDates);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
-	var _actionsPickerActions = __webpack_require__(237);
+	var _actionsTableDataActions = __webpack_require__(237);
 
 	var _DateRangeDateRange = __webpack_require__(239);
 
@@ -20615,7 +20615,7 @@
 	        _classCallCheck(this, PickerContainer);
 
 	        _get(Object.getPrototypeOf(PickerContainer.prototype), "constructor", this).call(this);
-	        _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.checkTableIndexExists)(_storesPickerStore2["default"].getState().tableData));
+	        _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.checkTableIndexExists)(_storesCheckoutStore2["default"].getState().tableData));
 	        this.state = {
 	            pickerState: {
 	                "closed": true,
@@ -20624,12 +20624,12 @@
 	                "loading": false,
 	                "ready": false
 	            },
-	            dateRanges: _storesPickerStore2["default"].getState().tableData.dateRanges,
-	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableData.tableDisplayIndex,
-	            deliveryTotal: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
-	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
-	            showHideText: _storesPickerStore2["default"].getState().tableData.showHideText,
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
+	            dateRanges: _storesCheckoutStore2["default"].getState().tableData.dateRanges,
+	            tableDisplayIndex: _storesCheckoutStore2["default"].getState().tableData.tableDisplayIndex,
+	            deliveryTotal: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
+	            basketTotal: _storesCheckoutStore2["default"].getState().basketTotals.overallTotal,
+	            showHideText: _storesCheckoutStore2["default"].getState().tableData.showHideText,
+	            unsubscribe: _storesCheckoutStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
 
@@ -20688,8 +20688,8 @@
 	        key: "preparePickerData",
 	        value: function preparePickerData(config) {
 
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.loadPickerData)(config));
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.checkTimeslotExists)(_storesPickerStore2["default"].getState().tableData));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.loadPickerData)(config));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.checkTimeslotExists)(_storesCheckoutStore2["default"].getState().tableData));
 
 	            this.setState({
 	                pickerState: {
@@ -20705,11 +20705,11 @@
 	        key: "onStoreUpdate",
 	        value: function onStoreUpdate() {
 	            this.setState({
-	                dateRanges: _storesPickerStore2["default"].getState().tableData.dateRanges,
-	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableData.tableDisplayIndex,
-	                deliveryTotal: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
-	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
-	                showHideText: _storesPickerStore2["default"].getState().tableData.showHideText
+	                dateRanges: _storesCheckoutStore2["default"].getState().tableData.dateRanges,
+	                tableDisplayIndex: _storesCheckoutStore2["default"].getState().tableData.tableDisplayIndex,
+	                deliveryTotal: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
+	                basketTotal: _storesCheckoutStore2["default"].getState().basketTotals.overallTotal,
+	                showHideText: _storesCheckoutStore2["default"].getState().tableData.showHideText
 	            });
 	        }
 	    }, {
@@ -20790,11 +20790,11 @@
 
 	var _pickerStyles2 = _interopRequireDefault(_pickerStyles);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
-	var _actionsPickerActions = __webpack_require__(237);
+	var _actionsTableDataActions = __webpack_require__(237);
 
 	var _DateRangeDateRange = __webpack_require__(239);
 
@@ -20815,13 +20815,13 @@
 	        _classCallCheck(this, Picker);
 
 	        _get(Object.getPrototypeOf(Picker.prototype), "constructor", this).call(this);
-	        _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.checkTableIndexExists)(_storesPickerStore2["default"].getState().tableData));
+	        _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.checkTableIndexExists)(_storesCheckoutStore2["default"].getState().tableData));
 	        this.state = {
-	            dateRanges: _storesPickerStore2["default"].getState().tableData.dateRanges,
-	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableData.tableDisplayIndex,
-	            deliveryTotal: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
-	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
+	            dateRanges: _storesCheckoutStore2["default"].getState().tableData.dateRanges,
+	            tableDisplayIndex: _storesCheckoutStore2["default"].getState().tableData.tableDisplayIndex,
+	            deliveryTotal: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
+	            basketTotal: _storesCheckoutStore2["default"].getState().basketTotals.overallTotal,
+	            unsubscribe: _storesCheckoutStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
 
@@ -20836,10 +20836,10 @@
 	        key: "onStoreUpdate",
 	        value: function onStoreUpdate() {
 	            this.setState({
-	                dateRanges: _storesPickerStore2["default"].getState().tableData.dateRanges,
-	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableData.tableDisplayIndex,
-	                deliveryTotal: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
-	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal
+	                dateRanges: _storesCheckoutStore2["default"].getState().tableData.dateRanges,
+	                tableDisplayIndex: _storesCheckoutStore2["default"].getState().tableData.tableDisplayIndex,
+	                deliveryTotal: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge || 0,
+	                basketTotal: _storesCheckoutStore2["default"].getState().basketTotals.overallTotal
 	            });
 	        }
 	    }, {
@@ -20862,7 +20862,7 @@
 	    }], [{
 	        key: "componentWillMount",
 	        value: function componentWillMount() {
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.checkTimeslotExists)(_storesPickerStore2["default"].getState().tableData));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.checkTimeslotExists)(_storesCheckoutStore2["default"].getState().tableData));
 	        }
 	    }]);
 
@@ -23565,23 +23565,23 @@
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _externalStores = __webpack_require__(234);
+	var _basketTotalsStores = __webpack_require__(234);
 
-	var _pickerDataStores = __webpack_require__(236);
+	var _tableDataStores = __webpack_require__(236);
 
 	function Checkout() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	    var action = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	    return {
-	        basketTotals: (0, _externalStores.basketTotals)(state.basketTotals, action),
-	        tableData: (0, _pickerDataStores.tableData)(state.tableData, action)
+	        basketTotals: (0, _basketTotalsStores.basketTotals)(state.basketTotals, action),
+	        tableData: (0, _tableDataStores.tableData)(state.tableData, action)
 	    };
 	}
 
 	var store = (0, _redux.applyMiddleware)(_reduxThunk2["default"])(_redux.createStore);
-	var DatePickerStore = store(Checkout);
-	exports["default"] = DatePickerStore;
+	var CheckoutStore = store(Checkout);
+	exports["default"] = CheckoutStore;
 	module.exports = exports["default"];
 
 /***/ },
@@ -24432,7 +24432,7 @@
 	exports.checkTableIndexExists = checkTableIndexExists;
 	exports.toggleShowHideMoreDates = toggleShowHideMoreDates;
 
-	var _externalActions = __webpack_require__(238);
+	var _basketTotalsActions = __webpack_require__(238);
 
 	var TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 	var NEWDATERANGES = "NEWDATERANGES";
@@ -24514,7 +24514,7 @@
 	            return matchingTimeslots.length;
 	        }
 	        if (!isTimeslotStillAvailable()) {
-	            dispatch((0, _externalActions.removeCharge)({ name: "delivery-charge" }));
+	            dispatch((0, _basketTotalsActions.removeCharge)({ name: "delivery-charge" }));
 	            dispatch(selectedTimeslotData({}));
 	        }
 	    };
@@ -24692,11 +24692,11 @@
 
 	var _dateRangeStyles2 = _interopRequireDefault(_dateRangeStyles);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
-	var _actionsPickerActions = __webpack_require__(237);
+	var _actionsTableDataActions = __webpack_require__(237);
 
 	var DateRange = (function (_React$Component) {
 	    _inherits(DateRange, _React$Component);
@@ -24730,13 +24730,13 @@
 	        key: "prevweek",
 	        value: function prevweek() {
 	            var prev = this.state.tableDisplayIndex === 0 ? this.state.dates.length - 1 : --this.state.tableDisplayIndex;
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(prev));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.updateTableIndex)(prev));
 	        }
 	    }, {
 	        key: "nextweek",
 	        value: function nextweek() {
 	            var next = this.state.tableDisplayIndex === this.state.dates.length - 1 ? 0 : ++this.state.tableDisplayIndex;
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.updateTableIndex)(next));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.updateTableIndex)(next));
 	        }
 	    }, {
 	        key: "render",
@@ -24810,9 +24810,9 @@
 
 	var _TableTableBody2 = _interopRequireDefault(_TableTableBody);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
@@ -24822,13 +24822,13 @@
 
 	        _get(Object.getPrototypeOf(Table.prototype), "constructor", this).call(this);
 	        this.state = {
-	            tableHeadData: _storesPickerStore2["default"].getState().tableData.tableHeadData,
-	            tableBodyData: _storesPickerStore2["default"].getState().tableData.tableBodyData,
-	            tableDisplayIndex: _storesPickerStore2["default"].getState().tableData.tableDisplayIndex,
-	            timeDescriptions: _storesPickerStore2["default"].getState().tableData.timeDescriptions,
-	            selectedTimeslotData: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData,
-	            displayAllRows: _storesPickerStore2["default"].getState().tableData.displayAllRows,
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
+	            tableHeadData: _storesCheckoutStore2["default"].getState().tableData.tableHeadData,
+	            tableBodyData: _storesCheckoutStore2["default"].getState().tableData.tableBodyData,
+	            tableDisplayIndex: _storesCheckoutStore2["default"].getState().tableData.tableDisplayIndex,
+	            timeDescriptions: _storesCheckoutStore2["default"].getState().tableData.timeDescriptions,
+	            selectedTimeslotData: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData,
+	            displayAllRows: _storesCheckoutStore2["default"].getState().tableData.displayAllRows,
+	            unsubscribe: _storesCheckoutStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
 
@@ -24843,12 +24843,12 @@
 	        key: "onStoreUpdate",
 	        value: function onStoreUpdate() {
 	            this.setState({
-	                tableHeadData: _storesPickerStore2["default"].getState().tableData.tableHeadData,
-	                tableBodyData: _storesPickerStore2["default"].getState().tableData.tableBodyData,
-	                tableDisplayIndex: _storesPickerStore2["default"].getState().tableData.tableDisplayIndex,
-	                timeDescriptions: _storesPickerStore2["default"].getState().tableData.timeDescriptions,
-	                selectedTimeslotData: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData,
-	                displayAllRows: _storesPickerStore2["default"].getState().tableData.displayAllRows
+	                tableHeadData: _storesCheckoutStore2["default"].getState().tableData.tableHeadData,
+	                tableBodyData: _storesCheckoutStore2["default"].getState().tableData.tableBodyData,
+	                tableDisplayIndex: _storesCheckoutStore2["default"].getState().tableData.tableDisplayIndex,
+	                timeDescriptions: _storesCheckoutStore2["default"].getState().tableData.timeDescriptions,
+	                selectedTimeslotData: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData,
+	                displayAllRows: _storesCheckoutStore2["default"].getState().tableData.displayAllRows
 	            });
 	        }
 	    }, {
@@ -24910,9 +24910,9 @@
 
 	var _tableHeadStyles2 = _interopRequireDefault(_tableHeadStyles);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
 	var TableHead = (function (_React$Component) {
 	    _inherits(TableHead, _React$Component);
@@ -25045,13 +25045,13 @@
 
 	var _DeliveryDescriptionsAnytime2 = _interopRequireDefault(_DeliveryDescriptionsAnytime);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
-	var _actionsExternalActions = __webpack_require__(238);
+	var _actionsBasketTotalsActions = __webpack_require__(238);
 
-	var _actionsPickerActions = __webpack_require__(237);
+	var _actionsTableDataActions = __webpack_require__(237);
 
 	__webpack_require__(249);
 
@@ -25070,8 +25070,8 @@
 	            displayAllRows: this.props.displayAllRows
 	        };
 	        this.alwaysDisplay = TableBody.rowsToDisplay();
-	        //DatePickerStore.subscribe(function(){
-	        //    console.log(DatePickerStore.getState());
+	        //CheckoutStore.subscribe(function(){
+	        //    console.log(CheckoutStore.getState());
 	        //})
 	    }
 
@@ -25225,8 +25225,8 @@
 	            }
 	            target.classList.toggle("timeslot-selected");
 	            var isActive = !!document.querySelector(".timeslot-selected");
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.selectedTimeslotData)({ target: target }));
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.deliveryCharge)({ isActive: isActive, charge: _storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge }));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.selectedTimeslotData)({ target: target }));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsBasketTotalsActions.deliveryCharge)({ isActive: isActive, charge: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge }));
 	        }
 	    }]);
 
@@ -25669,11 +25669,11 @@
 
 	var _summaryStyles2 = _interopRequireDefault(_summaryStyles);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
-	var _actionsPickerActions = __webpack_require__(237);
+	var _actionsTableDataActions = __webpack_require__(237);
 
 	var Summary = (function (_React$Component) {
 	    _inherits(Summary, _React$Component);
@@ -25749,7 +25749,7 @@
 	        key: "toggleDisplay",
 	        value: function toggleDisplay(e) {
 	            e.preventDefault();
-	            _storesPickerStore2["default"].dispatch((0, _actionsPickerActions.toggleShowHideMoreDates)());
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.toggleShowHideMoreDates)());
 	        }
 	    }]);
 
@@ -26038,9 +26038,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
 	var _Total = __webpack_require__(257);
 
@@ -26056,11 +26056,11 @@
 
 	        _get(Object.getPrototypeOf(TotalContainer.prototype), "constructor", this).call(this);
 	        this.state = {
-	            basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
-	            totalExcDiscount: _storesPickerStore2["default"].getState().basketTotals.total,
-	            discountTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().basketTotals.total - _storesPickerStore2["default"].getState().basketTotals.overallTotal),
-	            deliveryTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0),
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
+	            basketTotal: _storesCheckoutStore2["default"].getState().basketTotals.overallTotal,
+	            totalExcDiscount: _storesCheckoutStore2["default"].getState().basketTotals.total,
+	            discountTotal: (0, _utilsCostFormatter.format)(_storesCheckoutStore2["default"].getState().basketTotals.total - _storesCheckoutStore2["default"].getState().basketTotals.overallTotal),
+	            deliveryTotal: (0, _utilsCostFormatter.format)(_storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge || 0),
+	            unsubscribe: _storesCheckoutStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
 
@@ -26075,10 +26075,10 @@
 	        key: "onStoreUpdate",
 	        value: function onStoreUpdate() {
 	            this.setState({
-	                basketTotal: _storesPickerStore2["default"].getState().basketTotals.overallTotal,
-	                totalExcDiscount: _storesPickerStore2["default"].getState().basketTotals.total,
-	                deliveryTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().tableData.selectedTimeslotData.charge || 0),
-	                discountTotal: (0, _utilsCostFormatter.format)(_storesPickerStore2["default"].getState().basketTotals.total - _storesPickerStore2["default"].getState().basketTotals.overallTotal)
+	                basketTotal: _storesCheckoutStore2["default"].getState().basketTotals.overallTotal,
+	                totalExcDiscount: _storesCheckoutStore2["default"].getState().basketTotals.total,
+	                deliveryTotal: (0, _utilsCostFormatter.format)(_storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData.charge || 0),
+	                discountTotal: (0, _utilsCostFormatter.format)(_storesCheckoutStore2["default"].getState().basketTotals.total - _storesCheckoutStore2["default"].getState().basketTotals.overallTotal)
 	            });
 	        }
 	    }, {
@@ -26250,11 +26250,11 @@
 
 	var _Discount2 = _interopRequireDefault(_Discount);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
-	var _actionsExternalActions = __webpack_require__(238);
+	var _actionsBasketTotalsActions = __webpack_require__(238);
 
 	var _utilsCostFormatter = __webpack_require__(235);
 
@@ -26271,14 +26271,14 @@
 	            percentage: this.props.percentage,
 	            value: this.props.value,
 	            isActive: false,
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
+	            unsubscribe: _storesCheckoutStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
 
 	    _createClass(DiscountContainer, [{
 	        key: "componentWillMount",
 	        value: function componentWillMount() {
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addDiscount)(this.createDiscountStoreObject()));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsBasketTotalsActions.addDiscount)(this.createDiscountStoreObject()));
 	        }
 	    }, {
 	        key: "componentWillUnmount",
@@ -26292,7 +26292,7 @@
 	        value: function onStoreUpdate() {
 	            var _this = this;
 
-	            var isActive = _storesPickerStore2["default"].getState().basketTotals.activeDiscounts.filter(function (discount) {
+	            var isActive = _storesCheckoutStore2["default"].getState().basketTotals.activeDiscounts.filter(function (discount) {
 	                return _this.state.name === discount.name;
 	            }).reduce(function (d, e) {
 	                return e.isActive;
@@ -26489,11 +26489,11 @@
 
 	var _Basket2 = _interopRequireDefault(_Basket);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
-	var _actionsExternalActions = __webpack_require__(238);
+	var _actionsBasketTotalsActions = __webpack_require__(238);
 
 	var BasketContainer = (function (_React$Component) {
 	    _inherits(BasketContainer, _React$Component);
@@ -26505,7 +26505,7 @@
 	        this.state = {
 	            basketProducts: this.props.basketProducts,
 	            loadNewDates: this.props.loadNewDates,
-	            unsubscribe: _storesPickerStore2["default"].subscribe(this.onStoreUpdate.bind(this))
+	            unsubscribe: _storesCheckoutStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
 
@@ -26515,7 +26515,7 @@
 	            this.setState({
 	                loadNewDates: nextProps.loadNewDates
 	            });
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addProductsToBasket)(nextProps.basketProducts));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsBasketTotalsActions.addProductsToBasket)(nextProps.basketProducts));
 	        }
 	    }, {
 	        key: "componentWillUnmount",
@@ -26528,7 +26528,7 @@
 	        key: "onStoreUpdate",
 	        value: function onStoreUpdate() {
 	            this.setState({
-	                basketProducts: _storesPickerStore2["default"].getState().basketTotals.basketProducts
+	                basketProducts: _storesCheckoutStore2["default"].getState().basketTotals.basketProducts
 	            });
 	        }
 	    }, {
@@ -26544,13 +26544,13 @@
 	    }], [{
 	        key: "onProductIncrease",
 	        value: function onProductIncrease(name) {
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.updateProductCount)({ name: name, add: true }));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsBasketTotalsActions.updateProductCount)({ name: name, add: true }));
 	            this.state.loadNewDates();
 	        }
 	    }, {
 	        key: "onProductDecrease",
 	        value: function onProductDecrease(name) {
-	            _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.updateProductCount)({ name: name, add: false }));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsBasketTotalsActions.updateProductCount)({ name: name, add: false }));
 	            this.state.loadNewDates();
 	        }
 	    }]);
@@ -26603,11 +26603,11 @@
 
 	var _basketStyles2 = _interopRequireDefault(_basketStyles);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
-	var _actionsExternalActions = __webpack_require__(238);
+	var _actionsBasketTotalsActions = __webpack_require__(238);
 
 	var _utilsCostFormatter = __webpack_require__(235);
 
@@ -26736,57 +26736,6 @@
 
 /***/ },
 /* 264 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 265 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	exports.getData1 = getData1;
-	exports.getData2 = getData2;
-	exports.getData3 = getData3;
-	exports.getData4 = getData4;
-	exports.getBasketProducts = getBasketProducts;
-
-	function getData1() {
-	    return fetch('/data/picker-config1.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getData2() {
-	    return fetch('/data/picker-config2.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getData3() {
-	    return fetch('/data/picker-config3.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getData4() {
-	    return fetch('/data/picker-config4.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-	function getBasketProducts() {
-	    return fetch('/data/basket-products.json').then(function (response) {
-	        return response.json();
-	    });
-	}
-
-/***/ },
-/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26809,15 +26758,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Service = __webpack_require__(267);
+	var _Service = __webpack_require__(265);
 
 	var _Service2 = _interopRequireDefault(_Service);
 
-	var _storesPickerStore = __webpack_require__(223);
+	var _storesCheckoutStore = __webpack_require__(223);
 
-	var _storesPickerStore2 = _interopRequireDefault(_storesPickerStore);
+	var _storesCheckoutStore2 = _interopRequireDefault(_storesCheckoutStore);
 
-	var _actionsExternalActions = __webpack_require__(238);
+	var _actionsBasketTotalsActions = __webpack_require__(238);
 
 	var ServiceContainer = (function (_React$Component) {
 	    _inherits(ServiceContainer, _React$Component);
@@ -26838,9 +26787,9 @@
 	        key: "toggleService",
 	        value: function toggleService() {
 	            if (this.state.isActive) {
-	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.removeCharge)(this.createChargeStoreObject()));
+	                _storesCheckoutStore2["default"].dispatch((0, _actionsBasketTotalsActions.removeCharge)(this.createChargeStoreObject()));
 	            } else {
-	                _storesPickerStore2["default"].dispatch((0, _actionsExternalActions.addCharge)(this.createChargeStoreObject()));
+	                _storesCheckoutStore2["default"].dispatch((0, _actionsBasketTotalsActions.addCharge)(this.createChargeStoreObject()));
 	            }
 	            this.setState({
 	                isActive: !this.state.isActive
@@ -26889,7 +26838,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 267 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26988,6 +26937,57 @@
 
 	exports["default"] = (0, _reactCssModules2["default"])(Service, _priceComponentStyles2["default"], { allowMultiple: true });
 	module.exports = exports["default"];
+
+/***/ },
+/* 266 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 267 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	exports.getData1 = getData1;
+	exports.getData2 = getData2;
+	exports.getData3 = getData3;
+	exports.getData4 = getData4;
+	exports.getBasketProducts = getBasketProducts;
+
+	function getData1() {
+	    return fetch('/data/picker-config1.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData2() {
+	    return fetch('/data/picker-config2.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData3() {
+	    return fetch('/data/picker-config3.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getData4() {
+	    return fetch('/data/picker-config4.json').then(function (response) {
+	        return response.json();
+	    });
+	}
+
+	function getBasketProducts() {
+	    return fetch('/data/basket-products.json').then(function (response) {
+	        return response.json();
+	    });
+	}
 
 /***/ }
 /******/ ]);

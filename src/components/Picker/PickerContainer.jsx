@@ -4,8 +4,8 @@ import Closed from "./PickerClosed";
 import ThirdParty from "./PickerThirdParty";
 import Loading from "./PickerLoading";
 import NoDates from "./PickerNoDates";
-import DatePickerStore from "../../stores/PickerStore";
-import { loadPickerData, checkTimeslotExists, checkTableIndexExists } from "../../actions/picker-actions";
+import CheckoutStore from "../../stores/CheckoutStore";
+import { loadPickerData, checkTimeslotExists, checkTableIndexExists } from "../../actions/table-data-actions";
 
 import DateRange from "../DateRange/DateRange";
 import TableContainer from "../Table/TableContainer";
@@ -15,7 +15,7 @@ export default class PickerContainer extends React.Component {
 
     constructor() {
         super();
-        DatePickerStore.dispatch(checkTableIndexExists(DatePickerStore.getState().tableData));
+        CheckoutStore.dispatch(checkTableIndexExists(CheckoutStore.getState().tableData));
         this.state = {
             pickerState : {
                 "closed" : true,
@@ -24,12 +24,12 @@ export default class PickerContainer extends React.Component {
                 "loading" : false,
                 "ready" : false
             },
-            dateRanges : DatePickerStore.getState().tableData.dateRanges,
-            tableDisplayIndex : DatePickerStore.getState().tableData.tableDisplayIndex,
-            deliveryTotal : DatePickerStore.getState().tableData.selectedTimeslotData.charge || 0,
-            basketTotal : DatePickerStore.getState().basketTotals.overallTotal,
-            showHideText : DatePickerStore.getState().tableData.showHideText,
-            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
+            dateRanges : CheckoutStore.getState().tableData.dateRanges,
+            tableDisplayIndex : CheckoutStore.getState().tableData.tableDisplayIndex,
+            deliveryTotal : CheckoutStore.getState().tableData.selectedTimeslotData.charge || 0,
+            basketTotal : CheckoutStore.getState().basketTotals.overallTotal,
+            showHideText : CheckoutStore.getState().tableData.showHideText,
+            unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
 
@@ -84,8 +84,8 @@ export default class PickerContainer extends React.Component {
 
     preparePickerData(config) {
 
-        DatePickerStore.dispatch(loadPickerData(config));
-        DatePickerStore.dispatch(checkTimeslotExists(DatePickerStore.getState().tableData));
+        CheckoutStore.dispatch(loadPickerData(config));
+        CheckoutStore.dispatch(checkTimeslotExists(CheckoutStore.getState().tableData));
 
         this.setState({
             pickerState : {
@@ -101,11 +101,11 @@ export default class PickerContainer extends React.Component {
 
     onStoreUpdate() {
         this.setState({
-            dateRanges : DatePickerStore.getState().tableData.dateRanges,
-            tableDisplayIndex : DatePickerStore.getState().tableData.tableDisplayIndex,
-            deliveryTotal : DatePickerStore.getState().tableData.selectedTimeslotData.charge || 0,
-            basketTotal : DatePickerStore.getState().basketTotals.overallTotal,
-            showHideText : DatePickerStore.getState().tableData.showHideText
+            dateRanges : CheckoutStore.getState().tableData.dateRanges,
+            tableDisplayIndex : CheckoutStore.getState().tableData.tableDisplayIndex,
+            deliveryTotal : CheckoutStore.getState().tableData.selectedTimeslotData.charge || 0,
+            basketTotal : CheckoutStore.getState().basketTotals.overallTotal,
+            showHideText : CheckoutStore.getState().tableData.showHideText
         });
     }
 

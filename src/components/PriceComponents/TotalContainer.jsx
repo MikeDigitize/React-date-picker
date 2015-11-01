@@ -1,5 +1,5 @@
 import React from "react";
-import DatePickerStore from "../../stores/PickerStore";
+import CheckoutStore from "../../stores/CheckoutStore";
 import Total from "./Total";
 import { format } from "../../utils/cost-formatter";
 
@@ -7,11 +7,11 @@ export default class TotalContainer extends React.Component {
     constructor(){
         super();
         this.state = {
-            basketTotal : DatePickerStore.getState().basketTotals.overallTotal,
-            totalExcDiscount : DatePickerStore.getState().basketTotals.total,
-            discountTotal : format(DatePickerStore.getState().basketTotals.total - DatePickerStore.getState().basketTotals.overallTotal),
-            deliveryTotal : format(DatePickerStore.getState().tableData.selectedTimeslotData.charge || 0),
-            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
+            basketTotal : CheckoutStore.getState().basketTotals.overallTotal,
+            totalExcDiscount : CheckoutStore.getState().basketTotals.total,
+            discountTotal : format(CheckoutStore.getState().basketTotals.total - CheckoutStore.getState().basketTotals.overallTotal),
+            deliveryTotal : format(CheckoutStore.getState().tableData.selectedTimeslotData.charge || 0),
+            unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
 
@@ -23,10 +23,10 @@ export default class TotalContainer extends React.Component {
 
     onStoreUpdate() {
         this.setState({
-            basketTotal : DatePickerStore.getState().basketTotals.overallTotal,
-            totalExcDiscount : DatePickerStore.getState().basketTotals.total,
-            deliveryTotal : format(DatePickerStore.getState().tableData.selectedTimeslotData.charge || 0),
-            discountTotal : format(DatePickerStore.getState().basketTotals.total - DatePickerStore.getState().basketTotals.overallTotal)
+            basketTotal : CheckoutStore.getState().basketTotals.overallTotal,
+            totalExcDiscount : CheckoutStore.getState().basketTotals.total,
+            deliveryTotal : format(CheckoutStore.getState().tableData.selectedTimeslotData.charge || 0),
+            discountTotal : format(CheckoutStore.getState().basketTotals.total - CheckoutStore.getState().basketTotals.overallTotal)
         });
     }
 

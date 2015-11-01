@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { basketTotals } from "./external-stores";
-import { tableData } from "./picker-data-stores";
+import { basketTotals } from "./basket-totals-stores";
+import { tableData } from "./table-data-stores";
 
 function Checkout(state = {}, action = {}) {
     return {
@@ -11,5 +11,5 @@ function Checkout(state = {}, action = {}) {
 }
 
 let store = applyMiddleware(thunk)(createStore);
-let DatePickerStore = store(Checkout);
-export default DatePickerStore;
+let CheckoutStore = store(Checkout);
+export default CheckoutStore;

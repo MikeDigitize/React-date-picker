@@ -1,19 +1,19 @@
 import React from "react";
 import TableHead from "../Table/TableHead";
 import TableBody from "../Table/TableBody";
-import DatePickerStore from "../../stores/PickerStore";
+import CheckoutStore from "../../stores/CheckoutStore";
 
 export default class Table extends React.Component {
     constructor() {
         super();
         this.state = {
-            tableHeadData : DatePickerStore.getState().tableData.tableHeadData,
-            tableBodyData : DatePickerStore.getState().tableData.tableBodyData,
-            tableDisplayIndex : DatePickerStore.getState().tableData.tableDisplayIndex,
-            timeDescriptions : DatePickerStore.getState().tableData.timeDescriptions,
-            selectedTimeslotData : DatePickerStore.getState().tableData.selectedTimeslotData,
-            displayAllRows : DatePickerStore.getState().tableData.displayAllRows,
-            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
+            tableHeadData : CheckoutStore.getState().tableData.tableHeadData,
+            tableBodyData : CheckoutStore.getState().tableData.tableBodyData,
+            tableDisplayIndex : CheckoutStore.getState().tableData.tableDisplayIndex,
+            timeDescriptions : CheckoutStore.getState().tableData.timeDescriptions,
+            selectedTimeslotData : CheckoutStore.getState().tableData.selectedTimeslotData,
+            displayAllRows : CheckoutStore.getState().tableData.displayAllRows,
+            unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
 
@@ -25,12 +25,12 @@ export default class Table extends React.Component {
 
     onStoreUpdate() {
         this.setState({
-            tableHeadData : DatePickerStore.getState().tableData.tableHeadData,
-            tableBodyData : DatePickerStore.getState().tableData.tableBodyData,
-            tableDisplayIndex : DatePickerStore.getState().tableData.tableDisplayIndex,
-            timeDescriptions : DatePickerStore.getState().tableData.timeDescriptions,
-            selectedTimeslotData : DatePickerStore.getState().tableData.selectedTimeslotData,
-            displayAllRows : DatePickerStore.getState().tableData.displayAllRows,
+            tableHeadData : CheckoutStore.getState().tableData.tableHeadData,
+            tableBodyData : CheckoutStore.getState().tableData.tableBodyData,
+            tableDisplayIndex : CheckoutStore.getState().tableData.tableDisplayIndex,
+            timeDescriptions : CheckoutStore.getState().tableData.timeDescriptions,
+            selectedTimeslotData : CheckoutStore.getState().tableData.selectedTimeslotData,
+            displayAllRows : CheckoutStore.getState().tableData.displayAllRows,
         });
     }
 

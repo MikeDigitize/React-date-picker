@@ -1,8 +1,8 @@
 import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./summary-styles";
-import DatePickerStore from "../../stores/PickerStore";
-import { toggleShowHideMoreDates } from "../../actions/picker-actions";
+import CheckoutStore from "../../stores/CheckoutStore";
+import { toggleShowHideMoreDates } from "../../actions/table-data-actions";
 
 class Summary extends React.Component {
 
@@ -25,7 +25,7 @@ class Summary extends React.Component {
 
     static toggleDisplay(e){
         e.preventDefault();
-        DatePickerStore.dispatch(toggleShowHideMoreDates())
+        CheckoutStore.dispatch(toggleShowHideMoreDates())
     }
 
     render(){

@@ -1,7 +1,7 @@
 import React from "react";
 import Discount from "./Discount";
-import DatePickerStore from "../../stores/PickerStore";
-import { addDiscount } from "../../actions/external-actions";
+import CheckoutStore from "../../stores/CheckoutStore";
+import { addDiscount } from "../../actions/basket-totals-actions";
 import { format } from "../../utils/cost-formatter";
 
 export default class DiscountContainer extends React.Component {
@@ -13,12 +13,12 @@ export default class DiscountContainer extends React.Component {
             percentage : this.props.percentage,
             value : this.props.value,
             isActive : false,
-            unsubscribe : DatePickerStore.subscribe(this.onStoreUpdate.bind(this))
+            unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
 
     componentWillMount(){
-        DatePickerStore.dispatch(addDiscount(this.createDiscountStoreObject()));
+        CheckoutStore.dispatch(addDiscount(this.createDiscountStoreObject()));
     }
 
     componentWillUnmount() {
@@ -28,7 +28,7 @@ export default class DiscountContainer extends React.Component {
     }
 
     onStoreUpdate() {
-        let isActive = DatePickerStore.getState().basketTotals.activeDiscounts.filter(discount => this.state.name === discount.name).reduce((d,e) => e.isActive, false);
+        let isActive = CheckoutStore.getState().basketTotals.activeDiscounts.filter(discount => this.state.name === discount.name).reduce((d,e) => e.isActive, false);
         this.setState({
             isActive : isActive
         });

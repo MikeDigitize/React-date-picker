@@ -3,9 +3,9 @@ import CSSModule from "react-css-modules";
 import styles from "./table-body-styles";
 import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
-import DatePickerStore from "../../stores/PickerStore";
-import { deliveryCharge } from "../../actions/external-actions";
-import { selectedTimeslotData } from "../../actions/picker-actions";
+import CheckoutStore from "../../stores/CheckoutStore";
+import { deliveryCharge } from "../../actions/basket-totals-actions";
+import { selectedTimeslotData } from "../../actions/table-data-actions";
 import "../../utils/classList-polyfill";
 
 class TableBody extends React.Component {
@@ -20,8 +20,8 @@ class TableBody extends React.Component {
             displayAllRows : this.props.displayAllRows
         };
         this.alwaysDisplay = TableBody.rowsToDisplay();
-        //DatePickerStore.subscribe(function(){
-        //    console.log(DatePickerStore.getState());
+        //CheckoutStore.subscribe(function(){
+        //    console.log(CheckoutStore.getState());
         //})
     }
 
@@ -61,8 +61,8 @@ class TableBody extends React.Component {
         }
         target.classList.toggle("timeslot-selected");
         let isActive = !!document.querySelector(".timeslot-selected");
-        DatePickerStore.dispatch(selectedTimeslotData({ target }));
-        DatePickerStore.dispatch(deliveryCharge({ isActive, charge : DatePickerStore.getState().tableData.selectedTimeslotData.charge }))
+        CheckoutStore.dispatch(selectedTimeslotData({ target }));
+        CheckoutStore.dispatch(deliveryCharge({ isActive, charge : CheckoutStore.getState().tableData.selectedTimeslotData.charge }))
     };
 
     createRows() {

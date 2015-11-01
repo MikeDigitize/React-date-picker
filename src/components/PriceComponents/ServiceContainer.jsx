@@ -1,7 +1,7 @@
 import React from "react";
 import Service from "./Service";
-import DatePickerStore from "../../stores/PickerStore";
-import { addCharge, removeCharge } from "../../actions/external-actions";
+import CheckoutStore from "../../stores/CheckoutStore";
+import { addCharge, removeCharge } from "../../actions/basket-totals-actions";
 
 export default class ServiceContainer extends React.Component {
     constructor(props) {
@@ -16,10 +16,10 @@ export default class ServiceContainer extends React.Component {
 
     toggleService() {
         if(this.state.isActive) {
-            DatePickerStore.dispatch(removeCharge(this.createChargeStoreObject()));
+            CheckoutStore.dispatch(removeCharge(this.createChargeStoreObject()));
         }
         else {
-            DatePickerStore.dispatch(addCharge(this.createChargeStoreObject()));
+            CheckoutStore.dispatch(addCharge(this.createChargeStoreObject()));
         }
         this.setState({
             isActive : !this.state.isActive

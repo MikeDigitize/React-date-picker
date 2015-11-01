@@ -1,9 +1,9 @@
 jest.autoMockOff();
 let React = require("react/addons");
 let PickerContainer = require ("../PickerContainer");
-let DatePickerStore = require ("../../../stores/PickerStore");
+let CheckoutStore = require ("../../../stores/CheckoutStore");
 let data = require ("../../../data/available-dates");
-let actions = require ("../../../actions/picker-actions");
+let actions = require ("../../../actions/table-data-actions");
 
 describe("Date Picker Container", function() {
 

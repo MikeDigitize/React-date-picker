@@ -1,4 +1,4 @@
-import { removeCharge } from "./external-actions";
+import { removeCharge } from "./basket-totals-actions";
 
 const TOTALWEEKSUPDATE = "TOTALWEEKSUPDATE";
 const NEWDATERANGES = "NEWDATERANGES";

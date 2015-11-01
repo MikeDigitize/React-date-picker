@@ -1,7 +1,7 @@
 import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./table-head-styles";
-import DatePickerStore from "../../stores/PickerStore";
+import CheckoutStore from "../../stores/CheckoutStore";
 
 class TableHead extends React.Component {
     constructor(props) {
