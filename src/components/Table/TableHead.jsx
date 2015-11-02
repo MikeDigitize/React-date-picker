@@ -12,12 +12,6 @@ class TableHead extends React.Component {
         };
     }
 
-    componentWillUnmount() {
-        if(typeof this.state.unsubscribe === "function") {
-            this.state.unsubscribe();
-        }
-    }
-
     componentWillReceiveProps(nextProps) {
         this.setState({
             tableDisplayIndex : nextProps.tableDisplayIndex,

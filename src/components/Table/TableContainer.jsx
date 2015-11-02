@@ -48,7 +48,7 @@ export default class Table extends React.Component {
             tableDisplayIndex : CheckoutStore.getState().tableData.tableDisplayIndex,
             timeDescriptions : CheckoutStore.getState().tableData.timeDescriptions,
             selectedTimeslotData : CheckoutStore.getState().tableData.selectedTimeslotData,
-            displayAllRows : CheckoutStore.getState().tableData.displayAllRows,
+            displayAllRows : CheckoutStore.getState().tableData.displayAllRows
         });
     }
 

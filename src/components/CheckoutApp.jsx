@@ -19,11 +19,12 @@ class App extends React.Component {
         };
         Promise.all([getData1(), getData2(), getData3(), getData4()]).then(data => {
             config = data;
+            setTimeout(()=>{
+                this.loadNewDates();
+            }, 250);
         });
         getBasketProducts().then(this.storeProductsInBasket.bind(this));
-        setTimeout(()=>{
-            this.loadNewDates();
-        }, 250)
+
     }
 
     loadNewDates() {
@@ -45,33 +46,6 @@ class App extends React.Component {
                 <BasketContainer
                     basketProducts={ this.state.basketProducts }
                     loadNewDates={ this.loadNewDates.bind(this) }
-                />
-                <ServiceContainer
-                    description="Buy a care pack for your item(s)"
-                    value={25}
-                />
-                <ServiceContainer
-                    description="Remove your old appliances"
-                    value={112}
-                    />
-                <DiscountContainer
-                    threshold={100}
-                    percentage={10}
-                    name="10percentoff"
-                />
-                <DiscountContainer
-                    threshold={10000}
-                    percentage={50}
-                    name="50percentoff"
-                    />
-                <DiscountContainer
-                    threshold={5000}
-                    value={50}
-                    name="50quidoff"
-                />
-                <TotalContainer />
-                <PickerContainer
-                    config={this.state.config}
                 />
             </div>
         );
