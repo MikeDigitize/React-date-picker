@@ -1,7 +1,7 @@
 import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./table-head-styles";
-import DatePickerStore from "../../stores/PickerStore";
+
 
 class TableHead extends React.Component {
     constructor(props) {
@@ -10,12 +10,6 @@ class TableHead extends React.Component {
             tableDisplayIndex : this.props.tableDisplayIndex,
             tableHeadData : this.props.tableHeadData
         };
-    }
-
-    componentWillUnmount() {
-        if(typeof this.state.unsubscribe === "function") {
-            this.state.unsubscribe();
-        }
     }
 
     componentWillReceiveProps(nextProps) {

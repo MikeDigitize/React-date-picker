@@ -1,24 +1,37 @@
 import React from "react";
-import Picker from "./Picker";
-import PickerClosed from "./PickerClosed";
-import ThirdParty from "./ThirdParty";
-import DatePickerStore from "../../stores/PickerStore";
-import { totalWeeks, dateRanges, tableHeadData, tableBodyData, timeDescriptions } from "../../actions/picker-actions";
-import { basketTotal, availableDates } from "../../actions/external-actions";
+import Closed from "./PickerClosed";
+import ThirdParty from "./PickerThirdParty";
+import Loading from "./PickerLoading";
+import NoDates from "./PickerNoDates";
+import CheckoutStore from "../../stores/CheckoutStore";
+import { loadPickerData, checkTimeslotExists, checkTableIndexExists, updateTableIndex, toggleShowHideMoreDates } from "../../actions/table-data-actions";
+
+import DateRange from "../DateRange/DateRange";
+import TableContainer from "../Table/TableContainer";
+import Summary from "../Summary/Summary";
 
 export default class PickerContainer extends React.Component {
 
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
+        CheckoutStore.dispatch(checkTableIndexExists(CheckoutStore.getState().tableData));
         this.state = {
-            unsubscribeFromStore : null,
             pickerState : {
                 "closed" : true,
                 "third-party" : false,
                 "no-dates-available" : false,
                 "loading" : false,
                 "ready" : false
-            }
+            },
+            dateRanges : CheckoutStore.getState().tableData.dateRanges,
+            tableDisplayIndex : CheckoutStore.getState().tableData.tableDisplayIndex,
+            deliveryTotal : CheckoutStore.getState().tableData.selectedTimeslotData.charge || 0,
+            basketTotal : CheckoutStore.getState().basketTotals.overallTotal,
+            showHideText : CheckoutStore.getState().tableData.showHideText,
+            showPrevWeek : this.showPrevWeek.bind(this),
+            showNextWeek : this.showNextWeek.bind(this),
+            toggleShowMoreDates : PickerContainer.toggleDisplay,
+            unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
 
@@ -30,8 +43,7 @@ export default class PickerContainer extends React.Component {
 
     componentWillReceiveProps(nextProps) {
 
-        if(Object.keys(nextProps.config).length) {
-
+        if(nextProps.config.state) {
             if(nextProps.config.state === "ThirdParty") {
                 this.setState({
                     pickerState : {
@@ -43,7 +55,6 @@ export default class PickerContainer extends React.Component {
                     }
                 });
             }
-
             else if(!nextProps.config.hasDeliveryDates){
                 this.setState({
                     pickerState : {
@@ -54,17 +65,9 @@ export default class PickerContainer extends React.Component {
                         ready : false
                     }
                 });
-
             }
-
             else {
-
-                if(this.state.unsubscribeFromStore){
-                    this.state.unsubscribeFromStore();
-                }
-
                 this.setState({
-                    unsubscribeFromStore : DatePickerStore.subscribe(this.onNewData.bind(this)),
                     pickerState : {
                         closed : false,
                         thirdparty : false,
@@ -77,21 +80,21 @@ export default class PickerContainer extends React.Component {
                 // simulate ajax call to keep loading screen visible
                 setTimeout(()=> {
                     this.preparePickerData(nextProps.config);
-                }, 1000);
-
+                }, 250);
             }
-
         }
 
     }
 
+    static toggleDisplay(e) {
+        e.preventDefault();
+        CheckoutStore.dispatch(toggleShowHideMoreDates())
+    }
+
     preparePickerData(config) {
 
-        DatePickerStore.dispatch(totalWeeks(config.weeksInConfig));
-        DatePickerStore.dispatch(dateRanges(config.dateRanges));
-        DatePickerStore.dispatch(tableHeadData(config.tableHeadData));
-        DatePickerStore.dispatch(tableBodyData(config.tableBodyData));
-        DatePickerStore.dispatch(timeDescriptions(config.timeDescriptions));
+        CheckoutStore.dispatch(loadPickerData(config));
+        CheckoutStore.dispatch(checkTimeslotExists(CheckoutStore.getState().tableData));
 
         this.setState({
             pickerState : {
@@ -105,33 +108,57 @@ export default class PickerContainer extends React.Component {
 
     }
 
-    onNewData(){
-        //console.log("store updated", DatePickerStore.getState());
+    onStoreUpdate() {
+        this.setState({
+            dateRanges : CheckoutStore.getState().tableData.dateRanges,
+            tableDisplayIndex : CheckoutStore.getState().tableData.tableDisplayIndex,
+            deliveryTotal : CheckoutStore.getState().tableData.selectedTimeslotData.charge || 0,
+            basketTotal : CheckoutStore.getState().basketTotals.overallTotal,
+            showHideText : CheckoutStore.getState().tableData.showHideText
+        });
+    }
+
+    showPrevWeek() {
+        let prev = this.state.tableDisplayIndex === 0 ? this.state.dateRanges.length - 1 : --this.state.tableDisplayIndex;
+        CheckoutStore.dispatch(updateTableIndex(prev));
+    }
+
+    showNextWeek() {
+        let next = this.state.tableDisplayIndex === this.state.dateRanges.length - 1 ? 0 : ++this.state.tableDisplayIndex;
+        CheckoutStore.dispatch(updateTableIndex(next));
     }
 
     render() {
         if(this.state.pickerState.closed) {
-            return (<PickerClosed />);
+            return (<Closed />);
         }
         else if(this.state.pickerState.thirdparty) {
             return (<ThirdParty />);
         }
         else if(this.state.pickerState.noDatesAvailable) {
-            return (
-                <div>
-                    <p>noDatesAvailable</p>
-                </div>
-            );
+            return (<NoDates />);
         }
         else if(this.state.pickerState.loading){
-            return (
-                <div>
-                    <p>loading</p>
-                </div>
-            );
+            return (<Loading />);
         }
         else if(this.state.pickerState.ready){
-            return (<Picker />);
+            return (
+                <section className="date-picker">
+                    <DateRange
+                        dateRanges={ this.state.dateRanges }
+                        tableDisplayIndex={ this.state.tableDisplayIndex }
+                        showPrevWeek={ this.state.showPrevWeek }
+                        showNextWeek={ this.state.showNextWeek }
+                    />
+                    <TableContainer />
+                    <Summary
+                        basketTotal={ this.state.basketTotal }
+                        deliveryTotal={ this.state.deliveryTotal }
+                        showHideText={ this.state.showHideText }
+                        toggleShowMoreDates={ this.state.toggleShowMoreDates }
+                    />
+                </section>
+            );
         }
         else {
             return false;

@@ -6,7 +6,7 @@ var path = require("path"),
 
 module.exports = {
     entry: {
-        app: "./src/components/DatePickerApp.jsx"
+        app: "./src/components/CheckoutApp.jsx"
     },
     resolve: {
         root: path.resolve(__dirname + "/src"),

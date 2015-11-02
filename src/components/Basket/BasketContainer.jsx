@@ -1,6 +1,7 @@
 import React from "react";
 import Basket from "./Basket";
-import DatePickerStore from "../../stores/PickerStore";
+import CheckoutStore from "../../stores/CheckoutStore";
+import { addProductsToBasket, updateProductCount } from "../../actions/basket-totals-actions";
 
 export default class BasketContainer extends React.Component {
 
@@ -8,21 +9,57 @@ export default class BasketContainer extends React.Component {
         super(props);
         this.state = {
             basketProducts : this.props.basketProducts,
-            loadNewDates : this.props.loadNewDates
+            loadNewDates : this.props.loadNewDates,
+            onProductIncrease : this.onProductIncrease,
+            onProductDecrease : this.onProductDecrease,
+            unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ basketProducts : nextProps.basketProducts, loadNewDates : nextProps.loadNewDates });
+        this.setState({
+            loadNewDates : nextProps.loadNewDates
+        });
+        CheckoutStore.dispatch(addProductsToBasket(nextProps.basketProducts));
     }
 
+    componentWillUnmount() {
+        if(typeof this.state.unsubscribe === "function") {
+            this.state.unsubscribe();
+        }
+    }
+
+    onStoreUpdate() {
+        this.setState({
+            basketProducts : CheckoutStore.getState().basketTotals.basketProducts
+        });
+    }
+
+    onProductIncrease(name) {
+        CheckoutStore.dispatch(updateProductCount({ name : name, add : true }));
+        this.state.loadNewDates();
+    }
+
+    onProductDecrease(name){
+        CheckoutStore.dispatch(updateProductCount({ name : name, add : false }));
+        this.state.loadNewDates();
+    }
+
+
     render() {
-        return(<Basket basketProducts={this.state.basketProducts} loadNewDates={ this.state.loadNewDates }/>);
+        return(
+            <Basket
+                basketProducts={ this.state.basketProducts }
+                loadNewDates={ this.state.loadNewDates }
+                onProductIncrease = { this.state.onProductIncrease }
+                onProductDecrease = { this.state.onProductDecrease }
+            />
+        );
     }
 
 }
 
-BasketContainer.faultProps = {
+BasketContainer.defaultProps = {
     basketProducts : [],
     loadNewDates : function(){}
 };

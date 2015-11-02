@@ -1,11 +1,11 @@
 import React from "react";
 import PickerContainer from "./Picker/PickerContainer";
-import Total from "./PriceComponents/Total";
+import TotalContainer from "./PriceComponents/TotalContainer";
 import DiscountContainer from "./PriceComponents/DiscountContainer";
 import BasketContainer from "./Basket/BasketContainer";
-import DatePickerStore from "../stores/PickerStore";
+import ServiceContainer from "./PriceComponents/ServiceContainer";
+import CheckoutStore from "../stores/CheckoutStore";
 import styles from "../styles/global";
-import { basketProducts } from "../actions/external-actions";
 import { getData1, getData2, getData3, getData4, getBasketProducts } from "../utils/getConfig";
 
 let config;
@@ -19,8 +19,12 @@ class App extends React.Component {
         };
         Promise.all([getData1(), getData2(), getData3(), getData4()]).then(data => {
             config = data;
+            setTimeout(()=>{
+                this.loadNewDates();
+            }, 250);
         });
         getBasketProducts().then(this.storeProductsInBasket.bind(this));
+
     }
 
     loadNewDates() {
@@ -39,10 +43,10 @@ class App extends React.Component {
     render() {
         return(
             <div>
-                <BasketContainer basketProducts={ this.state.basketProducts } loadNewDates={ this.loadNewDates.bind(this) }/>
-                <PickerContainer config={this.state.config} />
-                <Total />
-                <DiscountContainer threshold={100} percentage={10} basketProducts={ this.state.basketProducts } />
+                <BasketContainer
+                    basketProducts={ this.state.basketProducts }
+                    loadNewDates={ this.loadNewDates.bind(this) }
+                />
             </div>
         );
 

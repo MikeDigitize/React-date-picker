@@ -1,8 +1,6 @@
 import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./date-range-styles";
-import DatePickerStore from "../../stores/PickerStore";
-import { updateTableIndex } from "../../actions/picker-actions";
 
 class DateRange extends React.Component {
 
@@ -10,7 +8,9 @@ class DateRange extends React.Component {
         super(props);
         this.state = {
             dates : this.props.dateRanges,
-            tableDisplayIndex : this.props.tableDisplayIndex
+            tableDisplayIndex : this.props.tableDisplayIndex,
+            showPrevWeek : this.props.showPrevWeek,
+            showNextWeek : this.props.showNextWeek
         };
     }
 
@@ -27,22 +27,12 @@ class DateRange extends React.Component {
         });
     }
 
-    prevweek() {
-        let prev = this.state.tableDisplayIndex === 0 ? this.state.dates.length - 1 : --this.state.tableDisplayIndex;
-        DatePickerStore.dispatch(updateTableIndex(prev));
-    }
-
-    nextweek() {
-        let next = this.state.tableDisplayIndex === this.state.dates.length - 1 ? 0 : ++this.state.tableDisplayIndex;
-        DatePickerStore.dispatch(updateTableIndex(next));
-    }
-
     render() {
         return(
             <div styleName="date-range-select">
-                <span styleName="date-range-left date-range-ctrl" className="icon-left" onClick={ this.prevweek.bind(this)}></span>
+                <span styleName="date-range-left date-range-ctrl" className="icon-left" onClick={ this.state.showPrevWeek }></span>
                     <p styleName="date-range">{ this.state.dates[this.state.tableDisplayIndex] }</p>
-                <span styleName="date-range-right date-range-ctrl" className="icon-right" onClick={ this.nextweek.bind(this)}></span>
+                <span styleName="date-range-right date-range-ctrl" className="icon-right" onClick={ this.state.showNextWeek }></span>
             </div>
         );
     }
@@ -51,12 +41,16 @@ class DateRange extends React.Component {
 
 DateRange.defaultProps = {
     dateRanges : [],
-    tableDisplayIndex : 0
+    tableDisplayIndex : 0,
+    showPrevWeek : function(){},
+    showNextWeek : function(){}
 };
 
 DateRange.propTypes = {
     dateRanges : React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-    tableDisplayIndex : React.PropTypes.number.isRequired
+    tableDisplayIndex : React.PropTypes.number.isRequired,
+    showPrevWeek : React.PropTypes.func.isRequired,
+    showNextWeek : React.PropTypes.func.isRequired
 };
 
 export default CSSModule(DateRange, styles, { allowMultiple : true });

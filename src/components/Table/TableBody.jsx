@@ -3,8 +3,6 @@ import CSSModule from "react-css-modules";
 import styles from "./table-body-styles";
 import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
-import DatePickerStore from "../../stores/PickerStore";
-import { addToBasketTotal, subtractFromBasketTotal, selectedTimeslotData } from "../../actions/external-actions";
 import "../../utils/classList-polyfill";
 
 class TableBody extends React.Component {
@@ -16,9 +14,10 @@ class TableBody extends React.Component {
             tableDisplayIndex : this.props.tableDisplayIndex,
             timeDescriptions : this.props.timeDescriptions,
             selectedTimeslotData : this.props.selectedTimeslotData,
-            displayAllRows : this.props.displayAllRows
+            displayAllRows : this.props.displayAllRows,
+            toggleSelected : this.props.toggleSelected
         };
-        this.alwaysDisplay = TableBody.rowsToDisplay()
+        this.alwaysDisplay = TableBody.rowsToDisplay();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -40,48 +39,11 @@ class TableBody extends React.Component {
                     this.these.push(row);
                 }
             },
-            reset(){
+            reset() {
                 this.these = ["SameDay", "Anytime"];
             }
         }
     }
-
-    static toggleSelected(e) {
-        let target = e.target || e.srcElement;
-        if(target.tagName === "SPAN") {
-            target = target.parentNode;
-        }
-        let currentTarget = document.querySelector(".timeslot-selected");
-        if(currentTarget && currentTarget !== target) {
-            currentTarget.classList.toggle("timeslot-selected");
-            target.classList.toggle("timeslot-selected");
-        }
-        else {
-            target.classList.toggle("timeslot-selected");
-        }
-        this.updateStoreWithSelectedTimeslot(target);
-    };
-
-    updateStoreWithSelectedTimeslot(target) {
-        let ref = target.getAttribute("data-ref");
-        let selected = [];
-        this.state.tableBodyData[this.state.tableDisplayIndex].forEach(data => {
-            if(!selected.length) {
-                selected = data.filter(days => {
-                    return days.ref === ref;
-                });
-            }
-        });
-        selected = selected.shift();
-        DatePickerStore.dispatch(subtractFromBasketTotal(this.state.selectedTimeslotData.charge || 0));
-        if(!target.classList.contains("timeslot-selected")){
-            selected = {};
-        }
-        else {
-            DatePickerStore.dispatch(addToBasketTotal(selected.charge));
-        }
-        DatePickerStore.dispatch(selectedTimeslotData(selected));
-    };
 
     createRows() {
         this.alwaysDisplay.reset();
@@ -120,9 +82,9 @@ class TableBody extends React.Component {
                 details[i].ref = ref;
                 tdContent = <p
                     styleName="delivery-selectable"
-                    className={className}
-                    data-ref={ref}
-                    onClick={TableBody.toggleSelected.bind(this)}>
+                    className={ className }
+                    data-ref={ ref }
+                    onClick={ this.state.toggleSelected }>
                         Free
                 </p>;
             }
@@ -133,9 +95,9 @@ class TableBody extends React.Component {
                 details[i].ref = ref;
                 tdContent = <p
                     styleName="delivery-selectable"
-                    className={className}
-                    data-ref={ref}
-                    onClick={TableBody.toggleSelected.bind(this)}>
+                    className={ className }
+                    data-ref={ ref }
+                    onClick={ this.state.toggleSelected }>
                         &pound;{ details[i].charge }
                 </p>;
             }
@@ -168,14 +130,16 @@ TableBody.defaultProps = {
     tableDisplayIndex : 0,
     timeDescriptions : {},
     tableBodyData : [],
-    selectedTimeslotData : {}
+    selectedTimeslotData : {},
+    toggleSelected : function(){}
 };
 
 TableBody.propTypes = {
     tableDisplayIndex : React.PropTypes.number.isRequired,
     tableBodyData : React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
     timeDescriptions : React.PropTypes.object.isRequired,
-    selectedTimeslotData :  React.PropTypes.object.isRequired
+    selectedTimeslotData :  React.PropTypes.object.isRequired,
+    toggleSelected : React.PropTypes.func.isRequired
 };
 
 export default CSSModule(TableBody, styles);
