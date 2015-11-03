@@ -5,30 +5,15 @@ import styles from "./price-component-styles";
 class Service extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            desc : this.props.desc,
-            value : this.props.value,
-            toggle : this.props.toggle,
-            isActive : this.props.isActive
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            desc : nextProps.desc,
-            value : nextProps.value,
-            toggle : nextProps.toggle,
-            isActive : nextProps.isActive
-        });
     }
 
     render() {
-        let className = !this.state.isActive ? "service-hide" : "";
+        let className = !this.props.isActive ? "service-hide" : "";
         return (
             <div className="checkbox" styleName="basket-total-holder">
                 <label styleName="service-text">
-                    <input type="checkbox" onChange={ this.state.toggle } />
-                    { this.state.desc } <span styleName="service-text service-value" className={className}>&pound;{ this.state.value }</span>
+                    <input type="checkbox" onChange={ this.props.toggle } />
+                    { this.props.desc } <span styleName="service-text service-value" className={className}>&pound;{ this.props.value }</span>
                 </label>
             </div>
         );

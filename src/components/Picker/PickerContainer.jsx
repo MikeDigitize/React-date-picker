@@ -93,7 +93,6 @@ export default class PickerContainer extends React.Component {
         CheckoutStore.dispatch(loadPickerData(config));
         CheckoutStore.dispatch(checkTimeslotExists(CheckoutStore.getState().tableData));
         CheckoutStore.dispatch(checkTableIndexExists(CheckoutStore.getState().tableData));
-        console.log("prepare!");
 
         this.setState({
             pickerState : {

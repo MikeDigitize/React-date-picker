@@ -20688,7 +20688,6 @@
 	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.loadPickerData)(config));
 	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.checkTimeslotExists)(_storesCheckoutStore2["default"].getState().tableData));
 	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.checkTableIndexExists)(_storesCheckoutStore2["default"].getState().tableData));
-	            console.log("prepare!");
 
 	            this.setState({
 	                pickerState: {
@@ -24929,13 +24928,13 @@
 
 	var _actionsTableDataActions = __webpack_require__(240);
 
-	var Table = (function (_React$Component) {
-	    _inherits(Table, _React$Component);
+	var TableContainer = (function (_React$Component) {
+	    _inherits(TableContainer, _React$Component);
 
-	    function Table() {
-	        _classCallCheck(this, Table);
+	    function TableContainer() {
+	        _classCallCheck(this, TableContainer);
 
-	        _get(Object.getPrototypeOf(Table.prototype), "constructor", this).call(this);
+	        _get(Object.getPrototypeOf(TableContainer.prototype), "constructor", this).call(this);
 	        this.state = {
 	            tableHeadData: _storesCheckoutStore2["default"].getState().tableData.tableHeadData,
 	            tableBodyData: _storesCheckoutStore2["default"].getState().tableData.tableBodyData,
@@ -24943,12 +24942,12 @@
 	            timeDescriptions: _storesCheckoutStore2["default"].getState().tableData.timeDescriptions,
 	            selectedTimeslotData: _storesCheckoutStore2["default"].getState().tableData.selectedTimeslotData,
 	            displayAllRows: _storesCheckoutStore2["default"].getState().tableData.displayAllRows,
-	            toggleSelected: Table.toggleSelected,
+	            toggleSelected: TableContainer.toggleSelected,
 	            unsubscribe: _storesCheckoutStore2["default"].subscribe(this.onStoreUpdate.bind(this))
 	        };
 	    }
 
-	    _createClass(Table, [{
+	    _createClass(TableContainer, [{
 	        key: "componentWillUnmount",
 	        value: function componentWillUnmount() {
 	            if (typeof this.state.unsubscribe === "function") {
@@ -25005,10 +25004,10 @@
 	        }
 	    }]);
 
-	    return Table;
+	    return TableContainer;
 	})(_react2["default"].Component);
 
-	exports["default"] = Table;
+	exports["default"] = TableContainer;
 	module.exports = exports["default"];
 
 /***/ },
@@ -25050,26 +25049,14 @@
 	        _classCallCheck(this, TableHead);
 
 	        _get(Object.getPrototypeOf(TableHead.prototype), "constructor", this).call(this, props);
-	        this.state = {
-	            tableDisplayIndex: this.props.tableDisplayIndex,
-	            tableHeadData: this.props.tableHeadData
-	        };
 	    }
 
 	    _createClass(TableHead, [{
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(nextProps) {
-	            this.setState({
-	                tableDisplayIndex: nextProps.tableDisplayIndex,
-	                tableHeadData: nextProps.tableHeadData
-	            });
-	        }
-	    }, {
 	        key: "createTableHeadRow",
 	        value: function createTableHeadRow() {
 	            var _this = this;
 
-	            return this.state.tableHeadData[this.state.tableDisplayIndex].map(function (txt, i) {
+	            return this.props.tableHeadData[this.props.tableDisplayIndex].map(function (txt, i) {
 	                return _react2["default"].createElement(
 	                    "th",
 	                    { key: i },
@@ -25176,36 +25163,17 @@
 	        _classCallCheck(this, TableBody);
 
 	        _get(Object.getPrototypeOf(TableBody.prototype), "constructor", this).call(this, props);
-	        this.state = {
-	            tableBodyData: this.props.tableBodyData,
-	            tableDisplayIndex: this.props.tableDisplayIndex,
-	            timeDescriptions: this.props.timeDescriptions,
-	            selectedTimeslotData: this.props.selectedTimeslotData,
-	            displayAllRows: this.props.displayAllRows,
-	            toggleSelected: this.props.toggleSelected
-	        };
 	        this.alwaysDisplay = TableBody.rowsToDisplay();
 	    }
 
 	    _createClass(TableBody, [{
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(nextProps) {
-	            this.setState({
-	                tableBodyData: nextProps.tableBodyData,
-	                tableDisplayIndex: nextProps.tableDisplayIndex,
-	                timeDescriptions: nextProps.timeDescriptions,
-	                selectedTimeslotData: nextProps.selectedTimeslotData,
-	                displayAllRows: nextProps.displayAllRows
-	            });
-	        }
-	    }, {
 	        key: "createRows",
 	        value: function createRows() {
 	            var _this = this;
 
 	            this.alwaysDisplay.reset();
-	            var data = this.state.tableBodyData[this.state.tableDisplayIndex];
-	            if (this.state.displayAllRows) {
+	            var data = this.props.tableBodyData[this.props.tableDisplayIndex];
+	            if (this.props.displayAllRows) {
 	                data[0].forEach(function (details) {
 	                    _this.alwaysDisplay.add(details.description);
 	                });
@@ -25215,7 +25183,7 @@
 	                var tds = _this.createTds(i);
 	                tds.unshift(_this.createRowDescription(details.description, i));
 	                var shouldRowBeHidden = _this.alwaysDisplay.these.indexOf(details.description) === -1;
-	                var className = shouldRowBeHidden && !_this.state.displayAllRows ? "row-hide" : "";
+	                var className = shouldRowBeHidden && !_this.props.displayAllRows ? "row-hide" : "";
 	                rows.push(_react2["default"].createElement(
 	                    "tr",
 	                    {
@@ -25232,14 +25200,14 @@
 	        value: function createTds(i) {
 	            var _this2 = this;
 
-	            var data = this.state.tableBodyData[this.state.tableDisplayIndex];
-	            var selectedRef = this.state.selectedTimeslotData.ref;
-	            var shortdate = this.state.selectedTimeslotData.shortdate;
+	            var data = this.props.tableBodyData[this.props.tableDisplayIndex];
+	            var selectedRef = this.props.selectedTimeslotData.ref;
+	            var shortdate = this.props.selectedTimeslotData.shortdate;
 	            return data.map(function (details, j) {
 	                var ref = i + "" + j;
 	                var className = selectedRef === ref && details[j] && details[j].shortdate === shortdate ? "timeslot-selected" : "";
 	                if (className && details[j].shortdate === shortdate) {
-	                    _this2.alwaysDisplay.add(_this2.state.tableBodyData[_this2.state.tableDisplayIndex][0][i].description);
+	                    _this2.alwaysDisplay.add(_this2.props.tableBodyData[_this2.props.tableDisplayIndex][0][i].description);
 	                }
 	                var tdContent = undefined;
 	                if (details[i].charge === 0) {
@@ -25250,7 +25218,7 @@
 	                            styleName: "delivery-selectable",
 	                            className: className,
 	                            "data-ref": ref,
-	                            onClick: _this2.state.toggleSelected },
+	                            onClick: _this2.props.toggleSelected },
 	                        "Free"
 	                    );
 	                } else if (!details[i].charge) {
@@ -25267,7 +25235,7 @@
 	                            styleName: "delivery-selectable",
 	                            className: className,
 	                            "data-ref": ref,
-	                            onClick: _this2.state.toggleSelected },
+	                            onClick: _this2.props.toggleSelected },
 	                        "£",
 	                        details[i].charge
 	                    );
@@ -25290,8 +25258,8 @@
 	                    _react2["default"].createElement(_DeliveryDescriptionsAnytime2["default"], null)
 	                );
 	            } else {
-	                var info = this.state.timeDescriptions[desc].desc;
-	                var time = this.state.timeDescriptions[desc].times;
+	                var info = this.props.timeDescriptions[desc].desc;
+	                var time = this.props.timeDescriptions[desc].times;
 	                return _react2["default"].createElement(
 	                    "td",
 	                    { key: random, styleName: "timeslot-desc" },
@@ -25774,24 +25742,9 @@
 	        _classCallCheck(this, Summary);
 
 	        _get(Object.getPrototypeOf(Summary.prototype), "constructor", this).call(this, props);
-	        this.state = {
-	            basketTotal: this.props.basketTotal,
-	            deliveryTotal: this.props.deliveryTotal,
-	            showHideText: this.props.showHideText,
-	            toggleShowMoreDates: this.props.toggleShowMoreDates
-	        };
 	    }
 
 	    _createClass(Summary, [{
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(nextProps) {
-	            this.setState({
-	                basketTotal: nextProps.basketTotal,
-	                deliveryTotal: nextProps.deliveryTotal,
-	                showHideText: nextProps.showHideText
-	            });
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
@@ -25799,8 +25752,8 @@
 	                { styleName: "picker-summary-container" },
 	                _react2["default"].createElement(
 	                    "a",
-	                    { href: "#", styleName: "show-more-dates-link", onClick: this.state.toggleShowMoreDates },
-	                    this.state.showHideText
+	                    { href: "#", styleName: "show-more-dates-link", onClick: this.props.toggleShowMoreDates },
+	                    this.props.showHideText
 	                ),
 	                _react2["default"].createElement(
 	                    "div",
@@ -25817,7 +25770,7 @@
 	                            "span",
 	                            { styleName: "summary-price" },
 	                            "£",
-	                            this.state.deliveryTotal
+	                            this.props.deliveryTotal
 	                        )
 	                    ),
 	                    _react2["default"].createElement(
@@ -25832,7 +25785,7 @@
 	                            "span",
 	                            { styleName: "summary-price" },
 	                            "£",
-	                            this.state.basketTotal
+	                            this.props.basketTotal
 	                        )
 	                    )
 	                )
@@ -26220,39 +26173,23 @@
 	        _classCallCheck(this, Discount);
 
 	        _get(Object.getPrototypeOf(Discount.prototype), "constructor", this).call(this, props);
-	        this.state = {
-	            discountThreshold: this.props.threshold,
-	            discountPercentage: this.props.percentage,
-	            discountValue: this.props.value,
-	            isActive: this.props.isActive
-	        };
 	    }
 
 	    _createClass(Discount, [{
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(nextProps) {
-	            this.setState({
-	                discountThreshold: nextProps.threshold,
-	                discountPercentage: nextProps.percentage,
-	                discountValue: nextProps.value,
-	                isActive: nextProps.isActive
-	            });
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
-	            var offer = this.state.discountPercentage ? _react2["default"].createElement(
+	            var offer = this.props.percentage ? _react2["default"].createElement(
 	                "span",
 	                null,
-	                this.state.discountPercentage,
+	                this.props.percentage,
 	                "%"
 	            ) : _react2["default"].createElement(
 	                "span",
 	                null,
 	                "£",
-	                this.state.discountValue
+	                this.props.value
 	            );
-	            var className = this.state.isActive ? "active" : "inactive";
+	            var className = this.props.isActive ? "active" : "inactive";
 	            return _react2["default"].createElement(
 	                "div",
 	                { styleName: "basket-total-holder", className: "form-group" },
@@ -26260,7 +26197,7 @@
 	                    "h4",
 	                    { styleName: "basket-discount-title" },
 	                    "Spend more than £",
-	                    this.state.discountThreshold,
+	                    this.props.threshold,
 	                    " to get a discount of ",
 	                    offer
 	                ),
@@ -26282,16 +26219,16 @@
 	})(_react2["default"].Component);
 
 	Discount.defaultProps = {
-	    discountThreshold: 0,
-	    discountPercentage: 0,
-	    discountValue: 0,
+	    threshold: 0,
+	    percentage: 0,
+	    value: 0,
 	    isActive: false
 	};
 
 	Discount.propTypes = {
-	    discountThreshold: _react2["default"].PropTypes.number.isRequired,
-	    discountPercentage: _react2["default"].PropTypes.number,
-	    discountValue: _react2["default"].PropTypes.number,
+	    threshold: _react2["default"].PropTypes.number.isRequired,
+	    percentage: _react2["default"].PropTypes.number,
+	    value: _react2["default"].PropTypes.number,
 	    isActive: _react2["default"].PropTypes.bool.isRequired
 	};
 
@@ -26708,42 +26645,26 @@
 	        _classCallCheck(this, Service);
 
 	        _get(Object.getPrototypeOf(Service.prototype), "constructor", this).call(this, props);
-	        this.state = {
-	            desc: this.props.desc,
-	            value: this.props.value,
-	            toggle: this.props.toggle,
-	            isActive: this.props.isActive
-	        };
 	    }
 
 	    _createClass(Service, [{
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(nextProps) {
-	            this.setState({
-	                desc: nextProps.desc,
-	                value: nextProps.value,
-	                toggle: nextProps.toggle,
-	                isActive: nextProps.isActive
-	            });
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
-	            var className = !this.state.isActive ? "service-hide" : "";
+	            var className = !this.props.isActive ? "service-hide" : "";
 	            return _react2["default"].createElement(
 	                "div",
 	                { className: "checkbox", styleName: "basket-total-holder" },
 	                _react2["default"].createElement(
 	                    "label",
 	                    { styleName: "service-text" },
-	                    _react2["default"].createElement("input", { type: "checkbox", onChange: this.state.toggle }),
-	                    this.state.desc,
+	                    _react2["default"].createElement("input", { type: "checkbox", onChange: this.props.toggle }),
+	                    this.props.desc,
 	                    " ",
 	                    _react2["default"].createElement(
 	                        "span",
 	                        { styleName: "service-text service-value", className: className },
 	                        "£",
-	                        this.state.value
+	                        this.props.value
 	                    )
 	                )
 	            );

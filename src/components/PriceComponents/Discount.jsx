@@ -5,29 +5,14 @@ import styles from "./price-component-styles";
 class Discount extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-            discountThreshold : this.props.threshold,
-            discountPercentage : this.props.percentage,
-            discountValue : this.props.value,
-            isActive : this.props.isActive
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            discountThreshold : nextProps.threshold,
-            discountPercentage : nextProps.percentage,
-            discountValue : nextProps.value,
-            isActive : nextProps.isActive
-        });
     }
 
     render(){
-        let offer = this.state.discountPercentage ? <span>{this.state.discountPercentage}%</span> : <span>&pound;{this.state.discountValue}</span>;
-        let className = this.state.isActive ? "active" : "inactive";
+        let offer = this.props.percentage ? <span>{this.props.percentage}%</span> : <span>&pound;{this.props.value}</span>;
+        let className = this.props.isActive ? "active" : "inactive";
         return(
             <div styleName="basket-total-holder" className="form-group">
-                <h4 styleName="basket-discount-title">Spend more than &pound;{ this.state.discountThreshold } to get a discount of { offer }</h4>
+                <h4 styleName="basket-discount-title">Spend more than &pound;{ this.props.threshold } to get a discount of { offer }</h4>
                 <p styleName="status">Currently <span styleName={className}>{className}</span></p>
             </div>
         );
@@ -35,16 +20,16 @@ class Discount extends React.Component {
 }
 
 Discount.defaultProps = {
-    discountThreshold : 0,
-    discountPercentage : 0,
-    discountValue : 0,
+    threshold : 0,
+    percentage : 0,
+    value : 0,
     isActive : false
 };
 
 Discount.propTypes = {
-    discountThreshold : React.PropTypes.number.isRequired,
-    discountPercentage : React.PropTypes.number,
-    discountValue : React.PropTypes.number,
+    threshold : React.PropTypes.number.isRequired,
+    percentage : React.PropTypes.number,
+    value : React.PropTypes.number,
     isActive : React.PropTypes.bool.isRequired,
 };
 

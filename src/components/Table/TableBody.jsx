@@ -9,25 +9,7 @@ class TableBody extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            tableBodyData : this.props.tableBodyData,
-            tableDisplayIndex : this.props.tableDisplayIndex,
-            timeDescriptions : this.props.timeDescriptions,
-            selectedTimeslotData : this.props.selectedTimeslotData,
-            displayAllRows : this.props.displayAllRows,
-            toggleSelected : this.props.toggleSelected
-        };
         this.alwaysDisplay = TableBody.rowsToDisplay();
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            tableBodyData : nextProps.tableBodyData,
-            tableDisplayIndex : nextProps.tableDisplayIndex,
-            timeDescriptions : nextProps.timeDescriptions,
-            selectedTimeslotData : nextProps.selectedTimeslotData,
-            displayAllRows : nextProps.displayAllRows
-        });
     }
 
     static rowsToDisplay() {
@@ -47,8 +29,8 @@ class TableBody extends React.Component {
 
     createRows() {
         this.alwaysDisplay.reset();
-        let data = this.state.tableBodyData[this.state.tableDisplayIndex];
-        if(this.state.displayAllRows) {
+        let data = this.props.tableBodyData[this.props.tableDisplayIndex];
+        if(this.props.displayAllRows) {
             data[0].forEach(details => {
                 this.alwaysDisplay.add(details.description);
             });
@@ -58,7 +40,7 @@ class TableBody extends React.Component {
             let tds = this.createTds(i);
             tds.unshift(this.createRowDescription(details.description, i));
             let shouldRowBeHidden= this.alwaysDisplay.these.indexOf(details.description) === -1;
-            let className = shouldRowBeHidden && !this.state.displayAllRows ? "row-hide" : "";
+            let className = shouldRowBeHidden && !this.props.displayAllRows ? "row-hide" : "";
             rows.push(<tr
                 key={i}
                 data-should-be-hidden={shouldRowBeHidden}
@@ -68,14 +50,14 @@ class TableBody extends React.Component {
     }
 
     createTds(i) {
-        let data = this.state.tableBodyData[this.state.tableDisplayIndex];
-        let selectedRef = this.state.selectedTimeslotData.ref;
-        let shortdate = this.state.selectedTimeslotData.shortdate;
+        let data = this.props.tableBodyData[this.props.tableDisplayIndex];
+        let selectedRef = this.props.selectedTimeslotData.ref;
+        let shortdate = this.props.selectedTimeslotData.shortdate;
         return data.map((details, j) => {
             let ref = i + "" + j;
             let className = selectedRef === ref && details[j] && details[j].shortdate === shortdate ? "timeslot-selected" : "";
             if(className && details[j].shortdate === shortdate) {
-                this.alwaysDisplay.add(this.state.tableBodyData[this.state.tableDisplayIndex][0][i].description);
+                this.alwaysDisplay.add(this.props.tableBodyData[this.props.tableDisplayIndex][0][i].description);
             }
             let tdContent;
             if(details[i].charge === 0) {
@@ -84,7 +66,7 @@ class TableBody extends React.Component {
                     styleName="delivery-selectable"
                     className={ className }
                     data-ref={ ref }
-                    onClick={ this.state.toggleSelected }>
+                    onClick={ this.props.toggleSelected }>
                         Free
                 </p>;
             }
@@ -97,7 +79,7 @@ class TableBody extends React.Component {
                     styleName="delivery-selectable"
                     className={ className }
                     data-ref={ ref }
-                    onClick={ this.state.toggleSelected }>
+                    onClick={ this.props.toggleSelected }>
                         &pound;{ details[i].charge }
                 </p>;
             }
@@ -111,8 +93,8 @@ class TableBody extends React.Component {
             return <td key={random} styleName="timeslot-desc"><Anytime /></td>;
         }
         else {
-            let info = this.state.timeDescriptions[desc].desc;
-            let time = this.state.timeDescriptions[desc].times;
+            let info = this.props.timeDescriptions[desc].desc;
+            let time = this.props.timeDescriptions[desc].times;
             return <td key={random} styleName="timeslot-desc"><Desc desc={ info } time={ time }/></td>
         }
     }
