@@ -14,7 +14,6 @@ export default class PickerContainer extends React.Component {
 
     constructor() {
         super();
-        CheckoutStore.dispatch(checkTableIndexExists(CheckoutStore.getState().tableData));
         this.state = {
             pickerState : {
                 "closed" : true,
@@ -33,6 +32,7 @@ export default class PickerContainer extends React.Component {
             toggleShowMoreDates : PickerContainer.toggleDisplay,
             unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
+
     }
 
     componentWillUnmount() {
@@ -77,10 +77,7 @@ export default class PickerContainer extends React.Component {
                     }
                 });
 
-                // simulate ajax call to keep loading screen visible
-                setTimeout(()=> {
-                    this.preparePickerData(nextProps.config);
-                }, 250);
+                this.preparePickerData(nextProps.config);
             }
         }
 
@@ -95,6 +92,7 @@ export default class PickerContainer extends React.Component {
 
         CheckoutStore.dispatch(loadPickerData(config));
         CheckoutStore.dispatch(checkTimeslotExists(CheckoutStore.getState().tableData));
+        CheckoutStore.dispatch(checkTableIndexExists(CheckoutStore.getState().tableData));
 
         this.setState({
             pickerState : {

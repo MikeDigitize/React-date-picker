@@ -6,33 +6,14 @@ class DateRange extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            dates : this.props.dateRanges,
-            tableDisplayIndex : this.props.tableDisplayIndex,
-            showPrevWeek : this.props.showPrevWeek,
-            showNextWeek : this.props.showNextWeek
-        };
-    }
-
-    componentWillUnmount() {
-        if(typeof this.state.unsubscribe === "function") {
-            this.state.unsubscribe();
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            dates : nextProps.dateRanges,
-            tableDisplayIndex : nextProps.tableDisplayIndex
-        });
     }
 
     render() {
         return(
             <div styleName="date-range-select">
-                <span styleName="date-range-left date-range-ctrl" className="icon-left" onClick={ this.state.showPrevWeek }></span>
-                    <p styleName="date-range">{ this.state.dates[this.state.tableDisplayIndex] }</p>
-                <span styleName="date-range-right date-range-ctrl" className="icon-right" onClick={ this.state.showNextWeek }></span>
+                <span styleName="date-range-left date-range-ctrl" className="icon-left" onClick={ this.props.showPrevWeek }></span>
+                    <p styleName="date-range">{ this.props.dateRanges[this.props.tableDisplayIndex] }</p>
+                <span styleName="date-range-right date-range-ctrl" className="icon-right" onClick={ this.props.showNextWeek }></span>
             </div>
         );
     }

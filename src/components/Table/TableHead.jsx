@@ -6,21 +6,10 @@ import styles from "./table-head-styles";
 class TableHead extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            tableDisplayIndex : this.props.tableDisplayIndex,
-            tableHeadData : this.props.tableHeadData
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            tableDisplayIndex : nextProps.tableDisplayIndex,
-            tableHeadData : nextProps.tableHeadData
-        });
     }
 
     createTableHeadRow() {
-        return this.state.tableHeadData[this.state.tableDisplayIndex].map((txt, i) => {
+        return this.props.tableHeadData[this.props.tableDisplayIndex].map((txt, i) => {
             return (<th key={i}>{this.createTableHeadText(txt)}</th>);
         });
     }

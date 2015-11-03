@@ -5,7 +5,7 @@ import CheckoutStore from "../../stores/CheckoutStore";
 import { deliveryCharge } from "../../actions/basket-totals-actions";
 import { selectedTimeslotData } from "../../actions/table-data-actions";
 
-export default class Table extends React.Component {
+export default class TableContainer extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -15,7 +15,7 @@ export default class Table extends React.Component {
             timeDescriptions : CheckoutStore.getState().tableData.timeDescriptions,
             selectedTimeslotData : CheckoutStore.getState().tableData.selectedTimeslotData,
             displayAllRows : CheckoutStore.getState().tableData.displayAllRows,
-            toggleSelected : Table.toggleSelected,
+            toggleSelected : TableContainer.toggleSelected,
             unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
     }

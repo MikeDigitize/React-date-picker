@@ -6,32 +6,18 @@ class Summary extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            basketTotal : this.props.basketTotal,
-            deliveryTotal : this.props.deliveryTotal,
-            showHideText : this.props.showHideText,
-            toggleShowMoreDates : this.props.toggleShowMoreDates
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            basketTotal : nextProps.basketTotal,
-            deliveryTotal : nextProps.deliveryTotal,
-            showHideText : nextProps.showHideText
-        });
     }
 
     render(){
         return(
             <div styleName="picker-summary-container">
-                <a href="#" styleName="show-more-dates-link" onClick={ this.state.toggleShowMoreDates }>{ this.state.showHideText }</a>
+                <a href="#" styleName="show-more-dates-link" onClick={ this.props.toggleShowMoreDates }>{ this.props.showHideText }</a>
                 <div styleName="picker-summary">
                     <div>
-                        <span styleName="summary-title">Delivery</span><span styleName="summary-price">&pound;{ this.state.deliveryTotal }</span>
+                        <span styleName="summary-title">Delivery</span><span styleName="summary-price">&pound;{ this.props.deliveryTotal }</span>
                     </div>
                     <div>
-                        <span styleName="summary-title">Total inc. delivery</span><span styleName="summary-price">&pound;{ this.state.basketTotal }</span>
+                        <span styleName="summary-title">Total inc. delivery</span><span styleName="summary-price">&pound;{ this.props.basketTotal }</span>
                     </div>
                 </div>
             </div>

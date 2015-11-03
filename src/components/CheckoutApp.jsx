@@ -6,7 +6,7 @@ import BasketContainer from "./Basket/BasketContainer";
 import ServiceContainer from "./PriceComponents/ServiceContainer";
 import CheckoutStore from "../stores/CheckoutStore";
 import styles from "../styles/global";
-import { getData1, getData2, getData3, getData4, getBasketProducts } from "../utils/getConfig";
+import { getData1, getData2, getData3, getBasketProducts } from "../utils/getConfig";
 
 let config;
 
@@ -17,18 +17,16 @@ class App extends React.Component {
             config : {},
             basketProducts : []
         };
-        Promise.all([getData1(), getData2(), getData3(), getData4()]).then(data => {
+        Promise.all([getData1(), getData2(), getData3()]).then(data => {
             config = data;
-            setTimeout(()=>{
-                this.loadNewDates();
-            }, 250);
+            this.loadNewDates();
         });
         getBasketProducts().then(this.storeProductsInBasket.bind(this));
 
     }
 
     loadNewDates() {
-        let random = Math.floor(Math.random() * 4);
+        let random = Math.floor(Math.random() * config.length);
         this.setState({
             config : config[random]
         });
@@ -46,7 +44,34 @@ class App extends React.Component {
                 <BasketContainer
                     basketProducts={ this.state.basketProducts }
                     loadNewDates={ this.loadNewDates.bind(this) }
-                />
+                    />
+                <ServiceContainer
+                    description="Buy a care pack for your item(s)"
+                    value={25}
+                    />
+                <ServiceContainer
+                    description="Remove your old appliances"
+                    value={112}
+                    />
+                <DiscountContainer
+                    threshold={100}
+                    percentage={10}
+                    name="10percentoff"
+                    />
+                <DiscountContainer
+                    threshold={10000}
+                    percentage={50}
+                    name="50percentoff"
+                    />
+                <DiscountContainer
+                    threshold={5000}
+                    value={50}
+                    name="50quidoff"
+                    />
+                <TotalContainer />
+                <PickerContainer
+                    config={this.state.config}
+                    />
             </div>
         );
 
