@@ -67,5 +67,5 @@ DiscountContainer.propTypes = {
     name : React.PropTypes.string.isRequired,
     threshold : React.PropTypes.number.isRequired,
     percentage : React.PropTypes.number,
-    value : React.PropTypes.number,
+    value : React.PropTypes.number
 };
