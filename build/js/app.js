@@ -105,11 +105,9 @@
 	            config: {},
 	            basketProducts: []
 	        };
-	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)(), (0, _utilsGetConfig.getData3)(), (0, _utilsGetConfig.getData4)()]).then(function (data) {
+	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)(), (0, _utilsGetConfig.getData3)()]).then(function (data) {
 	            config = data;
-	            setTimeout(function () {
-	                _this.loadNewDates();
-	            }, 250);
+	            _this.loadNewDates();
 	        });
 	        (0, _utilsGetConfig.getBasketProducts)().then(this.storeProductsInBasket.bind(this));
 	    }
@@ -117,7 +115,7 @@
 	    _createClass(App, [{
 	        key: "loadNewDates",
 	        value: function loadNewDates() {
-	            var random = Math.floor(Math.random() * 4);
+	            var random = Math.floor(Math.random() * config.length);
 	            this.setState({
 	                config: config[random]
 	            });
@@ -138,6 +136,33 @@
 	                _react2["default"].createElement(_BasketBasketContainer2["default"], {
 	                    basketProducts: this.state.basketProducts,
 	                    loadNewDates: this.loadNewDates.bind(this)
+	                }),
+	                _react2["default"].createElement(_PriceComponentsServiceContainer2["default"], {
+	                    description: "Buy a care pack for your item(s)",
+	                    value: 25
+	                }),
+	                _react2["default"].createElement(_PriceComponentsServiceContainer2["default"], {
+	                    description: "Remove your old appliances",
+	                    value: 112
+	                }),
+	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
+	                    threshold: 100,
+	                    percentage: 10,
+	                    name: "10percentoff"
+	                }),
+	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
+	                    threshold: 10000,
+	                    percentage: 50,
+	                    name: "50percentoff"
+	                }),
+	                _react2["default"].createElement(_PriceComponentsDiscountContainer2["default"], {
+	                    threshold: 5000,
+	                    value: 50,
+	                    name: "50quidoff"
+	                }),
+	                _react2["default"].createElement(_PriceComponentsTotalContainer2["default"], null),
+	                _react2["default"].createElement(_PickerPickerContainer2["default"], {
+	                    config: this.state.config
 	                })
 	            );
 	        }
@@ -24830,13 +24855,6 @@
 	    }
 
 	    _createClass(DateRange, [{
-	        key: "componentWillUnmount",
-	        value: function componentWillUnmount() {
-	            if (typeof this.state.unsubscribe === "function") {
-	                this.state.unsubscribe();
-	            }
-	        }
-	    }, {
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
 	            this.setState({

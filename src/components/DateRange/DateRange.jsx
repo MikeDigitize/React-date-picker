@@ -14,12 +14,6 @@ class DateRange extends React.Component {
         };
     }
 
-    componentWillUnmount() {
-        if(typeof this.state.unsubscribe === "function") {
-            this.state.unsubscribe();
-        }
-    }
-
     componentWillReceiveProps(nextProps) {
         this.setState({
             dates : nextProps.dateRanges,
