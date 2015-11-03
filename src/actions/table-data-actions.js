@@ -5,10 +5,10 @@ const NEWDATERANGES = "NEWDATERANGES";
 const NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
 const NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 const NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
-const TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
+const UPDATETABLEDISPLAYINDEX = "UPDATETABLEDISPLAYINDEX";
 const NEWSELECTEDTIMESLOTDATA= "NEWSELECTEDTIMESLOTDATA";
 const DISPLAYALLROWS = "DISPLAYALLROWS";
-const SHOWHIDETEXT = "SHOWHIDETEXT";
+const UPDATESHOWHIDETEXT = "UPDATESHOWHIDETEXT";
 
 function totalWeeks(data) {
     return { state : data, type: TOTALWEEKSUPDATE };
@@ -31,7 +31,7 @@ function tableBodyData(data) {
 }
 
 export function updateTableIndex(data) {
-    return { state : data, type: TABLEDISPLAYINDEX };
+    return { state : data, type: UPDATETABLEDISPLAYINDEX };
 }
 
 export function selectedTimeslotData(data) {
@@ -43,7 +43,7 @@ export function displayAllRows(data) {
 }
 
 export function updateShowHideText(data) {
-    return { state : data, type : SHOWHIDETEXT };
+    return { state : data, type : UPDATESHOWHIDETEXT };
 }
 
 export function loadPickerData(config) {
@@ -111,8 +111,8 @@ export function toggleShowHideMoreDates() {
             rowsToHide.forEach(row => {
                 row.classList.toggle("row-hide");
             });
-            dispatch(updateShowHideText("Show more timeslots"));
             dispatch(displayAllRows(false));
+            dispatch(updateShowHideText("Show more timeslots"));
         }
     }
 }

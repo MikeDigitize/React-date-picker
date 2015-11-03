@@ -90,8 +90,6 @@
 
 	var _utilsGetConfig = __webpack_require__(266);
 
-	var config = undefined;
-
 	var App = (function (_React$Component) {
 	    _inherits(App, _React$Component);
 
@@ -103,11 +101,15 @@
 	        _get(Object.getPrototypeOf(App.prototype), "constructor", this).call(this);
 	        this.state = {
 	            config: {},
-	            basketProducts: []
+	            basketProducts: [],
+	            data: []
 	        };
 	        Promise.all([(0, _utilsGetConfig.getData1)(), (0, _utilsGetConfig.getData2)(), (0, _utilsGetConfig.getData3)()]).then(function (data) {
-	            config = data;
-	            _this.loadNewDates();
+	            _this.setState({
+	                data: data
+	            }, function () {
+	                _this.loadNewDates();
+	            });
 	        });
 	        (0, _utilsGetConfig.getBasketProducts)().then(this.storeProductsInBasket.bind(this));
 	    }
@@ -115,9 +117,9 @@
 	    _createClass(App, [{
 	        key: "loadNewDates",
 	        value: function loadNewDates() {
-	            var random = Math.floor(Math.random() * config.length);
+	            var random = Math.floor(Math.random() * this.state.data.length);
 	            this.setState({
-	                config: config[random]
+	                config: this.state.data[random]
 	            });
 	        }
 	    }, {
@@ -24501,7 +24503,7 @@
 	            return Object.assign({}, state, {
 	                dateRanges: action.state
 	            });
-	        case "TABLEDISPLAYINDEX":
+	        case "UPDATETABLEDISPLAYINDEX":
 	            return Object.assign({}, state, {
 	                tableDisplayIndex: action.state
 	            });
@@ -24546,7 +24548,7 @@
 	            return Object.assign({}, state, {
 	                timeDescriptions: action.state
 	            });
-	        case "SHOWHIDETEXT":
+	        case "UPDATESHOWHIDETEXT":
 	            return Object.assign({}, state, {
 	                showHideText: action.state
 	            });
@@ -24580,10 +24582,10 @@
 	var NEWTIMEDESCRIPTIONS = "NEWTIMEDESCRIPTIONS";
 	var NEWTABLEHEADDATA = "NEWTABLEHEADDATA";
 	var NEWTABLEBODYDATA = "NEWTABLEBODYDATA";
-	var TABLEDISPLAYINDEX = "TABLEDISPLAYINDEX";
+	var UPDATETABLEDISPLAYINDEX = "UPDATETABLEDISPLAYINDEX";
 	var NEWSELECTEDTIMESLOTDATA = "NEWSELECTEDTIMESLOTDATA";
 	var DISPLAYALLROWS = "DISPLAYALLROWS";
-	var SHOWHIDETEXT = "SHOWHIDETEXT";
+	var UPDATESHOWHIDETEXT = "UPDATESHOWHIDETEXT";
 
 	function totalWeeks(data) {
 	    return { state: data, type: TOTALWEEKSUPDATE };
@@ -24606,7 +24608,7 @@
 	}
 
 	function updateTableIndex(data) {
-	    return { state: data, type: TABLEDISPLAYINDEX };
+	    return { state: data, type: UPDATETABLEDISPLAYINDEX };
 	}
 
 	function selectedTimeslotData(data) {
@@ -24618,7 +24620,7 @@
 	}
 
 	function updateShowHideText(data) {
-	    return { state: data, type: SHOWHIDETEXT };
+	    return { state: data, type: UPDATESHOWHIDETEXT };
 	}
 
 	function loadPickerData(config) {
@@ -24685,8 +24687,8 @@
 	            rowsToHide.forEach(function (row) {
 	                row.classList.toggle("row-hide");
 	            });
-	            dispatch(updateShowHideText("Show more timeslots"));
 	            dispatch(displayAllRows(false));
+	            dispatch(updateShowHideText("Show more timeslots"));
 	        }
 	    };
 	}

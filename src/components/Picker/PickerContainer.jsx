@@ -32,7 +32,6 @@ export default class PickerContainer extends React.Component {
             toggleShowMoreDates : PickerContainer.toggleDisplay,
             unsubscribe : CheckoutStore.subscribe(this.onStoreUpdate.bind(this))
         };
-
     }
 
     componentWillUnmount() {

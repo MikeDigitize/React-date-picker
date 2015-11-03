@@ -8,27 +8,29 @@ import CheckoutStore from "../stores/CheckoutStore";
 import styles from "../styles/global";
 import { getData1, getData2, getData3, getBasketProducts } from "../utils/getConfig";
 
-let config;
-
 class App extends React.Component {
     constructor(){
         super();
         this.state = {
             config : {},
-            basketProducts : []
+            basketProducts : [],
+            data : []
         };
         Promise.all([getData1(), getData2(), getData3()]).then(data => {
-            config = data;
-            this.loadNewDates();
+            this.setState({
+                data : data
+            }, ()=> {
+                this.loadNewDates();
+            });
         });
         getBasketProducts().then(this.storeProductsInBasket.bind(this));
 
     }
 
     loadNewDates() {
-        let random = Math.floor(Math.random() * config.length);
+        let random = Math.floor(Math.random() * this.state.data.length);
         this.setState({
-            config : config[random]
+            config : this.state.data[random]
         });
     }
 

@@ -23,7 +23,7 @@ export function tableData(state = initialState, action = {}) {
             return Object.assign({}, state, {
                 dateRanges : action.state
             });
-        case "TABLEDISPLAYINDEX" :
+        case "UPDATETABLEDISPLAYINDEX" :
             return Object.assign({}, state, {
                 tableDisplayIndex : action.state
             });
@@ -63,7 +63,7 @@ export function tableData(state = initialState, action = {}) {
             return Object.assign({}, state, {
                 timeDescriptions : action.state
             });
-        case "SHOWHIDETEXT" :
+        case "UPDATESHOWHIDETEXT" :
             return Object.assign({}, state, {
                 showHideText : action.state
             });
