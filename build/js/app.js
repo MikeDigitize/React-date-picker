@@ -20614,7 +20614,6 @@
 	        _classCallCheck(this, PickerContainer);
 
 	        _get(Object.getPrototypeOf(PickerContainer.prototype), "constructor", this).call(this);
-	        _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.checkTableIndexExists)(_storesCheckoutStore2["default"].getState().tableData));
 	        this.state = {
 	            pickerState: {
 	                "closed": true,
@@ -20645,7 +20644,6 @@
 	    }, {
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
-	            var _this = this;
 
 	            if (nextProps.config.state) {
 	                if (nextProps.config.state === "ThirdParty") {
@@ -20679,10 +20677,7 @@
 	                        }
 	                    });
 
-	                    // simulate ajax call to keep loading screen visible
-	                    setTimeout(function () {
-	                        _this.preparePickerData(nextProps.config);
-	                    }, 250);
+	                    this.preparePickerData(nextProps.config);
 	                }
 	            }
 	        }
@@ -20692,6 +20687,8 @@
 
 	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.loadPickerData)(config));
 	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.checkTimeslotExists)(_storesCheckoutStore2["default"].getState().tableData));
+	            _storesCheckoutStore2["default"].dispatch((0, _actionsTableDataActions.checkTableIndexExists)(_storesCheckoutStore2["default"].getState().tableData));
+	            console.log("prepare!");
 
 	            this.setState({
 	                pickerState: {
@@ -24846,35 +24843,21 @@
 	        _classCallCheck(this, DateRange);
 
 	        _get(Object.getPrototypeOf(DateRange.prototype), "constructor", this).call(this, props);
-	        this.state = {
-	            dates: this.props.dateRanges,
-	            tableDisplayIndex: this.props.tableDisplayIndex,
-	            showPrevWeek: this.props.showPrevWeek,
-	            showNextWeek: this.props.showNextWeek
-	        };
 	    }
 
 	    _createClass(DateRange, [{
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(nextProps) {
-	            this.setState({
-	                dates: nextProps.dateRanges,
-	                tableDisplayIndex: nextProps.tableDisplayIndex
-	            });
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2["default"].createElement(
 	                "div",
 	                { styleName: "date-range-select" },
-	                _react2["default"].createElement("span", { styleName: "date-range-left date-range-ctrl", className: "icon-left", onClick: this.state.showPrevWeek }),
+	                _react2["default"].createElement("span", { styleName: "date-range-left date-range-ctrl", className: "icon-left", onClick: this.props.showPrevWeek }),
 	                _react2["default"].createElement(
 	                    "p",
 	                    { styleName: "date-range" },
-	                    this.state.dates[this.state.tableDisplayIndex]
+	                    this.props.dateRanges[this.props.tableDisplayIndex]
 	                ),
-	                _react2["default"].createElement("span", { styleName: "date-range-right date-range-ctrl", className: "icon-right", onClick: this.state.showNextWeek })
+	                _react2["default"].createElement("span", { styleName: "date-range-right date-range-ctrl", className: "icon-right", onClick: this.props.showNextWeek })
 	            );
 	        }
 	    }]);
