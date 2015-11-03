@@ -2,7 +2,6 @@ import React from "react";
 import CSSModule from "react-css-modules";
 import styles from "./table-head-styles";
 
-
 class TableHead extends React.Component {
     constructor(props) {
         super(props);

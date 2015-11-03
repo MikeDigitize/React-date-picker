@@ -6,9 +6,9 @@ import NoDates from "./PickerNoDates";
 import CheckoutStore from "../../stores/CheckoutStore";
 import { loadPickerData, checkTimeslotExists, checkTableIndexExists, updateTableIndex, toggleShowHideMoreDates } from "../../actions/table-data-actions";
 
-import DateRange from "../DateRange/DateRange";
-import TableContainer from "../Table/TableContainer";
-import Summary from "../Summary/Summary";
+import DateRange from "./DateRange/DateRange";
+import TableContainer from "./Table/TableContainer";
+import Summary from "./Summary/Summary";
 
 export default class PickerContainer extends React.Component {
 

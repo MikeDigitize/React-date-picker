@@ -24886,7 +24886,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"date-range-select":"OX0IQ95QuEmxlWQhyiRs6","date-range":"_1yKpw1RLO3THHz9hnbX_Dt","date-range-ctrl":"znc2lrvqmWUjnbcbNbeIr","date-range-right":"_1AqK9xb6dHCKGPeJDRvBtw","date-range-left":"_8SLLaLIWkMBPftpcd_ldr"};
+	module.exports = {"date-range-select":"_30BoGu7fouyFSexZoOeofS","date-range":"_1GacuXgekmyGktFPm60UD0","date-range-ctrl":"nUyv4etgyr8u67IgaEupx","date-range-right":"_3cCCEYLqZ0Qm21wC47UZeC","date-range-left":"_1szl11CmYWA6jqMrSiSi1g"};
 
 /***/ },
 /* 244 */
@@ -24912,13 +24912,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _TableTableHead = __webpack_require__(245);
+	var _TableHead = __webpack_require__(245);
 
-	var _TableTableHead2 = _interopRequireDefault(_TableTableHead);
+	var _TableHead2 = _interopRequireDefault(_TableHead);
 
-	var _TableTableBody = __webpack_require__(247);
+	var _TableBody = __webpack_require__(247);
 
-	var _TableTableBody2 = _interopRequireDefault(_TableTableBody);
+	var _TableBody2 = _interopRequireDefault(_TableBody);
 
 	var _storesCheckoutStore = __webpack_require__(226);
 
@@ -24972,11 +24972,11 @@
 	            return _react2["default"].createElement(
 	                "table",
 	                { className: "date-picker-table" },
-	                _react2["default"].createElement(_TableTableHead2["default"], {
+	                _react2["default"].createElement(_TableHead2["default"], {
 	                    tableHeadData: this.state.tableHeadData,
 	                    tableDisplayIndex: this.state.tableDisplayIndex
 	                }),
-	                _react2["default"].createElement(_TableTableBody2["default"], {
+	                _react2["default"].createElement(_TableBody2["default"], {
 	                    tableBodyData: this.state.tableBodyData,
 	                    tableDisplayIndex: this.state.tableDisplayIndex,
 	                    timeDescriptions: this.state.timeDescriptions,
@@ -25112,7 +25112,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"date-picker-thead":"I0Zsu_vOjbLH-qTh5jbMr"};
+	module.exports = {"date-picker-thead":"_1Qfn_XDtEv7vjZ0RBuRHAi"};
 
 /***/ },
 /* 247 */
@@ -25321,7 +25321,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"date-picker-tbody":"_29vJ8JCK0woHtbMXWLpUK9","timeslot-desc":"_2j2BD-de5vLVDb31Pa_GhM","timeslot":"_2nbCK7KDaiFms044UxcM1m","delivery-non-selectable":"_2-_DwV3SrjiGf8gK8Qg_Vv","delivery-selectable":"_1joTcdAy56WL7iY5YFerPM","delivery-selected":"OjDALIjGZUOIa7p-dpptf"};
+	module.exports = {"date-picker-tbody":"rM-4Ff2b_qy5jjrzVGtny","timeslot-desc":"_1tkOKBukmq_M_8BTG0EdDc","timeslot":"_1pTNXMocDOJielTMd1_JFO","delivery-non-selectable":"_1RYLMEUw0pMlo-cP3Kngdx","delivery-selectable":"_2IWzu9MrRIbczgzB25I9Tw","delivery-selected":"epcAeiqkbqKS0HkpC9l-i"};
 
 /***/ },
 /* 249 */
@@ -25410,7 +25410,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"time-desc":"twEIetCF4STnzvQiPcYsl","time":"_3bdVbBScAd7I2p6YGPJEp","extra-info":"kGAWnSxKGyltFW8gS4zYX"};
+	module.exports = {"time-desc":"_3P-c3ysRbkmmuqIt_DEop_","time":"_1Fwhrt8Ixu8JYt307Ur6MI","extra-info":"oe_XFCxkj7cD-4AC8R4Hz"};
 
 /***/ },
 /* 251 */
@@ -25818,7 +25818,7 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"picker-summary-container":"_2ov1icXwgaSbINDvctnl-W","picker-summary":"_16ev4A4zbVxa782BG6rEwq","summary-title":"_17Oslj9Asc7k4sY1nehkuW","summary-price":"_1X8ETpdII5jGksb51q-xXj","show-more-dates-link":"_27iMzQC9XKlX3Ngl62uQXf"};
+	module.exports = {"picker-summary-container":"_1fZezVI-bUpSuLXe1wkzFT","picker-summary":"_2ndZg75bzuG2auVMmVUZFx","summary-title":"Wv4xqd2BGSlnYCWoHeXT4","summary-price":"_3_XAp0tHYQSOThmtP2WjzJ","show-more-dates-link":"_2JgXxSRGnhDTVK7-b6THar"};
 
 /***/ },
 /* 255 */

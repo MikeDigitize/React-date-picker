@@ -1,9 +1,9 @@
 import React from "react";
-import TableHead from "../Table/TableHead";
-import TableBody from "../Table/TableBody";
-import CheckoutStore from "../../stores/CheckoutStore";
-import { deliveryCharge } from "../../actions/basket-totals-actions";
-import { selectedTimeslotData } from "../../actions/table-data-actions";
+import TableHead from "./TableHead";
+import TableBody from "./TableBody";
+import CheckoutStore from "../../../stores/CheckoutStore";
+import { deliveryCharge } from "../../../actions/basket-totals-actions";
+import { selectedTimeslotData } from "../../../actions/table-data-actions";
 
 export default class TableContainer extends React.Component {
     constructor() {

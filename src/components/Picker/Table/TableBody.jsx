@@ -3,7 +3,7 @@ import CSSModule from "react-css-modules";
 import styles from "./table-body-styles";
 import Desc from "./DeliveryDescriptions/Desc";
 import Anytime from "./DeliveryDescriptions/Anytime";
-import "../../utils/classList-polyfill";
+import "../../../utils/classList-polyfill";
 
 class TableBody extends React.Component {
 
